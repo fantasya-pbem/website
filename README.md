@@ -1,2 +1,2 @@
-# fantasya
-Website of fantasya-pbem.de
+# Fantasya
+This is the website of fantasya-pbem.de.
