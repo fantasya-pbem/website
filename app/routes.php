@@ -17,6 +17,9 @@ Route::get('about', function() {
 	return View::make('about');
 });
 
+Route::get('myths', 'FantasyaController@myths');
+
 Route::get('contact', function() {
 	return View::make('contact');
 });
+

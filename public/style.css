@@ -155,6 +155,19 @@ a:hover {
 	text-decoration: underline;
 }
 
+/* Gerücht */
+#myth {
+    position: absolute;
+    top: 160px;
+    width: 960px;
+}
+
+#myth span {
+    text-align: center;
+    font-style: italic;
+    display: block;
+}
+
 /* Sidebar */
 
 #sidebar {

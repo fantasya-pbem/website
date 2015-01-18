@@ -16,6 +16,10 @@
 				</div>
 			</div>
 
+            <div id="myth">
+                <span><?php echo Myth::getLast()->myth ?></span>
+            </div>
+
 			<div id="menu">
 				<ul>
 					<li><a href="index">Fantasya</a></li>
@@ -33,7 +37,7 @@
 							<ul>
 								<li><a href="news">Neuigkeiten</a></li>
 								<li><a href="about">Über Fantasya</a></li>
-								{{--  <li><a href="#">Gerüchte</a></li> --}}
+								<li><a href="myths">Gerüchte</a></li>
 								{{--  <li><a href="#">Downloads</a></li> --}}
 								<li><a href="contact">Kontakt</a></li>
 							</ul>
