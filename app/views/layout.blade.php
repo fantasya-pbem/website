@@ -4,7 +4,7 @@
 		<meta name="description" content="Fantasya ist eine Welt voll mit Elfen, Zwergen und anderen Lebewesen. Die Unterwelt ist überrannt worden von Drachen und Zombies, die darauf warten durch Höhlen zur Oberwelt zu gelangen. Fantasya ist ein kostenloses Runden-Strategiespiel, bei dem Du Deine eigene Zivilisation gründen und Dich mit anderen Spielern messen kannst." />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<title>Fantasya</title>
-		<link href="style.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="/style.css" rel="stylesheet" type="text/css" media="screen" />
 	</head>
 	<body>
 		<div id="wrapper">
@@ -22,8 +22,8 @@
 
 			<div id="menu">
 				<ul>
-					<li><a href="index">Fantasya</a></li>
-					<li><a href="http://wiki.fantasya-pbem.de">Bibliothek</a></li>
+					<li><a href="/index">Fantasya</a></li>
+					<li><a href="//wiki.fantasya-pbem.de">Bibliothek</a></li>
 					{{-- <li><a href="#">Taverne</a></li> --}}
 					{{-- <li class="last"><a href="#">Entwicklung</a></li> --}}
 				</ul>
@@ -35,11 +35,11 @@
 						<li>
 							<h2>Fantasya</h2>
 							<ul>
-								<li><a href="news">Neuigkeiten</a></li>
-								<li><a href="about">Über Fantasya</a></li>
-								<li><a href="myths">Gerüchte</a></li>
+								<li><a href="/news">Neuigkeiten</a></li>
+								<li><a href="/about">Über Fantasya</a></li>
+								<li><a href="/myths">Gerüchte</a></li>
 								{{--  <li><a href="#">Downloads</a></li> --}}
-								<li><a href="contact">Kontakt</a></li>
+								<li><a href="/contact">Kontakt</a></li>
 							</ul>
 						</li>
 						<li>
@@ -50,7 +50,7 @@
 						    <h2>Die Welten</h2>
 						    <ul>
 						        @foreach (Game::all() as $game)
-                                    <li><a href="world/{{{$game->id}}}">{{{$game->name}}}</a></li>
+                                    <li><a href="/world/{{{$game->id}}}">{{{$game->name}}}</a></li>
                                 @endforeach
 						    </ul>
 						</li>
