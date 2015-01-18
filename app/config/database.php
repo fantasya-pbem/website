@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'default' => 'mysql',
+	'default' => $_ENV['MYSQL_DB_MANAGEMENT'],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -45,44 +45,46 @@ return array(
 	*/
 
 	'connections' => array(
-
-		'sqlite' => array(
-			'driver'   => 'sqlite',
-			'database' => __DIR__.'/../database/production.sqlite',
-			'prefix'   => '',
-		),
-
-		'mysql' => array(
+		$_ENV['MYSQL_DB_MANAGEMENT'] => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'fantasyasql5',
-			'username'  => 'sascha',
-			'password'  => '',
+			'database'  => $_ENV['MYSQL_DB_MANAGEMENT'],
+			'username'  => $_ENV['MYSQL_USER_MANAGEMENT'],
+			'password'  => $_ENV['MYSQL_PASS_MANAGEMENT'],
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
 		),
-
-		'pgsql' => array(
-			'driver'   => 'pgsql',
-			'host'     => 'localhost',
-			'database' => 'forge',
-			'username' => 'forge',
-			'password' => '',
-			'charset'  => 'utf8',
-			'prefix'   => '',
-			'schema'   => 'public',
+		$_ENV['MYSQL_DB_MAIN'] => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => $_ENV['MYSQL_DB_MAIN'],
+			'username'  => $_ENV['MYSQL_USER_MAIN'],
+			'password'  => $_ENV['MYSQL_PASS_MAIN'],
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
 		),
-
-		'sqlsrv' => array(
-			'driver'   => 'sqlsrv',
-			'host'     => 'localhost',
-			'database' => 'database',
-			'username' => 'root',
-			'password' => '',
-			'prefix'   => '',
+		$_ENV['MYSQL_DB_BETA'] => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => $_ENV['MYSQL_DB_BETA'],
+			'username'  => $_ENV['MYSQL_USER_BETA'],
+			'password'  => $_ENV['MYSQL_PASS_BETA'],
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
 		),
-
+		$_ENV['MYSQL_DB_SKIRMISH'] => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => $_ENV['MYSQL_DB_SKIRMISH'],
+			'username'  => $_ENV['MYSQL_USER_SKIRMISH'],
+			'password'  => $_ENV['MYSQL_PASS_SKIRMISH'],
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		)
 	),
 
 	/*

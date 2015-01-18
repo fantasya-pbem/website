@@ -6,6 +6,6 @@
 
 @section('text')
     @foreach ($myths as $myth)
-        <p>{{ $myth->myth }}</p>
+        <p>{{$myth->myth}}</p>
     @endforeach
 @stop

@@ -23,3 +23,5 @@ Route::get('contact', function() {
 	return View::make('contact');
 });
 
+Route::get('world/{id?}', 'FantasyaController@world');
+

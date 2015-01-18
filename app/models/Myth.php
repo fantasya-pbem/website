@@ -9,7 +9,7 @@ class Myth extends Eloquent {
     public $timestamps = false;
 
     public static function getLast() {
-        return DB::table(self::TABLE)->orderBy('id', 'DESC')->first();
+        return DB::table(self::TABLE)->orderBy('id', 'DESC')->first()->myth;
     }
     
 }

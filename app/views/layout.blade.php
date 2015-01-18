@@ -17,7 +17,7 @@
 			</div>
 
             <div id="myth">
-                <span><?php echo Myth::getLast()->myth ?></span>
+                <span>{{{Myth::getLast()}}}</span>
             </div>
 
 			<div id="menu">
@@ -47,6 +47,14 @@
 							<p>Die Anmeldung ist zur Zeit noch deaktiviert.</p>
 						</li>
 						<li>
+						    <h2>Die Welten</h2>
+						    <ul>
+						        @foreach (Game::all() as $game)
+                                    <li><a href="world/{{{$game->id}}}">{{{$game->name}}}</a></li>
+                                @endforeach
+						    </ul>
+						</li>
+						<li>
 							<h2>Links</h2>
 							<ul>
 								<li><a href="http://www.metadrei.org/toolbelt/forlage.html">Forlage</a></li>
@@ -74,7 +82,7 @@
 			</div>
 		</div>
 		<div id="footer">
-			<p>&copy; <?php echo date('Y') ?> fantasya.pbem. All rights reserved. Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>, mogel &amp; Thalian.</p>
+			<p>&copy; {{date('Y')}} fantasya.pbem. All rights reserved. Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>, mogel &amp; Thalian.</p>
 		</div>
 	</body>
 </html>
