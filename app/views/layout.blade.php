@@ -24,7 +24,7 @@
 				<ul>
 					<li><a href="/index">Fantasya</a></li>
 					<li><a href="//wiki.fantasya-pbem.de">Bibliothek</a></li>
-					{{-- <li><a href="#">Taverne</a></li> --}}
+					<li><a href="//forum.fantasya-pbem.de">Taverne</a></li>
 					{{-- <li class="last"><a href="#">Entwicklung</a></li> --}}
 				</ul>
 			</div>
