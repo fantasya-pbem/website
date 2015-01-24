@@ -16,8 +16,10 @@ class FantasyaController extends BaseController {
             $success = false;
             $user    = User::where('name', '=', Input::get('user'))->where('email', '=', Input::get('email'))->first();
             if ($user) {
-                $password = 'PW';
-                Mail::send('reset-mail', array('password' => $password), function($message) use ($user) {
+                $password       = uniqid();
+                $user->password = Hash::make($password);
+                $user->save();
+                Mail::send('reset-mail', array('user' => $user->name, 'password' => $password), function($message) use ($user) {
                     $message->from('admin@fantasya-pbem.de', 'Fantasya-Administrator');
                     $message->to($user->email);
                     $message->subject('Fantasya-Passwort-Reset');
