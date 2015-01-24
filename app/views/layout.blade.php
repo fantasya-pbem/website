@@ -44,7 +44,16 @@
 						</li>
 						<li>
 							<h2>Anmeldung</h2>
-							<p>Die Anmeldung ist zur Zeit noch deaktiviert.</p>
+							@if (Auth::check())
+							    <ul>
+							        <li>{{ Auth::user()->name }} ist angemeldet.</li>
+							        <li><a href="/login">Profil</a></li>
+							        <li><a href="/logout">Abmelden</a></li>
+							        <li>Weitere Aktionen werden bald verfügbar sein.</li>
+							    </ul>
+							@else
+							     @include('login-form')
+							@endif
 						</li>
 						<li>
 						    <h2>Die Welten</h2>

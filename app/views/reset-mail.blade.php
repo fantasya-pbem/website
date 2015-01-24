@@ -1,0 +1,2 @@
+Neues Passwort: {{ $password }}
+

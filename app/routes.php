@@ -23,5 +23,14 @@ Route::get('contact', function() {
 	return View::make('contact');
 });
 
+Route::match(array('GET', 'POST'), 'login', 'FantasyaController@login');
+
+Route::get('logout', function() {
+    Auth::logout();
+    return View::make('logout');
+});
+
+Route::match(array('GET', 'POST'), 'reset', 'FantasyaController@reset');
+
 Route::get('world/{id?}', 'FantasyaController@world');
 

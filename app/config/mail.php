@@ -28,7 +28,7 @@ return array(
 	|
 	*/
 
-	'host' => 'smtp.mailgun.org',
+	'host' => 'mail.fantasya-pbem.de',
 
 	/*
 	|--------------------------------------------------------------------------

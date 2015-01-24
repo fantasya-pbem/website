@@ -230,6 +230,10 @@ a:hover {
 	color: #787878;
 }
 
+#sidebar form {
+    margin: 0.8em 15px;
+}
+
 /* Calendar */
 
 #calendar {
