@@ -1,5 +1,5 @@
-Hallo {{ $user }},
+<p>Hallo {{ $user }},</p>
 
-Dein neues Passwort für die Anmeldung auf der Fantasya-Website lautet: {{ $password }}
+<p>Dein neues Passwort für die Anmeldung auf der Fantasya-Website lautet: <stromg>{{ $password }}</strong></p>
 
-http://www.fantasya-pbem.de
+<p><a href="http://www.fantasya-pbem.de">Fantasya</a></p>
