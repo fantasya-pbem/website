@@ -1,4 +1,4 @@
-{{ Form::open(array('action' => array('FantasyaController@edit', 'news#list'))) }}
+{{ Form::open(array('action' => array('FantasyaController@edit', 'news'))) }}
     <?php echo Form::label('title', 'Titel') ?><br>
     <?php echo Form::text('title') ?><br>
     <?php echo Form::label('content', 'Text (HTML erlaubt)') ?><br>

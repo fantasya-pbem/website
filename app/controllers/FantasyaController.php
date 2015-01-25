@@ -58,6 +58,7 @@ class FantasyaController extends BaseController {
                     $article->content = $content;
                     $article->save();
                 }
+                return Redirect::to('edit/news#list');
             }
             $news = DB::table(News::TABLE)->orderBy('id', 'DESC')->get();
             return View::make('edit-news', array('news' => $news));
