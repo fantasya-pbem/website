@@ -295,6 +295,31 @@ a:hover {
     line-height: 1.25em;
 }
 
+.article {
+    margin: 10px 0 0;
+	border: 1px #bf985f solid;
+}
+
+.article h3 {
+    background-color: #e8dcba;
+	border-bottom: 1px #bf985f solid;
+	height: 24px;
+	padding: 5px 10px 3px;
+}
+
+.article p {
+	padding: 5px 10px 3px;
+	margin: 0;    
+}
+
+.article p.edit {
+    border-top: 1px #bf985f dashed;
+}
+
+.article p.edit a {
+    color: #5555aa;
+}
+
 /* Footer */
 
 #footer {

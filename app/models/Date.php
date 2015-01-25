@@ -27,5 +27,13 @@ class Date {
         return Weekday::translate($w) . ', ' . $d . '. ' . self::$month[$m] . ' ' . $y . ', ' . $time . ' Uhr';
     }
 
+    public static function asDate($mysqlDate) {
+        $timestamp = strtotime($mysqlDate);
+        $d         = (int)substr($mysqlDate, 8, 2);
+        $m         = (int)substr($mysqlDate, 5, 2);
+        $y         = substr($mysqlDate, 0, 4);
+        return $d . '. ' . self::$month[$m] . ' ' . $y;
+    }
+    
 }
 

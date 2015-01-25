@@ -8,10 +8,7 @@ Route::get('index', array('as' => 'index', function() {
 	return Redirect::route('news');
 }));
 
-Route::get('news', array('as' => 'news', function()
-{
-	return View::make('news');
-}));
+Route::get('news', 'FantasyaController@news');
 
 Route::get('about', function() {
 	return View::make('about');
@@ -23,7 +20,7 @@ Route::get('contact', function() {
 	return View::make('contact');
 });
 
-Route::match(array('GET', 'POST'), 'login', 'FantasyaController@login');
+Route::match(array('GET', 'POST'), 'login/{saved?}', 'FantasyaController@login');
 
 Route::get('logout', function() {
     Auth::logout();
@@ -31,6 +28,12 @@ Route::get('logout', function() {
 });
 
 Route::match(array('GET', 'POST'), 'reset', 'FantasyaController@reset');
+
+Route::post('profile', 'FantasyaController@profile');
+
+Route::match(array('GET', 'POST'), 'edit/{what}', 'FantasyaController@edit');
+
+Route::get('delete/{what}/{id}', 'FantasyaController@delete');
 
 Route::get('world/{id?}', 'FantasyaController@world');
 
