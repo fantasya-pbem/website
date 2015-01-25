@@ -8,7 +8,7 @@ Route::get('index', array('as' => 'index', function() {
 	return Redirect::route('news');
 }));
 
-Route::get('news', 'FantasyaController@news');
+Route::get('news', array('as' => 'news', 'uses' => 'FantasyaController@news'));
 
 Route::get('about', function() {
 	return View::make('about');
