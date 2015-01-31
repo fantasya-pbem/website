@@ -16,6 +16,8 @@ Route::get('about', function() {
 
 Route::get('myths', 'FantasyaController@myths');
 
+Route::match(array('GET', 'POST'), 'myth', 'FantasyaController@myth');
+
 Route::get('contact', function() {
 	return View::make('contact');
 });

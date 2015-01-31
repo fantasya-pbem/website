@@ -320,6 +320,16 @@ a:hover {
     color: #5555aa;
 }
 
+#myth-form #mythtext {
+	width: 100%;
+	margin: 0 0 10px;
+}
+
+#myth-form img {
+	vertical-align: middle;
+	margin: 0 0 10px;
+}
+
 /* Footer */
 
 #footer {

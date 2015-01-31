@@ -5,7 +5,9 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"laravel/framework": "4.2.*"
+		"laravel/framework": "4.2.*",
+		"johntaa/captcha": "dev-master"
+
 	},
 	"autoload": {
 		"classmap": [

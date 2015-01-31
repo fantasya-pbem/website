@@ -87,7 +87,22 @@ class FantasyaController extends BaseController {
         $myths = DB::table(Myth::TABLE)->orderBy('id', 'DESC')->get();
         return View::make('myths', array('myths' => $myths));
     }
-    
+
+    public function myth() {
+        if (Request::isMethod('POST')) {
+            $mythtext  = Input::get('mythtext');
+            $rules     =  array('mythtext' => 'required|min:10|max:140', 'captcha' => array('required', 'captcha'));
+            $validator = Validator::make(Input::all(), $rules);
+            if ($validator->passes()) {
+                $myth       = new Myth();
+                $myth->myth = $mythtext;
+                $myth->save();
+                return Redirect::to('/myths');
+            }
+        }
+        return View::make('myth', array('mythtext' => Input::get('mythtext')));
+    }
+
     public function world($id = null) {
         if (!$id) {
             $id = (int)DB::table(Game::TABLE)->limit(1)->pluck('id');
