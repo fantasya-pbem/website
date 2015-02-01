@@ -9,11 +9,7 @@
 	<body>
 		<div id="wrapper">
 			<div id="header">
-				<div id="logo">
-					{{--
-					<h1><a href="//www.fantasya-pbem.de">Fantasya</a></h1>
-					--}}
-				</div>
+				<div id="logo" />
 			</div>
 
             <div id="myth">
@@ -25,7 +21,7 @@
 					<li><a href="/index">Fantasya</a></li>
 					<li><a href="//wiki.fantasya-pbem.de">Bibliothek</a></li>
 					<li><a href="//forum.fantasya-pbem.de">Taverne</a></li>
-					{{-- <li class="last"><a href="#">Entwicklung</a></li> --}}
+					<li class="last"><a href="//mantis.fantasya-pbem.de">Entwicklung</a></li>
 				</ul>
 			</div>
 
