@@ -59,6 +59,7 @@
 							<ul>
 								<li><a href="http://www.metadrei.org/toolbelt/forlage.html">Forlage</a></li>
 								<li><a href="http://sourceforge.net/projects/magellan-client">Magellan-Client</a></li>
+								<li><a href="http://fanalytics.dynamic-storage.com/">Fanalytics³-Client</a></li>
 								<li><a href="http://www.gulrak.de">Vorlage-Tool</a></li>
 								<li><a href="http://www.eressea.de">Eressea</a></li>
 								<li><a href="http://www.german-atlantis.de">German Atlantis</a></li>
