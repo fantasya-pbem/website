@@ -13,13 +13,10 @@
         <p>
             Benutzername: {{ Auth::user()->name }}<br>
             <em>
-            @if (Auth::user()->flags == 0)
+            @if (empty($flags))
                 Keine besonderen Berechtigungen.
             @else
-                Besondere Berechtigungen:
-                @if (User::has(User::CAN_CREATE_NEWS))
-                    News verfassen
-                @endif
+                Besondere Berechtigungen: {{ implode(', ', $flags); }}
             @endif
             </em>
         </p>
@@ -29,6 +26,19 @@
         @if ($saved)
             <p><strong>Änderung gespeichert.</strong></p>
         @endif
+
+        @foreach ($parties as $world => $partiesInWorld)
+            <h3>Parteien auf Welt {{ $games[$world]->name }}</h3>
+            @if (count($partiesInWorld) === 0)
+                <p>Keine Parteien angemeldet.</p>
+            @else
+                @foreach ($partiesInWorld as $party)
+                    <h4>{{ $party->name }}</h4>
+                    <p>{{ $party->rasse }}</p>
+                    <p>{{ $party->beschreibung }}</p>
+                @endforeach
+            @endif
+        @endforeach
     @else
         <p>Das war wohl das falsche Passwort!</p>
         <p><a href="/reset">Neues Passwort anfordern</a></p>

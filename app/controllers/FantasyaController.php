@@ -7,7 +7,14 @@ class FantasyaController extends BaseController {
             Auth::attempt(array('name' => Input::get('user'), 'password' => Input::get('password')));
             return Redirect::to('/login');
         }
-        return View::make('login', array('saved' => $saved));
+        $flags = array();
+        if (User::has(User::CAN_CREATE_NEWS)) {
+            $flags[] = 'News verfassen';
+        }
+        if (User::has(User::CAN_BETA_TEST)) {
+            $flags[] = 'Beta-Tester';
+        }
+        return View::make('login', array('flags' => $flags, 'games' => Game::allById(), 'parties' => Party::allFor(Auth::user()), 'saved' => $saved));
     }
 
     public function reset() {
@@ -45,6 +52,52 @@ class FantasyaController extends BaseController {
             }
         }
         return Redirect::to('/login/saved');
+    }
+
+    public function change($what) {
+        //zur Zeit nur $what = world
+        $current = Session::get('game');
+        $parties = Party::allFor(Auth::user());
+        $games   = array();
+        foreach ($parties as $game => $parties) {
+            if (count($parties) > 0) {
+                $games[] = $game;
+            }
+        }
+        $n = count($games);
+        if ($n > 0) {
+            $next = 0;
+            for ($i = 0; $i < $n; $i++) {
+                $game = $games[$i];
+                if ($game === $current) {
+                    $next = $i + 1;
+                    break;
+                }
+            }
+            if ($next >= $n) {
+                $next = 0;
+            }
+            Session::put('game', $games[$next]);
+            return Redirect::to('orders');
+        }
+    }
+
+    public function orders() {
+        $turn   = Settings::on(Game::current()->database)->find('game.runde');
+        $orders = 'noch keine Befehle';
+        return View::make('orders', array('turn' => $turn->Value, 'orders' => $orders));
+    }
+
+    public function send($what) {
+        //zur Zeit nur $what = orders
+        if (Request::isMethod('POST')) {
+            $orders = Input::get('orders');
+            if ($orders) {
+
+                return Redirect::to('/orders');
+            }
+        }
+        return View::make('send-orders');
     }
 
     public function edit($what) {

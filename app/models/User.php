@@ -11,6 +11,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
     const CAN_CREATE_NEWS = 1;
 
+    const CAN_BETA_TEST = 2;
+
     public $timestamps = false;
 
     public static function has($flag) {

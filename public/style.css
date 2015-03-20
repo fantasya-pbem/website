@@ -203,6 +203,10 @@ a:hover {
 	margin: 0px 15px 0;
 }
 
+#sidebar li li.beta {
+	background-color: #f8b9aa;
+}
+
 #sidebar h2 {
 	background: #90602A url(images/img03.jpg) repeat-x left top;
 	border: 0px #EEE3C3 solid;

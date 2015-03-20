@@ -24,6 +24,12 @@ Route::get('contact', function() {
 
 Route::match(array('GET', 'POST'), 'login/{saved?}', 'FantasyaController@login');
 
+Route::get('change/{what}', 'FantasyaController@change');
+
+Route::get('orders', 'FantasyaController@orders');
+
+Route::match(array('GET', 'POST'), 'send/{what}', 'FantasyaController@send');
+
 Route::get('logout', function() {
     Auth::logout();
     return View::make('logout');
