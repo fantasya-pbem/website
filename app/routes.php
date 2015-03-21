@@ -26,7 +26,7 @@ Route::match(array('GET', 'POST'), 'login/{saved?}', 'FantasyaController@login')
 
 Route::get('change/{what}', 'FantasyaController@change');
 
-Route::get('orders', 'FantasyaController@orders');
+Route::match(array('GET', 'POST'), 'orders/{party?}', 'FantasyaController@orders');
 
 Route::match(array('GET', 'POST'), 'send/{what}', 'FantasyaController@send');
 

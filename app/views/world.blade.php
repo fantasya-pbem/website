@@ -9,7 +9,7 @@
     <p>{{$game->description}}</p>
     <p><strong>Auswertung: </strong>{{Weekday::translate($game->adddays)}}, 17 Uhr</p>
     <p>
-        <strong>Letzter Zug: </strong>Runde {{$turn}} vom {{Date::translate($game->lastzat)}}<br>
-        <strong>Nächster Zug: </strong>{{Date::translate($game->nextzat)}}
+        <strong>Letzter Zug: </strong>Runde {{$turn - 1}} vom {{Date::translate($game->lastzat)}}<br>
+        <strong>Nächster Zug: </strong>Runde {{$turn}} am {{Date::translate($game->nextzat)}}
     </p>
 @stop

@@ -33,7 +33,7 @@
                 <p>Keine Parteien angemeldet.</p>
             @else
                 @foreach ($partiesInWorld as $party)
-                    <h4>{{ $party->name }}</h4>
+                    <h4>{{ $party->name }} [{{ $party->id }}]</h4>
                     <p>{{ $party->rasse }}</p>
                     <p>{{ $party->beschreibung }}</p>
                 @endforeach

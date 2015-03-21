@@ -82,22 +82,48 @@ class FantasyaController extends BaseController {
         }
     }
 
-    public function orders() {
-        $turn   = Settings::on(Game::current()->database)->find('game.runde');
-        $orders = 'noch keine Befehle';
-        return View::make('orders', array('turn' => $turn->Value, 'orders' => $orders));
+    public function orders($party = null) {
+        $game    = Game::current();
+        $parties = Party::allFor(Auth::user());
+        $parties = $parties[$game->id];
+        if (Request::isMethod('POST')) {
+            $party = Input::get('party');
+            $turn  = Input::get('turn');
+        } else {
+            $turn = Settings::on($game->database)->find('game.runde')->Value;
+        }
+        $party = $party ? $parties[$party] : current($parties);
+        $order = new Order($game, $party, $turn);
+        $p     = array();
+        foreach ($parties as $id => $pty) {
+            $p[$id] = $pty->name;
+        }
+        return View::make('orders', array('turn'  => $turn,  'turns'   => array(--$turn => $turn, ++$turn => $turn, ++$turn => $turn),
+                                          'party' => $party, 'parties' => $p,
+                                          'orders' => $order->getOrders(),));
     }
 
     public function send($what) {
         //zur Zeit nur $what = orders
+        $game    = Game::current();
+        $party   = Party::allFor(Auth::user());
+        $parties = $party[$game->id];
         if (Request::isMethod('POST')) {
+            $p      = Input::get('party');
+            $turn   = Input::get('turn');
             $orders = Input::get('orders');
-            if ($orders) {
-
-                return Redirect::to('/orders');
+            if ($p && $orders) {
+                $order = new Order($game, $parties[$p], $turn);
+                $order->setOrders($orders);
+                return Redirect::to('/orders/' . $p);
             }
         }
-        return View::make('send-orders');
+        $p = array();
+        foreach ($parties as $id => $party) {
+            $p[$id] = $party->name;
+        }
+        $turn = Settings::on($game->database)->find('game.runde')->Value;
+        return View::make('send-orders', array('parties' => $p, 'turns' => array($turn => $turn)));
     }
 
     public function edit($what) {
