@@ -14,7 +14,8 @@ class FantasyaController extends BaseController {
         if (User::has(User::CAN_BETA_TEST)) {
             $flags[] = 'Beta-Tester';
         }
-        return View::make('login', array('flags' => $flags, 'games' => Game::allById(), 'parties' => Party::allFor(Auth::user()), 'saved' => $saved));
+        $parties = Auth::user() ? Party::allFor(Auth::user()) : array();
+        return View::make('login', array('flags' => $flags, 'games' => Game::allById(), 'parties' => $parties, 'saved' => $saved));
     }
 
     public function reset() {

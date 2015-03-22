@@ -24,24 +24,23 @@ Route::get('contact', function() {
 
 Route::match(array('GET', 'POST'), 'login/{saved?}', 'FantasyaController@login');
 
-Route::get('change/{what}', 'FantasyaController@change');
+Route::get('change/{what}', array('before' => 'auth', 'uses' => 'FantasyaController@change'));
 
-Route::match(array('GET', 'POST'), 'orders/{party?}', 'FantasyaController@orders');
+Route::match(array('GET', 'POST'), 'orders/{party?}', array('before' => 'auth', 'uses' => 'FantasyaController@orders'));
 
-Route::match(array('GET', 'POST'), 'send/{what}', 'FantasyaController@send');
+Route::match(array('GET', 'POST'), 'send/{what}', array('before' => 'auth', 'uses' => 'FantasyaController@send'));
 
-Route::get('logout', function() {
+Route::get('logout', array('before' => 'auth', function() {
     Auth::logout();
     return View::make('logout');
-});
+}));
 
 Route::match(array('GET', 'POST'), 'reset', 'FantasyaController@reset');
 
-Route::post('profile', 'FantasyaController@profile');
+Route::post('profile', array('before' => 'auth', 'uses' => 'FantasyaController@profile'));
 
-Route::match(array('GET', 'POST'), 'edit/{what}', 'FantasyaController@edit');
+Route::match(array('GET', 'POST'), 'edit/{what}', array('before' => 'auth', 'uses' => 'FantasyaController@edit'));
 
-Route::get('delete/{what}/{id}', 'FantasyaController@delete');
+Route::get('delete/{what}/{id}', array('before' => 'auth', 'uses' => 'FantasyaController@delete'));
 
 Route::get('world/{id?}', 'FantasyaController@world');
-
