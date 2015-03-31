@@ -29,18 +29,29 @@ if (!is_file($configFile)) {
 $config = include($configFile);
 
 // Befehle extrahieren:
-switch ($recipient) {
-    case 'befehle@fantasya-pbem.de' :
+$atPos = strpos($recipient, '@fantasya-pbem.de');
+if ($atPos <= 0) {
+	echo 'Empfängeradresse fehlerhaft: ' . $recipient . PHP_EOL;
+	exit(1);
+}
+$mailbox = substr($recipient, 0, $atPos);
+switch ($mailbox) {
+    case 'befehle' :
+    case 'test' :
         $game       = 'spiel';
         $database   = $config['MYSQL_DB_MAIN'];
         $dbUser     = $config['MYSQL_USER_MAIN'];
         $dbPassword = $config['MYSQL_PASS_MAIN'];
         break;
-    default :
+	case 'beta' :
         $game       = 'beta';
         $database   = $config['MYSQL_DB_BETA'];
         $dbUser     = $config['MYSQL_USER_BETA'];
         $dbPassword = $config['MYSQL_PASS_BETA'];
+        break;
+    default :
+        echo 'Unbekanntes Postfach: ' . $mailbox . PHP_EOL;
+		exit(1);
 }
 
 $firstLinePos = strpos($email, "\r\n\r\n");
