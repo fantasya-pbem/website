@@ -54,17 +54,18 @@ switch ($mailbox) {
 		exit(1);
 }
 
-$firstLinePos = strpos($email, "\r\n\r\n");
+$email        = str_replace("\r\n", "\n", $email);
+$firstLinePos = strpos($email, "\n\n");
 if (!$firstLinePos) {
     echo 'Fehler: Anfang der Befehle nicht gefunden.';
     exit(1) . PHP_EOL;
 }
-$email = utf8_encode(quoted_printable_decode(substr($email, $firstLinePos + 4)));
+$email = utf8_encode(quoted_printable_decode(substr($email, $firstLinePos + 2)));
 if (strlen($email) <= 0) {
     echo 'Fehler: Leerer E-Mail-Text.';
     exit(1) . PHP_EOL;
 }
-$endOfLine = strpos($email, "\r\n");
+$endOfLine = strpos($email, "\n");
 if (!$endOfLine) {
     echo 'Fehler: Befehle bestehen nur aus einer Zeile.';
     exit(1) . PHP_EOL;
