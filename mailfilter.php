@@ -29,31 +29,43 @@ if (!is_file($configFile)) {
 $config = include($configFile);
 
 // Befehle extrahieren:
-switch ($recipient) {
-    case 'befehle@fantasya-pbem.de' :
+$atPos = strpos($recipient, '@fantasya-pbem.de');
+if ($atPos <= 0) {
+	echo 'Empfängeradresse fehlerhaft: ' . $recipient . PHP_EOL;
+	exit(1);
+}
+$mailbox = substr($recipient, 0, $atPos);
+switch ($mailbox) {
+    case 'befehle' :
+    case 'test' :
         $game       = 'spiel';
         $database   = $config['MYSQL_DB_MAIN'];
         $dbUser     = $config['MYSQL_USER_MAIN'];
         $dbPassword = $config['MYSQL_PASS_MAIN'];
         break;
-    default :
+	case 'beta' :
         $game       = 'beta';
         $database   = $config['MYSQL_DB_BETA'];
         $dbUser     = $config['MYSQL_USER_BETA'];
         $dbPassword = $config['MYSQL_PASS_BETA'];
+        break;
+    default :
+        echo 'Unbekanntes Postfach: ' . $mailbox . PHP_EOL;
+		exit(1);
 }
 
-$firstLinePos = strpos($email, "\r\n\r\n");
+$email        = str_replace("\r\n", "\n", $email);
+$firstLinePos = strpos($email, "\n\n");
 if (!$firstLinePos) {
     echo 'Fehler: Anfang der Befehle nicht gefunden.';
     exit(1) . PHP_EOL;
 }
-$email = utf8_encode(quoted_printable_decode(substr($email, $firstLinePos + 4)));
+$email = utf8_encode(quoted_printable_decode(substr($email, $firstLinePos + 2)));
 if (strlen($email) <= 0) {
     echo 'Fehler: Leerer E-Mail-Text.';
     exit(1) . PHP_EOL;
 }
-$endOfLine = strpos($email, "\r\n");
+$endOfLine = strpos($email, "\n");
 if (!$endOfLine) {
     echo 'Fehler: Befehle bestehen nur aus einer Zeile.';
     exit(1) . PHP_EOL;
