@@ -37,13 +37,13 @@ if ($atPos <= 0) {
 $mailbox = substr($recipient, 0, $atPos);
 switch ($mailbox) {
     case 'befehle' :
-    case 'test' :
         $game       = 'spiel';
         $database   = $config['MYSQL_DB_MAIN'];
         $dbUser     = $config['MYSQL_USER_MAIN'];
         $dbPassword = $config['MYSQL_PASS_MAIN'];
         break;
 	case 'beta' :
+	case 'test' :
         $game       = 'beta';
         $database   = $config['MYSQL_DB_BETA'];
         $dbUser     = $config['MYSQL_USER_BETA'];
@@ -60,7 +60,7 @@ if (!$firstLinePos) {
     echo 'Fehler: Anfang der Befehle nicht gefunden.';
     exit(1) . PHP_EOL;
 }
-$email = utf8_encode(quoted_printable_decode(substr($email, $firstLinePos + 2)));
+$email = quoted_printable_decode(substr($email, $firstLinePos + 2));
 if (strlen($email) <= 0) {
     echo 'Fehler: Leerer E-Mail-Text.';
     exit(1) . PHP_EOL;
