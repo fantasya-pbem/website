@@ -54,14 +54,13 @@ switch ($mailbox) {
 		exit(1);
 }
 
-$email        = trim($email) . "\n";
 $email        = str_replace("\r\n", "\n", $email);
 $firstLinePos = strpos($email, "\n\n");
 if (!$firstLinePos) {
     echo 'Fehler: Anfang der Befehle nicht gefunden.';
     exit(1) . PHP_EOL;
 }
-$email = quoted_printable_decode(substr($email, $firstLinePos + 2));
+$email = trim(quoted_printable_decode(substr($email, $firstLinePos + 2)));
 if (strlen($email) <= 0) {
     echo 'Fehler: Leerer E-Mail-Text.';
     exit(1) . PHP_EOL;
@@ -125,6 +124,7 @@ if (!is_dir($dir)) {
         exit(1);
     }
 }
+umask(0133);
 if (@file_put_contents($file, $email) <= 0) {
     echo 'Fehler: Befehle konnten nicht gespeichert werden.' . PHP_EOL;
     exit(1);
