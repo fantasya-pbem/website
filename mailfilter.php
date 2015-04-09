@@ -54,6 +54,7 @@ switch ($mailbox) {
 		exit(1);
 }
 
+$email        = trim($email) . "\n";
 $email        = str_replace("\r\n", "\n", $email);
 $firstLinePos = strpos($email, "\n\n");
 if (!$firstLinePos) {
