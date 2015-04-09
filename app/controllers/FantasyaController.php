@@ -99,7 +99,13 @@ class FantasyaController extends BaseController {
         foreach ($parties as $id => $pty) {
             $p[$id] = $pty->name;
         }
-        return View::make('orders', array('turn'  => $turn,  'turns'   => array($turn - 1 => $turn, $turn => $turn + 1, $turn + 1 => $turn + 2),
+		$turns = array();
+		$next  = $turn - 5;
+		$last  = $turn + 5;
+		while ($next <= $last ) {
+			$turns[$next++] = $next;
+		}
+        return View::make('orders', array('turn'  => $turn,  'turns'   => $turns,
                                           'party' => $party, 'parties' => $p,
                                           'orders' => $order->getOrders(),));
     }
@@ -123,8 +129,14 @@ class FantasyaController extends BaseController {
         foreach ($parties as $id => $party) {
             $p[$id] = $party->name;
         }
-        $turn = Settings::on($game->database)->find('game.runde')->Value;
-        return View::make('send-orders', array('parties' => $p, 'turns' => array($turn => $turn + 1)));
+        $turn  = Settings::on($game->database)->find('game.runde')->Value;
+		$turns = array();
+		$next  = $turn;
+		$last  = $turn + 4;
+		while ($next <= $last ) {
+			$turns[$next++] = $next;
+		}
+        return View::make('send-orders', array('parties' => $p, 'turns' => $turns));
     }
 
     public function edit($what) {
