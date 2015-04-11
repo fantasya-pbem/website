@@ -60,7 +60,12 @@ if (!$firstLinePos) {
     echo 'Fehler: Anfang der Befehle nicht gefunden.';
     exit(1) . PHP_EOL;
 }
-$email = trim(quoted_printable_decode(substr($email, $firstLinePos + 2)));
+$headers = trim(substr($email, 0, $firstLinePos));
+if (strlen($headers) <= 0) {
+    echo 'Fehler: Keine E-Mail-Header vorhanden.';
+    exit(1) . PHP_EOL;
+}
+$email   = trim(quoted_printable_decode(substr($email, $firstLinePos + 2)));
 if (strlen($email) <= 0) {
     echo 'Fehler: Leerer E-Mail-Text.';
     exit(1) . PHP_EOL;
@@ -129,3 +134,30 @@ if (@file_put_contents($file, $email) <= 0) {
     echo 'Fehler: Befehle konnten nicht gespeichert werden.' . PHP_EOL;
     exit(1);
 }
+
+// Bestätigungsmail senden:
+foreach( explode("\n", $headers) as $header ) {
+    if (strpos($header, 'From: ') === 0) {
+        $to = trim(substr($header, 6));
+    }
+    if (strpos($header, 'Subject: ') === 0) {
+        $subject = trim(substr($header, 9));
+    }
+    if (strpos($header, 'Message-ID: ') === 0) {
+        $id = trim(substr($header, 12));
+    }
+}
+$from    = "From: Fantasya Server <" . $recipient . ">\r\n"
+         . "Reply-To: Fantasya Admin <admin@fantasya-pbem.de>\r\n"
+         . "X-Mailer: PHP " . phpversion();
+if (isset($id)) {
+    $from .= "\r\nIn-Reply-To: " . $id;
+}
+$to      = isset($to) ? $to : $sender;
+$subject = isset($subject) ? 'Re: ' . $subject : 'Fantasya-Befehle sind angekommen';
+$message = "Deine Befehle sind angekommen:\r\n\r\n" . utf8_decode(file_get_contents($file));
+if (!mail($to, $subject, $message, $from)) {
+    echo 'Antwortmail konnte nicht gesendet werden.' . PHP_EOL;
+    exit(3);
+}
+
