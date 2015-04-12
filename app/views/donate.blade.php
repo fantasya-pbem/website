@@ -11,4 +11,7 @@
 	<p><code>18GPpNuzLGJze9Hep8do8haTDfadjY3wtu</code></p>
 	<p>Dankeschön!</p>
 	<p style="text-align: center"><img src="/images/donate.png" />
+	@if (Auth::user() && Auth::user()->name === 'Thalian')
+		<p><a href="https://blockchain.info/address/18GPpNuzLGJze9Hep8do8haTDfadjY3wtu" target="_blank">Spendenstatus in der Blockchain überprüfen</a></p>
+	@endif
 @stop
