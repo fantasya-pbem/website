@@ -18,6 +18,10 @@ Route::get('myths', 'FantasyaController@myths');
 
 Route::match(array('GET', 'POST'), 'myth', 'FantasyaController@myth');
 
+Route::get('donate', function() {
+	return View::make('donate');
+});
+
 Route::get('contact', function() {
 	return View::make('contact');
 });

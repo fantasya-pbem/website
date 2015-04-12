@@ -28,7 +28,7 @@ if (!is_file($configFile)) {
 }
 $config = include($configFile);
 
-// Befehle extrahieren:
+// Zuständige Datenbank ermitteln:
 $atPos = strpos($recipient, '@fantasya-pbem.de');
 if ($atPos <= 0) {
 	echo 'Empfängeradresse fehlerhaft: ' . $recipient . PHP_EOL;
@@ -54,6 +54,7 @@ switch ($mailbox) {
 		exit(1);
 }
 
+// Header und Mailtext trennen:
 $email        = str_replace("\r\n", "\n", $email);
 $firstLinePos = strpos($email, "\n\n");
 if (!$firstLinePos) {
@@ -65,15 +66,30 @@ if (strlen($headers) <= 0) {
     echo 'Fehler: Keine E-Mail-Header vorhanden.';
     exit(1) . PHP_EOL;
 }
+$headers = explode("\n", $headers);
 $email   = trim(quoted_printable_decode(substr($email, $firstLinePos + 2)));
 if (strlen($email) <= 0) {
-    echo 'Fehler: Leerer E-Mail-Text.';
-    exit(1) . PHP_EOL;
+    echo 'Fehler: Leerer E-Mail-Text.' . PHP_EOL;
+    exit(1);
 }
+
+// E-Mail-Format validieren:
+foreach( $headers as $header ) {
+    if (strpos($header, 'Content-Type: ') === 0) {
+	$type = trim(substr($header, 14));
+        break;
+    }
+}
+if (strpos($type, 'text/plain') !== 0) {
+    echo 'Fehler: Falsches E-Mail-Format: ' . $type . PHP_EOL;
+    exit(1);
+}
+
+// Befehle extrahieren:
 $endOfLine = strpos($email, "\n");
 if (!$endOfLine) {
-    echo 'Fehler: Befehle bestehen nur aus einer Zeile.';
-    exit(1) . PHP_EOL;
+    echo 'Fehler: Befehle bestehen nur aus einer Zeile.' . PHP_EOL;
+    exit(1);
 }
 $firstLine = substr($email, 0, $endOfLine);
 if (strlen($firstLine) <= 0) {
@@ -87,10 +103,6 @@ if (!preg_match('/^([^ ]+)[ ]+([a-z0-9]+)[ ]+"([^"]*)"$/', $firstLine, $parts) |
 $clientGame = $parts[1];
 $party      = $parts[2];
 $password   = $parts[3];
-
-//echo 'Spielkennzeichnung: ' . $parts[1] . PHP_EOL;
-//echo 'Partei-ID: ' . $parts[2]. PHP_EOL;
-//echo 'Passwort: ' . $parts[3] . PHP_EOL;
 
 // Authentifizierung prüfen:
 try {
@@ -106,6 +118,7 @@ try {
     exit(2);
 }
 
+// Aktuelle Rundennummer ermitteln:
 try {
     $stmt   = $db->query("SELECT Value FROM settings WHERE Name = 'game.runde'");
     $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -136,7 +149,7 @@ if (@file_put_contents($file, $email) <= 0) {
 }
 
 // Bestätigungsmail senden:
-foreach( explode("\n", $headers) as $header ) {
+foreach( $headers as $header ) {
     if (strpos($header, 'From: ') === 0) {
         $to = trim(substr($header, 6));
     }
