@@ -13,12 +13,16 @@ while (!feof($file)) {
 fclose($file);
 
 // Mail loggen:
-//$file = fopen(__DIR__ . '/app/storage/logs/mailfilter.log', 'w');
-//fputs($file, 'From: ' . $sender . PHP_EOL);
-//fputs($file, 'Size: ' . $size . PHP_EOL);
-//fputs($file, 'To:   ' . $recipient . PHP_EOL . PHP_EOL);
-//fputs($file, $email);
-//fclose($file);
+$loggingEnabled = true;
+$loggingEnabled = false;
+if ($loggingEnabled ) {
+    $file = fopen(__DIR__ . '/app/storage/logs/mailfilter.log', 'w');
+    fputs($file, 'From: ' . $sender . PHP_EOL);
+    fputs($file, 'Size: ' . $size . PHP_EOL);
+    fputs($file, 'To:   ' . $recipient . PHP_EOL . PHP_EOL);
+    fputs($file, $email);
+    fclose($file);
+}
 
 // Datenbankkonfiguration einlesen:
 $configFile = __DIR__ . '/.env.php';

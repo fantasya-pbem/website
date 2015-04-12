@@ -35,6 +35,7 @@
 								<li><a href="/about">Über Fantasya</a></li>
 								<li><a href="/myths">Gerüchte</a></li>
 								{{--  <li><a href="#">Downloads</a></li> --}}
+								<li><a href="/donate">Spenden</a></li>
 								<li><a href="/contact">Kontakt</a></li>
 							</ul>
 						</li>
