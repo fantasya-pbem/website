@@ -6,9 +6,13 @@ $sender    = $argv[1];
 $size      = $argv[2];
 $recipient = $argv[3];
 $file      = fopen('php://stdin', 'r');
-$email     = '';
+if (!$file) {
+    echo 'Fehler beim Einlesen der E-Mail.' . PHP_EOL;
+    exit(1);
+}
+$email = '';
 while (!feof($file)) {
-    $email .= fread($file, 1024);
+    $email .= fread($file, 8192);
 }
 fclose($file);
 
@@ -16,19 +20,21 @@ fclose($file);
 $loggingEnabled = true;
 $loggingEnabled = false;
 if ($loggingEnabled ) {
-    $file = fopen(__DIR__ . '/app/storage/logs/mailfilter.log', 'w');
-    fputs($file, 'From: ' . $sender . PHP_EOL);
-    fputs($file, 'Size: ' . $size . PHP_EOL);
-    fputs($file, 'To:   ' . $recipient . PHP_EOL . PHP_EOL);
-    fputs($file, $email);
-    fclose($file);
+    $file = fopen(__DIR__ . '/app/storage/logs/mailfilter.log', 'a');
+    if ($file) {
+	fputs($file, 'From: ' . $sender . PHP_EOL);
+	fputs($file, 'Size: ' . $size . PHP_EOL);
+	fputs($file, 'To:   ' . $recipient . PHP_EOL . PHP_EOL);
+	fputs($file, $email);
+        fclose($file);
+    }
 }
 
 // Datenbankkonfiguration einlesen:
 $configFile = __DIR__ . '/.env.php';
 if (!is_file($configFile)) {
     echo 'Datenbankkonfiguration nicht gefunden.' . PHP_EOL;
-    exit(1);
+    exit(2);
 }
 $config = include($configFile);
 
@@ -70,21 +76,27 @@ if (strlen($headers) <= 0) {
     echo 'Fehler: Keine E-Mail-Header vorhanden.';
     exit(1) . PHP_EOL;
 }
-$headers = explode("\n", $headers);
-$email   = trim(quoted_printable_decode(substr($email, $firstLinePos + 2)));
+$email = trim(quoted_printable_decode(substr($email, $firstLinePos + 2)));
 if (strlen($email) <= 0) {
     echo 'Fehler: Leerer E-Mail-Text.' . PHP_EOL;
     exit(1);
 }
 
-// E-Mail-Format validieren:
-foreach( $headers as $header ) {
-    if (strpos($header, 'Content-Type: ') === 0) {
-	$type = trim(substr($header, 14));
-        break;
+// Header parsen:
+$header = array();
+foreach (explode("\n", preg_replace('/\n[ \t]+/', ' ', $headers)) as $h) {
+    if (preg_match("/^([A-Z][A-Za-z\-]*):[ \t]+(.*)$/", $h, $matches) === 1) {
+        $tag = $matches[1];
+        if (!isset($header[$tag])) {
+            $header[$tag] = array();
+        }
+        $header[$tag][] = rtrim($matches[2]);
     }
 }
-if (strpos($type, 'text/plain') !== 0) {
+
+// E-Mail-Format validieren:
+$type = isset($header('Content-Type')) ? $header('Content-Type') : array('');
+if (strpos($type[0], 'text/plain') !== 0) {
     echo 'Fehler: Falsches E-Mail-Format: ' . $type . PHP_EOL;
     exit(1);
 }
@@ -140,41 +152,30 @@ try {
 $file = __DIR__ . '/app/storage/orders/' . $game . '/' . $turn . '/' . $party . '.order';
 $dir  = dirname($file);
 if (!is_dir($dir)) {
-    umask(0002);
-    if (!@mkdir($dir, 0775, true)) {
+    umask(0022);
+    if (!@mkdir($dir, 0755, true)) {
         echo 'Fehler: Rundenverzeichnis konnte nicht angelegt werden.' . PHP_EOL;
-        exit(1);
+        exit(4);
     }
 }
 umask(0133);
 if (@file_put_contents($file, $email) <= 0) {
     echo 'Fehler: Befehle konnten nicht gespeichert werden.' . PHP_EOL;
-    exit(1);
+    exit(4);
 }
 
 // Bestätigungsmail senden:
-foreach( $headers as $header ) {
-    if (strpos($header, 'From: ') === 0) {
-        $to = trim(substr($header, 6));
-    }
-    if (strpos($header, 'Subject: ') === 0) {
-        $subject = trim(substr($header, 9));
-    }
-    if (strpos($header, 'Message-ID: ') === 0) {
-        $id = trim(substr($header, 12));
-    }
-}
+$to      = isset($header['Reply-To']) ? implode(', ', $header['Reply-To']) : (isset($header['From']) ? implode(', ', $header['From']) : $sender);
+$subject = isset($header['Subject']) ? 'Re: ' . $header['Subject'][0] : 'Fantasya-Befehle sind angekommen';
+$message = "Deine Befehle sind angekommen:\n\n" . utf8_decode(file_get_contents($file));
 $from    = "From: Fantasya Server <" . $recipient . ">\r\n"
          . "Reply-To: Fantasya Admin <admin@fantasya-pbem.de>\r\n"
          . "X-Mailer: PHP " . phpversion();
-if (isset($id)) {
-    $from .= "\r\nIn-Reply-To: " . $id;
+if (isset($header['Message-ID'])) {
+    $from .= "\r\nIn-Reply-To: " . $header['Message-ID'][0];
 }
-$to      = isset($to) ? $to : $sender;
-$subject = isset($subject) ? 'Re: ' . $subject : 'Fantasya-Befehle sind angekommen';
-$message = "Deine Befehle sind angekommen:\r\n\r\n" . utf8_decode(file_get_contents($file));
 if (!mail($to, $subject, $message, $from)) {
     echo 'Antwortmail konnte nicht gesendet werden.' . PHP_EOL;
-    exit(3);
+    exit(5);
 }
 
