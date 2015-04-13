@@ -1,9 +1,9 @@
 @extends('layout')
 
 @section('headline')
-    Es geht ein Gerücht...
+	Es geht ein Gerücht...
 @stop
 
 @section('text')
-    @include('myth-form')
+	@include('myth-form')
 @stop

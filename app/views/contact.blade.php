@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('headline')
-    Kontakt
+	Kontakt
 @stop
 
 @section('text')

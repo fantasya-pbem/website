@@ -63,7 +63,7 @@ return array(
 			'password'  => $_ENV['MYSQL_PASS_MAIN'],
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
+			'prefix'    => ''
 		),
 		$_ENV['MYSQL_DB_BETA'] => array(
 			'driver'    => 'mysql',
@@ -73,7 +73,7 @@ return array(
 			'password'  => $_ENV['MYSQL_PASS_BETA'],
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
+			'prefix'    => ''
 		),
 		$_ENV['MYSQL_DB_SKIRMISH'] => array(
 			'driver'    => 'mysql',
@@ -83,7 +83,7 @@ return array(
 			'password'  => $_ENV['MYSQL_PASS_SKIRMISH'],
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
+			'prefix'    => ''
 		)
 	),
 
@@ -112,15 +112,12 @@ return array(
 	*/
 
 	'redis' => array(
-
 		'cluster' => false,
-
 		'default' => array(
 			'host'     => '127.0.0.1',
 			'port'     => 6379,
-			'database' => 0,
-		),
-
-	),
+			'database' => 0
+		)
+	)
 
 );

@@ -1,9 +1,9 @@
 @extends('layout')
 
 @section('headline')
-    Abmeldung
+	Abmeldung
 @stop
 
 @section('text')
-    <p>Du hast Dich abgemeldet.</p>
+	<p>Du hast Dich abgemeldet.</p>
 @stop

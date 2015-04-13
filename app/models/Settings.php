@@ -2,11 +2,10 @@
 
 class Settings extends Eloquent {
 
-    const TABLE = 'settings';
+	const TABLE = 'settings';
 
-    protected $primaryKey = 'Name';
-            
-    public $timestamps = false;
+	protected $primaryKey = 'Name';
+
+	public $timestamps = false;
    
 }
-

@@ -12,9 +12,9 @@
 				<div id="logo" />
 			</div>
 
-            <div id="myth">
-                <span>{{{Myth::getLast()}}}</span>
-            </div>
+			<div id="myth">
+				<span>{{{Myth::getLast()}}}</span>
+			</div>
 
 			<div id="menu">
 				<ul>
@@ -34,7 +34,6 @@
 								<li><a href="/news">Neuigkeiten</a></li>
 								<li><a href="/about">Über Fantasya</a></li>
 								<li><a href="/myths">Gerüchte</a></li>
-								{{--  <li><a href="#">Downloads</a></li> --}}
 								<li><a href="/donate">Spenden</a></li>
 								<li><a href="/contact">Kontakt</a></li>
 							</ul>
@@ -42,18 +41,18 @@
 						<li>
 							<h2>Anmeldung</h2>
 							@if (Auth::check())
-							     @include('login-menu')
+								 @include('login-menu')
 							@else
-							     @include('login-form')
+								 @include('login-form')
 							@endif
 						</li>
 						<li>
-						    <h2>Die Welten</h2>
-						    <ul>
-						        @foreach (Game::all() as $game)
-                                    <li><a href="/world/{{{$game->id}}}">{{{$game->name}}}</a></li>
-                                @endforeach
-						    </ul>
+							<h2>Die Welten</h2>
+							<ul>
+								@foreach (Game::all() as $game)
+									<li><a href="/world/{{{$game->id}}}">{{{$game->name}}}</a></li>
+								@endforeach
+							</ul>
 						</li>
 						<li>
 							<h2>Links</h2>

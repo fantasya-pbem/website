@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('headline')
-    Über Fantasya
+	Über Fantasya
 @stop
 
 @section('text')

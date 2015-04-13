@@ -35,8 +35,8 @@ Route::match(array('GET', 'POST'), 'orders/{party?}', array('before' => 'auth', 
 Route::match(array('GET', 'POST'), 'send/{what}', array('before' => 'auth', 'uses' => 'FantasyaController@send'));
 
 Route::get('logout', array('before' => 'auth', function() {
-    Auth::logout();
-    return View::make('logout');
+	Auth::logout();
+	return View::make('logout');
 }));
 
 Route::match(array('GET', 'POST'), 'reset', 'FantasyaController@reset');
