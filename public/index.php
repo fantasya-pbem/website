@@ -20,6 +20,10 @@
 
 require __DIR__.'/../bootstrap/autoload.php';
 
+if (!isset($_ENV['MYSQL_DB_MANAGEMENT']) ) {
+	$_ENV = require __DIR__ . '/../.env';
+}
+
 /*
 |--------------------------------------------------------------------------
 | Turn On The Lights
