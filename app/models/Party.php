@@ -4,6 +4,8 @@ class Party extends Eloquent {
 
 	const TABLE = 'partei';
 
+	public $timestamps = false;
+
 	protected $table = self::TABLE;
 
 	public static function allFor(User $user) {

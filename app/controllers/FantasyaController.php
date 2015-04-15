@@ -43,11 +43,23 @@ class FantasyaController extends BaseController {
 		if ($user) {
 			$email = Input::get('email');
 			if ($email) {
+				foreach( Party::allFor(Auth::user()) as $parties ) {
+					foreach( $parties as $party ) {
+						$party->email = $email;
+						$party->save();
+					}
+				}
 				$user->email = $email;
 				$user->save();
 			}
 			$password = Input::get('password');
 			if ($password) {
+				foreach( Party::allFor(Auth::user()) as $parties ) {
+					foreach( $parties as $party ) {
+						$party->password = md5($password);
+						$party->save();
+					}
+				}
 				$user->password = Hash::make($password);
 				$user->save();
 			}

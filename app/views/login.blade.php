@@ -23,6 +23,7 @@
 		<p>E-Mail-Adresse: {{{Auth::user()->email}}}</p>
 		@include('email-form')
 		@include('password-form')
+		<p>Das neue Passwort gilt für die Anmeldung und die Befehlsabgabe per E-Mail.</p>
 		@if ($saved)
 			<p><strong>Änderung gespeichert.</strong></p>
 		@endif
