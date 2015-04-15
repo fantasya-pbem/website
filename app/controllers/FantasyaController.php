@@ -212,9 +212,10 @@ class FantasyaController extends BaseController {
 		if (!$id) {
 			$id = (int)DB::table(Game::TABLE)->limit(1)->pluck('id');
 		}
-		$game = Game::find($id);
-		$turn = Settings::on($game->database)->find('game.runde');
-		return View::make('world', array('game' => $game, 'turn' => $turn->Value));
+		$game    = Game::find($id);
+		$turn    = Settings::on($game->database)->find('game.runde');
+		$lastZAT = DB::connection($game->database)->table('meldungen')->max('zeit');
+		return View::make('world', array('game' => $game, 'turn' => $turn->Value, 'lastZAT' => $lastZAT));
 	}
 
 }
