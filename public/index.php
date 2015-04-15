@@ -20,8 +20,6 @@
 
 require __DIR__.'/../bootstrap/autoload.php';
 
-$_ENV = require __DIR__.'/../.env';
-
 /*
 |--------------------------------------------------------------------------
 | Turn On The Lights
