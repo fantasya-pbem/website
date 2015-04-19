@@ -7,12 +7,12 @@ $loggingEnabled = true;
 function logReturn($message, $errorCode = 0) {
 	global $loggingEnabled;
 	if ($loggingEnabled) {
-		$prompt   = $errorCode > 0 ? '>>> Error: ' : '>>> ';
+		$prompt   = $errorCode > 0 ? '>>> Fehler: ' : '>>> ';
 		$logEntry = PHP_EOL . $prompt . $message . PHP_EOL . PHP_EOL;
 		@file_put_contents(__DIR__ . '/app/storage/logs/mailfilter.log', $logEntry, FILE_APPEND);
 	}
 	if ($errorCode > 0) {
-		echo $message . PHP_EOL;
+		echo 'Fehler: ' . $message . PHP_EOL;
 	}
 	exit($errorCode);
 }
@@ -27,7 +27,7 @@ $size      = $argv[2];
 $recipient = $argv[3];
 $file      = @fopen('php://stdin', 'r');
 if (!$file) {
-	logReturn('Fehler beim Einlesen der E-Mail.', 1);
+	logReturn('Die E-Mail konnte nicht eingelesen werden.', 1);
 }
 $email = '';
 while (!@feof($file)) {
@@ -82,15 +82,15 @@ switch ($mailbox) {
 $email        = str_replace("\r\n", "\n", $email);
 $firstLinePos = strpos($email, "\n\n");
 if (!$firstLinePos) {
-	logReturn('Fehler: Anfang der Befehle nicht gefunden.', 1);
+	logReturn('Anfang der Befehle nicht gefunden.', 1);
 }
 $headers = trim(substr($email, 0, $firstLinePos));
 if (strlen($headers) <= 0) {
-	logReturn('Fehler: Keine E-Mail-Header vorhanden.', 1);
+	logReturn('Keine E-Mail-Header vorhanden.', 1);
 }
 $email = trim(quoted_printable_decode(substr($email, $firstLinePos + 2)));
 if (strlen($email) <= 0) {
-	logReturn('Fehler: Leerer E-Mail-Text.', 1);
+	logReturn('Leerer E-Mail-Text.', 1);
 }
 
 // Header parsen:
@@ -108,17 +108,17 @@ foreach (explode("\n", preg_replace('/\n[ \t]+/', ' ', $headers)) as $h) {
 // E-Mail-Format validieren:
 $type = isset($header['Content-Type']) ? $header['Content-Type'] : array('');
 if (strpos($type[0], 'text/plain') !== 0) {
-	logReturn('Fehler: Falsches E-Mail-Format: ' . $type, 1);
+	logReturn('Falsches E-Mail-Format: ' . $type, 1);
 }
 
 // Befehle extrahieren:
 $endOfLine = strpos($email, "\n");
 if (!$endOfLine) {
-	logReturn('Fehler: Befehle bestehen nur aus einer Zeile.', 1);
+	logReturn('Befehle bestehen nur aus einer Zeile.', 1);
 }
 $firstLine = substr($email, 0, $endOfLine);
 if (strlen($firstLine) <= 0) {
-	logReturn('Fehler: Erste Befehlszeile ist leer.', 1);
+	logReturn('Erste Befehlszeile ist leer.', 1);
 }
 if (!preg_match('/^([^ ]+)[ ]+([a-zA-Z0-9]+)[ ]+"([^"]*)"$/', $firstLine, $parts) || count($parts) < 4) {
 	logReturn('Fehler: Erste Befehlszeile fehlerhaft.', 1);
@@ -133,17 +133,17 @@ try {
 	$stmt   = $db->query("SELECT COUNT(*) FROM partei WHERE id = '" . $party . "' AND password = MD5('" . $password . "')");
 	$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 	if (!isset($result[0]) || (int)$result[0] !== 1) {
-		logReturn('Fehler: Passwort falsch.', 3);
+		logReturn('Passwort falsch.', 3);
 	}
 	// Aktuelle Rundennummer ermitteln:
 	$stmt   = $db->query("SELECT Value FROM settings WHERE Name = 'game.runde'");
 	$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 	if (!isset($result[0]) || (int)$result[0] <= 0) {
-		logReturn('Fehler: Rundennummer nicht gefunden.', 2);
+		logReturn('Rundennummer nicht gefunden.', 2);
 	}
 	$turn = (int)$result[0];
 } catch (PDOException $e) {
-	logReturn('Fehler: ' . $e->getMessage(), 2);
+	logReturn($e->getMessage(), 2);
 }
 
 // Befehle in Datei schreiben:
@@ -152,12 +152,12 @@ $dir  = dirname($file);
 if (!@is_dir($dir)) {
 	umask(0022);
 	if (!@mkdir($dir, 0755, true)) {
-		logReturn('Fehler: Rundenverzeichnis konnte nicht angelegt werden.', 4);
+		logReturn('Rundenverzeichnis konnte nicht angelegt werden.', 4);
 	}
 }
 umask(0133);
 if (@file_put_contents($file, $email) <= 0) {
-	logReturn('Fehler: Befehle konnten nicht gespeichert werden.', 4);
+	logReturn('Befehle konnten nicht gespeichert werden.', 4);
 }
 
 // Bestätigungsmail senden:
