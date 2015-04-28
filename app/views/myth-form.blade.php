@@ -1,4 +1,4 @@
-<div id='myth-form'>
+<div id='myth-form' class="captcha">
     {{Form::open(array('action' => 'FantasyaController@myth'))}}
 		<?php echo Form::label('mythtext', '...das da lautet:'); ?><br>
 		<?php echo Form::text('mythtext', $mythtext); ?><br>

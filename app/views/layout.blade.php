@@ -44,6 +44,10 @@
 								 @include('login-menu')
 							@else
 								 @include('login-form')
+								<ul>
+									<li><a href="/register">Neu registrieren</a></li>
+									<li><a href="/reset">Passwort vergessen</a></li>
+								</ul>
 							@endif
 						</li>
 						<li>

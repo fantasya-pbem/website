@@ -18,6 +18,33 @@ class FantasyaController extends BaseController {
 		return View::make('login', array('flags' => $flags, 'games' => Game::allById(), 'parties' => $parties, 'saved' => $saved));
 	}
 
+	public function register() {
+		if (Request::isMethod('POST')) {
+			$rules =  array(
+				'user'    => 'required|min:3|max:50|unique:users,name',
+				'email'   => 'required|email',
+				'captcha' => array('required', 'captcha')
+			);
+			$validator = Validator::make(Input::all(), $rules);
+			if ($validator->passes()) {
+				$user = new User();
+				$user->name = Input::get('user');
+				$user->email = Input::get('email');
+				$password = uniqid();
+				$user->password = Hash::make($password);
+				$user->save();
+				Mail::send('reset-mail', array('user' => $user->name, 'password' => $password), function ($message) use ($user) {
+					$message->from('admin@fantasya-pbem.de', 'Fantasya-Administrator');
+					$message->to($user->email);
+					$message->subject('Fantasya-Registrierung');
+				});
+				return View::make('registered');
+			}
+			return View::make('register')->withErrors($validator);
+		}
+		return View::make('register');
+	}
+
 	public function reset() {
 		$success = null;
 		if (Request::isMethod('POST')) {

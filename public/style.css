@@ -29,6 +29,11 @@ a {
 a:hover {
 }
 
+form span.error {
+    color: #F93D00;
+    margin: 0 0 0 5px;
+}
+
 #wrapper {
 	width: 960px;
 	margin: 0 auto;
@@ -324,13 +329,13 @@ a:hover {
     color: #5555aa;
 }
 
-#myth-form #mythtext {
-	width: 100%;
-	margin: 0 0 10px;
+.captcha img {
+    vertical-align: middle;
+    margin: 0 0 10px;
 }
 
-#myth-form img {
-	vertical-align: middle;
+#myth-form #mythtext {
+	width: 100%;
 	margin: 0 0 10px;
 }
 

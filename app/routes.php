@@ -26,6 +26,12 @@ Route::get('contact', function() {
 	return View::make('contact');
 });
 
+Route::match(array('GET', 'POST'), 'register', 'FantasyaController@register');
+
+Route::get('registered', function() {
+	return View::make('registered');
+});
+
 Route::match(array('GET', 'POST'), 'login/{saved?}', 'FantasyaController@login');
 
 Route::get('change/{what}', array('before' => 'auth', 'uses' => 'FantasyaController@change'));
