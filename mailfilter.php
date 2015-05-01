@@ -1,6 +1,8 @@
 #!/usr/bin/php
 <?php
 
+setlocale(LC_ALL, 'de_DE');
+
 $loggingEnabled = true;
 //$loggingEnabled = false;
 
@@ -88,10 +90,7 @@ $headers = trim(substr($email, 0, $firstLinePos));
 if (strlen($headers) <= 0) {
 	logReturn('Keine E-Mail-Header vorhanden.', 1);
 }
-$email = trim(quoted_printable_decode(substr($email, $firstLinePos + 2)));
-if (strlen($email) <= 0) {
-	logReturn('Leerer E-Mail-Text.', 1);
-}
+$email = substr($email, $firstLinePos + 2);
 
 // Header parsen:
 $header = array();
@@ -108,7 +107,41 @@ foreach (explode("\n", preg_replace('/\n[ \t]+/', ' ', $headers)) as $h) {
 // E-Mail-Format validieren:
 $type = isset($header['Content-Type']) ? $header['Content-Type'] : array('');
 if (strpos($type[0], 'text/plain') !== 0) {
-	logReturn('Falsches E-Mail-Format: ' . $type, 1);
+	logReturn('Falsches E-Mail-Format: ' . $type[0], 1);
+}
+$charset   = 'UTF-8';
+$typeComma = strpos($type[0], ';');
+if ($typeComma > 0) {
+	$charsetLine = strtolower(trim(substr($type[0], $typeComma + 1)));
+	if (strpos($charsetLine, 'charset') === 0) {
+		$equal   = strpos($charsetLine, '=');
+		$charset = strtoupper(trim(substr($charsetLine, $equal + 1)));
+	}
+}
+$encoding = isset($header['Content-Transfer-Encoding']) ? strtolower($header['Content-Transfer-Encoding'][0]) : 'quoted-printable';
+
+// E-Mail-Text decodieren:
+switch ($encoding) {
+	case 'quoted-printable' :
+		$email = quoted_printable_decode($email);
+		break;
+	case 'base64' :
+		$email = base64_decode($email);
+		break;
+	default :
+		// sollte sonst 8bit sein
+}
+
+// E-Mail-Text nach UTF-8 wandeln:
+if ($charset !== 'UTF-8') {
+	$email = iconv($charset, 'UTF-8//TRANSLIT', $email);
+	if ($email === false) {
+		logReturn('E-Mail mit Charset ' . $charset . ' wird nicht unterstützt.', 1);
+	}
+}
+$email = trim($email);
+if (strlen($email) <= 0) {
+	logReturn('Leerer E-Mail-Text.', 1);
 }
 
 // Befehle extrahieren:
@@ -163,8 +196,10 @@ if (@file_put_contents($file, $email) <= 0) {
 // Bestätigungsmail senden:
 $to      = isset($header['Reply-To']) ? implode(', ', $header['Reply-To']) : (isset($header['From']) ? implode(', ', $header['From']) : $sender);
 $subject = isset($header['Subject']) ? 'Re: ' . $header['Subject'][0] : 'Fantasya-Befehle sind angekommen';
-$message = "Deine Befehle sind angekommen:\n\n" . utf8_decode(@file_get_contents($file));
+$message = quoted_printable_encode("Deine Befehle sind angekommen:\n\n" . @file_get_contents($file));
 $from    = "From: Fantasya Server <" . $recipient . ">\r\n"
+		 . "Content-Type: text/plain; charset=utf-8\r\n"
+		 . "Content-Transfer-Encoding: quoted-printable\r\n"
 		 . "Reply-To: Fantasya Admin <admin@fantasya-pbem.de>\r\n"
 		 . "X-Mailer: PHP " . phpversion();
 if (isset($header['Message-ID'])) {
