@@ -27,10 +27,10 @@ class FantasyaController extends BaseController {
 			);
 			$validator = Validator::make(Input::all(), $rules);
 			if ($validator->passes()) {
-				$user = new User();
-				$user->name = Input::get('user');
-				$user->email = Input::get('email');
-				$password = uniqid();
+				$user           = new User();
+				$user->name     = Input::get('user');
+				$user->email    = Input::get('email');
+				$password       = uniqid();
 				$user->password = Hash::make($password);
 				$user->save();
 				Mail::send('reset-mail', array('user' => $user->name, 'password' => $password), function ($message) use ($user) {
@@ -120,6 +120,15 @@ class FantasyaController extends BaseController {
 			Session::put('game', $games[$next]);
 			return Redirect::to('orders');
 		}
+	}
+
+	public function enter() {
+		$games = array();
+		foreach (Game::allById() as $id => $game) {
+			$games[$id] = $game->name;
+		}
+		$races = array('Aquaner', 'Elf', 'Halbling', 'Mensch', 'Ork', 'Troll', 'Zwerg');
+		return View::make('enter', array('games' => $games, 'races' => array_combine($races, $races)));
 	}
 
 	public function orders($party = null) {

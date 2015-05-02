@@ -36,12 +36,15 @@ Route::match(array('GET', 'POST'), 'login/{saved?}', 'FantasyaController@login')
 
 Route::get('change/{what}', array('before' => 'auth', 'uses' => 'FantasyaController@change'));
 
+Route::match(array('GET', 'POST'), 'enter', array('before' => 'auth', 'uses' => 'FantasyaController@enter'));
+
 Route::match(array('GET', 'POST'), 'orders/{party?}', array('before' => 'auth', 'uses' => 'FantasyaController@orders'));
 
 Route::match(array('GET', 'POST'), 'send/{what}', array('before' => 'auth', 'uses' => 'FantasyaController@send'));
 
 Route::get('logout', array('before' => 'auth', function() {
 	Auth::logout();
+	Session::flush();
 	return View::make('logout');
 }));
 
