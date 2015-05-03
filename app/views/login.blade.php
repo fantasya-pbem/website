@@ -40,7 +40,7 @@
 				@endforeach
 			@endif
 			@foreach ($newParties[$world] as $party)
-				<h4>{{{$party->name}}} [neu angemeldet]</h4>
+				<h4>{{{$party->name}}} [neu angemeldet] <a href="/revoke/{{{$world}}}/{{{urlencode($party->name)}}}">Anmeldung stornieren</a></h4>
 				<p>
 					{{{$party->rasse}}}
 					(Holz: {{{$party->holz}}} &middot; Stein: {{{$party->steine}}} &middot; Eisen: {{{$party->eisen}}})
