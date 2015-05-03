@@ -30,7 +30,7 @@
 
 		@foreach ($parties as $world => $partiesInWorld)
 			<h3>Parteien auf Welt {{{$games[$world]->name}}}</h3>
-			@if (count($partiesInWorld) === 0)
+			@if (count($partiesInWorld) === 0 && count($newParties[$world]) === 0)
 				<p>Keine Parteien angemeldet.</p>
 			@else
 				@foreach ($partiesInWorld as $party)
@@ -39,6 +39,14 @@
 					<p>{{{$party->beschreibung}}}</p>
 				@endforeach
 			@endif
+			@foreach ($newParties[$world] as $party)
+				<h4>{{{$party->name}}} [neu angemeldet]</h4>
+				<p>
+					{{{$party->rasse}}}
+					(Holz: {{{$party->holz}}} &middot; Stein: {{{$party->steine}}} &middot; Eisen: {{{$party->eisen}}})
+				</p>
+				<p>{{{$party->description}}}</p>
+			@endforeach
 		@endforeach
 	@else
 		<p>Das war wohl das falsche Passwort!</p>

@@ -14,8 +14,9 @@ class FantasyaController extends BaseController {
 		if (User::has(User::CAN_BETA_TEST)) {
 			$flags[] = 'Beta-Tester';
 		}
-		$parties = Auth::user() ? Party::allFor(Auth::user()) : array();
-		return View::make('login', array('flags' => $flags, 'games' => Game::allById(), 'parties' => $parties, 'saved' => $saved));
+		$parties    = Auth::user() ? Party::allFor(Auth::user()) : array();
+		$newParties = Auth::user() ? NewParty::allFor(Auth::user()) : array();
+		return View::make('login', array('flags' => $flags, 'games' => Game::allById(), 'parties' => $parties, 'newParties' => $newParties, 'saved' => $saved));
 	}
 
 	public function register() {
@@ -70,11 +71,14 @@ class FantasyaController extends BaseController {
 		if ($user) {
 			$email = Input::get('email');
 			if ($email) {
-				foreach( Party::allFor(Auth::user()) as $parties ) {
-					foreach( $parties as $party ) {
+				foreach (Party::allFor(Auth::user()) as $parties) {
+					foreach ($parties as $party) {
 						$party->email = $email;
 						$party->save();
 					}
+				}
+				foreach (Game::all() as $game) {
+					DB::connection($game->database)->table(NewParty::TABLE)->where('email', Auth::user()->email)->update(array('email' => $email));
 				}
 				$user->email = $email;
 				$user->save();
@@ -128,6 +132,39 @@ class FantasyaController extends BaseController {
 			$games[$id] = $game->name;
 		}
 		$races = array('Aquaner', 'Elf', 'Halbling', 'Mensch', 'Ork', 'Troll', 'Zwerg');
+		if (Request::isMethod('POST')) {
+			$rules = array(
+				'game'        => 'required|in:' . implode(',', array_keys($games)),
+				'party'       => 'max:50|regex:/^[a-zA-Z][a-zA-Z -]*$/',
+				'description' => 'max:500',
+				'race'        => 'required|in:' . implode(',', $races),
+				'wood'        => 'required|numeric|min:0|max:90',
+				'stone'       => 'required|numeric|min:0|max:90',
+				'iron'        => 'required|numeric|min:0|max:90',
+			);
+			$validator = Validator::make(Input::all(), $rules);
+			if ($validator->passes()) {
+				$wood  = (int)Input::get('wood');
+				$stone = (int)Input::get('stone');
+				$iron  = (int)Input::get('iron');
+				if (($wood + $stone + $iron) <= 90) {
+					$game  = Game::find(Input::get('game'));
+					$party = new NewParty();
+					$party->name        = Input::get('party');
+					$party->description = Input::get('description');
+					$party->email       = Auth::user()->email;
+					$party->rasse       = Input::get('race');
+					$party->tarnung     = '';
+					$party->holz        = $wood;
+					$party->steine      = $stone;
+					$party->eisen       = $iron;
+					$party->insel       = 0;
+					$party->setConnection($game->database)->save();
+					return Redirect::to('/login/');
+				}
+			}
+			return View::make('enter', array('games' => $games, 'races' => array_combine($races, $races)))->withErrors($validator);
+		}
 		return View::make('enter', array('games' => $games, 'races' => array_combine($races, $races)));
 	}
 

@@ -8,4 +8,16 @@ class NewParty extends Eloquent {
 
     protected $table = self::TABLE;
 
+    public static function allFor(User $user) {
+        $parties = array();
+        foreach (Game::all() as $game) {
+            $p = array();
+            foreach (NewParty::on($game->database)->where('email', '=', $user->email)->get() as $party) {
+                $p[] = $party;
+            }
+            $parties[$game->id] = $p;
+        }
+        return $parties;
+    }
+
 }

@@ -13,6 +13,11 @@ h1, h2, h3 {
 	color: #F93D00;
 }
 
+h4 {
+	margin: 5px 0 14px;
+	padding: 0;
+}
+
 p, ul, ol {
 	margin-top: 0;
 	line-height: 180%;
@@ -32,6 +37,10 @@ a:hover {
 form span.error {
     color: #F93D00;
     margin: 0 0 0 5px;
+}
+
+table {
+	font-size: 14px;
 }
 
 #wrapper {

@@ -6,8 +6,9 @@
 		<li><a href="/orders">Befehle kontrollieren</a></li>
 		<li><a href="/send/orders">Befehle senden</a></li>
 	@endif
+	<li><a href="/enter">Neues Spiel beginnen</a></li>
 	@if (User::has(User::CAN_BETA_TEST))
-		<li class="beta"><a href="/enter">Neues Spiel beginnen</a></li>
+		<!-- <li class="beta"><a href=""></a></li> -->
 	@endif
 	@if (User::has(User::CAN_CREATE_NEWS))
 		<li><a href="/edit/news">News erstellen</a></li>
