@@ -91,7 +91,8 @@ class FantasyaController extends BaseController {
 						$party->save();
 					}
 				}
-				$user->password = Hash::make($password);
+				$user->password    = Hash::make($password);
+				$user->passwordmd5 = md5($password);
 				$user->save();
 			}
 		}
@@ -159,6 +160,7 @@ class FantasyaController extends BaseController {
 					$party->steine      = $stone;
 					$party->eisen       = $iron;
 					$party->insel       = 0;
+					$party->password    = Auth::user()->passwordmd5;
 					$party->setConnection($game->database)->save();
 					return Redirect::to('/login');
 				}
