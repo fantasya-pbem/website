@@ -163,11 +163,13 @@ $password   = $parts[3];
 try {
 	// Authentifizierung prüfen:
 	$db     = new PDO('mysql:dbname=' . $database . ';host=localhost', $dbUser, $dbPassword);
-	$stmt   = $db->query("SELECT COUNT(*) FROM partei WHERE id = '" . $party . "' AND password = MD5('" . $password . "')");
+	$stmt   = $db->query("SELECT nummer FROM partei WHERE id = '" . $party . "' AND password = MD5('" . $password . "')");
 	$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
-	if (!isset($result[0]) || (int)$result[0] !== 1) {
+	if (!is_array($result) || count($result) !== 1 || !isset($result[0]) || ((int)$result[0]) <= 0 ) {
 		logReturn('Passwort falsch.', 3);
 	}
+    // Parteinummer ermitteln:
+    $partyNumber = (int)$result[0];
 	// Aktuelle Rundennummer ermitteln:
 	$stmt   = $db->query("SELECT Value FROM settings WHERE Name = 'game.runde'");
 	$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -180,7 +182,7 @@ try {
 }
 
 // Befehle in Datei schreiben:
-$file = __DIR__ . '/app/storage/orders/' . $game . '/' . $turn . '/' . $party . '.order';
+$file = __DIR__ . '/app/storage/orders/' . $game . '/' . $turn . '/' . $partyNumber . '.order';
 $dir  = dirname($file);
 if (!@is_dir($dir)) {
 	umask(0022);

@@ -215,6 +215,8 @@ class FantasyaController extends BaseController {
 			$turn   = Input::get('turn');
 			$orders = Input::get('orders');
 			if ($p && $orders) {
+//                $orders = 'PARTEI ' . $parties[$p]->id . ' "----------"' . PHP_EOL
+//                        . '; Befehlsabgabe erfolgte über die Webseite' . PHP_EOL;
 				$order = new Order($game, $parties[$p], $turn);
 				$order->setOrders($orders);
 				return Redirect::to('/orders/' . $p);
