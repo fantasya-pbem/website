@@ -21,6 +21,7 @@
 					<li><a href="/index">Fantasya</a></li>
 					<li><a href="//wiki.fantasya-pbem.de">Bibliothek</a></li>
 					<li><a href="//forum.fantasya-pbem.de">Taverne</a></li>
+					<li><a href="http://webchat.freenode.net/?channels=%23fantasya&uio=OT10cnVlJjExPTQx30" target="fantasya_chat">Chat</a></li>
 					<li class="last"><a href="//mantis.fantasya-pbem.de">Entwicklung</a></li>
 				</ul>
 			</div>
