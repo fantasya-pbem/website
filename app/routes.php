@@ -38,6 +38,8 @@ Route::get('change/{what}', array('before' => 'auth', 'uses' => 'FantasyaControl
 
 Route::match(array('GET', 'POST'), 'enter', array('before' => 'auth', 'uses' => 'FantasyaController@enter'));
 
+Route::get('revoke/{world}/{party}', array('before' => 'auth', 'uses' => 'FantasyaController@revoke'));
+
 Route::match(array('GET', 'POST'), 'orders/{party?}', array('before' => 'auth', 'uses' => 'FantasyaController@orders'));
 
 Route::match(array('GET', 'POST'), 'send/{what}', array('before' => 'auth', 'uses' => 'FantasyaController@send'));

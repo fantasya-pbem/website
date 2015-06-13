@@ -35,7 +35,7 @@ class Order  {
 	public function getPath() {
 		$storage = realpath(__DIR__ . '/../storage/orders');
 		return $storage . DIRECTORY_SEPARATOR . $this->game->alias . DIRECTORY_SEPARATOR . $this->turn
-						. DIRECTORY_SEPARATOR . $this->party->id . '.order';
+						. DIRECTORY_SEPARATOR . $this->party->nummer . '.order';
 	}
 
 }

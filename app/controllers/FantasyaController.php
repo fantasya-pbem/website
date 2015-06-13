@@ -91,7 +91,8 @@ class FantasyaController extends BaseController {
 						$party->save();
 					}
 				}
-				$user->password = Hash::make($password);
+				$user->password    = Hash::make($password);
+				$user->passwordmd5 = md5($password);
 				$user->save();
 			}
 		}
@@ -135,7 +136,7 @@ class FantasyaController extends BaseController {
 		if (Request::isMethod('POST')) {
 			$rules = array(
 				'game'        => 'required|in:' . implode(',', array_keys($games)),
-				'party'       => 'max:50|regex:/^[a-zA-Z][a-zA-Z -]*$/',
+				'party'       => 'required|min:1|max:50',
 				'description' => 'max:500',
 				'race'        => 'required|in:' . implode(',', $races),
 				'wood'        => 'required|numeric|min:0|max:90',
@@ -159,13 +160,22 @@ class FantasyaController extends BaseController {
 					$party->steine      = $stone;
 					$party->eisen       = $iron;
 					$party->insel       = 0;
+					$party->password    = Auth::user()->passwordmd5;
 					$party->setConnection($game->database)->save();
-					return Redirect::to('/login/');
+					return Redirect::to('/login');
 				}
 			}
 			return View::make('enter', array('games' => $games, 'races' => array_combine($races, $races)))->withErrors($validator);
 		}
 		return View::make('enter', array('games' => $games, 'races' => array_combine($races, $races)));
+	}
+
+	public function revoke($world, $party) {
+		$game = Game::find($world);
+		if ($game) {
+			DB::connection($game->database)->table(NewParty::TABLE)->where('email', Auth::user()->email)->where('name', urldecode($party))->delete();
+		}
+		return Redirect::to('/login');
 	}
 
 	public function orders($party = null) {
@@ -205,6 +215,8 @@ class FantasyaController extends BaseController {
 			$turn   = Input::get('turn');
 			$orders = Input::get('orders');
 			if ($p && $orders) {
+//                $orders = 'PARTEI ' . $parties[$p]->id . ' "----------"' . PHP_EOL
+//                        . '; Befehlsabgabe erfolgte über die Webseite' . PHP_EOL;
 				$order = new Order($game, $parties[$p], $turn);
 				$order->setOrders($orders);
 				return Redirect::to('/orders/' . $p);
