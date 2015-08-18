@@ -28,11 +28,12 @@ class FantasyaController extends BaseController {
 			);
 			$validator = Validator::make(Input::all(), $rules);
 			if ($validator->passes()) {
-				$user           = new User();
-				$user->name     = Input::get('user');
-				$user->email    = Input::get('email');
-				$password       = uniqid();
-				$user->password = Hash::make($password);
+				$user              = new User();
+				$user->name        = Input::get('user');
+				$user->email       = Input::get('email');
+				$password          = uniqid();
+				$user->password    = Hash::make($password);
+				$user->passwordmd5 = md5($password);
 				$user->save();
 				Mail::send('reset-mail', array('user' => $user->name, 'password' => $password), function ($message) use ($user) {
 					$message->from('admin@fantasya-pbem.de', 'Fantasya-Administrator');
