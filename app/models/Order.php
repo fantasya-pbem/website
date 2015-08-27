@@ -38,4 +38,27 @@ class Order  {
 						. DIRECTORY_SEPARATOR . $this->party->nummer . '.order';
 	}
 
+    public function fcheck() {
+        $check   = null;
+        $command = config(app.fcheck);
+        if (is_string($command) && strpos($command, '%input%') > 0 && strpos($command, '%output%') > 0) {
+            $file = $this->getPath();
+		    if (is_file($file)) {
+			    $command = str_replace('%input%', $file, $command);
+			    $output  = tempnam('/tmp', 'fcheck');
+			    if ($output) {
+			        $command = str_replace('%output%', $output, $command);
+			        $result  = array();
+			        $code    = -1;
+			        exec($command, $result, $code);
+			        if ($code === 0) {
+			            $check = file_get_contents($output);
+			        }
+			        @unlink($output);
+			    }
+		    }
+        }
+        return $check;
+    }
+
 }

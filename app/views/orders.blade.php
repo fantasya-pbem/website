@@ -8,5 +8,8 @@
 	<h3>Welt: {{{Game::current()->name}}}</h3>
 	<p>@include('orders-form')</p>
 	<p>{{{$party->name}}}, Runde {{$turn + 1}}</p>
+	@if ($check)
+	    <p><pre>{{{$check}}}</pre></p>
+	@endif
 	<p><pre>{{{$orders}}}</pre></p>
 @stop

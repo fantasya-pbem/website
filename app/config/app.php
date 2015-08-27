@@ -191,4 +191,6 @@ return array(
 		'Captcha' => 'Johntaa\Captcha\Facades\Captcha'
 	),
 
+    'fcheck' => $_ENV['FCHECK']
+
 );
