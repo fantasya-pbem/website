@@ -195,10 +195,27 @@ if (@file_put_contents($file, $email) <= 0) {
 	logReturn('Befehle konnten nicht gespeichert werden.', 4);
 }
 
+// Syntaxchecker aufrufen:
+$check   = null;
+$tmpFile = tempnam('/tmp', 'fcheck_');
+$command = '/home/fantasya/games/spiel/fcheck/fcheck.sh -of "' . $file . '" -mf "' . $tmpFile . '"';
+$result  = array();
+$code    = -1;
+exec($command, $result, $code);
+if ($code === 0) {
+    $check = @file_get_contents($tmpFile);
+}
+@unlink($tmpFile);
+
 // Bestätigungsmail senden:
 $to      = isset($header['Reply-To']) ? implode(', ', $header['Reply-To']) : (isset($header['From']) ? implode(', ', $header['From']) : $sender);
 $subject = isset($header['Subject']) ? 'Re: ' . $header['Subject'][0] : 'Fantasya-Befehle sind angekommen';
-$message = quoted_printable_encode("Deine Befehle sind angekommen:\n\n" . @file_get_contents($file));
+$body    = "Deine Befehle sind angekommen.\n\n";
+if( $check ) {
+    $body .= $check . "\n\n";
+}
+$body   .= @file_get_contents($file)
+$message = quoted_printable_encode($body);
 $from    = "From: Fantasya Server <" . $recipient . ">\r\n"
 		 . "Content-Type: text/plain; charset=utf-8\r\n"
 		 . "Content-Transfer-Encoding: quoted-printable\r\n"
@@ -206,7 +223,7 @@ $from    = "From: Fantasya Server <" . $recipient . ">\r\n"
 		 . "X-Mailer: PHP " . phpversion();
 if (isset($header['Message-ID'])) {
 	$from .= "\r\nIn-Reply-To: " . $header['Message-ID'][0];
-}
+} . 
 if (!mail($to, $subject, $message, $from)) {
 	logReturn('Antwortmail konnte nicht gesendet werden.', 5);
 }
