@@ -214,7 +214,7 @@ $body    = "Deine Befehle sind angekommen.\n\n";
 if( $check ) {
     $body .= $check . "\n\n";
 }
-$body   .= @file_get_contents($file)
+$body   .= @file_get_contents($file);
 $message = quoted_printable_encode($body);
 $from    = "From: Fantasya Server <" . $recipient . ">\r\n"
 		 . "Content-Type: text/plain; charset=utf-8\r\n"
