@@ -189,8 +189,6 @@ return array(
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
 		'Captcha' => 'Johntaa\Captcha\Facades\Captcha'
-	),
-
-    'fcheck' => $_ENV['FCHECK']
+	)
 
 );

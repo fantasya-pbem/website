@@ -40,7 +40,7 @@ class Order  {
 
     public function fcheck() {
         $check   = null;
-        $command = config(app.fcheck);
+        $command = isset($_ENV['FCHECK']) ? $_ENV['FCHECK'] : null;
         if (is_string($command) && strpos($command, '%input%') > 0 && strpos($command, '%output%') > 0) {
             $file = $this->getPath();
 		    if (is_file($file)) {

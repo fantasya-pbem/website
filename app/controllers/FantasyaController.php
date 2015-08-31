@@ -204,7 +204,7 @@ class FantasyaController extends BaseController {
 		return View::make('orders', array('turn'  => $turn,  'turns'   => $turns,
 										  'party' => $party, 'parties' => $p,
 										  'orders' => $order->getOrders(),
-										  'check'  => $order->fcheck());
+										  'check'  => $order->fcheck()));
 	}
 
 	public function send($what) {
