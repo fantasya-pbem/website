@@ -223,7 +223,7 @@ $from    = "From: Fantasya Server <" . $recipient . ">\r\n"
 		 . "X-Mailer: PHP " . phpversion();
 if (isset($header['Message-ID'])) {
 	$from .= "\r\nIn-Reply-To: " . $header['Message-ID'][0];
-} . 
+}
 if (!mail($to, $subject, $message, $from)) {
 	logReturn('Antwortmail konnte nicht gesendet werden.', 5);
 }
