@@ -3,10 +3,18 @@
 class FantasyaController extends BaseController {
 
 	public function login($saved = null) {
+	    if (!Auth::user() && isset($_SERVER['SSL_CLIENT_S_DN_Email'])) {
+	        $user = User::where('email', '=', $_SERVER['SSL_CLIENT_S_DN_Email'])->first();
+	        if ($user) {
+	            Auth::login($user);
+	        }
+	    }
+	    
 		if (Request::isMethod('POST')) {
 			Auth::attempt(array('name' => Input::get('user'), 'password' => Input::get('password')));
 			return Redirect::to('/login');
 		}
+		
 		$flags = array();
 		if (User::has(User::CAN_CREATE_NEWS)) {
 			$flags[] = 'News verfassen';

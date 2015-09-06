@@ -42,13 +42,16 @@
 						<li>
 							<h2>Anmeldung</h2>
 							@if (Auth::check())
-								 @include('login-menu')
+								@include('login-menu')
 							@else
-								 @include('login-form')
+								@include('login-form')
 								<ul>
 									<li><a href="/register">Neu registrieren</a></li>
 									<li><a href="/reset">Passwort vergessen</a></li>
-								</ul>
+									@if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+                                        <li><a href="/login">Login mit Zertifikat</a></li>
+                                    @endif
+   								</ul>
 							@endif
 						</li>
 						<li>
