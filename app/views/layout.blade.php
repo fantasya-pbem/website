@@ -48,9 +48,7 @@
 								<ul>
 									<li><a href="/register">Neu registrieren</a></li>
 									<li><a href="/reset">Passwort vergessen</a></li>
-									@if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
-                                        <li><a href="/login">Login mit Zertifikat</a></li>
-                                    @endif
+									<li><a href="https://www.fantasya-pbem.de/secure">Login mit Zertifikat</a></li>
    								</ul>
 							@endif
 						</li>
