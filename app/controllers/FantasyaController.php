@@ -79,8 +79,11 @@ class FantasyaController extends BaseController {
 						$party->save();
 					}
 				}
-				foreach (Game::all() as $game) {
-					DB::connection($game->database)->table(NewParty::TABLE)->where('email', Auth::user()->email)->update(array('email' => $email));
+				foreach (NewParty::allFor(Auth::user()) as $parties) {
+				    foreach ($parties as $party) {
+				        $party->email = $email;
+				        $party->save();
+				    }
 				}
 				$user->email = $email;
 				$user->save();
@@ -156,6 +159,7 @@ class FantasyaController extends BaseController {
 					$party->name        = Input::get('party');
 					$party->description = Input::get('description');
 					$party->email       = Auth::user()->email;
+					$party->user_id     = Auth::user()->id;
 					$party->rasse       = Input::get('race');
 					$party->tarnung     = '';
 					$party->holz        = $wood;
@@ -175,7 +179,7 @@ class FantasyaController extends BaseController {
 	public function revoke($world, $party) {
 		$game = Game::find($world);
 		if ($game) {
-			DB::connection($game->database)->table(NewParty::TABLE)->where('email', Auth::user()->email)->where('name', urldecode($party))->delete();
+			DB::connection($game->database)->table(NewParty::TABLE)->where('user_id', Auth::user()->id)->where('name', urldecode($party))->delete();
 		}
 		return Redirect::to('/login');
 	}
@@ -218,8 +222,6 @@ class FantasyaController extends BaseController {
 			$turn   = Input::get('turn');
 			$orders = Input::get('orders');
 			if ($p && $orders) {
-//                $orders = 'PARTEI ' . $parties[$p]->id . ' "----------"' . PHP_EOL
-//                        . '; Befehlsabgabe erfolgte über die Webseite' . PHP_EOL;
 				$order = new Order($game, $parties[$p], $turn);
 				$order->setOrders($orders);
 				return Redirect::to('/orders/' . $p);
@@ -276,7 +278,6 @@ class FantasyaController extends BaseController {
 	}
 
 	public function myths() {
-		//$myths = Myth::all();
 		$myths = DB::table(Myth::TABLE)->orderBy('id', 'DESC')->get();
 		return View::make('myths', array('myths' => $myths));
 	}

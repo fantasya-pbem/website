@@ -163,7 +163,7 @@ $password   = $parts[3];
 try {
 	// Authentifizierung prüfen:
 	$db     = new PDO('mysql:dbname=' . $database . ';host=localhost', $dbUser, $dbPassword);
-	$stmt   = $db->query("SELECT nummer FROM partei WHERE id = '" . $party . "' AND password = MD5('" . $password . "')");
+	$stmt   = $db->query("SELECT owner_id FROM partei WHERE id = '" . $party . "' AND password = MD5('" . $password . "')");
 	$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 	if (!is_array($result) || count($result) !== 1 || !isset($result[0]) || ((int)$result[0]) <= 0 ) {
 		logReturn('Passwort falsch.', 3);

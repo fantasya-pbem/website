@@ -12,7 +12,7 @@ class NewParty extends Eloquent {
         $parties = array();
         foreach (Game::all() as $game) {
             $p = array();
-            foreach (NewParty::on($game->database)->where('email', '=', $user->email)->get() as $party) {
+            foreach (NewParty::on($game->database)->where('user_id', '=', $user->id)->get() as $party) {
                 $p[] = $party;
             }
             $parties[$game->id] = $p;
