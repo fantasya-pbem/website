@@ -69,7 +69,7 @@ class Order  {
 			$first = strtoupper(trim($lines[0]));
 			$parts = explode(' ', $first);
 			if (count($parts) !== 3 || $parts[0] !== 'PARTEI' && $parts[0] !== 'FANTASYA' && $parts[0] !== 'ERESSEA') {
-				$orders .= 'PARTEI ' . $this->party->id . ' ********' . PHP_EOL;
+				$orders .= 'PARTEI ' . $this->party->id . ' "xxxxxxxx"' . PHP_EOL;
 			}
 			foreach ($lines as $line) {
 				$orders .= trim($line) . PHP_EOL;
