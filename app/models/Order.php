@@ -29,7 +29,7 @@ class Order  {
 		if (!is_dir($dir)) {
 			mkdir($dir, 0775, true);
 		}
-		return file_put_contents($file, $orders) > 0;
+		return file_put_contents($file, $this->cleanUp($orders)) > 0;
 	}
 
 	public function getPath() {
@@ -60,5 +60,22 @@ class Order  {
         }
         return $check;
     }
+
+	private function cleanUp($orders) {
+		$lines  = explode("\n", $orders);
+		$orders = '';
+		$n      = count($lines);
+		if ($n > 0) {
+			$first = strtoupper(trim($lines[0]));
+			$parts = explode(' ', $first);
+			if (count($parts) !== 3 || $parts[0] !== 'PARTEI' && $parts[0] !== 'FANTASYA' && $parts[0] !== 'ERESSEA') {
+				$orders .= 'PARTEI ' . $this->party->id . ' ********' . PHP_EOL;
+			}
+			foreach ($lines as $line) {
+				$orders .= trim($line) . PHP_EOL;
+			}
+		}
+		return $orders;
+	}
 
 }
