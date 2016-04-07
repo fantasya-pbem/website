@@ -348,6 +348,18 @@ table {
 	margin: 0 0 10px;
 }
 
+div#world .statistic {
+	width: 100%;
+}
+div#world .statistic th {
+	text-align: left;
+	min-width: 40px;
+}
+
+div#world .parties dt {
+	font-weight: bold;
+}
+
 /* Footer */
 
 #footer {

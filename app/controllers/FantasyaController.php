@@ -304,7 +304,10 @@ class FantasyaController extends BaseController {
 		$game    = Game::find($id);
 		$turn    = Settings::on($game->database)->find('game.runde');
 		$lastZAT = DB::connection($game->database)->table('meldungen')->max('zeit');
-		return View::make('world', array('game' => $game, 'turn' => $turn->Value, 'lastZAT' => $lastZAT));
+		$count   = DB::connection($game->database)->table('partei')->count();
+		$parties = DB::connection($game->database)->table('partei')->select(DB::raw('rasse, COUNT(*) AS count'))->groupBy('rasse')->get();
+		$names   = DB::connection($game->database)->table('partei')->select('name', 'beschreibung')->orderBy('name')->get();
+		return View::make('world', array('game' => $game, 'turn' => $turn->Value, 'lastZAT' => $lastZAT, 'count' => $count, 'parties' => $parties, 'names' => $names));
 	}
 
 }
