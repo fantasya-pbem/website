@@ -26,6 +26,7 @@
 		@endif
 
 		<h3>Statistik</h3>
+		<h4>Regionen</h4>
 		<p>
 			Es gibt {{{$layers[1]->count}}} Regionen auf dieser Spielwelt und {{{$layers[0]->count}}} Regionen in der Unterwelt.
 		</p>
@@ -61,7 +62,43 @@
 				<tr>
 			</tbody>
 		</table>
-		<br>
+		<h4>Bevölkerung</h4>
+		<p>
+			Es gibt insgesamt {{{$total[0]->units}}} Einheiten mit {{{$total[0]->persons}}} Individuen (Spieler und Monster).
+		</p>
+		<table class="statistic">
+			<thead>
+				<tr>
+					@foreach ($units as $unit)
+						<th>{{{$unit->rasse}}}</th>
+					@endforeach
+				<tr>
+			</thead>
+			<tbody>
+				<tr>
+					@foreach ($units as $unit)
+						<td>{{{$unit->units}}}/{{{$unit->persons}}}</td>
+					@endforeach
+				<tr>
+			</tbody>
+		</table>
+		<table class="statistic">
+			<thead>
+				<tr>
+					@foreach ($monsters as $unit)
+						<th>{{{$unit->rasse}}}</th>
+					@endforeach
+				<tr>
+			</thead>
+			<tbody>
+				<tr>
+					@foreach ($monsters as $unit)
+						<td>{{{$unit->units}}}/{{{$unit->persons}}}</td>
+					@endforeach
+				<tr>
+			</tbody>
+		</table>
+		<h4>Parteien</h4>
 		<p>
 			Diese Spielwelt wird von {{{$count}}} Parteien bevölkert.
 		</p>

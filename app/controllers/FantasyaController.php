@@ -310,7 +310,10 @@ class FantasyaController extends BaseController {
 		$regions    = DB::connection($game->database)->table('regionen')->select(DB::raw('typ, COUNT(*) AS count'))->where('welt', 1)->groupBy('typ')->orderBy('typ')->get();
 		$layers     = DB::connection($game->database)->table('regionen')->select(DB::raw('COUNT(*) AS count'))->groupBy('welt')->orderBy('welt')->get();
 		$underworld = DB::connection($game->database)->table('regionen')->select(DB::raw('typ, COUNT(*) AS count'))->where('welt', -1)->groupBy('typ')->orderBy('typ')->get();
-		return View::make('world', array('game' => $game, 'turn' => $turn->Value, 'lastZAT' => $lastZAT, 'count' => $count, 'parties' => $parties, 'names' => $names, 'regions' => $regions, 'underworld' => $underworld, 'layers' => $layers));
+		$units      = DB::connection($game->database)->table('einheiten')->select(DB::raw('rasse, COUNT(*) AS units, SUM(person) AS persons'))->whereNotIn('partei', [620480, 1376883])->groupBy('rasse')->orderBy('rasse')->get();
+		$monsters   = DB::connection($game->database)->table('einheiten')->select(DB::raw('rasse, COUNT(*) AS units, SUM(person) AS persons'))->whereIn('partei', [620480, 1376883])->groupBy('rasse')->orderBy('rasse')->get();
+		$total      = DB::connection($game->database)->table('einheiten')->select(DB::raw('COUNT(*) AS units, SUM(person) AS persons'))->groupBy('rasse')->get();
+		return View::make('world', array('game' => $game, 'turn' => $turn->Value, 'lastZAT' => $lastZAT, 'count' => $count, 'parties' => $parties, 'names' => $names, 'regions' => $regions, 'underworld' => $underworld, 'layers' => $layers, 'units' => $units, 'monsters' => $monsters, 'total' => $total));
 	}
 
 }
