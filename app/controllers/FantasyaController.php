@@ -301,13 +301,16 @@ class FantasyaController extends BaseController {
 		if (!$id) {
 			$id = (int)DB::table(Game::TABLE)->limit(1)->pluck('id');
 		}
-		$game    = Game::find($id);
-		$turn    = Settings::on($game->database)->find('game.runde');
-		$lastZAT = DB::connection($game->database)->table('meldungen')->max('zeit');
-		$count   = DB::connection($game->database)->table('partei')->count();
-		$parties = DB::connection($game->database)->table('partei')->select(DB::raw('rasse, COUNT(*) AS count'))->groupBy('rasse')->get();
-		$names   = DB::connection($game->database)->table('partei')->select('name', 'beschreibung')->orderBy('name')->get();
-		return View::make('world', array('game' => $game, 'turn' => $turn->Value, 'lastZAT' => $lastZAT, 'count' => $count, 'parties' => $parties, 'names' => $names));
+		$game       = Game::find($id);
+		$turn       = Settings::on($game->database)->find('game.runde');
+		$lastZAT    = DB::connection($game->database)->table('meldungen')->max('zeit');
+		$count      = DB::connection($game->database)->table('partei')->count();
+		$parties    = DB::connection($game->database)->table('partei')->select(DB::raw('rasse, COUNT(*) AS count'))->groupBy('rasse')->get();
+		$names      = DB::connection($game->database)->table('partei')->select('name', 'beschreibung')->orderBy('name')->get();
+		$regions    = DB::connection($game->database)->table('regionen')->select(DB::raw('typ, COUNT(*) AS count'))->where('welt', 1)->groupBy('typ')->orderBy('typ')->get();
+		$layers     = DB::connection($game->database)->table('regionen')->select(DB::raw('COUNT(*) AS count'))->groupBy('welt')->orderBy('welt')->get();
+		$underworld = DB::connection($game->database)->table('regionen')->select(DB::raw('typ, COUNT(*) AS count'))->where('welt', -1)->groupBy('typ')->orderBy('typ')->get();
+		return View::make('world', array('game' => $game, 'turn' => $turn->Value, 'lastZAT' => $lastZAT, 'count' => $count, 'parties' => $parties, 'names' => $names, 'regions' => $regions, 'underworld' => $underworld, 'layers' => $layers));
 	}
 
 }

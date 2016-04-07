@@ -27,6 +27,42 @@
 
 		<h3>Statistik</h3>
 		<p>
+			Es gibt {{{$layers[1]->count}}} Regionen auf dieser Spielwelt und {{{$layers[0]->count}}} Regionen in der Unterwelt.
+		</p>
+		<table class="statistic">
+			<thead>
+				<tr>
+					@foreach ($regions as $region)
+						<th>{{{$region->typ}}}</th>
+					@endforeach
+				<tr>
+			</thead>
+			<tbody>
+				<tr>
+					@foreach ($regions as $region)
+						<td>{{{$region->count}}}</td>
+					@endforeach
+				<tr>
+			</tbody>
+		</table>
+		<table class="statistic">
+			<thead>
+				<tr>
+					@foreach ($underworld as $region)
+						<th>{{{$region->typ}}}</th>
+					@endforeach
+				<tr>
+			</thead>
+			<tbody>
+				<tr>
+					@foreach ($underworld as $region)
+						<td>{{{$region->count}}}</td>
+					@endforeach
+				<tr>
+			</tbody>
+		</table>
+		<br>
+		<p>
 			Diese Spielwelt wird von {{{$count}}} Parteien bevölkert.
 		</p>
 		<table class="statistic">
