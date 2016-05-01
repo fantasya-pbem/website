@@ -15,6 +15,9 @@ class FantasyaController extends BaseController {
 		if (User::has(User::CAN_BETA_TEST)) {
 			$flags[] = 'Beta-Tester';
 		}
+		if (User::has(User::CAN_PLAY_MULTIS)) {
+			$flags[] = 'Mehrere Parteien';
+		}
 		$parties    = Auth::user() ? Party::allFor(Auth::user()) : array();
 		$newParties = Auth::user() ? NewParty::allFor(Auth::user()) : array();
 		return View::make('login', array('flags' => $flags, 'games' => Game::allById(), 'parties' => $parties, 'newParties' => $newParties, 'saved' => $saved));
@@ -133,6 +136,9 @@ class FantasyaController extends BaseController {
 	}
 
 	public function enter() {
+		if (User::countParties() > 0 && !User::has(User::CAN_PLAY_MULTIS)) {
+			return Redirect::to('login');
+		}
 		$games = array();
 		foreach (Game::allById() as $id => $game) {
 			$games[$id] = $game->name;
