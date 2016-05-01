@@ -13,11 +13,20 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	const CAN_BETA_TEST = 2;
 
+	const CAN_PLAY_MULTIS = 4;
+
 	public $timestamps = false;
 
 	public static function has($flag) {
 		$user = Auth::user();
 		return $user && ($user->flags & $flag);
+	}
+
+	public static function countParties() {
+		$user       = Auth::user();
+		$parties    = Party::allFor($user);
+		$newParties = NewParty::allFor($user);
+		return count($parties) + count($newParties);
 	}
 
 	/**
