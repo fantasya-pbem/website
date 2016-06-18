@@ -22,11 +22,19 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $user && ($user->flags & $flag);
 	}
 
-	public static function countParties() {
+	public static function countParties(Game $game = null) {
 		$user       = Auth::user();
 		$parties    = Party::allFor($user);
 		$newParties = NewParty::allFor($user);
-		return count($parties) + count($newParties);
+		$allParties = array();
+		foreach ($parties as $g => $p) {
+			$allParties[$g] = count($p);
+		}
+		foreach ($newParties as $g => $p) {
+			$allParties[$g] += count($p);
+		}
+		$id = $game ? $game->id : null;
+		return $id ? $allParties[$id] : array_sum($allParties);
 	}
 
 	/**

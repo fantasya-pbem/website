@@ -7,7 +7,7 @@ class FantasyaController extends BaseController {
 			Auth::attempt(array('name' => Input::get('user'), 'password' => Input::get('password')));
 			return Redirect::to('/login');
 		}
-		
+
 		$flags = array();
 		if (User::has(User::CAN_CREATE_NEWS)) {
 			$flags[] = 'News verfassen';
