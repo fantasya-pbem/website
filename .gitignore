@@ -1,6 +1,6 @@
 /.idea
 /bootstrap/compiled.php
-/download
+/public/download
 /vendor
 composer.phar
 composer.lock
