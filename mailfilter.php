@@ -182,7 +182,7 @@ try {
 }
 
 // Rundenangabe in Befehlen überprüfen:
-if (preg_match('/^RUNDE\h+([0-9]+)\s*$/i', $email, $matches)) {
+if (preg_match('/^RUNDE\h+([0-9]+)\s*$/im', $email, $matches)) {
 	$runde   = (int)$matches[1] - 1;
 	$maxTurn = $turn + 3;
 	if ($runde > $turn && $runde <= $maxTurn) {
