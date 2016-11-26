@@ -181,6 +181,15 @@ try {
 	logReturn($e->getMessage(), 2);
 }
 
+// Rundenangabe in Befehlen überprüfen:
+if (preg_match('/^RUNDE\h+([0-9]+)\s*$/i', $email, $matches)) {
+	$runde   = (int)$matches[1] - 1;
+	$maxTurn = $turn + 3;
+	if ($runde > $turn && $runde <= $maxTurn) {
+		$turn = $runde;
+	}
+}
+
 // Befehle in Datei schreiben:
 $file = __DIR__ . '/app/storage/orders/' . $game . '/' . $turn . '/' . $partyNumber . '.order';
 $dir  = dirname($file);
