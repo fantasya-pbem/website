@@ -210,7 +210,7 @@ if ($code === 0) {
 // Bestätigungsmail senden:
 $to      = isset($header['Reply-To']) ? implode(', ', $header['Reply-To']) : (isset($header['From']) ? implode(', ', $header['From']) : $sender);
 $subject = isset($header['Subject']) ? 'Re: ' . $header['Subject'][0] : 'Fantasya-Befehle sind angekommen';
-$body    = "Deine Befehle sind angekommen.\n\n";
+$body    = "Deine Befehle für Runde " . ($turn + 1) . " sind angekommen.\n\n";
 if( $check ) {
     $body .= $check . "\n\n";
 }
