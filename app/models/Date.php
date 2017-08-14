@@ -51,7 +51,7 @@ class Date {
 				$now += ($n - $day + $n) * 86400;
 			}
 		}
-		return date('Y-m-d', $now) . ' ' . $time . ':00:00';
+		return date('Y-m-d', $now) . ' ' . str_pad($time, 2, '0', STR_PAD_LEFT) . ':00:00.0';
 	}
 
 }

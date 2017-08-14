@@ -22,7 +22,7 @@
 			<strong>Nächster Zug: </strong>Runde {{$turn + 1}} am {{Date::translate(Date::getNext($game))}}
 		</p>
 		@if ($game->alias === 'beta')
-			<p><b>Achtung:</b> Im Beta-Spiel gibt es zur Zeit keine täglichen Auswertungen.</p>
+			<p><b>Achtung:</b> Im Beta-Spiel gibt es derzeit nur an manchen Wochentagen eine Auswertung, Details siehe Taverne.</p>
 		@endif
 
 		<h3>Statistik</h3>
