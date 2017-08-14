@@ -4,7 +4,21 @@ class FantasyaController extends BaseController {
 
 	public function login($saved = null) {
 		if (Request::isMethod('POST')) {
-			Auth::attempt(array('name' => Input::get('user'), 'password' => Input::get('password')));
+			if (Auth::attempt(array('name' => Input::get('user'), 'password' => Input::get('password')))) {
+				// MD5-Passwort in die Parteien schreiben (Workaround für alte Beta-Test).
+				$user = Auth::user();
+				$md5  = $user->passwordmd5;
+				if (strlen($md5) > 0) {
+					foreach (Party::allFor($user) as $parties) {
+						foreach ($parties as $party) {
+							if ($party->password !== $md5) {
+								$party->password = $md5;
+								$party->save();
+							}
+						}
+					}
+				}
+			}
 			return Redirect::to('/login');
 		}
 
@@ -108,45 +122,18 @@ class FantasyaController extends BaseController {
 	}
 
 	public function change($what) {
-		//zur Zeit nur $what = world
-		$current = Session::get('game');
-		$parties = Party::allFor(Auth::user());
-		$games   = array();
-		foreach ($parties as $game => $parties) {
-			if (count($parties) > 0) {
-				$games[] = $game;
-			}
-		}
-		$n = count($games);
-		if ($n > 0) {
-			$next = 0;
-			for ($i = 0; $i < $n; $i++) {
-				$game = $games[$i];
-				if ($game === $current) {
-					$next = $i + 1;
-					break;
-				}
-			}
-			if ($next >= $n) {
-				$next = 0;
-			}
-			Session::put('game', $games[$next]);
-			return Redirect::to('orders');
-		}
+		$game = Game::next();
+		Session::put('game', $game->id);
+		return Redirect::to(User::countParties($game) > 0 ? 'orders': 'login');
 	}
 
 	public function enter() {
-		if (User::countParties() > 0 && !User::has(User::CAN_PLAY_MULTIS)) {
+		if (User::countAllParties(Game::current()) > 0 && !User::has(User::CAN_PLAY_MULTIS)) {
 			return Redirect::to('login');
-		}
-		$games = array();
-		foreach (Game::allById() as $id => $game) {
-			$games[$id] = $game->name;
 		}
 		$races = array('Aquaner', 'Elf', 'Halbling', 'Mensch', 'Ork', 'Troll', 'Zwerg');
 		if (Request::isMethod('POST')) {
 			$rules = array(
-				'game'        => 'required|in:' . implode(',', array_keys($games)),
 				'party'       => 'required|min:1|max:50',
 				'description' => 'max:500',
 				'race'        => 'required|in:' . implode(',', $races),
@@ -160,7 +147,6 @@ class FantasyaController extends BaseController {
 				$stone = (int)Input::get('stone');
 				$iron  = (int)Input::get('iron');
 				if (($wood + $stone + $iron) <= 90) {
-					$game  = Game::find(Input::get('game'));
 					$party = new NewParty();
 					$party->name        = Input::get('party');
 					$party->description = Input::get('description');
@@ -173,13 +159,13 @@ class FantasyaController extends BaseController {
 					$party->eisen       = $iron;
 					$party->insel       = 0;
 					$party->password    = Auth::user()->passwordmd5;
-					$party->setConnection($game->database)->save();
+					$party->setConnection(Game::current()->database)->save();
 					return Redirect::to('/login');
 				}
 			}
-			return View::make('enter', array('games' => $games, 'races' => array_combine($races, $races)))->withErrors($validator);
+			return View::make('enter', array('races' => array_combine($races, $races)))->withErrors($validator);
 		}
-		return View::make('enter', array('games' => $games, 'races' => array_combine($races, $races)));
+		return View::make('enter', array('races' => array_combine($races, $races)));
 	}
 
 	public function revoke($world, $party) {
@@ -194,6 +180,10 @@ class FantasyaController extends BaseController {
 		$game    = Game::current();
 		$parties = Party::allFor(Auth::user());
 		$parties = $parties[$game->id];
+		if (count($parties) <= 0) {
+			return Redirect::to('/login');
+		}
+
 		if (Request::isMethod('POST')) {
 			$party = Input::get('party');
 			$turn  = Input::get('turn');
