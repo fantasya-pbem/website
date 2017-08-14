@@ -16,15 +16,30 @@ class Game extends Eloquent {
 
 	public static function current() {
 		if (Session::has('game')) {
-			return Game::find(Session::get('game'));
+			return self::find(Session::get('game'));
 		}
 		foreach (Party::allFor(Auth::user()) as $id => $parties) {
 			if (count($parties) > 0) {
 				Session::put('game', $id);
-				return Game::find($id);
+				return self::find($id);
 			}
 		}
-		return null;
+		$games = self::allById();
+		return current($games);
+	}
+
+	public static function next() {
+		$current = self::current()->id;
+		$all     = self::allById();
+		$ids     = array_keys($all);
+		$games   = array_values($all);
+		$n       = count($all);
+		for ($i = 0; $i < $n; $i++) {
+			$id = $ids[$i];
+			if ($id == $current) {
+				return isset($games[$i + 1]) ? $games[$i + 1] : $games[0];
+			}
+		}
 	}
 
 }

@@ -23,18 +23,21 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	}
 
 	public static function countParties(Game $game = null) {
+		$user    = Auth::user();
+		$parties = Party::allFor($user);
+		$id      = $game ? $game->id : null;
+		return self::count($id, $parties);
+	}
+
+	public static function countNewParties(Game $game = null) {
 		$user       = Auth::user();
-		$parties    = Party::allFor($user);
 		$newParties = NewParty::allFor($user);
-		$allParties = array();
-		foreach ($parties as $g => $p) {
-			$allParties[$g] = count($p);
-		}
-		foreach ($newParties as $g => $p) {
-			$allParties[$g] += count($p);
-		}
-		$id = $game ? $game->id : null;
-		return $id ? $allParties[$id] : array_sum($allParties);
+		$id         = $game ? $game->id : null;
+		return self::count($id, $newParties);
+	}
+
+	public static function countAllParties(Game $game = null) {
+		return self::countParties($game) + self::countNewParties($game);
 	}
 
 	/**
@@ -50,5 +53,19 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 * @var array
 	 */
 	protected $hidden = array('password', 'remember_token');
+
+	protected static function count($id, array $parties) {
+		$count = 0;
+		if ($id !== null) {
+			if (isset($parties[$id])) {
+				$count = count($parties[$id]);
+			}
+		} else {
+			foreach( $parties as $p ) {
+				$count += count($p);
+			}
+		}
+		return $count;
+	}
 
 }

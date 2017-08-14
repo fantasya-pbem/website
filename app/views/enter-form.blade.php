@@ -1,6 +1,4 @@
 {{Form::open(array('action' => array('FantasyaController@enter')))}}
-    <?php echo Form::label('game', 'Spiel') ?><br>
-    <?php echo Form::select('game', $games) ?><span class="error"><?php echo $errors->first('game'); ?></span><br>
     <?php echo Form::label('party', 'Name der Partei'); ?><br>
     <?php echo Form::text('party'); ?><span class="error"><?php echo $errors->first('party'); ?></span><br>
     <?php echo Form::label('race', 'Rasse') ?><br>
