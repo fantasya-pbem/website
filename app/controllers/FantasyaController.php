@@ -283,6 +283,10 @@ class FantasyaController extends BaseController {
 	}
 
 	public function myth() {
+		if (!User::canCreateMyths()) {
+			return Redirect::to('myths');
+		}
+
 		if (Request::isMethod('POST')) {
 			$mythtext  = Input::get('mythtext');
 			$rules     =  array('mythtext' => 'required|min:10|max:140', 'captcha' => array('required', 'captcha'));

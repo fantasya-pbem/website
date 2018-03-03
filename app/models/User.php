@@ -40,6 +40,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return self::countParties($game) + self::countNewParties($game);
 	}
 
+	public static function canCreateMyths() {
+		return isset($_ENV['MYTHS']) && $_ENV['MYTHS'];
+	}
+
 	public static function canRegister() {
 		return isset($_ENV['REGISTRATION']) && $_ENV['REGISTRATION'];
 	}
