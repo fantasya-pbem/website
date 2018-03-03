@@ -1,6 +1,6 @@
 <?php
 
-class Download  {
+class Report  {
 
 	protected $game = '';
 

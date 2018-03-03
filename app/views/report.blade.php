@@ -10,7 +10,7 @@
         @if (empty($turns[$id]))
             <p>Keine Auswertungen vorhanden.</p>
         @else
-            <p>@include('download-form')</p>
+            <p>@include('report-form')</p>
         @endif
     @endforeach
 @stop

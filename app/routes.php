@@ -42,7 +42,7 @@ Route::get('revoke/{world}/{party}', array('before' => 'auth', 'uses' => 'Fantas
 
 Route::match(array('GET', 'POST'), 'orders/{party?}', array('before' => 'auth', 'uses' => 'FantasyaController@orders'));
 
-Route::match(array('GET', 'POST'), 'download', array('before' => 'auth', 'uses' => 'FantasyaController@download'));
+Route::match(array('GET', 'POST'), 'report', array('before' => 'auth', 'uses' => 'FantasyaController@report'));
 
 Route::match(array('GET', 'POST'), 'send/{what}', array('before' => 'auth', 'uses' => 'FantasyaController@send'));
 

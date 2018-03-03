@@ -5,7 +5,7 @@
 	@if (User::countParties(Game::current()) > 0)
 		<li><a href="/orders">Befehle kontrollieren</a></li>
 		<li><a href="/send/orders">Befehle senden</a></li>
-		<li><a href="/download">Auswertung herunterladen</a></li>
+		<li><a href="/report">Auswertung herunterladen</a></li>
 	@endif
 	@if (User::countAllParties(Game::current()) <= 0 || User::has(User::CAN_PLAY_MULTIS))
 		<li><a href="/enter">Neues Spiel beginnen</a></li>

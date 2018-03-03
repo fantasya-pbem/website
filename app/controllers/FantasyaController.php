@@ -212,7 +212,7 @@ class FantasyaController extends BaseController {
 										  'check'  => $order->fcheck()));
 	}
 
-	public function download() {
+	public function report() {
 		$game    = Game::current();
 		$parties = Party::allFor(Auth::user());
 		$parties = $parties[$game->id];
@@ -227,7 +227,7 @@ class FantasyaController extends BaseController {
 			if ($party && $t && isset($parties[$party])) {
 				$party    = $party ? $parties[$party] : current($parties);
 				$turn     = $t;
-				$download = new Download($game, $party, $turn);
+				$download = new Report($game, $party, $turn);
 				if ($download->isValid()) {
 					return Response::download($download->getPath());
 				}
@@ -237,10 +237,10 @@ class FantasyaController extends BaseController {
 		$p     = array();
 		foreach ($parties as $id => $pty) {
 			$p[$id]     = $pty->name;
-			$turns[$id] = Download::getTurns($game, $pty);
+			$turns[$id] = Report::getTurns($game, $pty);
 		}
-		return View::make('download', array('turn'    => $turn, 'turns' => $turns,
-		                                    'parties' => $p));
+		return View::make('report', array('turn'    => $turn, 'turns' => $turns,
+		                                  'parties' => $p));
 	}
 
 	public function send($what) {
