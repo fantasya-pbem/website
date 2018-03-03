@@ -38,6 +38,10 @@ class FantasyaController extends BaseController {
 	}
 
 	public function register() {
+		if (!User::canRegister()) {
+			return View::make('no-register');
+		}
+
 		if (Request::isMethod('POST')) {
 			$rules =  array(
 				'user'    => 'required|min:3|max:50|unique:users,name',

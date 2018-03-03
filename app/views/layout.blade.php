@@ -46,9 +46,7 @@
 							@else
 								@include('login-form')
 								<ul>
-									@if (User::canRegister())
-										<li><a href="/register">Neu registrieren</a></li>
-									@endif
+									<li><a href="/register">Neu registrieren</a></li>
 									<li><a href="/reset">Passwort vergessen</a></li>
 									<li><a href="https://www.fantasya-pbem.de/secure">Login mit Zertifikat</a></li>
    								</ul>
