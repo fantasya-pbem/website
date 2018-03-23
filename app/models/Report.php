@@ -16,7 +16,7 @@ class Report  {
 
 	public function getPath() {
 		$directory = self::getDirectory($this->game);
-		return $directory . DIRECTORY_SEPARATOR . $this->turn . DIRECTORY_SEPARATOR . $this->party->id . '.zip';
+		return $directory . DIRECTORY_SEPARATOR . $this->turn . DIRECTORY_SEPARATOR . $this->turn . '-' . $this->party->id . '.zip';
 	}
 
 	public function isValid() {
@@ -34,11 +34,8 @@ class Report  {
 		foreach ($directories as $directory) {
 			$turn = (int)basename($directory);
 			if ($turn > 0) {
-				$zips = glob($directory . '/*.zip');
-				foreach ($zips as $zip) {
-					if (basename($zip) === $partyZip) {
-						$turns[$turn] = $turn;
-					}
+				if (is_file($directory . DIRECTORY_SEPARATOR . $turn . '-' . $partyZip)) {
+					$turns[$turn] = $turn;
 				}
 			}
 		}
