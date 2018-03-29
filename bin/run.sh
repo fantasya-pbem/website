@@ -9,6 +9,7 @@ TRUNCATE_MESSAGES=0
 LAST_TURN=`mysql -N -h $HOST -D $DATABASE -u $USER -p$PASSWORD -e "SELECT Value FROM settings WHERE Name='game.runde'"`
 TURN=`expr $LAST_TURN + 1`
 GAME=spiel
+MONSTER_PARTIES=0,620480,1376883
 BASE_DIR=/home/fantasya/games/$GAME
 BACKUP_DIR=sqlbackup
 REPORT_DIR=reporte
@@ -31,8 +32,8 @@ then
 fi
 if [ "$TRUNCATE_MESSAGES" -gt 0 ]
 then
-	echo "Delete previous messages..." >> $LOG
-	mysql -h $HOST -D $DATABASE -u $USER -p$PASSWORD -e "TRUNCATE TABLE meldungen" 2>&1 >> $LOG
+	echo "Delete previous battlefield messages..." >> $LOG
+	mysql -h $HOST -D $DATABASE -u $USER -p$PASSWORD -e "DELETE FROM meldungen WHERE kategorie = 'Battle' AND partei NOT IN ($MONSTER_PARTIES)" 2>&1 >> $LOG
 fi
 echo >> $LOG
 
