@@ -20,10 +20,12 @@ EMAIL_SUBJECT="Fantasya AW $TURN"
 EMAIL_TEXT=$EMAIL_DIR/turn.email.txt
 EMAIL_LOG=$EMAIL_DIR/log/$TURN
 LOG=$LOG_DIR/run-$TURN.log
+ZAT_LOG=$LOG_DIR/zat-$TURN.log
 
 cd $BASE_DIR
 touch $LOG
 
+echo "Fantasya ZAT start: `date`" >> $LOG
 echo "Running turn $TURN..." >> $LOG
 if [ "$BACKUP" -gt 0 ]
 then
@@ -38,9 +40,13 @@ fi
 echo >> $LOG
 
 echo "Running the game..." >> $LOG
-java -jar fantasya.jar -server $HOST:3306 -datenbank $DATABASE -benutzer $USER -passwort $PASSWORD -zat 2>&1 >> $LOG
+TIMER_START=`date +%s`
+java -jar fantasya.jar -server $HOST:3306 -datenbank $DATABASE -benutzer $USER -passwort $PASSWORD -zat 2>&1 > $ZAT_LOG
 ZAT_RESULT=$?
-echo "Exit code: $ZAT_RESULT" >> $LOG
+echo "Fantasya exit code: $ZAT_RESULT" >> $LOG
+TIMER_END=`date +%s`
+let DURATION=($TIMER_END-$TIMER_START+30)/60
+echo "This AW took $DURATION minutes." >> $LOG
 mv log-*.txt $LOG_DIR 2>&1 >> $LOG
 if [ $ZAT_RESULT -gt 0 ]
 then
@@ -70,4 +76,5 @@ do
 done
 echo >> $LOG
 
+echo "Fantasya ZAT end: `date`" >> $LOG
 echo "Finished." >> $LOG

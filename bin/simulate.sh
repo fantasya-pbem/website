@@ -1,9 +1,9 @@
 #!/bin/bash
 
 HOST=localhost
-DATABASE=
-USER=
-PASSWORD=''
+DATABASE=simulation
+USER=simulation
+PASSWORD='simulation'
 LAST_TURN=`mysql -N -h $HOST -D $DATABASE -u $USER -p$PASSWORD -e "SELECT Value FROM settings WHERE Name='game.runde'"`
 TURN=`expr $LAST_TURN + 1`
 GAME=spiel
