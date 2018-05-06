@@ -13,13 +13,19 @@ ZIP_DIR=zip
 LOG_DIR=log
 
 cd $BASE_DIR
+
+echo "Fantasya ZAT start: `date`"
 echo "Running turn $TURN..."
 echo
 
 echo "Running the game..."
+TIMER_START=`date +%s`
 java -jar fantasya.jar -server $HOST:3306 -datenbank $DATABASE -benutzer $USER -passwort $PASSWORD -zat
 ZAT_RESULT=$?
-echo "Exit code: $ZAT_RESULT"
+echo "Fantasya exit code: $ZAT_RESULT"
+TIMER_END=`date +%s`
+let DURATION=($TIMER_END-$TIMER_START+30)/60
+echo "This AW took $DURATION minutes."
 mv log-*.txt $LOG_DIR
 if [ $ZAT_RESULT -gt 0 ]
 then
@@ -35,3 +41,7 @@ for zip in $ZIP_DIR/$TURN/*.zip
 do
 	mv $zip $ZIP_DIR/$TURN/$TURN-$(basename $zip)
 done
+echo
+
+echo "Fantasya ZAT end: `date`"
+echo "Finished."
