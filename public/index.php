@@ -1,4 +1,13 @@
 <?php
+/*
+if ($_COOKIE['datenschutz']) {
+	echo $_COOKIE['datenschutz'];
+	exit;
+}
+setcookie('datenschutz', 'true');
+phpinfo();
+exit;
+*/
 /**
  * Laravel - A PHP Framework For Web Artisans
  *

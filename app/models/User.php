@@ -41,7 +41,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	}
 
 	public static function canCreateMyths() {
-		return isset($_ENV['MYTHS']) && $_ENV['MYTHS'];
+		return Auth::check() && isset($_ENV['MYTHS']) && $_ENV['MYTHS'];
 	}
 
 	public static function canRegister() {

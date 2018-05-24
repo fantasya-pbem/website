@@ -11,7 +11,10 @@
 |
 */
 
-App::before(function($request) {
+App::before(function($request /* @var $request Illuminate\Http\Request */) {
+	if (!isset($_COOKIE['accept_dsgvo']) && $request->getRequestUri() !== '/privacy') {
+		return Redirect::to('/privacy');
+	}
 });
 
 

@@ -16,7 +16,7 @@ Route::get('about', function() {
 
 Route::get('myths', 'FantasyaController@myths');
 
-Route::match(array('GET', 'POST'), 'myth', 'FantasyaController@myth');
+Route::match(array('GET', 'POST'), 'myth', array('before' => 'auth', 'uses' => 'FantasyaController@myth'));
 
 Route::get('donate', function() {
 	return View::make('donate');
@@ -73,3 +73,5 @@ Route::match(array('GET', 'POST'), 'edit/{what}', array('before' => 'auth', 'use
 Route::get('delete/{what}/{id}', array('before' => 'auth', 'uses' => 'FantasyaController@delete'));
 
 Route::get('world/{id?}', 'FantasyaController@world');
+
+Route::match(array('GET', 'POST'), 'privacy/{referrer?}', 'FantasyaController@privacy');

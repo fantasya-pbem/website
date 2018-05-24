@@ -5,15 +5,15 @@
 @stop
 
 @section('text')
-	<h3>Spielleiter und inhaltlich Verantwortlicher gem. TMG:</h3>
+	<h3>Inhaltlich Verantwortlicher gem. TMG:</h3>
 	<p>
-		<br />
-		<img src="images/imp.jpg" />
+		Sascha Ternes<br>
+		info(at)fantasya-pbem.de
 	</p>
-	<h3>Systemadministration</h3>
+
+	<h3>Hosting</h3>
 	<p>
-		<br />
-		Sascha Ternes<br />
-		hostmaster(at)fantasya-pbem.de
+		PC-Bär Computerservice<br>
+		<a href="https://www.hallerbach-it.de/">www.hallerbach-it.de</a>
 	</p>
 @stop

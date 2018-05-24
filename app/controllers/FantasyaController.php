@@ -352,5 +352,15 @@ class FantasyaController extends BaseController {
 		return View::make('world', array('game' => $game, 'turn' => $turn->Value, 'lastZAT' => $lastZAT, 'count' => $count, 'parties' => $parties, 'names' => $names, 'regions' => $regions, 'underworld' => $underworld, 'layers' => $layers, 'units' => $units, 'monsters' => $monsters, 'total' => $total));
 	}
 
-}
+	public function privacy() {
+		$cookieExists = isset($_COOKIE['accept_dsgvo']);
+		if (Request::isMethod('POST')) {
+			if (Input::get('accept')) {
+				setcookie('accept_dsgvo', 1);
+				$cookieExists = true;
+			}
+		}
+		return View::make('privacy', array('showForm' => !$cookieExists));
+	}
 
+}
