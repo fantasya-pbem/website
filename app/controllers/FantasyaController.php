@@ -356,7 +356,7 @@ class FantasyaController extends BaseController {
 		$cookieExists = isset($_COOKIE['accept_dsgvo']);
 		if (Request::isMethod('POST')) {
 			if (Input::get('accept')) {
-				setcookie('accept_dsgvo', 1);
+				setcookie('accept_dsgvo', 1, time() + 365 * 24 * 60 * 60, '/');
 				$cookieExists = true;
 			}
 		}
