@@ -9,7 +9,7 @@ TRUNCATE_MESSAGES=0
 LAST_TURN=`mysql -N -h $HOST -D $DATABASE -u $USER -p$PASSWORD -e "SELECT Value FROM settings WHERE Name='game.runde'"`
 TURN=`expr $LAST_TURN + 1`
 GAME=spiel
-MONSTER_PARTIES=0,620480,1376883
+MONSTER_PARTIES=(0 dark tier)
 BASE_DIR=/home/fantasya/games/$GAME
 BACKUP_DIR=sqlbackup
 REPORT_DIR=reporte
@@ -21,6 +21,13 @@ EMAIL_TEXT=$EMAIL_DIR/turn.email.txt
 EMAIL_LOG=$EMAIL_DIR/log/$TURN
 LOG=$LOG_DIR/run-$TURN.log
 ZAT_LOG=$LOG_DIR/zat-$TURN.log
+
+which b36 > /dev/null
+if [ "$?" -gt 0 ]
+then
+	echo "b36 tool not found."
+	exit 1
+fi
 
 cd $BASE_DIR
 touch $LOG
@@ -35,7 +42,17 @@ fi
 if [ "$TRUNCATE_MESSAGES" -gt 0 ]
 then
 	echo "Delete previous battlefield messages..." >> $LOG
-	mysql -h $HOST -D $DATABASE -u $USER -p$PASSWORD -e "DELETE FROM meldungen WHERE kategorie = 'Battle' AND partei NOT IN ($MONSTER_PARTIES)" 2>&1 >> $LOG
+	for id in ${MONSTER_PARTIES[*]}
+	do
+		number=`b36 -d $id`
+		if [ -z "$monsterParties" ]
+		then
+			monsterParties=$number
+		else
+			monsterParties=$monsterParties,$number
+		fi
+	done
+	mysql -h $HOST -D $DATABASE -u $USER -p$PASSWORD -e "DELETE FROM meldungen WHERE kategorie = 'Battle' AND partei NOT IN ($monsterParties)" 2>&1 >> $LOG
 fi
 echo >> $LOG
 
@@ -66,7 +83,16 @@ echo >> $LOG
 
 echo "Sending e-mails..." >> $LOG
 mkdir -p $EMAIL_LOG
-for ID in `mysql -N -s -h $HOST -u $USER -D $DATABASE -p$PASSWORD -e "SELECT id FROM partei"`
+for id in ${MONSTER_PARTIES[*]}
+do
+	if [ -z "$monsterParties" ]
+	then
+		monsterParties="'$id'"
+	else
+		monsterParties="$monsterParties,'$id'"
+	fi
+done
+for ID in `mysql -N -s -h $HOST -u $USER -D $DATABASE -p$PASSWORD -e "SELECT id FROM partei WHERE id NOT IN ($monsterParties)"`
 do
 	EMAIL=`mysql -N -s -h $HOST -u $USER -D $DATABASE -p$PASSWORD -e "SELECT email FROM partei WHERE id = '$ID'"`
 	ZIP=$ZIP_DIR/$TURN/$TURN-$ID.zip
