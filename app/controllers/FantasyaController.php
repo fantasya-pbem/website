@@ -43,10 +43,12 @@ class FantasyaController extends BaseController {
 		}
 
 		if (Request::isMethod('POST')) {
+			if (!$this->checkAntiSpam(Input::get('captcha'))) {
+				return View::make('antispam');
+			}
 			$rules =  array(
-				'user'    => 'required|min:3|max:50|unique:users,name',
-				'email'   => 'required|email',
-				'captcha' => array('required', 'captcha')
+				'user'  => 'required|min:3|max:50|unique:users,name',
+				'email' => 'required|email'
 			);
 			$validator = Validator::make(Input::all(), $rules);
 			if ($validator->passes()) {
@@ -62,11 +64,16 @@ class FantasyaController extends BaseController {
 					$message->to($user->email);
 					$message->subject('Fantasya-Registrierung');
 				});
+				Mail::send('admin-mail', array('user' => $user->name, 'email' => $user->email), function ($message) {
+					$message->from('admin@fantasya-pbem.de', 'Fantasya-Administrator');
+					$message->to('spielleitung@fantasya-pbem.de');
+					$message->subject('Neue Fantasya-Registrierung');
+				});
 				return View::make('registered');
 			}
-			return View::make('register')->withErrors($validator);
+			return View::make('register', array('captcha' => $this->getCaptcha()))->withErrors($validator);
 		}
-		return View::make('register');
+		return View::make('register', array('captcha' => $this->getCaptcha()));
 	}
 
 	public function reset() {
@@ -361,6 +368,18 @@ class FantasyaController extends BaseController {
 			}
 		}
 		return View::make('privacy', array('showForm' => !$cookieExists));
+	}
+
+	protected function getCaptcha() {
+		if (isset($_ENV['REGISTRATION_QUESTION'])) {
+			return $_ENV['REGISTRATION_QUESTION'];
+		}
+		return 'Wer hat Fantasya erfunden?';
+	}
+
+	protected function checkAntiSpam($answer) {
+		$correctAnswer = isset($_ENV['REGISTRATION_ANSWER']) ? $_ENV['REGISTRATION_ANSWER'] : 'Mogel';
+		return strtolower($answer) === strtolower($correctAnswer);
 	}
 
 }
