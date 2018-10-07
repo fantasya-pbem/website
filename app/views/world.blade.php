@@ -25,6 +25,23 @@
 			<p><b>Achtung:</b> Im Beta-Spiel gibt es derzeit nur an manchen Wochentagen eine Auswertung, Details siehe Taverne.</p>
 		@endif
 
+		@if ($newCount > 0)
+			<h3>Neue Parteien</h3>
+			<p>
+				@if ($newCount === 1)
+					Diese Woche startet {{{$newCount}}} neue Partei.
+				@else
+					Diese Woche starten {{{$newCount}}} neue Parteien.
+				@endif
+			</p>
+			<dl class="parties">
+				@foreach ($newParties as $party)
+					<dt>{{{$party->name}}}</dt>
+					<dd>{{{$party->description}}}</dd>
+				@endforeach
+			</dl>
+		@endif
+
 		<h3>Statistik</h3>
 		<h4>Regionen</h4>
 		<p>
@@ -123,6 +140,6 @@
 			<dt>{{{$party->name}}}</dt>
 			<dd>{{{$party->beschreibung}}}</dd>
 		@endforeach
-		<dl>
+		</dl>
 	</div>
 @stop
