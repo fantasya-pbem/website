@@ -172,6 +172,12 @@ class FantasyaController extends BaseController {
 					$party->insel       = 0;
 					$party->password    = Auth::user()->passwordmd5;
 					$party->setConnection(Game::current()->database)->save();
+
+					Mail::send('party-mail', array('user' => Auth::user()->name, 'party' => $party->name), function ($message) {
+						$message->from('admin@fantasya-pbem.de', 'Fantasya-Administrator');
+						$message->to('spielleitung@fantasya-pbem.de');
+						$message->subject('Neue Fantasya-Partei');
+					});
 					return Redirect::to('/login');
 				}
 			}
