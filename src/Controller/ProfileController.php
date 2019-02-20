@@ -2,21 +2,22 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * NewsController.
+ * @IsGranted("ROLE_USER")
  */
-class NewsController extends AbstractController
+class ProfileController extends AbstractController
 {
 	/**
-	 * @Route("/news", name="news")
+	 * @Route("/profile", name="profile")
 	 *
 	 * @return Response
 	 */
-	public function index(): Response {
-		return $this->render('news/index.html.twig');
+	public function profile(): Response {
+		return $this->render('profile/index.html.twig');
 	}
 }

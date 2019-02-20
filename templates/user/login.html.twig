@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya-Anmeldung fehlgeschlagen
+{% endblock %}
+
+{% block header %}
+    Anmeldung fehlgeschlagen
+{% endblock %}
+
+{% block content %}
+    <p>Das war wohl das falsche Passwort!</p>
+
+    <p><a href="{{ path('user_reset') }}">Neues Passwort anfordern</a></p>
+{% endblock %}

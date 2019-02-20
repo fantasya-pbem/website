@@ -1,13 +1,33 @@
 security:
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        App\Entity\User:
+            algorithm: argon2i
+
+    role_hierarchy:
+        ROLE_BETA_TESTER:  ROLE_USER
+        ROLE_MULTI_PLAYER: ROLE_USER
+        ROLE_NEWS_CREATOR: ROLE_USER
+
     providers:
-        in_memory: { memory: ~ }
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: name
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             anonymous: true
+            guard:
+                authenticators:
+                    - App\Security\PasswordAuthenticator
+            logout:
+                path: user_logout
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path: /
 
             # activate different ways to authenticate
 

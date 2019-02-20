@@ -1,6 +1,5 @@
 <?php
 declare (strict_types = 1);
-
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -8,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -15,11 +15,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PrivacyController extends AbstractController
 {
+	const COOKIE = 'accept_dsgvo';
+
 	/**
 	 * @Route("/privacy", name="privacy")
+	 *
+	 * @return Response
 	 */
-	public function index() {
-		$hasAccepted = isset($_COOKIE['accept_dsgvo']);
+	public function index(): Response {
+		$hasAccepted = isset($_COOKIE[self::COOKIE]);
 		$form        = $this->getForm()->createView();
 
 		return $this->render('privacy/index.html.twig', [
@@ -32,13 +36,15 @@ class PrivacyController extends AbstractController
 	 * @Route("/privacy/accept", name="privacy_accept")
 	 *
 	 * @param Request $request
+	 * @return Response
 	 */
-	public function accept(Request $request) {
+	public function accept(Request $request): Response {
 		$form = $this->getForm();
 
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
-			return $this->redirectToRoute('index');
+			setcookie(self::COOKIE, '1', time() + 365 * 24 * 60 * 60, '/');
+			return $this->redirectToRoute('news');
 		}
 
 		return $this->render('privacy/index.html.twig', [

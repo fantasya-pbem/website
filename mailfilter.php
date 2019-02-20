@@ -1,6 +1,10 @@
 #!/usr/bin/php
 <?php
 
+// TODO: Replace MD5(password).
+// require __DIR__ . '/vendor/autoload.php';
+// $encoder = new \Symfony\Component\Security\Core\Encoder\Argon2iPasswordEncoder();
+
 setlocale(LC_ALL, 'de_DE');
 
 $loggingEnabled = true;

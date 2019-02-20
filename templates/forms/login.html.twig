@@ -1,0 +1,21 @@
+<form method="post" action="{{ path('user_login') }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+    <label for="username" class="sr-only">Benutzername</label>
+    <br>
+    <input type="text" name="name" id="username" class="form-control" required>
+    <br>
+
+    <label for="password" class="sr-only">Passwort</label>
+    <br>
+    <input type="password" name="password" id="password" class="form-control" required>
+    <br>
+
+    <input type="checkbox" id="remember-me" name="_remember_me">
+    <label for="remember-me">Eingeloggt bleiben</label>
+    <br>
+
+    <button class="btn btn-lg btn-primary" type="submit">
+        Anmelden
+    </button>
+</form>
