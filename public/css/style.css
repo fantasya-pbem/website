@@ -1,18 +1,46 @@
 body {
-	margin: 0;
-	padding: 0;
-	background: #FFF3D1 url(images/img01.jpg) repeat-x left top;
+	background: #FFF3D1 url(../images/img01.jpg) repeat-x left top;
 	font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, "Times New Roman", Times, serif;
 	font-size: 14px;
 	color: #454545;
+/*
+	margin: 0;
+	padding: 0;
+*/
+}
+
+.container-fluid {
+	padding: 0;
+}
+
+.container-fluid.logo {
+	background: linear-gradient(#753d00, #c28e51);
+}
+
+.navbar {
+	background: linear-gradient(#564a2f, #473f28);
+}
+.navbar .nav-item {
+	font-size: 1.8rem;
+	font-weight: bold;
+	margin: 0.1rem 1rem;
+	padding: 0;
+}
+
+.navbar .nav-item a {
+	color: #fff;
+	text-decoration: none;
 }
 
 h1, h2, h3 {
+/*
 	margin: 0;
 	padding: 0;
+*/
 	color: #F93D00;
 }
 
+/*
 h4 {
 	margin: 5px 0 14px;
 	padding: 0;
@@ -25,9 +53,11 @@ p, ul, ol {
 
 ul, ol {
 }
-
+*/
 a {
+	/*
 	text-decoration: none;
+	*/
 	color: #704A21;
 }
 
@@ -60,7 +90,7 @@ table {
 /* Logo */
 
 #logo {
-	background: url(images/header.jpg) no-repeat left top;
+	background: url(../images/header.jpg) no-repeat left top;
 	width: 960px;
 	height: 102px;
 	margin: 0;
@@ -145,7 +175,7 @@ table {
 #menu li {
 	float: left;
 	height: 50px;
-	background: url(images/img02.jpg) no-repeat right top;
+	background: url(../images/img02.jpg) no-repeat right top;
 }
 #menu li.last {
 	background-image: none;
@@ -222,7 +252,7 @@ table {
 }
 
 #sidebar h2 {
-	background: #90602A url(images/img03.jpg) repeat-x left top;
+	background: #90602A url(../images/img03.jpg) repeat-x left top;
 	border: 0px #EEE3C3 solid;
 	height: 32px;
 	padding: 8px 0 0 15px;
@@ -297,7 +327,7 @@ table {
 }
 
 .post h2 {
-	background: #90602A url(images/img03.jpg) repeat-x left top;
+	background: #90602A url(../images/img03.jpg) repeat-x left top;
 	border: 1px #EEE3C3 solid;
 	height: 32px;
 	padding: 6px 15px 2px;

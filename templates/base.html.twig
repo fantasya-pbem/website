@@ -1,23 +1,57 @@
-<!DOCTYPE html>
-<html lang="{{ app.request.locale }}">
+<!doctype html>
+<html lang="{{ app.request.locale }}" xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="Fantasya PBEM Fantasy Rollenspiel">
     <meta name="description" content="Fantasya ist eine Welt voll mit Elfen, Zwergen und anderen Lebewesen. Die Unterwelt ist überrannt worden von Drachen und Zombies, die darauf warten durch Höhlen zur Oberwelt zu gelangen. Fantasya ist ein kostenloses Runden-Strategiespiel, bei dem Du Deine eigene Zivilisation gründen und Dich mit anderen Spielern messen kannst.">
     <title>{% block title %}{% endblock %}</title>
-    <link href="{{ asset('style.css') }}" rel="stylesheet" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
-<div id="wrapper">
-    <div id="header">
-        <div id="logo"></div>
+<div class="container-fluid logo">
+    <div class="row">
+        <div class="col-12 text-center">
+            <img class="img-fluid" src="{{ asset('images/header.jpg') }}">
+        </div>
     </div>
+</div>
 
+<div class="container">
+    <nav class="navbar navbar-expand-md">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item mx-auto">
+                    <a href="{{ path('index') }}">Fantasya</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a href="//wiki.fantasya-pbem.de">Bibliothek</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a href="//forum.fantasya-pbem.de">Taverne</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a href="http://webchat.freenode.net/?channels=%23fantasya&uio=OT10cnVlJjExPTQx30" target="fantasya_chat">Chat</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a href="https://github.com/fantasya-pbem/host" target="fantasya_entwicklung">Entwicklung</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div id="wrapper">
     <div id="myth">
         <span>Myth::getLast()</span>
     </div>
 
-    <div id="menu">
+    <div id="men">
         <ul>
             <li><a href="{{ path('index') }}">Fantasya</a></li>
             <li><a href="//wiki.fantasya-pbem.de">Bibliothek</a></li>
@@ -100,5 +134,9 @@
 <div id="footer">
     <p>&copy; {{ 'now'|date('Y') }} fantasya.pbem. All rights reserved. Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>, mogel &amp; Thalian.</p>
 </div>
+<footer>
+    <script src="{{ asset('js/jquery.slim.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+</footer>
 </body>
 </html>
