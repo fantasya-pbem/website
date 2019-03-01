@@ -1,12 +1,7 @@
 body {
-	background: #FFF3D1 url(../images/img01.jpg) repeat-x left top;
+	background-color: #fff3D1;
 	font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, "Times New Roman", Times, serif;
-	font-size: 14px;
 	color: #454545;
-/*
-	margin: 0;
-	padding: 0;
-*/
 }
 
 .container-fluid {
@@ -18,13 +13,13 @@ body {
 }
 
 .navbar {
-	background: linear-gradient(#564a2f, #473f28);
+	background: linear-gradient(#473f28, #6c6552);
 }
+
 .navbar .nav-item {
 	font-size: 1.8rem;
 	font-weight: bold;
 	margin: 0.1rem 1rem;
-	padding: 0;
 }
 
 .navbar .nav-item a {
@@ -85,43 +80,6 @@ table {
 	width: 960px;
 	height: 105px;
 	margin: 0 auto;
-}
-
-/* Logo */
-
-#logo {
-	background: url(../images/header.jpg) no-repeat left top;
-	width: 960px;
-	height: 102px;
-	margin: 0;
-	padding: 0;
-}
-
-#logo h1, #logo p {
-	margin: 0;
-	padding: 0;
-}
-
-#logo h1 {
-	float: left;
-	letter-spacing: -1px;
-	text-transform: none;
-	font-size: 2.6em;
-}
-
-#logo p {
-	float: left;
-	margin: 0;
-	padding: 12px 0 0 10px;
-	font: normal 14px Georgia, "Times New Roman", Times, serif;
-	font-style: italic;
-}
-
-#logo a {
-	border: none;
-	background: none;
-	text-decoration: none;
-	color: #FFFFFF;
 }
 
 /* Search */
