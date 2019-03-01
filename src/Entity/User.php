@@ -2,10 +2,10 @@
 declare (strict_types = 1);
 namespace App\Entity;
 
-use App\Data\PasswordReset;
-use App\Data\Registration;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+
+use App\Data\PasswordReset;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -48,16 +48,26 @@ class User implements UserInterface
      */
     private $email;
 
+	/**
+	 * @return int|null
+	 */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+	/**
+	 * @return string|null
+	 */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+	/**
+	 * @param string $name
+	 * @return User
+	 */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -68,7 +78,7 @@ class User implements UserInterface
     /**
      * A visual identifier that represents this user.
      *
-     * @see UserInterface
+     * @return string
      */
     public function getUsername(): string
     {
@@ -76,36 +86,41 @@ class User implements UserInterface
     }
 
     /**
-     * @see UserInterface
+     * @return string[]
      */
     public function getRoles(): array
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = self::ROLE_USER;
-
         return array_unique($roles);
     }
 
+	/**
+	 * @param array(string) $roles
+	 * @return User
+	 */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
-
         return $this;
     }
 
     /**
-     * @see UserInterface
+     * @return string
      */
     public function getPassword(): string
     {
         return (string) $this->password;
     }
 
+	/**
+	 * @param string $password
+	 * @return User
+	 */
     public function setPassword(string $password): self
     {
         $this->password = $password;
-
         return $this;
     }
 
@@ -126,15 +141,21 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
+	/**
+	 * @return string|null
+	 */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+	/**
+	 * @param string $email
+	 * @return User
+	 */
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 

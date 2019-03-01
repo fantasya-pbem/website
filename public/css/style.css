@@ -151,6 +151,19 @@ main a:before {
 	content: '»\2009'
 }
 
+.article.card {
+	border: 1px solid #90602a;
+}
+
+.article .card-header {
+	background: #e8dcba;
+	border-bottom: 1px solid #90602a;
+}
+
+.article .card-body {
+	padding: 0.25rem 0.5rem;
+}
+
 /* Footer */
 
 footer {

@@ -16,10 +16,10 @@
         unser Forum, die Taverne, der geeignete Ort.
     </p>
 
-    @foreach ($news as $article)
-    <div class="article">
-        <h3>Date::asDate($article->created_at) - $article->title</h3>
-        <p>$article->content</p>
+    {% for article in news %}
+    <div class="article card">
+        <h3 class="card-header">{{ article.createdAt|localizeddate('long', 'none') }} – {{ article.title }}</h3>
+        <div class="card-body">{{ article.content }}</div>
     </div>
-    @endforeach
+    {% endfor %}
 {% endblock %}
