@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Fantasya liebt Datenschutz.</h3>
+    <h2>Fantasya liebt Datenschutz.</h2>
 
     <p>
         Und deswegen verzichten wir darauf, unnötig personenbezogene Daten zu erheben. Nur die allernötigsten
@@ -70,7 +70,7 @@
     </p>
 
     {% if hasAccepted %}
-        <p>Du hast bereits Deine Zustimmung gegeben.</p>
+        <p><strong>Du hast bereits Deine Zustimmung gegeben.</strong></p>
     {% else %}
         {{ form(form) }}
     {% endif %}

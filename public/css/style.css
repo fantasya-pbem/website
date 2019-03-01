@@ -11,7 +11,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h2, h3, h4, h5, h6 {
-	color: #F93d00;
+	color: #e13900;
 }
 
 h1 {
@@ -23,12 +23,20 @@ h2 {
 	font-size: 1.25rem;
 }
 
+h3 {
+	font-size: 1.1rem;
+}
+
 p {
 	text-align: justify;
 }
 
 a {
 	color: #704a21;
+}
+a:hover {
+	color: #4d2d09;
+	text-decoration: none;
 }
 
 ul {
@@ -40,6 +48,25 @@ ul {
 
 .container-fluid {
 	padding: 0;
+}
+
+/* Forms */
+
+form label {
+	vertical-align: text-top;
+}
+
+form .form-check-label {
+	margin-left: 5px;
+}
+
+form .btn-primary {
+	background-color: #90602a;
+	border: none;
+	border-radius: unset;
+}
+form .btn-primary:hover {
+	background-color: #4d2d09;
 }
 
 /* Header */
@@ -61,6 +88,9 @@ ul {
 .navbar .nav-item a {
 	color: #fff;
 	text-decoration: none;
+}
+.navbar .nav-item a:hover {
+	color: #ddd;
 }
 
 .container-fluid.myth {
@@ -103,6 +133,10 @@ ul {
 	padding: 0.75rem 1.25rem;
 }
 
+.nav-link {
+	padding: 0;
+}
+
 main .card {
 	background: unset;
 	border: none;
@@ -113,94 +147,8 @@ main .card-body {
 	padding: 0.75rem 0.25rem;
 }
 
-.nav-link {
-	padding: 0;
-}
-
-/* Legacy stuff */
-
-form span.error {
-    color: #F93D00;
-    margin: 0 0 0 5px;
-}
-
-table {
-	font-size: 14px;
-}
-
-/* Content */
-
-#content {
-	float: right;
-	width: 700px;
-	padding: 50px 20px 0 0;
-}
-
-#content ul {
-    list-style-type: square;
-}
-
-.post {
-	margin-bottom: 8px;
-}
-
-.post h2 {
-	background: #90602A url(../images/img03.jpg) repeat-x left top;
-	border: 1px #EEE3C3 solid;
-	height: 32px;
-	padding: 6px 15px 2px;
-	color: #FFF3D1;
-}
-
-.post > div {
-	padding: 10px 5px 15px;
-	text-align: justify;
-}
-
-.post p, .post ul {
-    line-height: 1.25em;
-}
-
-.article {
-    margin: 10px 0 0;
-	border: 1px #bf985f solid;
-}
-
-.article h3 {
-    background-color: #e8dcba;
-	border-bottom: 1px #bf985f solid;
-	height: 24px;
-	padding: 5px 10px 3px;
-}
-
-.article p {
-	padding: 5px 10px 3px;
-	margin: 0;
-}
-
-.article p.edit {
-    border-top: 1px #bf985f dashed;
-}
-
-.article p.edit a {
-    color: #5555aa;
-}
-
-.captcha img {
-    vertical-align: middle;
-    margin: 0 0 10px;
-}
-
-div#world .statistic {
-	width: 100%;
-}
-div#world .statistic th {
-	text-align: left;
-	min-width: 40px;
-}
-
-div#world .parties dt {
-	font-weight: bold;
+main a:before {
+	content: '»\2009'
 }
 
 /* Footer */
@@ -217,8 +165,4 @@ footer span {
 	padding: 1.5rem 1.0rem;
 	text-align: center;
 	text-transform: uppercase;
-}
-
-footer a {
-	color: #704a21;
 }
