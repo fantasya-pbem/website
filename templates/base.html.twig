@@ -10,15 +10,16 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
-<div class="container-fluid logo">
+<header>
+    <div class="container-fluid logo">
     <div class="row">
         <div class="col-12 text-center">
-            <img class="img-fluid" src="{{ asset('images/header.jpg') }}">
+            <img class="img-fluid" src="{{ asset('images/header.jpg') }}" alt="Darstellung der Inselwelt von Fantasya">
         </div>
     </div>
 </div>
 
-<nav class="navbar navbar-expand">
+    <nav class="navbar navbar-expand">
     <ul class="navbar-nav mx-auto">
         <li class="nav-item d-none d-md-block ml-0 mr-sm-3 mr-md-4 mr-lg-5">
             <a href="{{ path('index') }}">Fantasya</a>
@@ -38,89 +39,133 @@
     </ul>
 </nav>
 
-<div class="container-fluid myth">
-
-</div>
-
-<div id="wrapper">
-    <div id="myth">
-        <span>Myth::getLast()</span>
+    <div class="container-fluid myth">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <span>Hier steht das Gerücht! Es kann aus sehr viel Text bestehen, fast wie eine SMS so viel.</span>
+            </div>
+        </div>
     </div>
+</header>
 
-    <div id="page">
-        <div id="sidebar">
-            <ul>
-                <li>
-                    <h2>Fantasya</h2>
-
-                    <ul>
-                        <li><a href="{{ path('news') }}">Neuigkeiten</a></li>
-                        <li><a href="{{ path('about-fantasya') }}">Über Fantasya</a></li>
-                        <li><a href="{{ path('myth') }}">Gerüchte</a></li>
-                        <li><a href="{{ path('donate') }}">Spenden</a></li>
-                        <li><a href="{{ path('contact') }}">Kontakt</a></li>
-                        <li><a href="{{ path('privacy') }}">Datenschutz</a></li>
+<div class="container">
+    <div class="row">
+        <div class="left col-4 col-md-3">
+            <div class="card">
+                <h1 class="card-header">Fantasya</h1>
+                <nav class="card-body">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a href="{{ path('news') }}" class="nav-link">Neuigkeiten</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path('about-fantasya') }}" class="nav-link">Über Fantasya</a></li>
+                        <li class="nav-item">
+                            <a href="{{ path('myth') }}" class="nav-link">Gerüchte</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path('donate') }}" class="nav-link">Spenden</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path('contact') }}" class="nav-link">Kontakt</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path('privacy') }}" class="nav-link">Datenschutz</a>
+                        </li>
                     </ul>
-                </li>
-                <li>
-                    <h2>Anmeldung</h2>
+                </nav>
+            </div>
 
+            <div class="card">
+                <h1 class="card-header">Anmeldung</h1>
+                <div class="card-body">
                     {% if app.user %}
                         {{ include('includes/menu.html.twig') }}
                     {% else %}
                         {{ include('forms/login.html.twig') }}
 
-                        <ul>
-                            <li><a href="{{ path('user_register') }}">Neu registrieren</a></li>
-                            <li><a href="{{ path('user_reset') }}">Passwort vergessen</a></li>
-                            @if (false)
-                            <li><a href="/secure">Login mit Zertifikat</a></li>
-                            @endif
-                        </ul>
+                        <nav>
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a href="{{ path('user_register') }}" class="nav-link">Neu registrieren</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('user_reset') }}" class="nav-link">Passwort vergessen</a>
+                                </li>
+                                {% if (false) %}
+                                    <li class="nav-item">
+                                        <a href="/secure" class="nav-link">Login mit Zertifikat</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
                     {% endif %}
-                </li>
-                <li>
-                    <h2>Die Welten</h2>
+                </div>
+            </div>
 
-                    <ul>
+            <div class="card">
+                <h1 class="card-header">Die Welten</h1>
+                <nav class="card-body">
+                    <ul class="nav flex-column">
                         @foreach (Game::all() as $game)
-                        <li><a href=""><!--/world/$game->id-->$game->name</a></li>
+                            <li class="nav-item">
+                                <a href="" class="nav-link"><!--/world/$game->id-->$game->name</a>
+                            </li>
                         @endforeach
                     </ul>
-                </li>
-                <li>
-                    <h2>Links</h2>
+                </nav>
+            </div>
 
-                    <ul>
-                        <li><a href="http://www.metadrei.org/toolbelt/forlage.html">Forlage</a></li>
-                        <li><a href="http://sourceforge.net/projects/magellan-client">Magellan-Client</a></li>
-                        <li><a href="http://fanalytics.dynamic-storage.com/">Fanalytics³-Client</a></li>
-                        <li><a href="http://www.gulrak.de">Vorlage-Tool</a></li>
-                        <li><a href="http://www.eressea.de">Eressea</a></li>
-                        <li><a href="http://www.german-atlantis.de">German Atlantis</a></li>
-                        <li><a href="http://www.pbem-spiele.de">PbEM-Spiele.de</a></li>
+            <div class="card">
+                <h1 class="card-header">Links</h1>
+                <nav class="card-body">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a href="http://www.metadrei.org/toolbelt/forlage.html" class="nav-link">Forlage</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="http://sourceforge.net/projects/magellan-client" class="nav-link">Magellan-Client</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="http://fanalytics.dynamic-storage.com" class="nav-link">Fanalytics³-Client</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="http://www.gulrak.de" class="nav-link">Vorlage-Tool</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="http://www.eressea.de" class="nav-link">Eressea</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="http://www.german-atlantis.de" class="nav-link">German Atlantis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="http://www.pbem-spiele.de" class="nav-link">PbEM-Spiele.de</a>
+                        </li>
                     </ul>
-                </li>
-            </ul>
+                </nav>
+            </div>
         </div>
 
-        <div id="content">
-            <div class="post">
-                <h2 class="title">{% block header %}{% endblock %}</h2>
+        <div class="right col-8 col-md-9">
+            <main>
+                <div class="card">
+                    <h1 class="card-header">{% block header %}{% endblock %}</h1>
 
-                <div class="entry">{% block content %}{% endblock %}</div>
+                    <div class="card-body">{% block content %}{% endblock %}</div>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <span>&copy; {{ 'now'|date('Y') }} fantasya.pbem. All rights reserved. Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>, mogel &amp; Thalian.</span>
             </div>
         </div>
     </div>
-    <div style="clear: both;">&nbsp;</div>
-</div>
-
-<div style="clear: both;">&nbsp</div>
-
-<div id="footer">
-    <p>&copy; {{ 'now'|date('Y') }} fantasya.pbem. All rights reserved. Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>, mogel &amp; Thalian.</p>
-</div>
-<footer>
     <script src="{{ asset('js/jquery.slim.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 </footer>
