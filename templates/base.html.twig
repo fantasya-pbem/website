@@ -12,32 +12,14 @@
 <body>
 <header>
     <div class="container-fluid logo">
-    <div class="row">
-        <div class="col-12 text-center">
-            <img class="img-fluid" src="{{ asset('images/header.jpg') }}" alt="Darstellung der Inselwelt von Fantasya">
+        <div class="row">
+            <div class="col-12 text-center">
+                <img class="img-fluid" src="{{ asset('images/header.jpg') }}" alt="Darstellung der Inselwelt von Fantasya">
+            </div>
         </div>
     </div>
-</div>
 
-    <nav class="navbar navbar-expand">
-    <ul class="navbar-nav mx-auto">
-        <li class="nav-item d-none d-md-block ml-0 mr-sm-3 mr-md-4 mr-lg-5">
-            <a href="{{ path('index') }}">Fantasya</a>
-        </li>
-        <li class="nav-item ml-0 mr-3 mx-md-4 mx-lg-5">
-            <a href="//wiki.fantasya-pbem.de">Bibliothek</a>
-        </li>
-        <li class="nav-item mx-sm-3 mx-md-4 mx-lg-5">
-            <a href="//forum.fantasya-pbem.de">Taverne</a>
-        </li>
-        <li class="nav-item ml-3 mr-0 mx-sm-3 mx-md-4 mx-lg-5">
-            <a href="http://webchat.freenode.net/?channels=%23fantasya&uio=OT10cnVlJjExPTQx30" target="fantasya_chat">Chat</a>
-        </li>
-        <li class="nav-item d-none d-sm-block ml-sm-3 ml-md-4 ml-lg-5 mr-0">
-            <a href="https://github.com/fantasya-pbem/host" target="fantasya_entwicklung">Entwicklung</a>
-        </li>
-    </ul>
-</nav>
+    {% include('includes/navbar.html.twig') %}
 
     <div class="container-fluid myth">
         <div class="row justify-content-center">
@@ -50,60 +32,41 @@
 
 <div class="container">
     <div class="row">
-        <div class="left col-4 col-md-3">
+        <div class="col-6 col-md-4 col-lg-3 col-xl-2 offset-xl-1">
             <div class="card">
                 <h1 class="card-header">Fantasya</h1>
                 <nav class="card-body">
+                    {% include('includes/fantasya.html.twig') %}
+                </nav>
+            </div>
+
+            <div class="card d-md-none">
+                <h1 class="card-header">Die Welten</h1>
+                <nav class="card-body">
                     <ul class="nav flex-column">
+                        @foreach (Game::all() as $game)
                         <li class="nav-item">
-                            <a href="{{ path('news') }}" class="nav-link">Neuigkeiten</a>
+                            <a href="" class="nav-link"><!--/world/$game->id-->$game->name</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ path('about-fantasya') }}" class="nav-link">Über Fantasya</a></li>
-                        <li class="nav-item">
-                            <a href="{{ path('myth') }}" class="nav-link">Gerüchte</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ path('donate') }}" class="nav-link">Spenden</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ path('contact') }}" class="nav-link">Kontakt</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ path('privacy') }}" class="nav-link">Datenschutz</a>
-                        </li>
+                        @endforeach
                     </ul>
                 </nav>
             </div>
 
-            <div class="card">
+
+            <div class="card d-none d-md-block">
                 <h1 class="card-header">Anmeldung</h1>
                 <div class="card-body">
                     {% if app.user %}
                         {{ include('includes/menu.html.twig') }}
                     {% else %}
                         {{ include('forms/login.html.twig') }}
-
-                        <nav>
-                            <ul class="nav flex-column">
-                                <li class="nav-item">
-                                    <a href="{{ path('user_register') }}" class="nav-link">Neu registrieren</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ path('user_reset') }}" class="nav-link">Passwort vergessen</a>
-                                </li>
-                                {% if (false) %}
-                                    <li class="nav-item">
-                                        <a href="/secure" class="nav-link">Login mit Zertifikat</a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </nav>
+                        {{ include('includes/login.html.twig') }}
                     {% endif %}
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card d-none d-md-block">
                 <h1 class="card-header">Die Welten</h1>
                 <nav class="card-body">
                     <ul class="nav flex-column">
@@ -116,37 +79,29 @@
                 </nav>
             </div>
 
-            <div class="card">
+            <div class="card d-none d-md-block">
                 <h1 class="card-header">Links</h1>
                 <nav class="card-body">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a href="http://www.metadrei.org/toolbelt/forlage.html" class="nav-link">Forlage</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="http://sourceforge.net/projects/magellan-client" class="nav-link">Magellan-Client</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="http://fanalytics.dynamic-storage.com" class="nav-link">Fanalytics³-Client</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="http://www.gulrak.de" class="nav-link">Vorlage-Tool</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="http://www.eressea.de" class="nav-link">Eressea</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="http://www.german-atlantis.de" class="nav-link">German Atlantis</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="http://www.pbem-spiele.de" class="nav-link">PbEM-Spiele.de</a>
-                        </li>
-                    </ul>
+                    {% include('includes/links.html.twig') %}
                 </nav>
             </div>
         </div>
 
-        <div class="right col-8 col-md-9">
+        <div class="col-6 d-md-none">
+            <div class="card">
+                <h1 class="card-header">Anmeldung</h1>
+                <div class="card-body">
+                    {% if app.user %}
+                        {{ include('includes/menu.html.twig') }}
+                    {% else %}
+                        {{ include('forms/login.html.twig') }}
+                        {{ include('includes/login.html.twig') }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
             <main>
                 <div class="card">
                     <h1 class="card-header">{% block header %}{% endblock %}</h1>
@@ -154,6 +109,15 @@
                     <div class="card-body">{% block content %}{% endblock %}</div>
                 </div>
             </main>
+        </div>
+
+        <div class="col-6 d-md-none">
+            <div class="card">
+                <h1 class="card-header">Links</h1>
+                <nav class="card-body">
+                    {% include('includes/links.html.twig') %}
+                </nav>
+            </div>
         </div>
     </div>
 </div>

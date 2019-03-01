@@ -23,6 +23,10 @@ h2 {
 	font-size: 1.25rem;
 }
 
+p {
+	text-align: justify;
+}
+
 a {
 	color: #704a21;
 }
@@ -72,12 +76,8 @@ ul {
 
 /* Content */
 
-.container .row .left {
-	padding-right: 10px;
-}
-
-.container .row .right {
-	padding-left: 10px;
+.container .row > div {
+	padding: 0 10px;
 }
 
 .card {
@@ -94,21 +94,22 @@ ul {
 	border-radius: unset;
 }
 
-.left .card {
+.card {
 	border-color: #90602a;
 }
 
-.left .card-body {
+.card-body {
 	background-color: #e8dcba;
 	padding: 0.75rem 1.25rem;
 }
 
-.right .card {
+main .card {
 	background: unset;
 	border: none;
 }
 
-.right .card-body {
+main .card-body {
+	background-color: unset;
 	padding: 0.75rem 0.25rem;
 }
 
