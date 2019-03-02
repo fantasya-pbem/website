@@ -9,11 +9,12 @@
 {% endblock %}
 
 {% block content %}
-    @if (User::canCreateMyths())
+    {% if app.user %}
     <p style="float: right;"><a href="/myth">ein Gerücht in die Welt setzen</a></p>
     <p style="clear: right;"></p>
-    @endif
-    @foreach ($myths as $myth)
-    <p>$myth->myth</p>
-    @endforeach
+    {%  endif %}
+
+    {% for myth in myths %}
+        <p class="myth">„{{ myth.myth }}“</p>
+    {% endfor %}
 {% endblock %}

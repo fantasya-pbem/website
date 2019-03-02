@@ -164,6 +164,10 @@ main a:before {
 	padding: 0.25rem 0.5rem;
 }
 
+p.myth {
+	font-style: italic;
+}
+
 /* Footer */
 
 footer {
