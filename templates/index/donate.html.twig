@@ -44,11 +44,11 @@
         </a>
     </p>
 
-    @if (Auth::user() && Auth::user()->name === 'Thalian')
-    <p>
-        <a href="https://blockchain.info/address/18GPpNuzLGJze9Hep8do8haTDfadjY3wtu" target="_blank">
-            Spendenstatus in der Blockchain überprüfen
-        </a>
-    </p>
-    @endif
+    {% if is_granted('ROLE_ADMIN') %}
+        <p>
+            <a href="https://blockchain.info/address/18GPpNuzLGJze9Hep8do8haTDfadjY3wtu" target="_blank">
+                Spendenstatus in der Blockchain überprüfen
+            </a>
+        </p>
+    {% endif %}
 {% endblock %}

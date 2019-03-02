@@ -9,8 +9,8 @@
 {% endblock %}
 
 {% block content %}
-    {% if app.user %}
-    <p style="float: right;"><a href="/myth">ein Gerücht in die Welt setzen</a></p>
+    {% if is_granted('ROLE_USER') %}
+    <p style="float: right;"><a href="{{ path('myth_spread') }}">ein Gerücht in die Welt setzen</a></p>
     <p style="clear: right;"></p>
     {%  endif %}
 

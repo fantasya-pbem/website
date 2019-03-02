@@ -6,7 +6,7 @@
         <li class="nav-item">
             <a href="{{ path('user_reset') }}" class="nav-link">Passwort vergessen</a>
         </li>
-        {% if (false) %}
+        {% if is_granted('ROLE_ADMIN') %}
             <li class="nav-item">
                 <a href="/secure" class="nav-link">Login mit Zertifikat</a>
             </li>

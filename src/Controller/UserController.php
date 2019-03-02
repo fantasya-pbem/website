@@ -114,7 +114,7 @@ class UserController extends AbstractController
 				$entityManager->persist($user);
 				$entityManager->flush();
 				$this->sendMail($user, $password);
-				//return $this->redirectToRoute('user_resetted');
+				return $this->redirectToRoute('user_resetted');
 			} else {
 				$error = true;
 			}
@@ -147,7 +147,7 @@ class UserController extends AbstractController
 	 * @param string $password
 	 */
 	private function sendMail(User $user, string $password) {
-		$mail   = new \Swift_Message();
+		$mail = new \Swift_Message();
 		$mail->setFrom('admin@fantasya-pbem.de', 'Fantasya-Administrator');
 		$mail->setTo($user->getEmail(), $user->getName());
 		$mail->setSubject('Fantasya-Registrierung');

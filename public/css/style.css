@@ -69,6 +69,20 @@ form .btn-primary:hover {
 	background-color: #4d2d09;
 }
 
+form .row {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+form .row .col-12 {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+form .row .col-6 {
+	padding-left: 0;
+}
+
 /* Header */
 
 .container-fluid.logo {
@@ -106,7 +120,7 @@ form .btn-primary:hover {
 
 /* Content */
 
-.container .row > div {
+.container > .row > div {
 	padding: 0 10px;
 }
 
@@ -119,6 +133,7 @@ form .btn-primary:hover {
 	background: linear-gradient(#573d21, #90602a);
 	border-bottom: none;
 	padding: 0.5rem 1.0rem;
+	word-wrap: normal;
 }
 .card-header:first-child {
 	border-radius: unset;

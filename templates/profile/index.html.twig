@@ -9,5 +9,12 @@
 {% endblock %}
 
 {% block content %}
-    {{ app.user.name }}
+    {% include('forms/profile.html.twig') %}
+
+    {% if error %}
+        <p class="text-danger"><strong>{{ error }}</strong></p>
+    {% endif %}
+    {% if success %}
+        <p><strong>Änderung gespeichert.</strong></p>
+    {% endif %}
 {% endblock %}

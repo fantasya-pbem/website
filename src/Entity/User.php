@@ -12,6 +12,8 @@ use App\Data\PasswordReset;
  */
 class User implements UserInterface
 {
+	const ROLE_ADMIN = 'ROLE_ADMIN';
+
 	const ROLE_BETA_TESTER = 'ROLE_BETA_TESTER';
 
 	const ROLE_MULTI_PLAYER = 'ROLE_MULTI_PLAYER';
@@ -85,6 +87,14 @@ class User implements UserInterface
         return (string) $this->name;
     }
 
+	/**
+	 * @param string $role
+	 * @return bool
+	 */
+    public function hasRole(string $role): bool {
+    	return in_array($role, $this->getRoles());
+	}
+
     /**
      * @return string[]
      */
@@ -155,7 +165,7 @@ class User implements UserInterface
 	 */
     public function setEmail(string $email): self
     {
-        $this->email = $email;
+        $this->email = (strtolower($email));
         return $this;
     }
 
