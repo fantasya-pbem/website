@@ -16,10 +16,17 @@
         unser Forum, die Taverne, der geeignete Ort.
     </p>
 
+    {% if is_granted('ROLE_NEWS_CREATOR') %}
+        <p class="float-right">
+            <a href="{{ path('news_edit') }}">News bearbeiten</a>
+        </p>
+        <div class="clearfix"></div>
+    {%  endif %}
+
     {% for article in news %}
-    <div class="article card">
-        <h3 class="card-header">{{ article.createdAt|localizeddate('long', 'none') }} – {{ article.title }}</h3>
-        <div class="card-body">{{ article.content }}</div>
-    </div>
+        <div class="article card">
+            <h3 class="card-header">{{ article.createdAt|localizeddate('long', 'none') }} – {{ article.title }}</h3>
+            <div class="card-body">{{ article.content|nl2br }}</div>
+        </div>
     {% endfor %}
 {% endblock %}

@@ -59,6 +59,10 @@ dd {
 	padding: 0;
 }
 
+.float-right {
+	margin-bottom: 0;
+}
+
 /* Forms */
 
 form label {
@@ -134,6 +138,7 @@ form .row .col-6 {
 }
 
 .card {
+    border-color: #90602a;
 	border-radius: unset;
 	margin-top: 1.5rem;
 }
@@ -148,13 +153,13 @@ form .row .col-6 {
 	border-radius: unset;
 }
 
-.card {
-	border-color: #90602a;
-}
-
 .card-body {
 	background-color: #e8dcba;
 	padding: 0.75rem 1.25rem;
+}
+
+.card-footer {
+    padding: 0.5rem 1.0rem;
 }
 
 .nav-link {

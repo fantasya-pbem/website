@@ -13,8 +13,5 @@
     {% if is_granted('ROLE_BETA_TESTER') %}
         <!-- <li class="nav-item"><a href="" class="nav-link"></a></li> -->
     {% endif %}
-    {% if is_granted('ROLE_NEWS_CREATOR') %}
-        <li class="nav-item"><a href="/edit/news" class="nav-link">News erstellen</a></li>
-    {% endif %}
     <li class="nav-item"><a href="{{ path('user_logout') }}" class="nav-link">Abmelden</a></li>
 </ul>
