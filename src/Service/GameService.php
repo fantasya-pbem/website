@@ -16,6 +16,11 @@ class GameService
 	private $repository;
 
 	/**
+	 * @var Game[]
+	 */
+	private $games;
+
+	/**
 	 * @param GameRepository $repository
 	 */
 	public function __construct(GameRepository $repository) {
@@ -28,6 +33,9 @@ class GameService
 	 * @return Game[]
 	 */
 	public function getAll(): array {
-		return $this->repository->findAll();
+		if ($this->games === null) {
+			$this->games = $this->repository->findAll();
+		}
+		return $this->games;
 	}
 }

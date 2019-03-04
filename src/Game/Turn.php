@@ -3,7 +3,7 @@ declare (strict_types = 1);
 namespace App\Game;
 
 use Doctrine\DBAL\Connection;
-
+use Doctrine\DBAL\DBALException;
 use App\Entity\Game;
 
 /**
@@ -44,6 +44,7 @@ class Turn
 	/**
 	 * @param Game $game
 	 * @param Connection $connection
+	 * @throws DBALException
 	 */
 	public function __construct(Game $game, Connection $connection) {
 		$this->game = $game;
@@ -90,6 +91,7 @@ class Turn
 
 	/**
 	 * @param Connection $connection
+	 * @throws DBALException
 	 */
 	private function fetchData(Connection $connection) {
 		$table = $this->game->getDb() . '.settings';

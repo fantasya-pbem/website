@@ -22,17 +22,17 @@
         <strong>Nächster Zug: </strong>Runde {{ turn.round + 1|localizednumber }} am {{ turn.next }}
     </p>
 
-    {% if statistics.newPartiesCount > 0 %}
+    {% if statistics.newbiesCount > 0 %}
         <h3>Neue Parteien</h3>
 
-        {% if statistics.newPartiesCount == 1 %}
+        {% if statistics.newiesCount == 1 %}
             <p>Diese Woche startet eine neue Partei.</p>
         {% else %}
-            <p>Diese Wochen starten {{ statistics.newPartiesCount|localizednumber }} neue Parteien.</p>
+            <p>Diese Wochen starten {{ statistics.newviesCount|localizednumber }} neue Parteien.</p>
         {% endif %}
 
         <dl>
-            {% for party in statistics.newParties %}
+            {% for party in statistics.newbies %}
                 <dt>{{ party.name }}</dt>
                 <dd>{{ party.description }}</dd>
             {% endfor %}

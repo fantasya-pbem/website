@@ -4,12 +4,14 @@ namespace App\Game;
 
 use App\Entity\Game;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 /**
  * A helper class for game statistical data.
  */
 class Statistics
 {
+
 	/**
 	 * @var Game
 	 */
@@ -41,7 +43,7 @@ class Statistics
 
 	/**
 	 * @return array[]
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
 	public function getParties(): array {
 		if ($this->parties === null) {
@@ -56,7 +58,7 @@ class Statistics
 
 	/**
 	 * @return int
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
 	public function getPartiesCount(): int {
 		return count($this->getParties());
@@ -64,7 +66,7 @@ class Statistics
 
 	/**
 	 * @return array[]
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
 	public function getPartyRaces(): array {
 		$table = $this->game->getDb() . '.partei';
@@ -76,9 +78,9 @@ class Statistics
 
 	/**
 	 * @return array[]
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
-	public function getNewParties(): array {
+	public function getNewbies(): array {
 		if ($this->newParties === null) {
 			$table = $this->game->getDb() . '.neuespieler';
 			$sql   = "SELECT name, description FROM " . $table . " ORDER BY name";
@@ -91,15 +93,15 @@ class Statistics
 
 	/**
 	 * @return int
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
-	public function getNewPartiesCount(): int {
-		return count($this->getNewParties());
+	public function getNewbiesCount(): int {
+		return count($this->getNewbies());
 	}
 
 	/**
 	 * @return array
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
 	public function getLandscape(): array {
 		$table = $this->game->getDb() . '.regionen';
@@ -112,7 +114,7 @@ class Statistics
 
 	/**
 	 * @return array[]
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
 	public function getWorld(): array {
 		$table = $this->game->getDb() . '.regionen';
@@ -124,7 +126,7 @@ class Statistics
 
 	/**
 	 * @return array[]
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
 	public function getUnderworld(): array {
 		$table = $this->game->getDb() . '.regionen';
@@ -136,7 +138,7 @@ class Statistics
 
 	/**
 	 * @return array
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
 	public function getPopulation(): array {
 		$table = $this->game->getDb() . '.einheiten';
@@ -149,7 +151,7 @@ class Statistics
 
 	/**
 	 * @return array[]
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
 	public function getRaces(): array {
 		$table = $this->game->getDb() . '.einheiten';
@@ -161,7 +163,7 @@ class Statistics
 
 	/**
 	 * @return array[]
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
 	public function getMonsters(): array {
 		$table = $this->game->getDb() . '.einheiten';
@@ -169,11 +171,5 @@ class Statistics
 		$stmt  = $this->connection->prepare($sql);
 		$stmt->execute();
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-	}
-
-	public function getCount() {
-		$count      = DB::connection($game->database)->table('partei')->count();
-		$parties    = DB::connection($game->database)->table('partei')->select(DB::raw('rasse, COUNT(*) AS count'))->groupBy('rasse')->get();
-		$names      = DB::connection($game->database)->table('partei')->select('name', 'beschreibung')->orderBy('name')->get();
 	}
 }

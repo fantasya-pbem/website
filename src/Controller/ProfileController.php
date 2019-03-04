@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
+use Doctrine\DBAL\DBALException;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -12,6 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use App\Entity\User;
+use App\Service\GameService;
+use App\Service\PartyService;
 use App\Repository\UserRepository;
 
 /**
@@ -45,7 +48,17 @@ class ProfileController extends AbstractController
 	/**
 	 * @var UserRepository
 	 */
-	private $repository;
+	private $userRepository;
+
+	/**
+	 * @var GameService
+	 */
+	private $gameService;
+
+	/**
+	 * @var PartyService
+	 */
+	private $partyService;
 
 	/**
 	 * @var UserPasswordEncoderInterface
@@ -58,10 +71,16 @@ class ProfileController extends AbstractController
 	private $mailer;
 
 	/**
-	 * @param UserRepository $repository
+	 * @param UserRepository $userRepository
+	 * @param GameService $gameService
+	 * @param UserPasswordEncoderInterface $encoder
+	 * @param \Swift_Mailer $mailer
 	 */
-	public function __construct(UserRepository $repository, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer) {
-		$this->repository      = $repository;
+	public function __construct(UserRepository $userRepository, GameService $gameService, PartyService $partyService,
+								UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer) {
+		$this->userRepository  = $userRepository;
+		$this->gameService     = $gameService;
+		$this->partyService    = $partyService;
 		$this->passwordEncoder = $encoder;
 		$this->mailer          = $mailer;
 	}
@@ -71,14 +90,13 @@ class ProfileController extends AbstractController
 	 *
 	 * @param Request $request
 	 * @return Response
+	 * @throws DBALException
 	 */
 	public function profile(Request $request): Response {
-		$roles = [];
-		foreach ($this->user()->getRoles() as $role) {
-			if ($role !== User::ROLE_USER) {
-				$roles[] = self::$roles[$role] ?? $role;
-			}
-		}
+		$roles   = $this->getRoles();
+		$games   = $this->gameService->getAll();
+		$parties = $this->partyService->getFor($this->user());
+		$newbies = $this->partyService->getNewbies($this->user());
 
 		$success = null;
 		$error   = null;
@@ -93,6 +111,9 @@ class ProfileController extends AbstractController
 
 		return $this->render('profile/index.html.twig', [
 			'roles'   => $roles,
+			'games'   => $games,
+			'parties' => $parties,
+			'newbies' => $newbies,
 			'success' => $success,
 			'error'   => self::$errors[$error] ?? null
 		]);
@@ -111,7 +132,7 @@ class ProfileController extends AbstractController
 				if (mb_strlen($name) <= 190) {
 					$user = $this->user();
 					if ($name !== $user->getName()) {
-						if ($this->repository->findOneBy(['name' => $name])) {
+						if ($this->userRepository->findOneBy(['name' => $name])) {
 							$error = 12;
 						} else {
 							$this->save($this->user()->setName($name));
@@ -133,7 +154,7 @@ class ProfileController extends AbstractController
 				if (strlen($email) <= 190) {
 					$user = $this->user();
 					if ($email !== $user->getEmail()) {
-						if ($this->repository->findOneBy(['email' => $email])) {
+						if ($this->userRepository->findOneBy(['email' => $email])) {
 							$error = 22;
 						} else {
 							$this->save($this->user()->setEmail($email));
@@ -161,6 +182,19 @@ class ProfileController extends AbstractController
 		}
 
 		return $this->redirectToRoute('profile', isset($error) ? ['error' => $error] : []);
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getRoles(): array {
+		$roles = [];
+		foreach ($this->user()->getRoles() as $role) {
+			if ($role !== User::ROLE_USER) {
+				$roles[] = self::$roles[$role] ?? $role;
+			}
+		}
+		return $roles;
 	}
 
 	/**

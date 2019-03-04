@@ -17,4 +17,36 @@
     {% if success %}
         <p><strong>Änderung gespeichert.</strong></p>
     {% endif %}
+
+    {% for game in games %}
+        <h2>Parteien auf Welt {{ game.name }}</h2>
+
+        {% if parties[game.id]|length or newbies[game.id]|length %}
+            {% for party in parties[game.id] %}
+                <p><strong>{{ party.name }} [{{ party.id }}]</strong></p>
+
+                <p>{{ party.race }}</p>
+
+                {% if party.description %}
+                    <p>{{ party.description }}</p>
+                {% endif %}
+            {% endfor %}
+
+            {% for newbie in newbies[game.id] %}
+                <p>
+                    <strong>{{ newbie.name }} [neu angemeldet]</strong>
+                    <a href="/revoke/world/party->name">Anmeldung stornieren</a>
+                </p>
+
+                <p>
+                    {{ newbie.race }}
+                    (Holz: {{ newbie.wood }} &middot; Stein: {{ newbie.stone }} &middot; Eisen: {{ newbie.iron }})
+                </p>
+
+                <p>{{ newbie.description }}</p>
+            {% endfor %}
+        {% else %}
+            <p><em>Keine Parteien angemeldet.</em></p>
+        {% endif %}
+    {% endfor %}
 {% endblock %}
