@@ -67,6 +67,44 @@ class PartyService
 	}
 
 	/**
+	 * Check if a User has a Party in a Game.
+	 *
+	 * @param User $user
+	 * @param Game $game
+	 * @return bool
+	 * @throws DBALException
+	 */
+	public function hasParty(User $user, Game $game): bool {
+		$parties = $this->getFor($user);
+		return !empty($parties[$game->getId()]);
+	}
+
+	/**
+	 * Check if a User has a Newbie in a Game.
+	 *
+	 * @param User $user
+	 * @param Game $game
+	 * @return bool
+	 * @throws DBALException
+	 */
+	public function hasNewbie(User $user, Game $game): bool {
+		$newbies = $this->getNewbies($user);
+		return !empty($newbies[$game->getId()]);
+	}
+
+	/**
+	 * Check if a User has a Party or Newbie in a Game.
+	 *
+	 * @param User $user
+	 * @param Game $game
+	 * @return bool
+	 * @throws DBALException
+	 */
+	public function hasAny(User $user, Game $game): bool {
+		return $this->hasParty($user, $game) || $this->hasNewbie($user, $game);
+	}
+
+	/**
 	 * @param User $user
 	 * @param Game $game
 	 * @return Party[]

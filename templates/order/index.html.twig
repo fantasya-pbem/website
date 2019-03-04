@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya-Befehle kontrollieren
+{% endblock %}
+
+{% block header %}
+    Befehle kontrollieren
+{% endblock %}
+
+{% block content %}
+    <h2>Welt: {{ app.session.get('game').name }}</h2>
+{% endblock %}

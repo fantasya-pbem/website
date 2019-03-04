@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya-Spiel beginnen
+{% endblock %}
+
+{% block header %}
+    Ein neues Spiel beginnen
+{% endblock %}
+
+{% block content %}
+    <h2>Welt: {{ app.session.get('game').name }}</h2>
+{% endblock %}

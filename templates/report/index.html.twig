@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya-Auswertung herunterladen
+{% endblock %}
+
+{% block header %}
+    Auswertung herunterladen
+{% endblock %}
+
+{% block content %}
+    <h2>Welt: {{ app.session.get('game').name }}</h2>
+{% endblock %}

@@ -73,6 +73,7 @@ class ProfileController extends AbstractController
 	/**
 	 * @param UserRepository $userRepository
 	 * @param GameService $gameService
+	 * @param PartyService $partyService
 	 * @param UserPasswordEncoderInterface $encoder
 	 * @param \Swift_Mailer $mailer
 	 */
@@ -92,11 +93,14 @@ class ProfileController extends AbstractController
 	 * @return Response
 	 * @throws DBALException
 	 */
-	public function profile(Request $request): Response {
+	public function index(Request $request): Response {
 		$roles   = $this->getRoles();
 		$games   = $this->gameService->getAll();
 		$parties = $this->partyService->getFor($this->user());
 		$newbies = $this->partyService->getNewbies($this->user());
+		if ($request->getSession() && !$request->getSession()->has('game')) {
+			$request->getSession()->set('game', $games[0]);
+		}
 
 		$success = null;
 		$error   = null;

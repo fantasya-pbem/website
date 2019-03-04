@@ -1,17 +1,18 @@
 <ul class="nav flex-column">
     <li class="nav-item">{{ app.user.name }} ist angemeldet.</li>
-    <li class="nav-item"><a href="{{ path('profile') }}" class="nav-link">Profil</a></li>
-    <li class="nav-item"><a href="/change/world" class="nav-link">Aktuelle Welt: Game::current()->name</a></li>
-    @if (User::countParties(Game::current()) > 0)
-    <li class="nav-item"><a href="/orders" class="nav-link">Befehle kontrollieren</a></li>
-    <li class="nav-item"><a href="/send/orders" class="nav-link">Befehle senden</a></li>
-    <li class="nav-item"><a href="/report" class="nav-link">Auswertung herunterladen</a></li>
-    @endif
-    @if (User::countAllParties(Game::current()) <= 0 || User::has(User::CAN_PLAY_MULTIS))
-    <li class="nav-item"><a href="/enter" class="nav-link">Neues Spiel beginnen</a></li>
-    @endif
-    {% if is_granted('ROLE_BETA_TESTER') %}
-        <!-- <li class="nav-item"><a href="" class="nav-link"></a></li> -->
+    <li class="nav-item">
+        <a href="{{ path('profile') }}" class="nav-link">Profil</a>
+    </li>
+    <li class="nav-item">
+        <a href="{{ path('game_next') }}" class="nav-link">Aktuelle Welt: {{ app.session.get('game').name }}</a>
+    </li>
+    {% if party_service.party(app.user, app.session.get('game')) %}
+        <li class="nav-item"><a href="{{ path('order') }}" class="nav-link">Befehle kontrollieren</a></li>
+        <li class="nav-item"><a href="{{ path('order_send') }}" class="nav-link">Befehle senden</a></li>
+        <li class="nav-item"><a href="{{ path('report') }}" class="nav-link">Auswertung herunterladen</a></li>
+    {% endif %}
+    {% if is_granted('ROLE_MULTI_PLAYER') or not party_service.any(app.user, app.session.get('game')) %}
+        <li class="nav-item"><a href="{{ path('game_enter') }}" class="nav-link">Neues Spiel beginnen</a></li>
     {% endif %}
     <li class="nav-item"><a href="{{ path('user_logout') }}" class="nav-link">Abmelden</a></li>
 </ul>
