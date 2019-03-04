@@ -41,16 +41,7 @@
             </div>
 
             <div class="card d-md-none">
-                <h1 class="card-header">Die&nbsp;Welten</h1>
-                <nav class="card-body">
-                    <ul class="nav flex-column">
-                        @foreach (Game::all() as $game)
-                        <li class="nav-item">
-                            <a href="" class="nav-link"><!--/world/$game->id-->$game->name</a>
-                        </li>
-                        @endforeach
-                    </ul>
-                </nav>
+                {% include('includes/worlds.html.twig') %}
             </div>
 
 
@@ -67,16 +58,7 @@
             </div>
 
             <div class="card d-none d-md-block">
-                <h1 class="card-header">Die Welten</h1>
-                <nav class="card-body">
-                    <ul class="nav flex-column">
-                        @foreach (Game::all() as $game)
-                            <li class="nav-item">
-                                <a href="" class="nav-link"><!--/world/$game->id-->$game->name</a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </nav>
+                {% include('includes/worlds.html.twig') %}
             </div>
 
             <div class="card d-none d-md-block">

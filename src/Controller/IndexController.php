@@ -5,7 +5,10 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
+use App\Entity\Game;
+use App\Repository\GameRepository;
+use App\Service\GameService;
 
 /**
  * IndexController.
@@ -13,15 +16,21 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class IndexController extends AbstractController
 {
 	/**
-	 * @var UserPasswordEncoderInterface
+	 * @var GameRepository
 	 */
-	private $encoder;
+	private $repository;
 
 	/**
-	 * @param UserPasswordEncoderInterface $encoder
+	 * @var GameService
 	 */
-	public function __construct(UserPasswordEncoderInterface $encoder) {
-		$this->encoder = $encoder;
+	private $service;
+
+	/**
+	 * @param
+	 */
+	public function __construct(GameRepository $repository, GameService $service) {
+		$this->repository = $repository;
+		$this->service    = $service;
 	}
 
 	/**
@@ -58,5 +67,19 @@ class IndexController extends AbstractController
 	 */
 	public function donate(): Response {
 		return $this->render('index/donate.html.twig');
+	}
+
+	/**
+	 * @Route("/world/{game}", name="world")
+	 *
+	 * @param Game $game
+	 * @return Response
+	 */
+	public function world(Game $game): Response {
+		$turn = $this->service->getTurn($game);
+		return $this->render('index/world.html.twig', [
+			'game' => $game,
+			'turn' => $turn
+		]);
 	}
 }

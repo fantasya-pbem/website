@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Die Fantasya-Welten
+{% endblock %}
+
+{% block header %}
+    Die Welten
+{% endblock %}
+
+{% block content %}
+    <h2>{{ game.name }}</h2>
+
+    <p>{{ game.description|raw }}</p>
+
+    <p>
+        <strong>Auswertung: {{ game.start }}</strong>
+    </p>
+
+    <p>
+        <strong>Letzter Zug: </strong>Runde {{ turn.round }} vom {{ turn.start }}<br>
+        <strong>Nächster Zug: </strong>Runde {{ turn.round + 1 }} am {{ turn.next }}
+    </p>
+{% endblock %}

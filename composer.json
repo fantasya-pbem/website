@@ -6,6 +6,7 @@
         "php": "~7.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-pdo": "*",
         "components/jquery": "~3.3",
         "doctrine/annotations": "~1.6",
         "sensio/framework-extra-bundle": "~5.2",

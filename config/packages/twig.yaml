@@ -6,4 +6,5 @@ twig:
     form_themes: ['bootstrap_4_layout.html.twig']
 
     globals:
+        game_service: '@App\Service\GameService'
         myth_service: '@App\Service\MythService'
