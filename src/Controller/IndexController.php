@@ -2,13 +2,14 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
+use App\Game\Statistics;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Game;
-use App\Repository\GameRepository;
-use App\Service\GameService;
+use App\Game\Turn;
 
 /**
  * IndexController.
@@ -16,21 +17,15 @@ use App\Service\GameService;
 class IndexController extends AbstractController
 {
 	/**
-	 * @var GameRepository
+	 * @var EntityManagerInterface
 	 */
-	private $repository;
+	private $manager;
 
 	/**
-	 * @var GameService
+	 * @param EntityManagerInterface $manager
 	 */
-	private $service;
-
-	/**
-	 * @param
-	 */
-	public function __construct(GameRepository $repository, GameService $service) {
-		$this->repository = $repository;
-		$this->service    = $service;
+	public function __construct(EntityManagerInterface $manager) {
+		$this->manager = $manager;
 	}
 
 	/**
@@ -76,10 +71,12 @@ class IndexController extends AbstractController
 	 * @return Response
 	 */
 	public function world(Game $game): Response {
-		$turn = $this->service->getTurn($game);
+		$turn       = new Turn($game, $this->manager->getConnection());
+		$statistics = new Statistics($game, $this->manager->getConnection());
 		return $this->render('index/world.html.twig', [
-			'game' => $game,
-			'turn' => $turn
+			'game'       => $game,
+			'turn'       => $turn,
+			'statistics' => $statistics
 		]);
 	}
 }

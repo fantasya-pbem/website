@@ -2,11 +2,12 @@
 declare (strict_types = 1);
 namespace App\Game;
 
+use Doctrine\DBAL\Connection;
+
 use App\Entity\Game;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
- * A helper class for game data.
+ * A helper class for game turn data.
  */
 class Turn
 {
@@ -42,13 +43,11 @@ class Turn
 
 	/**
 	 * @param Game $game
-	 * @param int $round
-	 * @param \DateTime $lastZat
+	 * @param Connection $connection
 	 */
-	public function __construct(Game $game, int $round, \DateTime $lastZat) {
-		$this->game    = $game;
-		$this->round   = $round;
-		$this->lastZat = $lastZat;
+	public function __construct(Game $game, Connection $connection) {
+		$this->game = $game;
+		$this->fetchData($connection);
 	}
 
 	/**
@@ -87,6 +86,25 @@ class Turn
 			}
 		}
 		return $this->getDateString($start);
+	}
+
+	/**
+	 * @param Connection $connection
+	 */
+	private function fetchData(Connection $connection) {
+		$table = $this->game->getDb() . '.settings';
+		$sql   = "SELECT value FROM " . $table . " WHERE name = 'game.runde'";
+		$stmt  = $connection->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+		$this->round = (int)($result[0] ?? 0);
+
+		$table = $this->game->getDb() . '.meldungen';
+		$sql   = "SELECT MAX(zeit) FROM " . $table;
+		$stmt  = $connection->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+		$this->lastZat = new \DateTime($result[0] ?? 'now');
 	}
 
 	/**
