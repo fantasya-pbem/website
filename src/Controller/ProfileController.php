@@ -98,9 +98,6 @@ class ProfileController extends AbstractController
 		$games   = $this->gameService->getAll();
 		$parties = $this->partyService->getFor($this->user());
 		$newbies = $this->partyService->getNewbies($this->user());
-		if ($request->getSession() && !$request->getSession()->has('game')) {
-			$request->getSession()->set('game', $games[0]);
-		}
 
 		$success = null;
 		$error   = null;

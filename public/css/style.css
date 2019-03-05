@@ -87,13 +87,12 @@ form .row {
 	margin-right: 0;
 }
 
-form .row .col-12 {
+form .row > div {
 	padding-left: 0;
-	padding-right: 0;
 }
 
-form .row .col-6 {
-	padding-left: 0;
+form .row > div:last-child {
+	padding-right: 0;
 }
 
 /* Header */

@@ -2,12 +2,12 @@
 declare (strict_types = 1);
 namespace App\Service;
 
-use App\Game\Newbie;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Game;
 use App\Entity\User;
+use App\Game\Newbie;
 use App\Game\Party;
 
 /**
@@ -105,6 +105,38 @@ class PartyService
 	}
 
 	/**
+	 * Create a Newbie.
+	 *
+	 * @param Newbie $newbie
+	 * @throws DBALException
+	 */
+	public function create(Newbie $newbie) {
+		$connection = $this->manager->getConnection();
+		$table      = $this->service->getCurrent()->getDb() . '.neuespieler';
+		$columns    = implode(',', array_keys($newbie->getProperties()));
+		$values     = $this->createValues($newbie);
+		$sql        = "INSERT INTO " . $table . " (" . $columns . ") VALUES (" . $values . ")";
+		if (!$connection->prepare($sql)->execute()) {
+			throw new DBALException('Could not save Newbie.');
+		}
+	}
+
+	/**
+	 * Delete a Newbie.
+	 *
+	 * @param Newbie $newbie
+	 */
+	public function delete(Newbie $newbie) {
+		$connection = $this->manager->getConnection();
+		$table      = $this->service->getCurrent()->getDb() . '.neuespieler';
+		$values     = $this->createConstraints($newbie);
+		$sql        = "DELETE FROM " . $table . " WHERE " . $values;
+		if (!$connection->prepare($sql)->execute()) {
+			throw new DBALException('Could not delete Newbie.');
+		}
+	}
+
+	/**
 	 * @param User $user
 	 * @param Game $game
 	 * @return Party[]
@@ -137,8 +169,35 @@ class PartyService
 		$stmt->execute();
 		$newbies = [];
 		foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $properties) {
-			$newbies[] = new Newbie($properties);
+			$newbie    = new Newbie($properties);
+			$newbies[] = $newbie->setUser($user);
 		}
 		return $newbies;
+	}
+
+	/**
+	 * @var Newbie $newbie
+	 * @return string
+	 */
+	private function createValues(Newbie $newbie): string {
+		$connection = $this->manager->getConnection();
+		$properties = [];
+		foreach ($newbie->getProperties() as $value) {
+			$properties[] = is_int($value) ? $value : $connection->quote($value);
+		}
+		return implode(',', $properties);
+	}
+
+	/**
+	 * @var Newbie $newbie
+	 * @return string
+	 */
+	private function createConstraints(Newbie $newbie): string {
+		$connection  = $this->manager->getConnection();
+		$constraints = [];
+		foreach ($newbie->getProperties() as $column => $value) {
+			$constraints[] = $column . ' = ' . (is_int($value) ? $value : $connection->quote($value));
+		}
+		return implode(' AND ', $constraints);
 	}
 }

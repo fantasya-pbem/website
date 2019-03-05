@@ -73,6 +73,7 @@ class UserController extends AbstractController
 				$entityManager->persist($user);
 				$entityManager->flush();
 				$this->sendMail($user, $password);
+				$this->sendAdminMail($user);
 				return $this->redirectToRoute('user_registered');
 			}
 		}
@@ -151,10 +152,19 @@ class UserController extends AbstractController
 		$mail->setFrom('admin@fantasya-pbem.de', 'Fantasya-Administrator');
 		$mail->setTo($user->getEmail(), $user->getName());
 		$mail->setSubject('Fantasya-Registrierung');
-		$mail->setBody($this->renderView('emails/user_reset.html.twig', [
-			'user'     => $user,
-			'password' => $password
-		]));
+		$mail->setBody($this->renderView('emails/user_reset.html.twig', ['user' => $user, 'password' => $password]));
+		$this->mailer->send($mail);
+	}
+
+	/**
+	 * @param User $user
+	 */
+	private function sendAdminMail(User $user) {
+		$mail = new \Swift_Message();
+		$mail->setFrom('admin@fantasya-pbem.de', 'Fantasya-Administrator');
+		$mail->setTo('spielleitung@fantasya-pbem.de', 'Fantasya-Spielleitung');
+		$mail->setSubject('Neue Fantasya-Registrierung');
+		$mail->setBody($this->renderView('emails/admin_user.html.twig', ['user' => $user]));
 		$this->mailer->send($mail);
 	}
 }

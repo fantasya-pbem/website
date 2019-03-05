@@ -4,14 +4,14 @@
         <a href="{{ path('profile') }}" class="nav-link">Profil</a>
     </li>
     <li class="nav-item">
-        <a href="{{ path('game_next') }}" class="nav-link">Aktuelle Welt: {{ app.session.get('game').name }}</a>
+        <a href="{{ path('game_next') }}" class="nav-link">Aktuelle Welt: {{ game_service.current.name }}</a>
     </li>
-    {% if party_service.party(app.user, app.session.get('game')) %}
+    {% if party_service.party(app.user, game_service.current) %}
         <li class="nav-item"><a href="{{ path('order') }}" class="nav-link">Befehle kontrollieren</a></li>
         <li class="nav-item"><a href="{{ path('order_send') }}" class="nav-link">Befehle senden</a></li>
         <li class="nav-item"><a href="{{ path('report') }}" class="nav-link">Auswertung herunterladen</a></li>
     {% endif %}
-    {% if is_granted('ROLE_MULTI_PLAYER') or not party_service.any(app.user, app.session.get('game')) %}
+    {% if is_granted('ROLE_MULTI_PLAYER') or not party_service.any(app.user, game_service.current) %}
         <li class="nav-item"><a href="{{ path('game_enter') }}" class="nav-link">Neues Spiel beginnen</a></li>
     {% endif %}
     <li class="nav-item"><a href="{{ path('user_logout') }}" class="nav-link">Abmelden</a></li>
