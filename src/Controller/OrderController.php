@@ -2,15 +2,13 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use App\Game\Party;
-use App\Service\OrderService;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,8 +16,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Data\Order;
 use App\Entity\User;
+use App\Game\Party;
 use App\Game\Turn;
 use App\Service\GameService;
+use App\Service\OrderService;
 use App\Service\PartyService;
 
 /**
@@ -74,7 +74,7 @@ class OrderController extends AbstractController
 		}
 
 		$party = $parties[0];
-		$turn  = $this->turn($request);
+		$turn  = $this->turn($request, -5);
 		$order = new Order();
 		$form  = $this->createOrderForm($order, $parties, $turn);
 		$form->handleRequest($request);
@@ -87,20 +87,69 @@ class OrderController extends AbstractController
 			$order->setTurn($turn);
 		}
 		$order->setGame($this->gameService->getCurrent()->getAlias());
+		$this->orderService->setContext($order);
 
-		return $this->render('order/index.html.twig', [
-			'form'  => $form->createView(),
-			'order' => $order
-		]);
+		return $this->render('order/index.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**
 	 * @Route("/order/send", name="order_send")
 	 *
+	 * @param Request $request
 	 * @return Response
+	 * @throws DBALException
 	 */
-	public function send(): Response {
-		return $this->render('order/send.html.twig');
+	public function send(Request $request): Response {
+		$parties = $this->partyService->getCurrent($this->user());
+		if (empty($parties)) {
+			return $this->redirectToRoute('profile');
+		}
+
+		$turn = $this->turn($request);
+		$form = $this->createSendForm(new Order(), $parties, $turn);
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			/* @var Order $order */
+			$order = $form->getData();
+			$order->setGame($this->gameService->getCurrent()->getAlias());
+			$this->orderService->setContext($order);
+			$this->orderService->saveOrders();
+			return $this->redirectToRoute('order_success', ['p' => $order->getParty(), 't' => $turn]);
+		}
+
+		return $this->render('order/send.html.twig', ['form' => $form->createView()]);
+	}
+
+	/**
+	 * @Route("/order/party/{p}/turn/{t}", name="order_success")
+	 *
+	 * @param string $p
+	 * @param int $t
+	 * @return Response
+	 * @throws DBALException
+	 */
+	public function party(string $p, int $t): Response {
+		$parties = $this->partyService->getCurrent($this->user());
+		$party   = null;
+		foreach ($parties as $userParty) {
+			if ($userParty->getId() === $p) {
+				$party = $p;
+				break;
+			}
+		}
+		if (!$party) {
+			return $this->redirectToRoute('profile');
+		}
+
+		$order = new Order();
+		$order->setParty($p);
+		$order->setTurn($t);
+		$order->setGame($this->gameService->getCurrent()->getAlias());
+		$this->orderService->setContext($order);
+		$form = $this->createOrderForm($order, $parties, $t);
+
+		return $this->render('order/index.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**
@@ -112,18 +161,23 @@ class OrderController extends AbstractController
 
 	/**
 	 * @param Request $request
+	 * @param int $min
 	 * @return int
 	 * @throws DBALException
 	 */
-	private function turn(Request $request): int {
+	private function turn(Request $request, int $min = 0): int {
+		$turn  = new Turn($this->gameService->getCurrent(), $this->manager->getConnection());
+		$round = $turn->getRound();
 		if ($request->request->has('form')) {
 			$form = $request->request->get('form');
 			if (isset($form['turn'])) {
-				return (int)$form['turn'];
+				$r = (int)$form['turn'];
+				if ($r >= $turn->getRound() + $min) {
+					$round = $r;
+				}
 			}
 		}
-		$turn = new Turn($this->gameService->getCurrent(), $this->manager->getConnection());
-		return $turn->getRound();
+		return $round;
 	}
 
 	/**
@@ -135,6 +189,7 @@ class OrderController extends AbstractController
 	 */
 	private function createOrderForm(Order $order, array $parties, int $turn): FormInterface {
 		$form = $this->createFormBuilder($order);
+		$form->setAction($this->generateUrl('order'));
 		$form->add('party', ChoiceType::class, [
 			'label'   => 'Partei',
 			'choices' => $this->getParties($parties)
@@ -146,6 +201,34 @@ class OrderController extends AbstractController
 		]);
 		$form->add('submit', SubmitType::class, [
 			'label' => 'Anzeigen'
+		]);
+		return $form->getForm();
+	}
+
+	/**
+	 * @param Order $order
+	 * @param array $parties
+	 * @param int $turn
+	 * @return FormInterface
+	 * @throws DBALException
+	 */
+	private function createSendForm(Order $order, array $parties, int $turn): FormInterface {
+		$form = $this->createFormBuilder($order);
+		$form->add('party', ChoiceType::class, [
+			'label'   => 'Partei',
+			'choices' => $this->getParties($parties)
+		]);
+		$form->add('turn', ChoiceType::class, [
+			'label'   => 'Runde',
+			'choices' => $this->getTurns($turn, 0, 5),
+			'data'    => (string)$turn
+		]);
+		$form->add('orders', TextareaType::class, [
+			'label' => 'Befehle',
+			'attr'  => ['rows' => 10]
+		]);
+		$form->add('submit', SubmitType::class, [
+			'label' => 'Befehle senden'
 		]);
 		return $form->getForm();
 	}
@@ -165,12 +248,14 @@ class OrderController extends AbstractController
 
 	/**
 	 * @param int $turn
+	 * @param int|null $min
+	 * @param int|null $max
 	 * @return string[]
 	 */
-	private function getTurns(int $turn): array {
+	private function getTurns(int $turn, int $min = -5, int $max = 5): array {
 		$turns = [];
-		$next  = $turn - 5;
-		$last  = $turn + 5;
+		$next  = $turn + $min;
+		$last  = $turn + $max;
 		while ($next <= $last ) {
 			$turn         = (string)$next;
 			$turns[$turn] = $turn;

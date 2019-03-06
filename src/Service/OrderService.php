@@ -15,6 +15,11 @@ class OrderService
 	private $baseDir;
 
 	/**
+	 * @var Order
+	 */
+	private $order;
+
+	/**
 	 * Initialize order base directory.
 	 */
 	public function __construct() {
@@ -27,16 +32,16 @@ class OrderService
 	/**
 	 * @return string
 	 */
-	public function getPath(Order $order) {
-		return $this->baseDir . DIRECTORY_SEPARATOR . $order->getGame() . DIRECTORY_SEPARATOR . $order->getTurn() .
-			                    DIRECTORY_SEPARATOR . $order->getParty() . '.order';
+	public function getPath() {
+		return $this->baseDir . DIRECTORY_SEPARATOR . $this->order->getGame() . DIRECTORY_SEPARATOR .
+			   $this->order->getTurn() . DIRECTORY_SEPARATOR . $this->order->getParty() . '.order';
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getOrders(Order $order) {
-		$file = $this->getPath($order);
+	public function getOrders() {
+		$file = $this->getPath();
 		if (is_file($file)) {
 			$contents = file_get_contents($file);
 			if ($contents) {
@@ -49,11 +54,11 @@ class OrderService
 	/**
 	 * @return string
 	 */
-	public function getFcheck(Order $order) {
+	public function getFcheck() {
 		$check   = null;
 		$command = getenv('FCHECK') ?? null;
 		if (is_string($command) && strpos($command, '%input%') > 0 && strpos($command, '%output%') > 0) {
-			$file = $this->getPath($order);
+			$file = $this->getPath();
 			if (is_file($file)) {
 				$command = str_replace('%input%', $file, $command);
 				$output  = tempnam('/tmp', 'fcheck');
@@ -78,25 +83,30 @@ class OrderService
 	}
 
 	/**
-	 * @param $orders
+	 * @param Order $order
+	 */
+	public function setContext(Order $order) {
+		$this->order = $order;
+	}
+
+	/**
 	 * @return bool
 	 */
-	public function setOrders($orders) {
+	public function saveOrders() {
 		$file = $this->getPath();
 		$dir  = dirname($file);
 		umask(0002);
 		if (!is_dir($dir)) {
 			mkdir($dir, 0775, true);
 		}
-		return file_put_contents($file, $this->cleanUp($orders)) > 0;
+		return file_put_contents($file, $this->cleanUp()) > 0;
 	}
 
 	/**
-	 * @param string[] $orders
 	 * @return string
 	 */
-	private function cleanUp(array $orders): string {
-		$lines  = explode("\n", $orders);
+	private function cleanUp(): string {
+		$lines  = explode("\n", $this->order->getOrders());
 		$orders = '';
 		$n      = count($lines);
 		if ($n > 0) {

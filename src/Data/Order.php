@@ -21,6 +21,11 @@ class Order
 	/**
 	 * @var string
 	 */
+	private $orders = '';
+
+	/**
+	 * @var string
+	 */
 	private $game = '';
 
 	/**
@@ -35,6 +40,13 @@ class Order
 	 */
 	public function getTurn(): int {
 		return $this->turn;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getOrders(): string {
+		return $this->orders;
 	}
 
 	/**
@@ -56,6 +68,13 @@ class Order
 	 */
 	public function setTurn(int $turn) {
 		$this->turn = $turn;
+	}
+
+	/**
+	 * @param string $orders
+	 */
+	public function setOrders(string $orders) {
+		$this->orders = $orders;
 	}
 
 	/**
