@@ -38,7 +38,7 @@ class PartyService
 	 * Get all parties of a User.
 	 *
 	 * @param User $user
-	 * @return Party[]
+	 * @return array
 	 * @throws DBALException
 	 */
 	public function getFor(User $user): array {
@@ -48,6 +48,17 @@ class PartyService
 			$parties[$game->getId()] = $this->parties($user, $game);
 		}
 		return $parties;
+	}
+
+	/**
+	 * Get parties in current Game of a User.
+	 *
+	 * @param User $user
+	 * @return Party[]
+	 * @throws DBALException
+	 */
+	public function getCurrent(User $user): array {
+		return $this->parties($user, $this->service->getCurrent());
 	}
 
 	/**

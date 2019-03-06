@@ -9,3 +9,4 @@ twig:
         game_service: '@App\Service\GameService'
         myth_service: '@App\Service\MythService'
         party_service: '@App\Service\PartyService'
+        order_service: '@App\Service\OrderService'

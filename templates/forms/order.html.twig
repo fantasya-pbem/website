@@ -1,0 +1,19 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-12">
+        {{ form_errors(form) }}
+    </div>
+</div>
+
+<div class="row align-items-end">
+    <div class="col-12 col-sm-6 col-lg-4">
+        {{ form_row(form.party) }}
+    </div>
+    <div class="col-12 col-sm-6 col-lg-4">
+        {{ form_row(form.turn) }}
+    </div>
+    <div class="col-12 col-sm-4">
+        {{ form_row(form.submit) }}
+    </div>
+</div>
+{{ form_end(form) }}
