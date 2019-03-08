@@ -50,6 +50,7 @@ class OrderController extends AbstractController
 	/**
 	 * @param GameService $gameService
 	 * @param PartyService $partyService
+	 * @param OrderService $orderService
 	 * @param EntityManagerInterface $manager
 	 */
 	public function __construct(GameService $gameService, PartyService $partyService, OrderService $orderService,
@@ -83,7 +84,7 @@ class OrderController extends AbstractController
 			/* @var Order $order */
 			$order = $form->getData();
 		} else {
-			$order->setParty($party->getId());
+			$order->setParty($party->getOwner());
 			$order->setTurn($turn);
 		}
 		$order->setGame($this->gameService->getCurrent()->getAlias());
@@ -124,16 +125,16 @@ class OrderController extends AbstractController
 	/**
 	 * @Route("/order/party/{p}/turn/{t}", name="order_success")
 	 *
-	 * @param string $p
+	 * @param int $p
 	 * @param int $t
 	 * @return Response
 	 * @throws DBALException
 	 */
-	public function party(string $p, int $t): Response {
+	public function party(int $p, int $t): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		$party   = null;
 		foreach ($parties as $userParty) {
-			if ($userParty->getId() === $p) {
+			if ($userParty->getOwner() === $p) {
 				$party = $p;
 				break;
 			}
@@ -241,7 +242,7 @@ class OrderController extends AbstractController
 	private function getParties(array $parties): array {
 		$choices = [];
 		foreach ($parties as $party) {
-			$choices[$party->getName()] = $party->getId();
+			$choices[$party->getName()] = $party->getOwner();
 		}
 		return $choices;
 	}

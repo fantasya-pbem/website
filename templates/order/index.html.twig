@@ -9,8 +9,6 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Welt: {{ game_service.current.name }}</h2>
-
     {% include('forms/order.html.twig') %}
 
     <pre><strong>{{ order_service.fcheck }}</strong></pre>

@@ -9,5 +9,9 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Welt: {{ game_service.current.name }}</h2>
+    {% for party in parties %}
+        <h2>{{ party.name }}</h2>
+
+        {{ form(forms[party.id]) }}
+    {% endfor %}
 {% endblock %}

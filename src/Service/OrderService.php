@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Data\Order;
 
 /**
- * A service for templates to fetch myths.
+ * A service for fetching and storing Fantasya orders.
  */
 class OrderService
 {

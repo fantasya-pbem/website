@@ -46,4 +46,11 @@ class Party
 	public function getDescription(): string {
 		return $this->properties['beschreibung'];
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getOwner(): int {
+		return (int)$this->properties['owner_id'];
+	}
 }
