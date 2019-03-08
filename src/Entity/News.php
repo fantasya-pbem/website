@@ -82,7 +82,7 @@ class News {
 	 * @return string|null
 	 */
 	public function getContent(): ?string {
-		return $this->content;
+		return str_replace('<br />', '', $this->content);
 	}
 
 	/**
@@ -90,7 +90,7 @@ class News {
 	 * @return News
 	 */
 	public function setContent(string $content): self {
-		$this->content = $content;
+		$this->content = nl2br($content);
 		return $this;
 	}
 }

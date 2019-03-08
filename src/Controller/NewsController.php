@@ -11,7 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\News;
 use App\Form\NewsType;
 use App\Repository\NewsRepository;
-use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * NewsController.
