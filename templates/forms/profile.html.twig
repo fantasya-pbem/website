@@ -1,0 +1,45 @@
+<form method="post" action="{{ path('profile_change') }}">
+    <div class="row">
+        <div class="col-12">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        </div>
+
+        <div class="col-12">
+            <strong>Benutzername: {{ app.user.name }}</strong>
+            <br>
+            {% if roles is empty %}
+                <em>Keine besonderen Berechtigungen.</em>
+            {% else %}
+                Besondere Berechtigungen: <em>{{ roles|join(', ') }}</em>
+            {% endif %}
+        </div>
+        <div class="col-6">
+            <input type="text" name="name" id="username" class="form-control" placeholder="Neuer Benutzername">
+        </div>
+        <div class="col-6">
+            <button type="submit" name="submitName" class="btn btn-primary">Benutzername ändern</button>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <strong>E-Mail-Adresse: {{ app.user.email }}</strong>
+        </div>
+        <div class="col-6">
+            <input type="email" name="email" id="email" class="form-control" placeholder="Neue E-Mail-Adresse">
+        </div>
+        <div class="col-6">
+            <button type="submit" name="submitEmail" class="btn btn-primary">E-Mail-Adresse ändern</button>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">Das neue Passwort gilt für die Anmeldung und die Befehlsabgabe per E-Mail.</div>
+       <div class="col-6">
+            <input type="password" name="password" id="password" class="form-control" placeholder="Neues Passwort">
+        </div>
+        <div class="col-6">
+            <button type="submit" name="submitPassword" class="btn btn-primary">Passwort ändern</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya-Neuigkeiten bearbeiten
+{% endblock %}
+
+{% block header %}
+    Neuigkeiten bearbeiten
+{% endblock %}
+
+{% block content %}
+
+    <h2>News erstellen</h2>
+    {{ form(form) }}
+
+    <h2>News bearbeiten</h2>
+
+    {% if news|length > 0 %}
+        {% for article in news %}
+            <div class="article card">
+                <h3 class="card-header">{{ article.createdAt|localizeddate('long', 'none') }} – {{ article.title }}</h3>
+                <div class="card-body">{{ article.content|nl2br }}</div>
+                <div class="card-footer">
+                    <a href="{{ path('news_delete', {'news': article.id}) }}">Löschen</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p><em>Keine Neuigkeiten vorhanden.</p>
+    {% endif %}
+{% endblock %}

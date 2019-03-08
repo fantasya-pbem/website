@@ -2,3 +2,11 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+
+    form_themes: ['bootstrap_4_layout.html.twig']
+
+    globals:
+        game_service: '@App\Service\GameService'
+        myth_service: '@App\Service\MythService'
+        party_service: '@App\Service\PartyService'
+        order_service: '@App\Service\OrderService'

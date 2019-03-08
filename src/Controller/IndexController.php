@@ -2,10 +2,14 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
+use App\Game\Statistics;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
+use App\Entity\Game;
+use App\Game\Turn;
 
 /**
  * IndexController.
@@ -13,15 +17,15 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class IndexController extends AbstractController
 {
 	/**
-	 * @var UserPasswordEncoderInterface
+	 * @var EntityManagerInterface
 	 */
-	private $encoder;
+	private $manager;
 
 	/**
-	 * @param UserPasswordEncoderInterface $encoder
+	 * @param EntityManagerInterface $manager
 	 */
-	public function __construct(UserPasswordEncoderInterface $encoder) {
-		$this->encoder = $encoder;
+	public function __construct(EntityManagerInterface $manager) {
+		$this->manager = $manager;
 	}
 
 	/**
@@ -58,5 +62,21 @@ class IndexController extends AbstractController
 	 */
 	public function donate(): Response {
 		return $this->render('index/donate.html.twig');
+	}
+
+	/**
+	 * @Route("/world/{game}", name="world")
+	 *
+	 * @param Game $game
+	 * @return Response
+	 */
+	public function world(Game $game): Response {
+		$turn       = new Turn($game, $this->manager->getConnection());
+		$statistics = new Statistics($game, $this->manager->getConnection());
+		return $this->render('index/world.html.twig', [
+			'game'       => $game,
+			'turn'       => $turn,
+			'statistics' => $statistics
+		]);
 	}
 }

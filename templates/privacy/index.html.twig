@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Fantasya liebt Datenschutz.</h3>
+    <h2>Fantasya liebt Datenschutz.</h2>
 
     <p>
         Und deswegen verzichten wir darauf, unnötig personenbezogene Daten zu erheben. Nur die allernötigsten
@@ -31,7 +31,7 @@
     <h3>Cookies</h3>
 
     <p>
-        Wie nahezu alle anderen Angebote in den Weiten des Internet benutzt Fantasya sogenannte <i>Cookies</i> für die
+        Wie nahezu alle anderen Angebote in den Weiten des Internet benutzt Fantasya sogenannte <em>Cookies</em> für die
         Identifizierung der Benutzer. Dies sind kleine Textdateien, die auf dem Computer des Benutzers gespeichert
         werden und über den Browser gelöscht werden können.
     </p>
@@ -70,7 +70,7 @@
     </p>
 
     {% if hasAccepted %}
-        <p>Du hast bereits Deine Zustimmung gegeben.</p>
+        <p><strong>Du hast bereits Deine Zustimmung gegeben.</strong></p>
     {% else %}
         {{ form(form) }}
     {% endif %}

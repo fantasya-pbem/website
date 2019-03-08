@@ -9,11 +9,14 @@
 {% endblock %}
 
 {% block content %}
-    @if (User::canCreateMyths())
-    <p style="float: right;"><a href="/myth">» ein Gerücht in die Welt setzen</a></p>
-    <p style="clear: right;"></p>
-    @endif
-    @foreach ($myths as $myth)
-    <p>$myth->myth</p>
-    @endforeach
+    {% if is_granted('ROLE_USER') %}
+        <p class="float-right">
+            <a href="{{ path('myth_spread') }}">ein Gerücht in die Welt setzen</a>
+        </p>
+        <div class="clearfix"></div>
+    {%  endif %}
+
+    {% for myth in myths %}
+        <p class="myth">„{{ myth.myth }}“</p>
+    {% endfor %}
 {% endblock %}

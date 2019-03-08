@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya-Befehle kontrollieren
+{% endblock %}
+
+{% block header %}
+    Befehle kontrollieren
+{% endblock %}
+
+{% block content %}
+    {% include('forms/order.html.twig') %}
+
+    <pre><strong>{{ order_service.fcheck }}</strong></pre>
+
+    <pre>{{ order_service.orders }}</pre>
+{% endblock %}
