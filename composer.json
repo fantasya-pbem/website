@@ -73,16 +73,19 @@
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
+        "create-directories": "bin/create-directories.sh",
         "create-links": "bin/create-links.sh",
         "post-install-cmd": [
             "@auto-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts",
+            "@create-directories",
             "@create-links"
         ]
     },
     "scripts-descriptions": {
+        "create-directories": "Create data directories.",
         "create-links": "Create Bootstrap CSS & JS links."
     },
     "extra": {
