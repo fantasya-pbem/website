@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace App\Controller;
 
 use App\Game\Statistics;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,6 +27,7 @@ class IndexController extends AbstractController
 	 */
 	public function __construct(EntityManagerInterface $manager) {
 		$this->manager = $manager;
+		\Locale::setDefault('de_DE.utf8');
 	}
 
 	/**
@@ -69,6 +71,7 @@ class IndexController extends AbstractController
 	 *
 	 * @param Game $game
 	 * @return Response
+	 * @throws DBALException
 	 */
 	public function world(Game $game): Response {
 		$turn       = new Turn($game, $this->manager->getConnection());

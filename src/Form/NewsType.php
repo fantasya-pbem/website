@@ -19,7 +19,8 @@ class NewsType extends AbstractType
 			'label' => 'Titel'
 		]);
 		$builder->add('content', TextareaType::class,[
-			'label' => 'Nachricht'
+			'label' => 'Nachricht (HTML wird unterstützt)',
+			'attr'  => ['rows' => 10]
 		]);
 		$builder->add('submit', SubmitType::class, [
 			'label' => 'News erstellen'

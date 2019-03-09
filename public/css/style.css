@@ -64,6 +64,10 @@ dd {
 	margin-bottom: 0;
 }
 
+.text-danger {
+	font-weight: 700;
+}
+
 /* Forms */
 
 form label {

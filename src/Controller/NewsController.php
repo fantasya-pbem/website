@@ -27,6 +27,7 @@ class NewsController extends AbstractController
 	 */
 	public function __construct(NewsRepository $repository) {
 		$this->repository = $repository;
+		\Locale::setDefault('de_DE.utf8');
 	}
 
 	/**
@@ -40,38 +41,53 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/edit", name="news_edit")
+	 * @Route("/news/edit/{article}", name="news_edit")
 	 * @IsGranted("ROLE_NEWS_CREATOR")
 	 *
+	 * @param News|null $article
 	 * @return Response
 	 */
-	public function edit(): Response {
-		$news = $this->repository->findAll();
-		$form = $this->createForm(NewsType::class, new News(), [
-			'action' => $this->generateUrl('news_create')
+	public function edit(News $article = null): Response {
+		$news       = $this->repository->findAll();
+		$parameters = [];
+		if ($article) {
+			$parameters['article'] = $article->getId();
+		} else {
+			$article = new News();
+		}
+
+		$form = $this->createForm(NewsType::class, $article, [
+			'action' => $this->generateUrl('news_create', $parameters)
 		])->createView();
 
 		return $this->render('news/edit.html.twig', ['news' => $news, 'form' => $form]);
 	}
 
 	/**
-	 * @Route("/news/create", name="news_create")
+	 * @Route("/news/create/{article}", name="news_create")
 	 * @IsGranted("ROLE_NEWS_CREATOR")
 	 *
 	 * @param Request $request
+	 * @param News $article
 	 * @return Response
+	 * @throws \Exception
 	 */
-	public function create(Request $request): Response {
-		$news = new News();
-		$form = $this->createForm(NewsType::class, $news);
+	public function create(Request $request, News $article = null): Response {
+		if ($article) {
+			$date = $article->getCreatedAt();
+		} else {
+			$article = new News();
+			$date    = new \DateTime();
+		}
+		$form = $this->createForm(NewsType::class, $article);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
 			/* @var News $news */
-			$news = $form->getData();
-			$news->setCreatedAt(new \DateTime());
+			$article = $form->getData();
+			$article->setCreatedAt($date);
 			$entityManager = $this->getDoctrine()->getManager();
-			$entityManager->persist($news);
+			$entityManager->persist($article);
 			$entityManager->flush();
 			return $this->redirectToRoute('news');
 		}
@@ -80,15 +96,15 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/delete/{news}", name="news_delete")
+	 * @Route("/news/delete/{article}", name="news_delete")
 	 * @IsGranted("ROLE_NEWS_CREATOR")
 	 *
-	 * @param News $news
+	 * @param News $article
 	 * @return Response
 	 */
-	public function delete(News $news): Response {
+	public function delete(News $article): Response {
 		$entityManager = $this->getDoctrine()->getManager();
-		$entityManager->remove($news);
+		$entityManager->remove($article);
 		$entityManager->flush();
 
 		return $this->redirectToRoute('news');
