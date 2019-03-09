@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    {% include('forms/profile.html.twig') %}
+    {{ include('forms/profile.html.twig') }}
 
     {% if error %}
         <p class="text-danger"><strong>{{ error }}</strong></p>

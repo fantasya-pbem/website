@@ -173,7 +173,7 @@ class OrderController extends AbstractController
 			$form = $request->request->get('form');
 			if (isset($form['turn'])) {
 				$r = (int)$form['turn'];
-				if ($r >= $turn->getRound() + $min) {
+				if ($r > 0) {
 					$round = $r;
 				}
 			}

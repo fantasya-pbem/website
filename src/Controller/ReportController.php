@@ -78,6 +78,7 @@ class ReportController extends AbstractController
 			$report = new Report();
 			$report->setParty($id);
 			$report->setGame($this->gameService->getCurrent()->getAlias());
+			$this->reportService->setContext($report);
 			$form       = $this->createReportForm($report);
 			$forms[$id] = $form->createView();
 			$form->handleRequest($request);
@@ -87,7 +88,7 @@ class ReportController extends AbstractController
 				$report = $form->getData();
 				$report->setGame($this->gameService->getCurrent()->getAlias());
 				$this->reportService->setContext($report);
-				return $this->reportService->getZip();
+				return $this->file($this->reportService->getPath());
 			}
 		}
 
@@ -104,34 +105,24 @@ class ReportController extends AbstractController
 		return $this->getUser();
 	}
 
-
-	/**
-	 * @param Request $request
-	 * @return int
-	 * @throws DBALException
-	 */
-	private function turn(Request $request): int {
-		$turn  = new Turn($this->gameService->getCurrent(), $this->manager->getConnection());
-		$round = $turn->getRound();
-		if ($request->request->has('form')) {
-			$form = $request->request->get('form');
-			if (isset($form['turn'])) {
-				$round = (int)$form['turn'];
-			}
-		}
-		return $round;
-	}
-
 	/**
 	 * @param Report $report
 	 * @return FormInterface
+	 * @throws DBALException
 	 */
 	private function createReportForm(Report $report): FormInterface {
+		$turns = $this->reportService->getTurns();
+		$turn  = null;
+		if (!empty($turns)) {
+			$rounds = array_values($turns);
+			$turn   = $rounds[count($rounds) - 1];
+		}
+
 		$form = $this->createFormBuilder($report);
 		$form->add('turn', ChoiceType::class, [
 			'label'   => 'Runde',
-			'choices' => [],
-			'data'    => (string)123
+			'choices' => $turns,
+			'data'    => $turn
 		]);
 		$form->add('submit', SubmitType::class, [
 			'label' => 'Herunterladen'

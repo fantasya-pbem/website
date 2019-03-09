@@ -39,17 +39,22 @@ class ReportService
 	}
 
 	/**
-	 * @return string
+	 * @return int[]
 	 */
-	public function getZip(): string {
-		$file = $this->getPath();
-		if (is_file($file)) {
-			$contents = file_get_contents($file);
-			if ($contents) {
-				return $contents;
+	public function getTurns(): array {
+		$turns   = [];
+		$pattern = $this->baseDir . DIRECTORY_SEPARATOR . $this->report->getGame() . DIRECTORY_SEPARATOR . '*';
+		foreach (glob($pattern) as $roundDir) {
+			$round = basename($roundDir);
+			$turn  = (int)$round;
+			if ((string)$turn === $round) {
+				$this->report->setTurn($turn);
+				if (is_file($this->getPath())) {
+					$turns[$turn] = $turn;
+				}
 			}
 		}
-		return '';
+		return $turns;
 	}
 
 	/**

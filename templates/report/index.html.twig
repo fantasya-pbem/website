@@ -12,6 +12,6 @@
     {% for party in parties %}
         <h2>{{ party.name }}</h2>
 
-        {{ form(forms[party.id]) }}
+        {{ include('forms/report.html.twig', {'form': forms[party.id]}) }}
     {% endfor %}
 {% endblock %}
