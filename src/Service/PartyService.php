@@ -35,6 +35,25 @@ class PartyService
 	}
 
 	/**
+	 * @param string $id
+	 * @param Game $game
+	 * @return Party|null
+	 * @throws DBALException
+	 */
+	public function getById(string $id, Game $game): ?Party {
+		$connection = $this->manager->getConnection();
+		$table      = $game->getDb() . '.partei';
+		$sql        = "SELECT * FROM " . $table . " WHERE id = " . $id;
+		$stmt       = $connection->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		if (is_array($result) && isset($result[0]) && is_array($result[0])) {
+			return new Party($result[0]);
+		}
+		return null;
+	}
+
+	/**
 	 * Get all parties of a User.
 	 *
 	 * @param User $user

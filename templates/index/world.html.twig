@@ -19,7 +19,7 @@
 
     <p>
         <strong>Letzter Zug: </strong>Runde {{ turn.round|localizednumber }} vom {{ turn.start }}<br>
-        <strong>Nächster Zug: </strong>Runde {{ turn.round + 1|localizednumber }} am {{ turn.next }}
+        <strong>Nächster Zug: </strong>Runde {{ (turn.round + 1)|localizednumber }} am {{ turn.next }}
     </p>
 
     {% if statistics.newbiesCount > 0 %}
