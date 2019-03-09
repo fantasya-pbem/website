@@ -1,8 +1,6 @@
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
-/.env.*.local
-/.idea
 /composer.lock
 /public/bundles/
 /var/
@@ -18,6 +16,7 @@
 /.web-server-pid
 ###< symfony/web-server-bundle ###
 
+/.idea
 /public/css/bootstrap.*
 /public/js/bootstrap.*
 /public/js/jquery.*

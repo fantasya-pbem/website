@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya-Fehlermeldung
+{% endblock %}
+
+{% block header %}
+    Fehlermeldung
+{% endblock %}
+
+{% block content %}
+    <h2>{{ status_code }} – {{ status_text }}</h2>
+
+    <p>
+        Es ist ein Fehler aufgetreten. Die gewünschte Seite ist nicht vorhanden, oder Du hast einen Bug entdeckt. Wenn
+        Du diesen Fehler auch weiterhin erhälst, melde dies bitte in der
+        <a href="//forum.fantasya-pbem.de/viewforum.php?f=12" target="_blank">Taverne</a>. Wenn Du möchtest, kannst Du auch im
+        <a href="https://github.com/fantasya-pbem/website/issues" target="_blank">Entwicklungsbereich</a>
+        ein Bugticket erstellen.
+    </p>
+{% endblock %}

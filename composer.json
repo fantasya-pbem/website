@@ -73,8 +73,8 @@
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
-        "create-directories": "bin/create-directories.sh",
-        "create-links": "bin/create-links.sh",
+        "create-directories": "bin/composer/create-directories.sh",
+        "create-links": "bin/composer/create-links.sh",
         "post-install-cmd": [
             "@auto-scripts"
         ],
