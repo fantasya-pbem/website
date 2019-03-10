@@ -43,7 +43,7 @@ class PartyService
 	public function getById(string $id, Game $game): ?Party {
 		$connection = $this->manager->getConnection();
 		$table      = $game->getDb() . '.partei';
-		$sql        = "SELECT * FROM " . $table . " WHERE id = " . $id;
+		$sql        = "SELECT * FROM " . $table . " WHERE id = " . $this->manager->getConnection()->quote($id);
 		$stmt       = $connection->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);

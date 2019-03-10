@@ -258,9 +258,10 @@ class OrderController extends AbstractController
 		$next  = $turn + $min;
 		$last  = $turn + $max;
 		while ($next <= $last ) {
-			$turn         = (string)$next;
-			$turns[$turn] = $turn;
+			$round = (string)$next;
 			$next++;
+			$turn         = (string)$next;
+			$turns[$turn] = $round;
 		}
 		return $turns;
 	}

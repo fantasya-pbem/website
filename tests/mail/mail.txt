@@ -1,0 +1,484 @@
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by v22018041585863736.luckysrv.de (Postfix) with ESMTPS id 381CAC2149
+	for <befehle@fantasya-pbem.de>; Sun, 10 Mar 2019 14:33:33 +0100 (CET)
+Received: from elite ([93.199.81.154]) by mrelayeu.kundenserver.de (mreue109
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1N6srB-1h0Bff3EWV-018KBG for
+ <befehle@fantasya-pbem.de>; Sun, 10 Mar 2019 14:33:32 +0100
+Date: Sun, 10 Mar 2019 14:33:32 +0100 (CET)
+From: "thalian@online.de" <thalian@online.de>
+To: "befehle@fantasya-pbem.de" <befehle@fantasya-pbem.de>
+Message-ID: <800000126.01552224812145.JavaMail.sascha@elite>
+Subject: Fantasya Befehle
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3210Wsm9XCnIiUCloC5hS5vDu+gFf+6unWDTukpkAO0G9LsjGb6
+ IfNLZLOUn/NruDgFRc5H9ZAD4B1pYKtBPLqL4n3bzeMQvN/mMhNVTlGTUf1UKzZn0CtJ1eb
+ clooT3laRm/c9Op2uSIkZzuj82QVGzT/Wu89dHukMf8AABRiWShdZKi0KUa8aLYNHjTcgZZ
+ qGu4KC8Y5xWQXohMTt1/w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:gYd8Li+9EaM=:GN+qgstycT9kTk8oNdzPYC
+ YoBxYchsi4M5vyg/Jmha0bznXpSNAo2C1p/jS0MZa6FNdqPgRZWB8atiME3HaNEO+A3vNhU3L
+ MN17Q+SKbGBZUfFGn5fQu6ykWcXt7IGy03yXASpv+rvng0SaRzOkgs2+uT2ZNRdBdLCYU3QYJ
+ JWmXrgcULw7AqPoKl1lF9LAV7RlgwtiDJPJ8rBxJnDUa3FXG1R7jvQJiq+yY9MTg3WuVPERpp
+ 0wZVzVRKKYFcOxa60cPMMWIUmrlJS5VDl95gGAIkGfLkwXKVze2jUyqnmP6Xz1SEo2oad5US3
+ pxXyaYpOtZA7z9eMMi8PVZUr7myn8hhy9dEAvvx8A/BgrkQonN8O8378zNpbvo1IlPs56cEkZ
+ 1yftkRnS7AghGafojcqrfjqe+2ALrMYi4J1lgMF9xFTwQ/TRxx12ZkF66jpiNZ3QHqncw3Wst
+ UnIMWRv3aanDydnNaWvyfQv3zE7OALpPUouzY5/Qi492HQt5UFDUuUMl9Ab0alNIP+KmZMVX4
+ o0BAPdHwimCxvtUQvCs4vIAzpMAaNUj7wFlS++iL25s0TDFahg13Cm84BUfTWfJmsNUk0ofS0
+ FFcsr9qddRHcHXRUgI8AVpIO+eh76pUW1wUg8MKDlWzwak+qLAJBDyGdHASHV/accsRmbkq/p
+ +rtVUCN00OPkb6fG32fbkV1z7owvrtzGWlllb/Owj12CqvQUj43kO79eFMbRvypyHG6skVGzT
+ A6YagqGqSrXR9LlxxbtTCXz/Z1SwkO3rD/RqzWIgxm0CJnPP5wbCZZ4hNoI=
+
+ERESSEA imp "thaliansfantasya"
+; TIMESTAMP 1552224812607
+; Magellan Version 2.0.6 (build 473)
+LOCALE de
+RUNDE 445
+EINHEIT f6h
+UNTERHALTE
+TARNE Einheit ; automatisch
+EINHEIT 9z0
+LERNE Holzfaellen
+EINHEIT awm
+
+// +anlernen Wahrnehmung 10
+LERNE Wahrnehmung
+EINHEIT cih
+ROUTE SO Pause NW Pause
+// +gib 9ps Holz
+// Silber mitnehmen.
+EINHEIT guq
+
+// +lerne Steuereintreiben
+LERNE Steuereintreiben ; ohne Lehrer
+EINHEIT ift
+
+// +lerne Armbrustschiessen
+LERNE Armbrustschiessen ; ohne Lehrer
+EINHEIT ord
+LERNE Handel
+EINHEIT s1d
+LERNE Holzfaellen
+// 724 Holz
+EINHEIT 9
+LERNE Steinbau
+EINHEIT 38u
+MACHE Steine
+// +gib nqg 96 Stein
+// +gib Ls2 96 Stein
+GIB nqg 96 Stein=20
+EINHEIT 4aL
+UNTERHALTE
+// +magbest
+GIB cae 1500 Silber ; einlagern
+EINHEIT 52q
+LERNE Hiebwaffen
+EINHEIT 8mb
+MACHE Eisen
+// +gib nqg 120 Eisen
+// +gib Ls2 120 Eisen
+GIB nqg 120 Eisen=20
+EINHEIT cae
+HANDEL Kaufe 30 Pelz
+// HANDEL Verkaufe 10 Balsam
+// +gib nqg 30 Pelz
+// +gib Ls2 30 Pelz
+// +sLag
+// +magbest
+GIB nqg 30 Pelz=20
+GIB 8mb 250 Silber ; Futter
+GIB 52q 10 Silber ; Futter
+GIB 38u 250 Silber ; Futter
+GIB 9 10 Silber ; Futter
+GIB nqg 100 Silber ; Futter
+EINHEIT nqg
+ROUTE SW PAUSE NO PAUSE
+// +gib 1ox Pelz
+// +gib 9pt Eisen
+// +gib 1om Stein
+// +magbest
+EINHEIT 1dk
+
+// +anlernen Wahrnehmung 12
+LERNE Wahrnehmung
+EINHEIT 5hk
+UNTERHALTE
+// +magbest
+GIB dg2 1500 Silber ; einlagern
+EINHEIT dg2
+LERNE Handel
+// +sLag
+// +lernen Handel 5
+GIB 1dk 10 Silber ; Futter
+GIB ere 1000 Silber ; Futter
+GIB erf 1000 Silber ; Futter
+EINHEIT ere
+
+// +anlernen Ausdauer 8
+LERNE Ausdauer
+EINHEIT erf
+LERNE Armbrustschiessen
+EINHEIT yu
+LERNE Schiffbau
+EINHEIT 12f
+LERNE Armbrustschiessen
+EINHEIT 18i
+LERNE Taktik
+EINHEIT 1om
+
+// +lehre Strassenbau
+LERNE Strassenbau ; Weiterbildung
+EINHEIT 1ox
+LERNE Handel
+// +gib i6k 30 Balsam
+// +gib f0o 30 Pelz
+// +gib nqf 20 Pelz
+// +lernen Handel 12
+GIB i6k 30 Balsam=20
+GIB nqf 20 Pelz=20
+EINHEIT 21m
+
+// +lehre Unterhaltung
+LERNE Unterhaltung ; Weiterbildung
+EINHEIT 52y
+LERNE Schiffbau
+EINHEIT 5hL
+// +anlernen Armbrustschiessen 16
+// Schiffseinheiten bilden.
+LERNE Armbrustschie=C3=9Fen
+EINHEIT 5hy
+MACHE Eisenschild
+EINHEIT 6g1
+
+// +lehre Hiebwaffen
+LERNE Hiebwaffen ; Weiterbildung
+EINHEIT 6sm
+LERNE Tarnung
+// Order 1: Verteidigungswall mit drei Kohorten und Schuetzenreihen in den =
+westlichen Regionen errichten.
+// Order 2: Karavelle bauen und Schaetze aus dem Sueden verschiffen.
+// Order 3: Schiffswachen ausbilden.
+// Order 4: Strasse im Sueden fertigstellen.
+// Order 5: Handelsroute nach Gruenmeer einrichten.
+// Order 6: Tiremen bauen und Chaos erkunden.
+EINHEIT 6sn
+
+// +anlernen Hiebwaffen 13
+// Mit Schilden ausruesten.
+// Schiffseinheiten bilden.
+LERNE Hiebwaffen
+EINHEIT 6ss
+
+// +lehre Reiten
+LERNE Reiten ; Weiterbildung
+EINHEIT 7xc
+LERNE Reiten
+EINHEIT 7y3
+LERNE Speerkampf
+EINHEIT 7z6
+LERNE Reiten
+EINHEIT 9ps
+LERNE Bogenbau
+EINHEIT 9pt
+LERNE Waffenbau
+// 100 Speere nach Helosia bringen.
+EINHEIT 9pz
+
+// +lehre Armbrustschiessen
+LERNE Armbrustschiessen ; Weiterbildung
+EINHEIT 9vw
+LERNE Burgenbau
+EINHEIT a89
+LERNE Hiebwaffen
+EINHEIT b9a
+LEHRE yu 52y
+EINHEIT c6r
+LERNE Hiebwaffen
+TARNE Einheit ; automatisch
+EINHEIT cb7
+LERNE Hiebwaffen
+EINHEIT cLj
+LERNE Segeln
+EINHEIT dg1
+
+// +lerne Reiten
+LERNE Reiten ; ohne Lehrer
+EINHEIT dvn
+// +anlernen Armbrustschiessen 16
+LERNE Armbrustschie=C3=9Fen
+EINHEIT dw2
+
+// +lehre Reiten
+LERNE Reiten ; Weiterbildung
+EINHEIT e04
+LERNE Reiten
+EINHEIT fgh
+LERNE Segeln
+EINHEIT fp7
+LERNE Hiebwaffen
+EINHEIT frb
+LERNE Hiebwaffen
+EINHEIT gmx
+LERNE Reiten
+EINHEIT h5q
+
+// +lehre Steuereintreiben
+LERNE Steuereintreiben ; Weiterbildung
+EINHEIT i6k
+ROUTE W Pause O Pause
+// +gib dg2 Balsam
+// +gib 1ox Weihrauch
+EINHEIT ita
+
+// +lerne Segeln
+LERNE Segeln ; ohne Lehrer
+EINHEIT iuh
+LERNE Holzfaellen
+// +lernen Holzfaellen 9
+EINHEIT iui
+LERNE Holzfaellen
+EINHEIT jtb
+LERNE Hiebwaffen
+EINHEIT khy
+LERNE Segeln
+EINHEIT khz
+LERNE Armbrustschiessen
+@SAMMEL Alle Beute
+EINHEIT Ls2
+ROUTE NO PAUSE SW PAUSE
+// +gib 1om Stein
+// +gib 1ox Pelz
+// +gib 5hy Eisen
+// +magbest
+GIB 1ox 30 Pelz=20
+GIB 5hy 120 Eisen=20
+EINHEIT Ls3
+
+// +lehre Segeln
+LERNE Segeln ; Weiterbildung
+EINHEIT mjj
+LERNE Taktik
+EINHEIT n6t
+LERNE Hiebwaffen
+EINHEIT ngy
+LERNE Segeln
+EINHEIT nqf
+ROUTE O PAUSE W PAUSE
+// +gib 1ox Balsam
+// +gib 1ox Silber
+// +gib 2zk 20 Pelz
+GIB 1ox 10 Balsam=20
+EINHEIT nt8
+UNTERHALTE
+EINHEIT or2
+
+// +lerne Burgenbau
+LERNE Burgenbau ; ohne Lehrer
+EINHEIT ore
+LERNE Holzfaellen
+EINHEIT p0L
+LERNE Hiebwaffen
+EINHEIT qLg
+LERNE Armbrustschiessen
+EINHEIT qLh
+TREIBE
+// +gib cih 25000 Silber
+EINHEIT 2zk
+HANDEL Kaufe 10 Balsam
+HANDEL Verkaufe 10 Pelz
+// +gib nqf 50 Balsam
+// +gib f0o 50 Balsam
+// +sLag
+GIB f0o 10 Balsam=20
+GIB 9z1 145 Silber ; Futter
+GIB 8zh 100 Silber ; Futter
+GIB f0o 100 Silber ; Futter
+EINHEIT 8zh
+LERNE Unterhaltung
+EINHEIT 9z1
+MACHE Holz
+// 936 Holz
+EINHEIT f0o
+ROUTE W Pause O Pause
+// +gib 2zk Pelz
+// +gib 1ox Balsam
+GIB 2zk 30 Pelz=20
+EINHEIT f6i
+LERNE Wahrnehmung
+TARNE Einheit ; automatisch
+EINHEIT c59
+
+// +anlernen Ausdauer 6
+LERNE Ausdauer
+EINHEIT dcb
+LERNE Wahrnehmung
+// +lernen Wahrnehmung 7
+EINHEIT fef
+HANDEL Kaufe 20 Pelz
+// HANDEL Verkaufe 10 Balsam
+EINHEIT iug
+LERNE Wahrnehmung
+TARNE Einheit ; automatisch
+EINHEIT kxg
+
+// +anlernen Armbrustschiessen 14
+LERNE Armbrustschiessen
+EINHEIT id7
+LERNE Unterhaltung
+EINHEIT awp
+LERNE Wahrnehmung
+TARNE Einheit ; automatisch
+EINHEIT iuf
+LERNE Wahrnehmung
+TARNE Einheit ; automatisch
+EINHEIT b0e
+NACH O
+EINHEIT kcd
+LERNE Wahrnehmung
+TARNE Einheit ; automatisch
+EINHEIT za
+LERNE Wahrnehmung
+EINHEIT 4ob
+LERNE Wahrnehmung
+EINHEIT q25
+LERNE Wahrnehmung
+EINHEIT Lpe
+NACH SW
+EINHEIT dyu
+NACH SO
+EINHEIT mc6
+ROUTE O SO Pause NW W W W SW Pause NO O O
+LIEFERE 43u 200 Weihrauch
+LIEFERE yp 200 Myhrre
+@SAMMEL Alle Beute
+EINHEIT q7w
+LERNE Unterhaltung
+EINHEIT q26
+LERNE Unterhaltung
+EINHEIT q28
+LERNE Wahrnehmung
+TARNE Einheit ; automatisch
+EINHEIT xv
+LERNE Wahrnehmung
+EINHEIT q24
+LERNE Hiebwaffen
+EINHEIT q2a
+LERNE Holzfaellen
+EINHEIT q27
+LERNE Wahrnehmung
+EINHEIT ij2
+LERNE Unterhaltung
+TARNE Einheit ; automatisch
+EINHEIT 2if
+LERNE Hiebwaffen
+EINHEIT 2im
+LERNE Speerkampf
+EINHEIT 43u
+HANDEL Verkaufe 10 Weihrauch
+HANDEL Kaufe 50 Myhrre
+LIEFERE mc6 200 Myhrre
+EINHEIT naL
+LERNE Unterhaltung
+EINHEIT yd
+ROUTE SW SO O NO Pause SW W NW NO Pause
+// GIB 1h1 40 Stein
+EINHEIT ye
+LERNE Segeln
+EINHEIT yg
+LERNE Segeln
+EINHEIT yp
+HANDEL Verkaufe 10 Myhrre
+HANDEL Kaufe 60 Weihrauch
+LIEFERE mc6 200 Weihrauch
+EINHEIT z1
+LERNE Ruestungsbau
+EINHEIT 1gr
+LERNE Unterhaltung
+EINHEIT 1gt
+LERNE Steuereintreiben
+EINHEIT 1h1
+LERNE Steuereintreiben
+EINHEIT 329
+LERNE Steinbau
+EINHEIT 32e
+LERNE Bogenschiessen
+EINHEIT 43v
+LERNE Segeln
+EINHEIT 44e
+LERNE Segeln
+EINHEIT 44y
+LERNE Waffenbau
+// +lernen Waffenbau 10
+EINHEIT 684
+LERNE Speerkampf
+EINHEIT 7sL
+LERNE Reiten
+EINHEIT 7sm
+LERNE Segeln
+EINHEIT 7sv
+LERNE Bogenschiessen
+EINHEIT 7t1
+GIB yd 100 Silber
+UNTERHALTE
+EINHEIT 9d6
+LERNE Unterhaltung
+EINHEIT ayt
+LERNE Hiebwaffen
+EINHEIT chd
+LERNE Segeln
+EINHEIT dsd
+LERNE Wahrnehmung
+EINHEIT ij1
+LERNE Segeln
+EINHEIT Lss
+LERNE Hiebwaffen
+EINHEIT nkf
+
+// +segeln LERNE Segeln
+LERNE Segeln
+EINHEIT nkg
+LERNE Bogenschiessen
+EINHEIT np3
+LERNE Reiten
+EINHEIT q29
+LERNE Reiten
+EINHEIT qa5
+LERNE Schiffbau
+EINHEIT q7v
+LERNE Unterhaltung
+EINHEIT chj
+LERNE Wahrnehmung
+EINHEIT q7t
+LERNE Wahrnehmung
+EINHEIT c8f
+LERNE Wahrnehmung
+EINHEIT ovg
+LERNE Unterhaltung
+EINHEIT on0
+LERNE Unterhaltung
+TARNE Einheit ; automatisch
+EINHEIT y7
+ROUTE SW W NW NO Pause SW SO O NO Pause
+// @GIB 1h1 48 Stein
+EINHEIT nke
+
+// +segeln LERNE Segeln
+LERNE Segeln
+EINHEIT q7u
+LERNE Wahrnehmung
+// @GIB yd 48 Stein
+// @GIB y7 48 Stein
+EINHEIT 1ja
+LERNE Segeln
+EINHEIT 1jc
+LERNE Armbrustschiessen
+@SAMMEL Alle Beute
+EINHEIT 4p3
+NACH O W NW W NW NO W SW
+EINHEIT b0n
+LERNE Hiebwaffen
+N=C3=84CHSTER
+
