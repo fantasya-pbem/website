@@ -20,3 +20,5 @@
 /public/css/bootstrap.*
 /public/js/bootstrap.*
 /public/js/jquery.*
+!/var/orders/.gitignore
+!/var/zip/.gitignore
