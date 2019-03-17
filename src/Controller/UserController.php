@@ -98,6 +98,7 @@ class UserController extends AbstractController
 	 *
 	 * @param Request $request
 	 * @return Response
+	 * @throws \Exception
 	 */
 	public function reset(Request $request): Response {
 		$form  = $this->createForm(PasswordResetType::class, new PasswordReset());
@@ -109,7 +110,7 @@ class UserController extends AbstractController
 			$resetUser->from($form->getData());
 			$user = $this->repository->findExisting($resetUser);
 			if ($user) {
-				$password = uniqid();
+				$password = bin2hex(random_bytes(5));
 				$user->setPassword($this->passwordEncoder->encodePassword($user, $password));
 				$entityManager = $this->getDoctrine()->getManager();
 				$entityManager->persist($user);
