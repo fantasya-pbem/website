@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya-Auswertung herunterladen
+{% endblock %}
+
+{% block header %}
+    Auswertung herunterladen
+{% endblock %}
+
+{% block content %}
+    {% for party in parties %}
+        <h2>{{ party.name }}</h2>
+
+        {{ include('forms/report.html.twig', {'form': forms[party.id]}) }}
+    {% endfor %}
+{% endblock %}

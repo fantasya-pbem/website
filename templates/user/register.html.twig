@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya-Registrierung
+{% endblock %}
+
+{% block header %}
+    Registrierung für neue Spieler
+{% endblock %}
+
+{% block content %}
+    {% if existing %}
+        {% if existing.name == form.name.vars.value %}
+            <p>Es gibt bereits einen Benutzer mit diesem Namen. Bitte wähle einen anderen Benutzernamen.</p>
+        {% endif %}
+        {% if existing.email == form.email.vars.value %}
+            <p>Es gibt bereits einen Benutzer mit dieser E-Mail-Adresse. Bitte wähle eine andere E-Mail-Adresse.</p>
+        {% endif %}
+    {% endif %}
+
+    {{ form(form) }}
+
+    <p>Die Antwort auf die Anti-Spam-Frage findest Du in der Taverne.</p>
+{% endblock %}

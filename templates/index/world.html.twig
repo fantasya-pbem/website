@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Die Fantasya-Welten
+{% endblock %}
+
+{% block header %}
+    Die Welten
+{% endblock %}
+
+{% block content %}
+    <h2>{{ game.name }}</h2>
+
+    <p>{{ game.description|raw }}</p>
+
+    <p>
+        <strong>Auswertung: {{ game.start }}</strong>
+    </p>
+
+    <p>
+        <strong>Letzter Zug: </strong>Runde {{ turn.round|localizednumber }} vom {{ turn.start }}<br>
+        <strong>Nächster Zug: </strong>Runde {{ (turn.round + 1)|localizednumber }} am {{ turn.next }}
+    </p>
+
+    {% if statistics.newbiesCount > 0 %}
+        <h3>Neue Parteien</h3>
+
+        {% if statistics.newiesCount == 1 %}
+            <p>Diese Woche startet eine neue Partei.</p>
+        {% else %}
+            <p>Diese Wochen starten {{ statistics.newviesCount|localizednumber }} neue Parteien.</p>
+        {% endif %}
+
+        <dl>
+            {% for party in statistics.newbies %}
+                <dt>{{ party.name }}</dt>
+                <dd>{{ party.description }}</dd>
+            {% endfor %}
+        </dl>
+    {% endif %}
+
+    <h3>Statistik</h3>
+
+    <h4>Regionen</h4>
+
+    <p>Es gibt {{ statistics.landscape.world|localizednumber }} Regionen auf dieser Spielwelt und {{ statistics.landscape.underworld|localizednumber }} Regionen in der Unterwelt.</p>
+
+    <table class="table table-borderless table-sm">
+        <thead></thead>
+        <tr>
+            {% for region in statistics.world %}
+                <th>{{ region.typ }}</th>
+            {% endfor %}
+        </tr>
+        <tbody>
+        <tr>
+            {% for region in statistics.world %}
+                <td>{{ region.count|localizednumber }}</td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-borderless table-sm">
+        <thead></thead>
+        <tr>
+            {% for region in statistics.underworld %}
+                <th>{{ region.typ }}</th>
+            {% endfor %}
+        </tr>
+        <tbody>
+        <tr>
+            {% for region in statistics.underworld %}
+                <td>{{ region.count|localizednumber }}</td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+
+    <h4>Bevölkerung</h4>
+
+    <p>Es gibt insgesamt {{ statistics.population.units|localizednumber }} Einheiten mit {{ statistics.population.persons|localizednumber }} Individuen (Spieler und Monster).</p>
+
+    <table class="table table-borderless table-sm">
+        <thead></thead>
+        <tr>
+            {% for player in statistics.races %}
+                <th>{{ player.race }}</th>
+            {% endfor %}
+        </tr>
+        <tbody>
+        <tr>
+            {% for player in statistics.races %}
+                <td>{{ player.units|localizednumber }}/{{ player.persons|localizednumber }}</td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-borderless table-sm">
+        <thead></thead>
+        <tr>
+            {% for monster in statistics.monsters %}
+                <th>{{ monster.race }}</th>
+            {% endfor %}
+        </tr>
+        <tbody>
+        <tr>
+            {% for monster in statistics.monsters %}
+                <td>{{ monster.units|localizednumber }}/{{ monster.persons|localizednumber }}</td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+
+    <h4>Parteien</h4>
+
+    <p>Diese Spielwelt wird von {{ statistics.partiesCount|localizednumber }} Parteien bevölkert.</p>
+
+    <table class="table table-borderless table-sm">
+        <thead></thead>
+        <tr>
+            {% for player in statistics.partyRaces %}
+                <th>{{ player.race }}</th>
+            {% endfor %}
+        </tr>
+        <tbody>
+        <tr>
+            {% for player in statistics.partyRaces %}
+                <td>{{ player.count|localizednumber }}</td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+
+    <dl>
+        {% for party in statistics.parties %}
+            <dt>{{ party.name }}</dt>
+            <dd>{{ party.description }}</dd>
+        {% endfor %}
+    </dl>
+{% endblock %}

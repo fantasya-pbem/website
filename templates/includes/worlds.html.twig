@@ -1,0 +1,10 @@
+<h1 class="card-header">Die&nbsp;Welten</h1>
+<nav class="card-body">
+    <ul class="nav flex-column">
+        {% for game in game_service.all %}
+            <li class="nav-item">
+                <a href="{{ path('world', {'game': game.id}) }}" class="nav-link">{{ game.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>

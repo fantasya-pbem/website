@@ -1,0 +1,15 @@
+<nav>
+    <ul class="nav flex-column mt-4">
+        <li class="nav-item">
+            <a href="{{ path('user_register') }}" class="nav-link">Neu registrieren</a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ path('user_reset') }}" class="nav-link">Passwort vergessen</a>
+        </li>
+        {% if is_granted('ROLE_ADMIN') %}
+            <li class="nav-item">
+                <a href="/secure" class="nav-link">Login mit Zertifikat</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>

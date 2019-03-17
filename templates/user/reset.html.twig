@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Neues Fantasya-Passwort anfordern
+{% endblock %}
+
+{% block header %}
+    Neues Passwort anfordern
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <p>Benutzer nicht gefunden.</p>
+    {% endif %}
+
+    {{ form(form) }}
+{% endblock %}

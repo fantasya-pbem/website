@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya-Gerüchte
+{% endblock %}
+
+{% block header %}
+    Gerüchte
+{% endblock %}
+
+{% block content %}
+    {% if is_granted('ROLE_USER') %}
+        <p class="float-right">
+            <a href="{{ path('myth_spread') }}">ein Gerücht in die Welt setzen</a>
+        </p>
+        <div class="clearfix"></div>
+    {%  endif %}
+
+    {% for myth in myths %}
+        <p class="myth">„{{ myth.myth }}“</p>
+    {% endfor %}
+{% endblock %}

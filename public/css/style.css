@@ -1,0 +1,218 @@
+/* HTML elements */
+
+body {
+	background-color: #fff3d1;
+	color: #454545;
+	font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, "Times New Roman", Times, serif;
+}
+
+h1, h2, h3, h4 {
+	font-weight: 700;
+}
+
+h1 {
+	color: #fff3d1;
+	font-size: 1.5rem;
+}
+
+h2, h3, h4 {
+	color: #e13900;
+}
+
+h2 {
+	font-size: 1.25rem;
+}
+
+h3 {
+	font-size: 1.1rem;
+}
+
+h4 {
+	font-size: 1.0rem;
+}
+
+p {
+	text-align: justify;
+}
+
+a {
+	color: #704a21;
+}
+a:hover {
+	color: #4d2d09;
+	text-decoration: none;
+}
+
+ul {
+	/* Use SQUARE if browser does not know DISCLOSURE-CLOSED. */
+	list-style-type: square;
+	list-style-type: disclosure-closed;
+}
+
+dd {
+	margin-left: 3.0rem;
+	text-align: justify;
+}
+
+/* Bootstrap reset */
+
+.container-fluid {
+	padding: 0;
+}
+
+.float-right {
+	margin-bottom: 0;
+}
+
+.text-danger {
+	font-weight: 700;
+}
+
+/* Forms */
+
+form label {
+	vertical-align: text-top;
+}
+
+form .form-check-label {
+	margin-left: 5px;
+}
+
+form .btn-primary {
+	background-color: #90602a;
+	border: none;
+	border-radius: unset;
+}
+form .btn-primary:hover {
+	background-color: #4d2d09;
+}
+
+form .row {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+form .row > div {
+	padding-left: 0;
+}
+
+form .row > div:last-child {
+	padding-right: 0;
+}
+
+/* Header */
+
+.container-fluid.logo {
+	background: linear-gradient(#753d00, #c28e51);
+}
+
+.navbar {
+	background: linear-gradient(#473f28, #6c6552);
+}
+
+.navbar .nav-item {
+	font-size: 1.8rem;
+	font-weight: bold;
+	margin: 0.1rem 1rem;
+}
+
+.navbar .nav-item a {
+	color: #fff;
+	text-decoration: none;
+}
+.navbar .nav-item a:hover {
+	color: #ddd;
+}
+
+.container-fluid.myth {
+	background: #d0c6a3;
+}
+
+.container-fluid.myth span {
+	display: block;
+	font-style: italic;
+	padding: 5px;
+	text-align: center;
+}
+
+/* Content */
+
+.container > .row > div {
+	padding: 0 10px;
+}
+
+.card {
+    border-color: #90602a;
+	border-radius: unset;
+	margin-top: 1.5rem;
+}
+
+.card-header {
+	background: linear-gradient(#573d21, #90602a);
+	border-bottom: none;
+	padding: 0.5rem 1.0rem;
+	word-wrap: normal;
+}
+.card-header:first-child {
+	border-radius: unset;
+}
+
+.card-body {
+	background-color: #e8dcba;
+	padding: 0.75rem 1.25rem;
+}
+
+.card-footer {
+    padding: 0.5rem 1.0rem;
+}
+
+.nav-link {
+	padding: 0;
+}
+
+main .card {
+	background: unset;
+	border: none;
+}
+
+main .card-body {
+	background-color: unset;
+	padding: 0.75rem 0.25rem;
+}
+
+main a:before {
+	content: '»\2009'
+}
+
+.article.card {
+	border: 1px solid #90602a;
+}
+
+.article .card-header {
+	background: #e8dcba;
+	border-bottom: 1px solid #90602a;
+}
+
+.article .card-body {
+	padding: 0.25rem 0.5rem;
+}
+
+p.myth {
+	font-style: italic;
+}
+
+/* Footer */
+
+footer {
+	background: #d0c6a3;
+	margin-top: 2.0rem;
+}
+
+footer span {
+	display: block;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 70%;
+	padding: 1.5rem 1.0rem;
+	text-align: center;
+	text-transform: uppercase;
+}

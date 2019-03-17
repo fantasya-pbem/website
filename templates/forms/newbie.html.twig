@@ -1,0 +1,34 @@
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col-12">
+            {{ form_errors(form) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-6">
+            {{ form_row(form.name) }}
+        </div>
+        <div class="col-12 col-sm-6">
+            {{ form_row(form.race) }}
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            {{ form_row(form.description) }}
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-4">
+            {{ form_row(form.wood) }}
+        </div>
+        <div class="col-4">
+            {{ form_row(form.stone) }}
+        </div>
+        <div class="col-4">
+            {{ form_row(form.iron) }}
+        </div>
+    </div>
+{{ form_end(form) }}

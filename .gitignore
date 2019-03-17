@@ -1,10 +1,24 @@
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/composer.lock
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###
+
 /.idea
-/bootstrap/compiled.php
-/public/download
-/vendor
-composer.phar
-composer.lock
-.env.*.php
-.env.php
-.DS_Store
-Thumbs.db
+/public/css/bootstrap.*
+/public/js/bootstrap.*
+/public/js/jquery.*
+!/var/orders/.gitignore
+!/var/zip/.gitignore

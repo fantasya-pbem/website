@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya-Spiel beginnen
+{% endblock %}
+
+{% block header %}
+    Ein neues Spiel beginnen
+{% endblock %}
+
+{% block content %}
+    <h2>Welt: {{ game_service.current.name }}</h2>
+
+    <p>Hier kannst Du eine neue Partei registrieren, mit der Du an Fantasya teilnimmst.</p>
+
+    <p>Du kannst insgesamt 90 Ressourcen (Holz, Stein und Eisen) beliebig verteilen.</p>
+
+    <p>
+        Beim nächsten ZAT wird Deine neue Partei in der Spielwelt ausgesetzt, und Du erhältst Deine erste Auswertung.
+        Anschließend kannst Du die ersten Befehle abgeben.
+    </p>
+
+    {% if resources %}
+        <p class="text-danger">Die Summe der Ressourcen darf nicht größer als 90 sein!</p>
+    {% endif %}
+
+    {{ include('forms/newbie.html.twig') }}
+{% endblock %}
