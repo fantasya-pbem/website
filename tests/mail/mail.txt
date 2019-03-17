@@ -1,44 +1,45 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+From pcbaer@online.de  Sun Mar 17 19:27:14 2019
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by v22018041585863736.luckysrv.de (Postfix) with ESMTPS id 381CAC2149
-	for <befehle@fantasya-pbem.de>; Sun, 10 Mar 2019 14:33:33 +0100 (CET)
-Received: from elite ([93.199.81.154]) by mrelayeu.kundenserver.de (mreue109
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1N6srB-1h0Bff3EWV-018KBG for
- <befehle@fantasya-pbem.de>; Sun, 10 Mar 2019 14:33:32 +0100
-Date: Sun, 10 Mar 2019 14:33:32 +0100 (CET)
-From: "thalian@online.de" <thalian@online.de>
+	by v22018041585863736.luckysrv.de (Postfix) with ESMTPS id 6E2BCC24FE
+	for <befehle@fantasya-pbem.de>; Sun, 17 Mar 2019 19:27:14 +0100 (CET)
+Received: from elite ([93.199.87.88]) by mrelayeu.kundenserver.de (mreue109
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1MqJuP-1gjC7t0Mgl-00nQKc for
+ <befehle@fantasya-pbem.de>; Sun, 17 Mar 2019 19:27:14 +0100
+Date: Sun, 17 Mar 2019 19:27:13 +0100 (CET)
+From: "pcbaer@online.de" <pcbaer@online.de>
 To: "befehle@fantasya-pbem.de" <befehle@fantasya-pbem.de>
-Message-ID: <800000126.01552224812145.JavaMail.sascha@elite>
+Message-ID: <1353279857.31552847233743.JavaMail.sascha@elite>
 Subject: Fantasya Befehle
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:3210Wsm9XCnIiUCloC5hS5vDu+gFf+6unWDTukpkAO0G9LsjGb6
- IfNLZLOUn/NruDgFRc5H9ZAD4B1pYKtBPLqL4n3bzeMQvN/mMhNVTlGTUf1UKzZn0CtJ1eb
- clooT3laRm/c9Op2uSIkZzuj82QVGzT/Wu89dHukMf8AABRiWShdZKi0KUa8aLYNHjTcgZZ
- qGu4KC8Y5xWQXohMTt1/w==
+X-Provags-ID: V03:K1:paH3Nws0eG5FTE3EwxABlhVwSijkNaIhwvJif49/RfHIZJsFWRj
+ oJ/GDBPhH66K4Re5E5QG/eqQwvnL/y459CfH8/CK3rLlk1IUSzxr/KX4B93B5+hTGvJB6NU
+ 7GMup4wbgjoNN0Hi/hDC9OF0/sfyxMn2dDPXNF3bFZ2mC+DrkK4RA5EAp0f8hVvXGBtaOys
+ mFvnztn0Kmm7aw5Ktc0Bg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gYd8Li+9EaM=:GN+qgstycT9kTk8oNdzPYC
- YoBxYchsi4M5vyg/Jmha0bznXpSNAo2C1p/jS0MZa6FNdqPgRZWB8atiME3HaNEO+A3vNhU3L
- MN17Q+SKbGBZUfFGn5fQu6ykWcXt7IGy03yXASpv+rvng0SaRzOkgs2+uT2ZNRdBdLCYU3QYJ
- JWmXrgcULw7AqPoKl1lF9LAV7RlgwtiDJPJ8rBxJnDUa3FXG1R7jvQJiq+yY9MTg3WuVPERpp
- 0wZVzVRKKYFcOxa60cPMMWIUmrlJS5VDl95gGAIkGfLkwXKVze2jUyqnmP6Xz1SEo2oad5US3
- pxXyaYpOtZA7z9eMMi8PVZUr7myn8hhy9dEAvvx8A/BgrkQonN8O8378zNpbvo1IlPs56cEkZ
- 1yftkRnS7AghGafojcqrfjqe+2ALrMYi4J1lgMF9xFTwQ/TRxx12ZkF66jpiNZ3QHqncw3Wst
- UnIMWRv3aanDydnNaWvyfQv3zE7OALpPUouzY5/Qi492HQt5UFDUuUMl9Ab0alNIP+KmZMVX4
- o0BAPdHwimCxvtUQvCs4vIAzpMAaNUj7wFlS++iL25s0TDFahg13Cm84BUfTWfJmsNUk0ofS0
- FFcsr9qddRHcHXRUgI8AVpIO+eh76pUW1wUg8MKDlWzwak+qLAJBDyGdHASHV/accsRmbkq/p
- +rtVUCN00OPkb6fG32fbkV1z7owvrtzGWlllb/Owj12CqvQUj43kO79eFMbRvypyHG6skVGzT
- A6YagqGqSrXR9LlxxbtTCXz/Z1SwkO3rD/RqzWIgxm0CJnPP5wbCZZ4hNoI=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4PXfHysUlZ4=:0u7qj/xNMaEAvPFCYg7eLY
+ 8e0VXAZJ2/Qdq9133YxvFeJtMwarNg2TMj2QwyMmyHvzGHeTIqUFLO6FN3KCjfHrUzhUPDbIW
+ OwpGYjMrhr2sYwShidSyWEo54YUrwPg9oCa3ZIoWvnZlimBurSIgAMBTGuypNiwZ8cwDEqPkc
+ dVv/mpzgT2E9WwrPUj/I3VEgw0SApA26TAoYKImsCqtngH1Do2bbsOvptKwbXbE9BDYkDdSzo
+ xVgGDOyTIe2QDredlxw8eYAPZYli7JH9RzRs6sZ/1HdUSCSCCBRxa19yfwmLI99Fw2Nm6MDzU
+ akmKNxL0LJ2cXCWWnhUKLEgfrb9w2ouvYpEhR9riIZE1hf8lQ3bKYt3XIuBkNWX4dh0UQl4Le
+ pRfSjKMvONzwUWHqA1ah0C7LFQ38tCt9K56ifw40RQCzlUhTiDSPvAsqRpJMC7FbCmyo0zfiX
+ lUgmB0kgxCVwBL2mMG/vsQ/4dXF0mXnKOYd3KRrruvZyrdnmWZYWQ4fzn+zxi/+XNhEVd4Sbv
+ k8779SzMEX28jA2iEhJnwUOsB6Dvo7DaizY7+gKPT0+fJ8ujELZa/3jPk87yuauZ/EbLeBWsT
+ SyVlKyp5mpJfklhdAcUk50XMm2frEB8npqL1Y3oMIpo8adl6dVxoS6JxVvhxuy6+nYdtcB5PS
+ DmwkKTen6zL+N18PrhKioOXQZdAqIwJr4wM1obUnZ8Rg2+8l/YmrPZkH8zj5ocwxqNQ/3//kU
+ uevWzSJAMaj+p2qdUk1nXwugxV7dMLwQLtxar/gW7x4NYoESsQmxWf4P+44=
 
 ERESSEA imp "thaliansfantasya"
-; TIMESTAMP 1552224812607
+; TIMESTAMP 1552847233028
 ; Magellan Version 2.0.6 (build 473)
 LOCALE de
-RUNDE 445
 EINHEIT f6h
-UNTERHALTE
+NACH O
+// +next1 NACH W
 TARNE Einheit ; automatisch
 EINHEIT 9z0
 LERNE Holzfaellen
@@ -46,10 +47,6 @@ EINHEIT awm
 
 // +anlernen Wahrnehmung 10
 LERNE Wahrnehmung
-EINHEIT cih
-ROUTE SO Pause NW Pause
-// +gib 9ps Holz
-// Silber mitnehmen.
 EINHEIT guq
 
 // +lerne Steuereintreiben
@@ -59,6 +56,7 @@ EINHEIT ift
 // +lerne Armbrustschiessen
 LERNE Armbrustschiessen ; ohne Lehrer
 EINHEIT ord
+@GIB f6h 150 Silber
 LERNE Handel
 EINHEIT s1d
 LERNE Holzfaellen
@@ -69,7 +67,7 @@ EINHEIT 38u
 MACHE Steine
 // +gib nqg 96 Stein
 // +gib Ls2 96 Stein
-GIB nqg 96 Stein=20
+GIB Ls2 96 Stein=20
 EINHEIT 4aL
 UNTERHALTE
 // +magbest
@@ -80,7 +78,7 @@ EINHEIT 8mb
 MACHE Eisen
 // +gib nqg 120 Eisen
 // +gib Ls2 120 Eisen
-GIB nqg 120 Eisen=20
+GIB Ls2 120 Eisen=20
 EINHEIT cae
 HANDEL Kaufe 30 Pelz
 // HANDEL Verkaufe 10 Balsam
@@ -88,17 +86,17 @@ HANDEL Kaufe 30 Pelz
 // +gib Ls2 30 Pelz
 // +sLag
 // +magbest
-GIB nqg 30 Pelz=20
+GIB Ls2 30 Pelz=20
 GIB 8mb 250 Silber ; Futter
 GIB 52q 10 Silber ; Futter
 GIB 38u 250 Silber ; Futter
 GIB 9 10 Silber ; Futter
-GIB nqg 100 Silber ; Futter
-EINHEIT nqg
+GIB Ls2 100 Silber ; Futter
+EINHEIT Ls2
 ROUTE SW PAUSE NO PAUSE
-// +gib 1ox Pelz
-// +gib 9pt Eisen
 // +gib 1om Stein
+// +gib 1ox Pelz
+// +gib 5hy Eisen
 // +magbest
 EINHEIT 1dk
 
@@ -115,12 +113,18 @@ LERNE Handel
 GIB 1dk 10 Silber ; Futter
 GIB ere 1000 Silber ; Futter
 GIB erf 1000 Silber ; Futter
+GIB i6k 100 Silber ; Futter
 EINHEIT ere
 
 // +anlernen Ausdauer 8
 LERNE Ausdauer
 EINHEIT erf
 LERNE Armbrustschiessen
+EINHEIT i6k
+ROUTE O Pause W Pause
+// +gib dg2 Balsam
+// +gib 1ox Weihrauch
+GIB dg2 30 Balsam=20
 EINHEIT yu
 LERNE Schiffbau
 EINHEIT 12f
@@ -137,8 +141,7 @@ LERNE Handel
 // +gib f0o 30 Pelz
 // +gib nqf 20 Pelz
 // +lernen Handel 12
-GIB i6k 30 Balsam=20
-GIB nqf 20 Pelz=20
+GIB f0o 30 Pelz=20
 EINHEIT 21m
 
 // +lehre Unterhaltung
@@ -146,9 +149,10 @@ LERNE Unterhaltung ; Weiterbildung
 EINHEIT 52y
 LERNE Schiffbau
 EINHEIT 5hL
+
 // +anlernen Armbrustschiessen 16
 // Schiffseinheiten bilden.
-LERNE Armbrustschie=C3=9Fen
+LERNE Armbrustschiessen
 EINHEIT 5hy
 MACHE Eisenschild
 EINHEIT 6g1
@@ -200,6 +204,10 @@ LERNE Hiebwaffen
 TARNE Einheit ; automatisch
 EINHEIT cb7
 LERNE Hiebwaffen
+EINHEIT cih
+ROUTE NW Pause SO Pause
+// +gib 9ps Holz
+// Silber mitnehmen.
 EINHEIT cLj
 LERNE Segeln
 EINHEIT dg1
@@ -207,14 +215,20 @@ EINHEIT dg1
 // +lerne Reiten
 LERNE Reiten ; ohne Lehrer
 EINHEIT dvn
+
 // +anlernen Armbrustschiessen 16
-LERNE Armbrustschie=C3=9Fen
+LERNE Armbrustschiessen
 EINHEIT dw2
 
 // +lehre Reiten
 LERNE Reiten ; Weiterbildung
 EINHEIT e04
 LERNE Reiten
+EINHEIT f0o
+ROUTE O Pause W Pause
+// +gib 2zk Pelz
+// +gib 1ox Balsam
+GIB 1ox 10 Balsam=20
 EINHEIT fgh
 LERNE Segeln
 EINHEIT fp7
@@ -227,10 +241,6 @@ EINHEIT h5q
 
 // +lehre Steuereintreiben
 LERNE Steuereintreiben ; Weiterbildung
-EINHEIT i6k
-ROUTE W Pause O Pause
-// +gib dg2 Balsam
-// +gib 1ox Weihrauch
 EINHEIT ita
 
 // +lerne Segeln
@@ -247,14 +257,6 @@ LERNE Segeln
 EINHEIT khz
 LERNE Armbrustschiessen
 @SAMMEL Alle Beute
-EINHEIT Ls2
-ROUTE NO PAUSE SW PAUSE
-// +gib 1om Stein
-// +gib 1ox Pelz
-// +gib 5hy Eisen
-// +magbest
-GIB 1ox 30 Pelz=20
-GIB 5hy 120 Eisen=20
 EINHEIT Ls3
 
 // +lehre Segeln
@@ -265,12 +267,15 @@ EINHEIT n6t
 LERNE Hiebwaffen
 EINHEIT ngy
 LERNE Segeln
-EINHEIT nqf
-ROUTE O PAUSE W PAUSE
-// +gib 1ox Balsam
-// +gib 1ox Silber
-// +gib 2zk 20 Pelz
-GIB 1ox 10 Balsam=20
+EINHEIT nqg
+ROUTE NO PAUSE SW PAUSE
+// +gib 1ox Pelz
+// +gib 9pt Eisen
+// +gib 1om Stein
+// +magbest
+GIB 1ox 30 Pelz=20
+GIB 9pt 120 Eisen=20
+GIB 1om 96 Stein=20
 EINHEIT nt8
 UNTERHALTE
 EINHEIT or2
@@ -286,56 +291,58 @@ LERNE Armbrustschiessen
 EINHEIT qLh
 TREIBE
 // +gib cih 25000 Silber
+GIB cih 25000 Silber=20
 EINHEIT 2zk
 HANDEL Kaufe 10 Balsam
 HANDEL Verkaufe 10 Pelz
 // +gib nqf 50 Balsam
 // +gib f0o 50 Balsam
 // +sLag
-GIB f0o 10 Balsam=20
+GIB nqf 10 Balsam=20
 GIB 9z1 145 Silber ; Futter
 GIB 8zh 100 Silber ; Futter
-GIB f0o 100 Silber ; Futter
+GIB nqf 100 Silber ; Futter
 EINHEIT 8zh
 LERNE Unterhaltung
 EINHEIT 9z1
 MACHE Holz
-// 936 Holz
-EINHEIT f0o
-ROUTE W Pause O Pause
-// +gib 2zk Pelz
+// 921 Holz
+EINHEIT nqf
+ROUTE W PAUSE O PAUSE
 // +gib 1ox Balsam
-GIB 2zk 30 Pelz=20
+// +gib 1ox Silber
+// +gib 2zk 20 Pelz
+GIB 2zk 20 Pelz=20
 EINHEIT f6i
 LERNE Wahrnehmung
 TARNE Einheit ; automatisch
 EINHEIT c59
-
-// +anlernen Ausdauer 6
-LERNE Ausdauer
+// +anlernen Steuereintreiben 5
+LERNE Steuereintreiben
 EINHEIT dcb
 LERNE Wahrnehmung
 // +lernen Wahrnehmung 7
 EINHEIT fef
+GIB iug 550 Silber
 HANDEL Kaufe 20 Pelz
 // HANDEL Verkaufe 10 Balsam
 EINHEIT iug
-LERNE Wahrnehmung
+NACH SO
 TARNE Einheit ; automatisch
 EINHEIT kxg
 
 // +anlernen Armbrustschiessen 14
 LERNE Armbrustschiessen
 EINHEIT id7
-LERNE Unterhaltung
+LERNE Wahrnehmung
 EINHEIT awp
 LERNE Wahrnehmung
 TARNE Einheit ; automatisch
-EINHEIT iuf
-LERNE Wahrnehmung
-TARNE Einheit ; automatisch
 EINHEIT b0e
-NACH O
+NACH NO
+EINHEIT iuf
+NACH NO
+TARNE Einheit ; automatisch
 EINHEIT kcd
 LERNE Wahrnehmung
 TARNE Einheit ; automatisch
@@ -345,15 +352,6 @@ EINHEIT 4ob
 LERNE Wahrnehmung
 EINHEIT q25
 LERNE Wahrnehmung
-EINHEIT Lpe
-NACH SW
-EINHEIT dyu
-NACH SO
-EINHEIT mc6
-ROUTE O SO Pause NW W W W SW Pause NO O O
-LIEFERE 43u 200 Weihrauch
-LIEFERE yp 200 Myhrre
-@SAMMEL Alle Beute
 EINHEIT q7w
 LERNE Unterhaltung
 EINHEIT q26
@@ -379,12 +377,15 @@ LERNE Speerkampf
 EINHEIT 43u
 HANDEL Verkaufe 10 Weihrauch
 HANDEL Kaufe 50 Myhrre
+GIB Lpe 550 Silber
 LIEFERE mc6 200 Myhrre
+EINHEIT Lpe
+NACH NO
 EINHEIT naL
 LERNE Unterhaltung
-EINHEIT yd
+EINHEIT y7
 ROUTE SW SO O NO Pause SW W NW NO Pause
-// GIB 1h1 40 Stein
+// @GIB 1h1 48 Stein
 EINHEIT ye
 LERNE Segeln
 EINHEIT yg
@@ -421,20 +422,26 @@ LERNE Segeln
 EINHEIT 7sv
 LERNE Bogenschiessen
 EINHEIT 7t1
-GIB yd 100 Silber
 UNTERHALTE
 EINHEIT 9d6
 LERNE Unterhaltung
 EINHEIT ayt
 LERNE Hiebwaffen
-EINHEIT chd
-LERNE Segeln
 EINHEIT dsd
 LERNE Wahrnehmung
 EINHEIT ij1
 LERNE Segeln
 EINHEIT Lss
 LERNE Hiebwaffen
+EINHEIT mc6
+ROUTE NW W W W SW Pause NO O O O SO Pause
+LIEFERE 43u 200 Weihrauch
+LIEFERE yp 200 Myhrre
+@SAMMEL Alle Beute
+EINHEIT nke
+
+// +segeln LERNE Segeln
+LERNE Segeln
 EINHEIT nkf
 
 // +segeln LERNE Segeln
@@ -450,7 +457,11 @@ LERNE Schiffbau
 EINHEIT q7v
 LERNE Unterhaltung
 EINHEIT chj
+GIB dyu 1500 Silber
 LERNE Wahrnehmung
+EINHEIT dyu
+NACH NW
+TARNE Einheit ; automatisch
 EINHEIT q7t
 LERNE Wahrnehmung
 EINHEIT c8f
@@ -460,16 +471,15 @@ LERNE Unterhaltung
 EINHEIT on0
 LERNE Unterhaltung
 TARNE Einheit ; automatisch
-EINHEIT y7
+EINHEIT yd
 ROUTE SW W NW NO Pause SW SO O NO Pause
-// @GIB 1h1 48 Stein
-EINHEIT nke
-
-// +segeln LERNE Segeln
+// GIB 1h1 40 Stein
+EINHEIT chd
 LERNE Segeln
 EINHEIT q7u
 LERNE Wahrnehmung
-// @GIB yd 48 Stein
+@GIB yd 40 Stein
+@GIB yd 56910 Silber
 // @GIB y7 48 Stein
 EINHEIT 1ja
 LERNE Segeln
@@ -477,7 +487,7 @@ EINHEIT 1jc
 LERNE Armbrustschiessen
 @SAMMEL Alle Beute
 EINHEIT 4p3
-NACH O W NW W NW NO W SW
+NACH O SO O SO O NO SW SW SO O NO SO
 EINHEIT b0n
 LERNE Hiebwaffen
 N=C3=84CHSTER

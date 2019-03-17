@@ -190,7 +190,7 @@ class MailfilterCommand extends Command
 
 		$length = strlen($email);
 		if ($length !== $size) {
-			throw new MailfilterException('Die Größe der E-Mail ist ' . $length . ' Byte statt ' . $size . ' Byte.', 2);
+			// Postfix $size is not applicable to $length.
 		}
 
 		// Header und Mailtext trennen:
