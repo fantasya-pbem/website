@@ -58,8 +58,10 @@ class PrivacyController extends AbstractController
 	 */
 	private function getForm(): FormInterface {
 		$form = $this->createFormBuilder()->setAction($this->generateUrl('privacy_accept'));
-		$form->add('isAccepted', CheckboxType::class);
-		$form->add('accept', SubmitType::class);
+		$form->add('isAccepted', CheckboxType::class, [
+			'label' => 'Ich möchte an Fantasya teilnehmen und akzeptiere diese Bedingungen.'
+		]);
+		$form->add('accept', SubmitType::class, ['label' => 'Zustimmen']);
 		return $form->getForm();
 	}
 }
