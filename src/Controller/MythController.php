@@ -41,7 +41,7 @@ class MythController extends AbstractController
 
 	/**
 	 * @Route("/myth/spread", name="myth_spread")
-	 * @IsGranted("ROLE_NEWS_CREATOR")
+	 * @IsGranted("ROLE_USER")
 	 *
 	 * @param Request $request
 	 * @return Response
