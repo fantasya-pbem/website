@@ -13,7 +13,7 @@ To: "befehle@fantasya-pbem.de" <befehle@fantasya-pbem.de>
 Message-ID: <1353279857.31552847233743.JavaMail.sascha@elite>
 Subject: Fantasya Befehle
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
 X-Provags-ID: V03:K1:paH3Nws0eG5FTE3EwxABlhVwSijkNaIhwvJif49/RfHIZJsFWRj
  oJ/GDBPhH66K4Re5E5QG/eqQwvnL/y459CfH8/CK3rLlk1IUSzxr/KX4B93B5+hTGvJB6NU

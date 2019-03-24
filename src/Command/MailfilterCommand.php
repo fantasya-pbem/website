@@ -187,6 +187,7 @@ class MailfilterCommand extends Command
 			$email .= @fread($file, 8192);
 		}
 		@fclose($file);
+		//file_put_contents(__DIR__ . '/../../var/log/email.log', date('c') . PHP_EOL . $email . PHP_EOL . PHP_EOL, FILE_APPEND);
 
 		$length = strlen($email);
 		if ($length !== $size) {
@@ -209,28 +210,27 @@ class MailfilterCommand extends Command
 			if (preg_match("/^([A-Z][A-Za-z-]*):[ \t]+(.*)$/", $h, $matches) === 1) {
 				$tag = $matches[1];
 				if (!isset($this->header[$tag])) {
-					$this->header[$tag] = array();
+					$this->header[$tag] = [];
 				}
 				$this->header[$tag][] = rtrim($matches[2]);
 			}
 		}
 
 		// E-Mail-Format validieren:
-		$type = isset($this->header['Content-Type']) ? $this->header['Content-Type'] : array('');
-		if (strpos($type[0], 'text/plain') !== 0) {
-			throw new MailfilterException('Falsches E-Mail-Format: ' . $type[0], 2);
+		$contentType = explode(';', $this->header['Content-Type'][0] ?? '');
+		$type        = strtolower(trim($contentType[0]));
+		if ($type !== 'text/plain') {
+			throw new MailfilterException('Falsches E-Mail-Format: ' . $type, 2);
 		}
-		$charset   = 'UTF-8';
-		$typeComma = strpos($type[0], ';');
-		if ($typeComma > 0) {
-			$charsetLine = strtolower(trim(substr($type[0], $typeComma + 1)));
-			if (strpos($charsetLine, 'charset') === 0) {
-				$equal   = strpos($charsetLine, '=');
-				$charset = strtoupper(trim(substr($charsetLine, $equal + 1)));
+		$charset = 'UTF-8';
+		for ($i = 1; $i < count($contentType); $i++) {
+			$charsetPart = explode('=', $contentType[$i]);
+			if (count($charsetPart) === 2 && strtolower(trim($charsetPart[0])) === 'charset') {
+				$charset = strtoupper(trim($charsetPart[1]));
+				break;
 			}
 		}
-		$encoding = isset($this->header['Content-Transfer-Encoding']) ?
-			strtolower($this->header['Content-Transfer-Encoding'][0]) : 'quoted-printable';
+		$encoding = strtolower($this->header['Content-Transfer-Encoding'][0] ?? 'quoted-printable');
 
 		// E-Mail-Text decodieren:
 		switch ($encoding) {
@@ -376,8 +376,8 @@ class MailfilterCommand extends Command
 	 * @throws MailfilterException
 	 */
 	private function sendAnswerMail(string $from, string $fcheck) {
-		$subject = isset($this->header['Subject']) ? 'Re: ' . $this->header['Subject'][0]
-			                                       : 'Fantasya-Befehle sind angekommen';
+		$subject = isset($this->header['Subject'][0]) ? 'Re: ' . $this->header['Subject'][0]
+			                                          : 'Fantasya-Befehle sind angekommen';
 		$body    = "Deine Befehle für Runde " . ($this->round + 1) . " sind angekommen.\n\n";
 		if ($fcheck) {
 			$body .= $fcheck . "\n\n";
