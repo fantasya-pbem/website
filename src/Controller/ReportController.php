@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Data\Report;
 use App\Entity\User;
-use App\Game\Turn;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -21,7 +20,7 @@ use App\Service\PartyService;
 use App\Service\ReportService;
 
 /**
- * @IsGranted("ROLE_USER")
+ *
  */
 class ReportController extends AbstractController
 {
@@ -61,6 +60,7 @@ class ReportController extends AbstractController
 
 	/**
 	 * @Route("/report", name="report")
+	 * @IsGranted("ROLE_USER")
 	 *
 	 * @param Request $request
 	 * @return Response
@@ -96,6 +96,16 @@ class ReportController extends AbstractController
 			'parties' => $parties,
 			'forms'   => $forms
 		]);
+	}
+
+	/**
+	 * @Route("/report/t/{token}", name="report_download")
+	 *
+	 * @param string $token
+	 * @return Response
+	 */
+	public function download(string $token): Response {
+		return $this->redirectToRoute('report');
 	}
 
 	/**
