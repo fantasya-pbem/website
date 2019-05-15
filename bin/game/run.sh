@@ -9,6 +9,7 @@ TRUNCATE_MESSAGES=0
 LAST_TURN=`mysql -N -h $HOST -D $DATABASE -u $USER -p$PASSWORD -e "SELECT Value FROM settings WHERE Name='game.runde'"`
 TURN=`expr $LAST_TURN + 1`
 GAME=spiel
+GAME_ID=1
 MONSTER_PARTIES=(0 dark tier)
 BASE_DIR=/home/fantasya/games/$GAME
 BACKUP_DIR=sqlbackup
@@ -20,7 +21,7 @@ EMAIL_SUBJECT="Fantasya AW $TURN"
 EMAIL_TEMPLATE=$EMAIL_DIR/turn.email.template
 EMAIL_TEXT=$EMAIL_DIR/turn.email.txt
 EMAIL_LINK='https://www.fantasya-pbem.de/report/t'
-FANTASYACOMMAND=/var/customers/web/fantasya/website/bin/console
+FANTASYACOMMAND=/var/customers/webs/fantasya/website/bin/console
 EMAIL_LOG=$EMAIL_DIR/log/$TURN
 LOG=$LOG_DIR/run-$TURN.log
 ZAT_LOG=$LOG_DIR/zat-$TURN.log
@@ -98,14 +99,13 @@ done
 for ID in `mysql -N -s -h $HOST -u $USER -D $DATABASE -p$PASSWORD -e "SELECT id FROM partei WHERE id NOT IN ($monsterParties)"`
 do
 	EMAIL=`mysql -N -s -h $HOST -u $USER -D $DATABASE -p$PASSWORD -e "SELECT email FROM partei WHERE id = '$ID'"`
-	EMAIL_TOKEN=`$FANTASYACOMMAND download:token 1 $ID $EMAIL $TURN`
+	EMAIL_TOKEN=`$FANTASYACOMMAND download:token $GAME_ID $ID $EMAIL $TURN`
 	if [ $? -eq 0 ]
 	then
 		cat $EMAIL_TEMPLATE > $EMAIL_TEXT
 		echo "$EMAIL_LINK/$EMAIL_TOKEN" >> $EMAIL_TEXT
-		ZIP=$ZIP_DIR/$TURN/$TURN-$ID.zip
-		echo "$ZIP -> $EMAIL" >> $LOG
-		mutt -F $EMAIL_DIR/muttrc -s "$EMAIL_SUBJECT" -a $ZIP -- $EMAIL < $EMAIL_TEXT 2>&1 >> $LOG
+		echo "$ID -> $EMAIL" >> $LOG
+		mutt -F $EMAIL_DIR/muttrc -s "$EMAIL_SUBJECT" -- $EMAIL < $EMAIL_TEXT 2>&1 >> $LOG
 		echo $(cat $EMAIL_TEXT) > $EMAIL_LOG/$EMAIL.mail 2>> $LOG
 	else
 		echo "Creation of download token failed for $EMAIL! No mail sent." >> $LOG
