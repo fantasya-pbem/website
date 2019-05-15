@@ -9,7 +9,7 @@ TRUNCATE_MESSAGES=0
 LAST_TURN=`mysql -N -h $HOST -D $DATABASE -u $USER -p$PASSWORD -e "SELECT Value FROM settings WHERE Name='game.runde'"`
 TURN=`expr $LAST_TURN + 1`
 GAME=spiel
-GAME_ID=2
+GAME_ID=1
 MONSTER_PARTIES=(0 dark tier)
 BASE_DIR=/home/fantasya/games/$GAME
 BACKUP_DIR=sqlbackup
