@@ -2,20 +2,20 @@
 declare (strict_types = 1);
 namespace App\Command;
 
-use App\Game\Party;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use App\Game\Party;
 use App\Security\Token;
 
-class DownloadUrlCommand extends Command
+class DownloadTokenCommand extends Command
 {
 	/**
 	 * @var string
 	 */
-	protected static $defaultName = 'download:url';
+	protected static $defaultName = 'download:token';
 
 	/**
 	 * Set description and help.
