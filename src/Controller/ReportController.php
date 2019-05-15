@@ -2,9 +2,6 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use App\Data\Report;
-use App\Entity\User;
-use App\Game\Turn;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -16,12 +13,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use App\Data\Report;
+use App\Entity\Game;
+use App\Entity\User;
+use App\Game\Party;
+use App\Game\Turn;
+use App\Security\Token;
 use App\Service\GameService;
 use App\Service\PartyService;
 use App\Service\ReportService;
 
 /**
- * @IsGranted("ROLE_USER")
+ *
  */
 class ReportController extends AbstractController
 {
@@ -61,6 +64,7 @@ class ReportController extends AbstractController
 
 	/**
 	 * @Route("/report", name="report")
+	 * @IsGranted("ROLE_USER")
 	 *
 	 * @param Request $request
 	 * @return Response
@@ -99,6 +103,40 @@ class ReportController extends AbstractController
 	}
 
 	/**
+	 * @Route("/report/t/{token}", name="report_download", requirements={"token"="[0-9a-f]{23,24}"}))
+	 *
+	 * @param string $token
+	 * @return Response
+	 */
+	public function download(string $token): Response {
+		$tokenPart = substr($token, 0, Token::LENGTH);
+		$idPart    = substr($token, Token::LENGTH);
+		$gameAndId = hexdec($idPart);
+		$gameId    = $gameAndId >> 24;
+		$partyId   = Party::toId($gameAndId % 2 ** 24);
+
+		$game = $this->getGame($gameId);
+		if ($game) {
+			try {
+				$turn         = new Turn($game, $this->manager->getConnection());
+				$party        = $this->partyService->getById($partyId, $game);
+				$token        = new Token();
+				$currentToken = (string)$token->setEmail($party->getEmail())->setTurn($turn->getRound());
+				if ($tokenPart === $currentToken) {
+					$report = new Report();
+					$report->setGame($game->getAlias());
+					$report->setParty($party->getId());
+					$report->setTurn($turn->getRound());
+					$this->reportService->setContext($report);
+					return $this->file($this->reportService->getPath());
+				}
+			} catch (DBALException $e) {
+			}
+		}
+		return $this->redirectToRoute('report');
+	}
+
+	/**
 	 * @return User
 	 */
 	private function user(): User {
@@ -128,5 +166,18 @@ class ReportController extends AbstractController
 			'label' => 'Herunterladen'
 		]);
 		return $form->getForm();
+	}
+
+	/**
+	 * @param int $id
+	 * @return Game|null
+	 */
+	private function getGame(int $id): ?Game {
+		foreach ($this->gameService->getAll() as $game) {
+			if ($game->getId() === $id) {
+				return $game;
+			}
+		}
+		return null;
 	}
 }

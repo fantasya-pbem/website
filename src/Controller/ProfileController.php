@@ -159,6 +159,7 @@ class ProfileController extends AbstractController
 							$error = 22;
 						} else {
 							$this->save($this->user()->setEmail($email));
+							$this->partyService->update($this->user());
 							$error = 0;
 						}
 					}

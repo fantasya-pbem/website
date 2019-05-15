@@ -135,6 +135,33 @@ class PartyService
 	}
 
 	/**
+	 * Update eMail address of user's parties and newbies.
+	 *
+	 * @param User $user
+	 * @throws DBALException
+	 */
+	public function update(User $user) {
+		$games      = $this->service->getAll();
+		$connection = $this->manager->getConnection();
+		$id         = $user->getId();
+		$email      = $connection->quote($user->getEmail());
+
+		foreach ($games as $game) {
+			$table = $game->getDb() . '.partei';
+			$sql   = "UPDATE " . $table . " SET email = " . $email . " WHERE user_id = " . $id;
+			if (!$connection->prepare($sql)->execute()) {
+				throw new DBALException('Could not update parties.');
+			}
+
+			$table = $game->getDb() . '.neuespieler';
+			$sql   = "UPDATE " . $table . " SET email = " . $email . " WHERE user_id = " . $id;
+			if (!$connection->prepare($sql)->execute()) {
+				throw new DBALException('Could not update newbies.');
+			}
+		}
+	}
+
+	/**
 	 * Create a Newbie.
 	 *
 	 * @param Newbie $newbie
