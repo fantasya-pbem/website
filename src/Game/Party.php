@@ -13,6 +13,26 @@ class Party
 	private $properties;
 
 	/**
+	 * Convert Base-36 ID to numeric ID.
+	 *
+	 * @param string $id
+	 * @return int
+	 */
+	public static function fromId(string $id): int {
+		return (int)base_convert($id, 36, 10);
+	}
+
+	/**
+	 * Convert numeric ID to Base-36 ID.
+	 *
+	 * @param int $id
+	 * @return string
+	 */
+	public static function toId(int $id): string {
+		return base_convert($id, 10, 36);
+	}
+
+	/**
 	 * @param array $properties
 	 */
 	public function __construct(array $properties) {
@@ -59,5 +79,12 @@ class Party
 	 */
 	public function getUser(): int {
 		return (int)$this->properties['user_id'];
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEmail(): string {
+		return $this->properties['email'];
 	}
 }

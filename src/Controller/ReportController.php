@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Data\Report;
 use App\Entity\User;
+use App\Game\Party;
+use App\Game\Turn;
+use App\Security\Token;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -105,6 +108,20 @@ class ReportController extends AbstractController
 	 * @return Response
 	 */
 	public function download(string $token): Response {
+		$tokenPart = substr($token, 0, Token::LENGTH);
+		$idPart    = substr($token, Token::LENGTH);
+		$gameAndId = hexdec($idPart);
+		$gameId    = $gameAndId >> 24;
+		$partyId   = Party::toId($gameAndId % 2 ** 24);
+
+		$game  = $this->getGame($gameId);
+		$turn  = new Turn($game, $this->manager->getConnection());
+		$party = $this->partyService->getById($partyId, $game);
+
+		$token = new Token();
+		$token->setEmail($party->getEmail())->setTurn($turn->getRound());
+		$currentToken = (string)$token;
+
 		return $this->redirectToRoute('report');
 	}
 
@@ -138,5 +155,13 @@ class ReportController extends AbstractController
 			'label' => 'Herunterladen'
 		]);
 		return $form->getForm();
+	}
+
+	private function getGame(int $id): Game {
+		foreach ($this->gameService->getAll() as $game) {
+			if ($game->getId() === $id) {
+				return $game;
+			}
+		}
 	}
 }
