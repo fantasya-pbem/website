@@ -321,7 +321,7 @@ class MailfilterCommand extends Command
 
 		$this->user = $this->userRepository->find($this->party->getUser());
 		if (!$this->user) {
-			throw new MailfilterException('Der Benuter #' . $this->party->getUser() . ' nicht gefunden.', 1);
+			throw new MailfilterException('Der Benutzer #' . $this->party->getUser() . ' wurde nicht gefunden.', 1);
 		}
 		if (!$this->encoder->isPasswordValid($this->user, $password)) {
 			throw new MailfilterException('Das Kennwort ist falsch.', 4);
