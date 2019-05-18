@@ -30,13 +30,19 @@ class MythController extends AbstractController
 	}
 
 	/**
-	 * @Route("/myth", name="myth")
+	 * @Route("/myth/{page}", name="myth", requirements={"page"="\d+"})
 	 *
+	 * @param int $page
 	 * @return Response
 	 */
-	public function index(): Response {
-		$myths = $this->repository->findAll();
-		return $this->render('myth/index.html.twig', ['myths' => $myths]);
+	public function index(int $page = 1): Response {
+		if ($page <= 0) {
+			$page = 1;
+		}
+		$myths = $this->repository->findAll($page);
+		$next  = count($myths) > $page * MythRepository::PAGE_SIZE ? $page + 1 : $page;
+
+		return $this->render('myth/index.html.twig', ['myths' => $myths, 'page' => $page, 'next' => $next]);
 	}
 
 	/**

@@ -19,4 +19,11 @@
     {% for myth in myths %}
         <p class="myth">„{{ myth.myth }}“</p>
     {% endfor %}
+
+    {% if next > page %}
+        <p class="float-right">
+            <a href="{{ path('myth', {'page': next}) }}">mehr Gerüchte</a>
+        </p>
+        <div class="clearfix"></div>
+    {% endif %}
 {% endblock %}
