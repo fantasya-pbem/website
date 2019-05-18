@@ -5,6 +5,7 @@ namespace App\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use App\Entity\Myth;
@@ -16,6 +17,8 @@ use App\Entity\Myth;
  */
 class MythRepository extends ServiceEntityRepository
 {
+	const PAGE_SIZE = 15;
+
 	/**
 	 * @param RegistryInterface $registry
 	 */
@@ -24,11 +27,13 @@ class MythRepository extends ServiceEntityRepository
     }
 
 	/**
-	 * @return Myth[]
+	 * @param int $page
+	 * @return Paginator
 	 */
-    public function findAll(): array {
-		 $q = $this->createQuery();
-		 return $q->getQuery()->getArrayResult();
+    public function findAll(int $page = 1): Paginator {
+    	$q = $this->createQuery()->getQuery();
+		$q->setFirstResult(--$page * self::PAGE_SIZE)->setMaxResults(self::PAGE_SIZE);
+		return new Paginator($q);
 	}
 
 	/**
