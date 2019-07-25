@@ -22,7 +22,7 @@ class RegistrationType extends AbstractType
 			'label' => 'E-Mail-Adresse'
 		]);
 		$builder->add('antispam', TextType::class, [
-			'label' => 'Anti-Spam: Wer war Fantasyas zweiter Spielleiter?'
+			'label' => 'Anti-Spam: ' . getenv('ANTISPAM_QUESTION')
 		]);
 		$builder->add('submit', SubmitType::class, [
 			'label' => 'Registrieren'

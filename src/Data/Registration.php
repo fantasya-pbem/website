@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Registration extends PasswordReset
 {
 	/**
-	 * @Assert\EqualTo("Hamilcar", message="Das ist nicht die richtige Antwort.")
+	 * @Assert\Expression("value in this.getValidAnswers()", message="Das ist nicht die richtige Antwort.")
 	 *
 	 * @var string
 	 */
@@ -25,5 +25,12 @@ class Registration extends PasswordReset
 	 */
 	public function setAntispam(string $antispam) {
 		$this->antispam = trim($antispam);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getValidAnswers(): array {
+		return explode(',', getenv('ANTISPAM_ANSWER'));
 	}
 }
