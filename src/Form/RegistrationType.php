@@ -22,7 +22,7 @@ class RegistrationType extends AbstractType
 			'label' => 'E-Mail-Adresse'
 		]);
 		$builder->add('antispam', TextType::class, [
-			'label' => 'Anti-Spam: Wer hat Fantasya erfunden?'
+			'label' => 'Anti-Spam: Wer war Fantasyas zweiter Spielleiter?'
 		]);
 		$builder->add('submit', SubmitType::class, [
 			'label' => 'Registrieren'
