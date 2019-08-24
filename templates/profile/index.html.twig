@@ -19,6 +19,16 @@
         </div>
     </div>
 
+    <div class="mb-4">
+        <h2>
+            Einstellungen
+            <button class="btn dropdown-toggle collapsed" data-toggle="collapse" data-target="#settings-form" aria-expanded="false" aria-controls="settings-form"></button>
+        </h2>
+        <div id="settings-form" class="collapse">
+            {{ include('forms/settings.html.twig') }}
+        </div>
+    </div>
+
     {% if error %}
         <p class="text-danger"><strong>{{ error }}</strong></p>
     {% endif %}

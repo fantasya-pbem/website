@@ -1,0 +1,13 @@
+<form method="post" action="{{ path('user_login') }}">
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group form-check">
+                <input type="checkbox" id="flag-with-attachment" name="flag[with-attachment]" class="form-check-input">
+                <label for="flag-with-attachment" class="form-check-label">Auswertung in der E-Mail</label>
+            </div>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary btn-block">Einstellungen übernehmen</button>
+        </div>
+    </div>
+</form>

@@ -12,15 +12,19 @@ use App\Data\PasswordReset;
  */
 class User implements UserInterface {
 
-	const ROLE_ADMIN = 'ROLE_ADMIN';
+	public const FLAG_WITH_ATTACHMENT = 1;
 
-	const ROLE_BETA_TESTER = 'ROLE_BETA_TESTER';
+	public const ROLE_ADMIN = 'ROLE_ADMIN';
 
-	const ROLE_MULTI_PLAYER = 'ROLE_MULTI_PLAYER';
+	public const ROLE_BETA_TESTER = 'ROLE_BETA_TESTER';
 
-	const ROLE_NEWS_CREATOR = 'ROLE_NEWS_CREATOR';
+	public const ROLE_MULTI_PLAYER = 'ROLE_MULTI_PLAYER';
 
-	const ROLE_USER = 'ROLE_USER';
+	public const ROLE_NEWS_CREATOR = 'ROLE_NEWS_CREATOR';
+
+	public const ROLE_USER = 'ROLE_USER';
+
+	private const ALL_FLAGS = [self::FLAG_WITH_ATTACHMENT];
 
 	/**
 	 * @ORM\Id()
@@ -44,6 +48,13 @@ class User implements UserInterface {
 	 * @var string[]
 	 */
 	private $roles = [];
+
+	/**
+	 * @ORM\Column(type="smallint")
+	 *
+	 * @var int
+	 */
+	private $flags;
 
 	/**
 	 * @var string The hashed password
@@ -177,5 +188,41 @@ class User implements UserInterface {
 			->setPassword('')
 			->setEmail($resetOrRegistration->getEmail())
 			->setRoles([User::ROLE_USER]);
+	}
+
+	/**
+	 * @param int $flag
+	 * @return bool
+	 * @throws \InvalidArgumentException
+	 */
+	public function hasFlag(int $flag): bool {
+		$this->validateFlag($flag);
+		return ($this->flags & $flag) === 1;
+	}
+
+	/**
+	 * @param int $flag
+	 * @param bool $set
+	 * @return User
+	 * @throws \InvalidArgumentException
+	 */
+	public function setFlag(int $flag, bool $set = true): self {
+		$this->validateFlag($flag);
+		if ($set) {
+			$this->flags |= $flag;
+		} else {
+			$this->flags &= array_sum(self::ALL_FLAGS) - $flag;
+		}
+		return $this;
+	}
+
+	/**
+	 * @param int $flag
+	 * @throws \InvalidArgumentException
+	 */
+	private function validateFlag(int $flag): void {
+		if (!in_array($flag, self::ALL_FLAGS)) {
+			throw new \InvalidArgumentException('Invalid flag: ' . $flag);
+		}
 	}
 }
