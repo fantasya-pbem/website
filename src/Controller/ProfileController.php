@@ -42,7 +42,8 @@ class ProfileController extends AbstractController
 		20 => 'Das ist keine gültige E-Mail-Adresse.',
 		21 => 'Die E-Mail-Adresse darf nicht länger als 190 Zeichen sein.',
 		22 => 'Es gibt bereits einen Benutzer mit dieser E-Mail-Adresse.',
-		30 => 'Das Passwort darf nicht leer sein.'
+		30 => 'Das Passwort darf nicht leer sein.',
+		40 => 'Die Einstellungen konnten nicht gespeichert werden.'
 	];
 
 	/**
@@ -99,8 +100,9 @@ class ProfileController extends AbstractController
 		$parties = $this->partyService->getFor($this->user());
 		$newbies = $this->partyService->getNewbies($this->user());
 
-		$success = null;
-		$error   = null;
+		$success   = null;
+		$errorCode = 0;
+		$error     = null;
 		if ($request->query->has('error')) {
 			$errorCode = (int)$request->query->get('error');
 			if ($errorCode) {
@@ -116,7 +118,7 @@ class ProfileController extends AbstractController
 			'parties' => $parties,
 			'newbies' => $newbies,
 			'success' => $success,
-			'error'   => self::$errors[$error] ?? null
+			'error'   => ['code' => $errorCode, 'text' => self::$errors[$error] ?? null]
 		]);
 	}
 
@@ -182,6 +184,18 @@ class ProfileController extends AbstractController
 				$error = 30;
 			}
 		}
+
+		return $this->redirectToRoute('profile', isset($error) ? ['error' => $error] : []);
+	}
+
+	/**
+	 * @Route("/profile/settings", name="profile_settings")
+	 *
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function settings(Request $request): Response {
+		$error = 40;
 
 		return $this->redirectToRoute('profile', isset($error) ? ['error' => $error] : []);
 	}
