@@ -1,13 +1,14 @@
 <form method="post" action="{{ path('profile_settings') }}">
+    <input type="hidden" name="flags[0]">
     <div class="row">
         <div class="col-12">
             <div class="form-group form-check">
-                <input type="checkbox" id="flag-with-attachment" name="flag[with-attachment]" class="form-check-input">
+                <input type="checkbox" id="flag-with-attachment" name="flags[withAttachment]" class="form-check-input"{{ flags.withAttachment }}>
                 <label for="flag-with-attachment" class="form-check-label">Auswertung in der E-Mail</label>
             </div>
         </div>
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary btn-block">Einstellungen übernehmen</button>
+            <button type="submit" name="submitSettings" class="btn btn-primary btn-block">Einstellungen übernehmen</button>
         </div>
     </div>
 </form>
