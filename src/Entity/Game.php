@@ -3,8 +3,6 @@ declare (strict_types=1);
 namespace App\Entity;
 
 use App\Game\Turn;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

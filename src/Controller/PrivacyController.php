@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PrivacyController extends AbstractController
 {
-	const COOKIE = 'accept_dsgvo';
+	private const COOKIE = 'accept_dsgvo';
 
 	/**
 	 * @Route("/privacy", name="privacy")

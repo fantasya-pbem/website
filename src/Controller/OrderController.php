@@ -75,7 +75,7 @@ class OrderController extends AbstractController
 		}
 
 		$party = $parties[0];
-		$turn  = $this->turn($request, -5);
+		$turn  = $this->turn($request);
 		$order = new Order();
 		$form  = $this->createOrderForm($order, $parties, $turn);
 		$form->handleRequest($request);
@@ -162,11 +162,10 @@ class OrderController extends AbstractController
 
 	/**
 	 * @param Request $request
-	 * @param int $min
 	 * @return int
 	 * @throws DBALException
 	 */
-	private function turn(Request $request, int $min = 0): int {
+	private function turn(Request $request): int {
 		$turn  = new Turn($this->gameService->getCurrent(), $this->manager->getConnection());
 		$round = $turn->getRound();
 		if ($request->request->has('form')) {
@@ -237,7 +236,6 @@ class OrderController extends AbstractController
 	/**
 	 * @param Party[] $parties
 	 * @return string[]
-	 * @throws DBALException
 	 */
 	private function getParties(array $parties): array {
 		$choices = [];

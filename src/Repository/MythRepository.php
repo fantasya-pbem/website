@@ -17,7 +17,7 @@ use App\Entity\Myth;
  */
 class MythRepository extends ServiceEntityRepository
 {
-	const PAGE_SIZE = 15;
+	public const PAGE_SIZE = 15;
 
 	/**
 	 * @param RegistryInterface $registry

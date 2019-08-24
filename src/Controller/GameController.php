@@ -40,6 +40,7 @@ class GameController extends AbstractController
 	/**
 	 * @param GameService $gameService
 	 * @param PartyService $partyService
+	 * @param \Swift_Mailer $mailer
 	 */
 	public function __construct(GameService $gameService, PartyService $partyService, \Swift_Mailer $mailer) {
 		$this->gameService  = $gameService;
@@ -90,7 +91,7 @@ class GameController extends AbstractController
 	/**
 	 * @Route("/game/enter", name="game_enter")
 	 *
-	 * @param Request
+	 * @param Request $request
 	 * @return Response
 	 */
 	public function enter(Request $request): Response {
@@ -134,7 +135,7 @@ class GameController extends AbstractController
 		$newbies = $this->partyService->getNewbies($this->user());
 		$delete  = [];
 		foreach ($newbies as $id => $gameNewbies) {
-			foreach ($gameNewbies as $newbie) {
+			foreach ($gameNewbies as $newbie /* @var Newbie $newbie */) {
 				if ($id === $game->getId()) {
 					if ($newbie->getName() === $name && $newbie->getUserId() === $user->getId()) {
 						$delete[] = $newbie;
@@ -157,7 +158,7 @@ class GameController extends AbstractController
 
 	/**
 	 * @return bool
-	 * @throws \Doctrine\DBAL\DBALException
+	 * @throws DBALException
 	 */
 	private function canEnter(): bool {
 		if ($this->isGranted(User::ROLE_MULTI_PLAYER)) {
@@ -170,7 +171,7 @@ class GameController extends AbstractController
 	}
 
 	/**
-	 * @param User $user
+	 * @param Newbie $newbie
 	 */
 	private function sendAdminMail(Newbie $newbie) {
 		$mail = new \Swift_Message();
