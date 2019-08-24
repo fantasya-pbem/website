@@ -35,6 +35,10 @@ p {
 	text-align: justify;
 }
 
+address {
+	color: #4d2d09;
+}
+
 a {
 	color: #704a21;
 }
