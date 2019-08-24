@@ -9,7 +9,15 @@
 {% endblock %}
 
 {% block content %}
-    {{ include('forms/profile.html.twig') }}
+    <div class="mb-4">
+        <h2>
+            Zugangsdaten
+            <button class="btn dropdown-toggle collapsed" data-toggle="collapse" data-target="#profile-form" aria-expanded="false" aria-controls="profile-form"></button>
+        </h2>
+        <div id="profile-form" class="collapse">
+            {{ include('forms/profile.html.twig') }}
+        </div>
+    </div>
 
     {% if error %}
         <p class="text-danger"><strong>{{ error }}</strong></p>
