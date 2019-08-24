@@ -35,6 +35,8 @@ class UserController extends AbstractController
 
 	/**
 	 * @param UserRepository $repository
+	 * @param UserPasswordEncoderInterface $encoder
+	 * @param \Swift_Mailer $mailer
 	 */
 	public function __construct(UserRepository $repository, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer) {
 		$this->repository      = $repository;

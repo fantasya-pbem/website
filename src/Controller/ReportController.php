@@ -146,7 +146,6 @@ class ReportController extends AbstractController
 	/**
 	 * @param Report $report
 	 * @return FormInterface
-	 * @throws DBALException
 	 */
 	private function createReportForm(Report $report): FormInterface {
 		$turns = $this->reportService->getTurns();

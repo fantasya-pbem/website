@@ -42,7 +42,8 @@ class ProfileController extends AbstractController
 		20 => 'Das ist keine gültige E-Mail-Adresse.',
 		21 => 'Die E-Mail-Adresse darf nicht länger als 190 Zeichen sein.',
 		22 => 'Es gibt bereits einen Benutzer mit dieser E-Mail-Adresse.',
-		30 => 'Das Passwort darf nicht leer sein.'
+		30 => 'Das Passwort darf nicht leer sein.',
+		40 => 'Die Einstellungen konnten nicht gespeichert werden.'
 	];
 
 	/**
@@ -95,12 +96,14 @@ class ProfileController extends AbstractController
 	 */
 	public function index(Request $request): Response {
 		$roles   = $this->getRoles();
+		$flags   = $this->getFlags();
 		$games   = $this->gameService->getAll();
 		$parties = $this->partyService->getFor($this->user());
 		$newbies = $this->partyService->getNewbies($this->user());
 
-		$success = null;
-		$error   = null;
+		$success   = null;
+		$errorCode = 0;
+		$error     = null;
 		if ($request->query->has('error')) {
 			$errorCode = (int)$request->query->get('error');
 			if ($errorCode) {
@@ -112,11 +115,12 @@ class ProfileController extends AbstractController
 
 		return $this->render('profile/index.html.twig', [
 			'roles'   => $roles,
+			'flags'   => $flags,
 			'games'   => $games,
 			'parties' => $parties,
 			'newbies' => $newbies,
 			'success' => $success,
-			'error'   => self::$errors[$error] ?? null
+			'error'   => ['code' => $errorCode, 'text' => self::$errors[$error] ?? null]
 		]);
 	}
 
@@ -136,7 +140,7 @@ class ProfileController extends AbstractController
 						if ($this->userRepository->findOneBy(['name' => $name])) {
 							$error = 12;
 						} else {
-							$this->save($this->user()->setName($name));
+							$this->save($this->user()->setName($name), true);
 							$error = 0;
 						}
 					}
@@ -158,7 +162,7 @@ class ProfileController extends AbstractController
 						if ($this->userRepository->findOneBy(['email' => $email])) {
 							$error = 22;
 						} else {
-							$this->save($this->user()->setEmail($email));
+							$this->save($this->user()->setEmail($email), true);
 							$this->partyService->update($this->user());
 							$error = 0;
 						}
@@ -176,10 +180,35 @@ class ProfileController extends AbstractController
 			if ($password) {
 				$user = $this->user();
 				$user->setPassword($this->passwordEncoder->encodePassword($user, $password));
-				$this->save($user);
+				$this->save($user, true);
 				$error = 0;
 			} else {
 				$error = 30;
+			}
+		}
+
+		return $this->redirectToRoute('profile', isset($error) ? ['error' => $error] : []);
+	}
+
+	/**
+	 * @Route("/profile/settings", name="profile_settings")
+	 *
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function settings(Request $request): Response {
+		if ($request->request->has('submitSettings') && $request->request->has('flags')) {
+			$user  = $this->user();
+			$flags = $request->request->get('flags');
+
+			try {
+				$withAttachment = $flags['withAttachment'] ?? false;
+				$user->setFlag(User::FLAG_WITH_ATTACHMENT, (bool)$withAttachment);
+
+				$this->save($user);
+				$error = 0;
+			} catch (\Exception $e) {
+				$error = 40;
 			}
 		}
 
@@ -200,6 +229,16 @@ class ProfileController extends AbstractController
 	}
 
 	/**
+	 * @return array(string=>string)
+	 */
+	private function getFlags(): array {
+		$withAttachment = $this->user()->hasFlag(User::FLAG_WITH_ATTACHMENT);
+		return [
+			'withAttachment' => $withAttachment ? ' checked="checked"' : ''
+		];
+	}
+
+	/**
 	 * @return User
 	 */
 	private function user(): User {
@@ -208,12 +247,15 @@ class ProfileController extends AbstractController
 
 	/**
 	 * @param User $user
+	 * @param bool $sendMail
 	 */
-	private function save(User $user) {
+	private function save(User $user, bool $sendMail = false) {
 		$entityManager = $this->getDoctrine()->getManager();
 		$entityManager->persist($user);
 		$entityManager->flush();
-		$this->sendMail($user);
+		if ($sendMail) {
+			$this->sendMail($user);
+		}
 	}
 
 	/**
