@@ -102,7 +102,8 @@ done
 for ID in `mysql -N -s -h $HOST -u $USER_GAME -D $DATABASE_GAME -p$PASSWORD_GAME -e "SELECT id FROM partei WHERE id NOT IN ($monsterParties)"`
 do
 	EMAIL=`mysql -N -s -h $HOST -u $USER_GAME -D $DATABASE_GAME -p$PASSWORD_GAME -e "SELECT email FROM partei WHERE id = '$ID'"`
-	WITH_ATTACHMENT=`mysql -N -s -h $HOST -u $USER_USER -D $DATABASE_USER -p$PASSWORD_USER -e "SELECT flags & 1 FROM user WHERE email = '$EMAIL'"`
+	USER_ID=`mysql -N -s -h $HOST -u $USER_GAME -D $DATABASE_GAME -p$PASSWORD_GAME -e "SELECT user_id FROM partei WHERE id = '$ID'"`
+	WITH_ATTACHMENT=`mysql -N -s -h $HOST -u $USER_USER -D $DATABASE_USER -p$PASSWORD_USER -e "SELECT flags & 1 FROM user WHERE id = $USER_ID"`
 	EMAIL_TOKEN=`$FANTASYACOMMAND download:token $GAME_ID $ID $EMAIL $TURN`
 	if [ $? -eq 0 ]
 	then
