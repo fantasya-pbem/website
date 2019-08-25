@@ -218,5 +218,5 @@ ij_php_version_weight = 28
 ij_php_while_brace_force = never
 ij_php_while_on_new_line = false
 
-[{*.yml,*.yaml}]
+[{*.html.twig,*.yml,*.yaml}]
 indent_style = space

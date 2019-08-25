@@ -3,12 +3,17 @@
     <div class="row">
         <div class="col-12">
             <div class="form-group form-check">
-                <input type="checkbox" id="flag-with-attachment" name="flags[withAttachment]" class="form-check-input"{{ flags.withAttachment }}>
-                <label for="flag-with-attachment" class="form-check-label">Auswertung in der E-Mail</label>
+                <input type="checkbox" id="flag-with-attachment" name="flags[withAttachment]"
+                       class="form-check-input"{{ flags.withAttachment }}>
+                <label for="flag-with-attachment" class="form-check-label">
+                    Auswertung als E-Mail-Anhang
+                    <img class="icon" src="{{ asset('images/info.svg') }}" alt="Hilfe" title="Deaktiviere diese Option, falls die E-Mails wegen der ZIP-Datei im Anhang von Deinem Provider zurückgewiesen werden."/>
+                </label>
             </div>
         </div>
         <div class="col-auto">
-            <button type="submit" name="submitSettings" class="btn btn-primary btn-block">Einstellungen übernehmen</button>
+            <button type="submit" name="submitSettings" class="btn btn-primary btn-block">Einstellungen übernehmen
+            </button>
         </div>
     </div>
 </form>
