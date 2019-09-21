@@ -21,7 +21,9 @@ security:
             anonymous: true
             guard:
                 authenticators:
+                    - App\Security\ClientCertificateAuthenticator
                     - App\Security\PasswordAuthenticator
+                entry_point: App\Security\ClientCertificateAuthenticator
             logout:
                 path: user_logout
             remember_me:
