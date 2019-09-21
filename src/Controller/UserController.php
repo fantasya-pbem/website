@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
+use App\Security\ClientCertificate;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,6 +53,27 @@ class UserController extends AbstractController
     public function login(): Response {
         return $this->render('user/login.html.twig');
     }
+
+	/**
+	 * @Route("/user/secure", name="user_secure")
+	 *
+	 * @return Response
+	 */
+    public function secure(): Response {
+		return $this->login();
+	}
+
+	/**
+	 * @Route("/user/expire/{days}", name="user_expire")
+	 *
+	 * @param int $days
+	 * @return Response
+	 */
+	public function expire(int $days): Response {
+    	return $this->render('user/expire.html.twig', [
+    		'days' => $days
+		]);
+	}
 
 	/**
 	 * @Route("/user/register", name="user_register")
