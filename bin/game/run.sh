@@ -65,7 +65,7 @@ echo >> $LOG
 
 echo "Running the game..." >> $LOG
 TIMER_START=`date +%s`
-java -jar fantasya.jar -server $HOST:3306 -datenbank $DATABASE_GAME -benutzer $USER_GAME -passwort $PASSWORD_GAME -zat 2>&1 > $ZAT_LOG
+java -jar fantasya.jar -server $HOST:3306 -datenbank $DATABASE_GAME -benutzer $USER_GAME -passwort $PASSWORD_GAME -zat -ohnemonster 2>&1 > $ZAT_LOG
 ZAT_RESULT=$?
 echo "Fantasya exit code: $ZAT_RESULT" >> $LOG
 TIMER_END=`date +%s`
