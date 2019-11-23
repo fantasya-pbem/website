@@ -3,8 +3,8 @@ declare (strict_types = 1);
 namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use App\Entity\User;
 
@@ -17,9 +17,9 @@ use App\Entity\User;
 class UserRepository extends ServiceEntityRepository
 {
 	/**
-	 * @param RegistryInterface $registry
+	 * @param ManagerRegistry $registry
 	 */
-    public function __construct(RegistryInterface $registry) {
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, User::class);
     }
 

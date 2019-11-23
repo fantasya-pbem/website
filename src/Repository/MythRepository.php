@@ -3,10 +3,10 @@ declare (strict_types = 1);
 namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use App\Entity\Myth;
 
@@ -20,9 +20,9 @@ class MythRepository extends ServiceEntityRepository
 	public const PAGE_SIZE = 15;
 
 	/**
-	 * @param RegistryInterface $registry
+	 * @param ManagerRegistry $registry
 	 */
-    public function __construct(RegistryInterface $registry) {
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Myth::class);
     }
 
