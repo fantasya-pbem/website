@@ -9,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -67,7 +70,7 @@ class ProfileController extends AbstractController
 	private $passwordEncoder;
 
 	/**
-	 * @var \Swift_Mailer
+	 * @var MailerInterface
 	 */
 	private $mailer;
 
@@ -76,10 +79,10 @@ class ProfileController extends AbstractController
 	 * @param GameService $gameService
 	 * @param PartyService $partyService
 	 * @param UserPasswordEncoderInterface $encoder
-	 * @param \Swift_Mailer $mailer
+	 * @param MailerInterface $mailer
 	 */
 	public function __construct(UserRepository $userRepository, GameService $gameService, PartyService $partyService,
-								UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer) {
+								UserPasswordEncoderInterface $encoder, MailerInterface $mailer) {
 		$this->userRepository  = $userRepository;
 		$this->gameService     = $gameService;
 		$this->partyService    = $partyService;
@@ -262,13 +265,11 @@ class ProfileController extends AbstractController
 	 * @param User $user
 	 */
 	private function sendMail(User $user) {
-		$mail = new \Swift_Message();
-		$mail->setFrom('admin@fantasya-pbem.de', 'Fantasya-Administrator');
-		$mail->setTo($user->getEmail(), $user->getName());
-		$mail->setSubject('Fantasya-Profil geändert');
-		$mail->setBody($this->renderView('emails/profile_change.html.twig', [
-			'user' => $user
-		]));
+		$mail = new Email();
+		$mail->from(new Address($this->getParameter('app.mail.admin.address'), $this->getParameter('app.mail.admin.name')));
+		$mail->to(new Address($user->getEmail(), $user->getName()));
+		$mail->subject('Fantasya-Profil geändert');
+		$mail->text($this->renderView('emails/profile_change.html.twig', ['user' => $user]));
 		$this->mailer->send($mail);
 	}
 }

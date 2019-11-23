@@ -8,7 +8,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use App\Data\Order;
@@ -55,14 +58,24 @@ class MailfilterCommand extends Command
 	private $manager;
 
 	/**
-	 * @var PasswordEncoderInterface
+	 * @var UserPasswordEncoderInterface
 	 */
 	private $encoder;
 
 	/**
-	 * @var \Swift_Mailer
+	 * @var MailerInterface
 	 */
 	private $mailer;
+
+	/**
+	 * @var string
+	 */
+	private $fromName;
+
+	/**
+	 * @var Address
+	 */
+	private $replyTo;
 
 	/**
 	 * @var User
@@ -101,12 +114,13 @@ class MailfilterCommand extends Command
 	 * @param OrderService $orderService
 	 * @param EntityManagerInterface $manager
 	 * @param UserPasswordEncoderInterface $encoder
-	 * @param \Swift_Mailer $mailer
+	 * @param MailerInterface $mailer
+	 * @param ContainerBagInterface $config
 	 */
 	public function __construct(UserRepository $userRepository, GameRepository $gameRepository,
 								PartyService $partyService, OrderService $orderService,
-								EntityManagerInterface $manager,
-								UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer) {
+								EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder,
+								MailerInterface $mailer, ContainerBagInterface $config) {
 		parent::__construct();
 		$this->userRepository = $userRepository;
 		$this->gameRepository = $gameRepository;
@@ -115,6 +129,8 @@ class MailfilterCommand extends Command
 		$this->manager        = $manager;
 		$this->encoder        = $encoder;
 		$this->mailer         = $mailer;
+		$this->fromName       = $config->get('app.mail.server.name');
+		$this->replyTo        = new Address($config->get('app.mail.admin.address'), $config->get('app.mail.admin.name'));
 		setlocale(LC_ALL, 'de_DE');
 	}
 
@@ -124,7 +140,7 @@ class MailfilterCommand extends Command
 	 * @return int
 	 * @throws \Exception
 	 */
-	public function run(InputInterface $input, OutputInterface $output) {
+	public function run(InputInterface $input, OutputInterface $output): int {
 		try {
 			return parent::run($input, $output);
 		} catch (MailfilterException $e) {
@@ -143,7 +159,7 @@ class MailfilterCommand extends Command
 	/**
 	 * Set description and help.
 	 */
-	protected function configure() {
+	protected function configure(): void {
 		$this->setDescription('Receive Fantasya orders via eMail.');
 		$this->setHelp('This command is a Postfix mail filter that receives and saves Fantasya orders.');
 
@@ -155,9 +171,10 @@ class MailfilterCommand extends Command
 	/**
 	 * @param InputInterface $input
 	 * @param OutputInterface $output
+	 * @return int
 	 * @throws MailfilterException
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$sender    = $input->getArgument('sender');
 		$size      = (int)$input->getArgument('size');
 		$recipient = $input->getArgument('recipient');
@@ -170,13 +187,14 @@ class MailfilterCommand extends Command
 
 		$fcheck = $this->orderService->getFcheck();
 		$this->sendAnswerMail($recipient, $fcheck);
+		return 0;
 	}
 
 	/**
 	 * @param int $size
 	 * @throws MailfilterException
 	 */
-	private function fetchMailContent(int $size) {
+	private function fetchMailContent(int $size): void {
 		$file = @fopen('php://stdin', 'r');
 		if (!$file) {
 			throw new MailfilterException('Die E-Mail konnte nicht eingelesen werden.', 2);
@@ -261,7 +279,7 @@ class MailfilterCommand extends Command
 	 * @param string $recipient
 	 * @throws MailfilterException
 	 */
-	private function fetchGame(string $recipient) {
+	private function fetchGame(string $recipient): void {
 		$atPos = strpos($recipient, '@fantasya-pbem.de');
 		if ($atPos <= 0) {
 			throw new MailfilterException('Die Empfängeradresse ist fehlerhaft.', 3);
@@ -291,7 +309,7 @@ class MailfilterCommand extends Command
 	 * @param string $sender (currently unused)
 	 * @throws MailfilterException
 	 */
-	private function fetchUserParty(string $sender) {
+	private function fetchUserParty(string $sender): void {
 		// Befehle extrahieren:
 		$endOfLine = strpos($this->content, "\n");
 		if (!$endOfLine) {
@@ -336,7 +354,7 @@ class MailfilterCommand extends Command
 	/**
 	 * @throws MailfilterException
 	 */
-	private function getRound() {
+	private function getRound(): void {
 		try {
 			$current = new Turn($this->game, $this->manager->getConnection());
 		} catch (DBALException $e) {
@@ -358,7 +376,7 @@ class MailfilterCommand extends Command
 	/**
 	 * @throws MailfilterException
 	 */
-	private function saveOrders() {
+	private function saveOrders(): void {
 		$order = new Order();
 		$order->setParty($this->party->getOwner());
 		$order->setGame($this->game->getAlias());
@@ -375,7 +393,7 @@ class MailfilterCommand extends Command
 	 * @param string $fcheck
 	 * @throws MailfilterException
 	 */
-	private function sendAnswerMail(string $from, string $fcheck) {
+	private function sendAnswerMail(string $from, string $fcheck): void {
 		$subject = isset($this->header['Subject'][0]) ? 'Re: ' . $this->header['Subject'][0]
 			                                          : 'Fantasya-Befehle sind angekommen';
 		$body    = "Deine Befehle für Runde " . ($this->round + 1) . " sind angekommen.\n\n";
@@ -383,17 +401,20 @@ class MailfilterCommand extends Command
 			$body .= $fcheck . "\n\n";
 		}
 
-		$mail = new \Swift_Message();
+		$mail = new Email();
 		if (isset($this->header['Message-ID'])) {
-			$mail->getHeaders()->addTextHeader('In-Reply-To', $this->header['Message-ID'][0]);
+			$messageId = trim($this->header['Message-ID'][0], '< >');
+			$mail->getHeaders()->addIdHeader('In-Reply-To', $messageId)->addIdHeader('References', $messageId);
 		}
-		$mail->setFrom($from, 'Fantasya-Server');
-		$mail->setReplyTo('admin@fantasya-pbem.de', 'Fantasya-Administrator');
-		$mail->setTo($this->user->getEmail(), $this->user->getName());
-		$mail->setSubject($subject);
-		$mail->setBody($body);
-		if ($this->mailer->send($mail) < 1) {
-			throw new MailfilterException('Die Antwortmail konnte nicht gesendet werden.', 5);
+		$mail->from(new Address($from, $this->fromName));
+		$mail->replyTo($this->replyTo);
+		$mail->to(new Address($this->user->getEmail(), $this->user->getName()));
+		$mail->subject($subject);
+		$mail->text($body);
+		try {
+			$this->mailer->send($mail);
+		} catch (\Throwable $e) {
+			throw new MailfilterException('Die Antwortmail konnte nicht gesendet werden.', 5, $e);
 		}
 	}
 }

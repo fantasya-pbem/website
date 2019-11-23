@@ -3,8 +3,7 @@ declare (strict_types=1);
 namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
+use Doctrine\Common\Persistence\ManagerRegistry;
 use App\Entity\Game;
 
 /**
@@ -15,9 +14,9 @@ use App\Entity\Game;
 class GameRepository extends ServiceEntityRepository
 {
 	/**
-	 * @param RegistryInterface $registry
+	 * @param ManagerRegistry $registry
 	 */
-    public function __construct(RegistryInterface $registry) {
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Game::class);
     }
 	/**

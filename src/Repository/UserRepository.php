@@ -3,8 +3,11 @@ declare (strict_types = 1);
 namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\ORM\ORMException;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 use App\Entity\User;
 
@@ -14,14 +17,26 @@ use App\Entity\User;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository
+class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
 	/**
-	 * @param RegistryInterface $registry
+	 * @param ManagerRegistry $registry
 	 */
-    public function __construct(RegistryInterface $registry) {
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, User::class);
     }
+
+	/**
+	 * @param UserInterface $user
+	 * @param string $newEncodedPassword
+	 * @throws ORMException
+	 */
+    public function upgradePassword(UserInterface $user, string $newEncodedPassword): void {
+		if ($user instanceof User) {
+			$user->setPassword($newEncodedPassword);
+			$this->getEntityManager()->flush($user);
+		}
+	}
 
 	/**
 	 * @param User $user

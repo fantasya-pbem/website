@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace App\Service;
 
 use App\Data\Order;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 /**
  * A service for fetching and storing Fantasya orders.
@@ -20,13 +21,19 @@ class OrderService
 	private $order;
 
 	/**
-	 * Initialize order base directory.
+	 * @var string
 	 */
-	public function __construct() {
+	private $fcheck;
+
+	/**
+	 * @param ContainerBagInterface $config
+	 */
+	public function __construct(ContainerBagInterface $config) {
 		$this->baseDir = realpath(__DIR__ . '/../../var/orders');
 		if (!$this->baseDir) {
 			throw new \RuntimeException('Orders directory not found.');
 		}
+		$this->fcheck = $config->get('app.fcheck');
 	}
 
 	/**
@@ -56,7 +63,7 @@ class OrderService
 	 */
 	public function getFcheck() {
 		$check   = null;
-		$command = getenv('FCHECK') ?? null;
+		$command = $this->fcheck;
 		if (is_string($command) && strpos($command, '%input%') > 0 && strpos($command, '%output%') > 0) {
 			$file = $this->getPath();
 			if (is_file($file)) {
