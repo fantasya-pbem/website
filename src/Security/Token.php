@@ -24,8 +24,8 @@ class Token
 	/**
 	 * Initialize secret.
 	 */
-	public function __construct() {
-		$this->secret = getenv('APP_SECRET');
+	public function __construct(string $secret) {
+		$this->secret = $secret;
 	}
 
 	/**

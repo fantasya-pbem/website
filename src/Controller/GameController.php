@@ -7,6 +7,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Data\Newbie as NewbieData;
@@ -33,16 +36,16 @@ class GameController extends AbstractController
 	private $partyService;
 
 	/**
-	 * @var \Swift_Mailer
+	 * @var MailerInterface
 	 */
 	private $mailer;
 
 	/**
 	 * @param GameService $gameService
 	 * @param PartyService $partyService
-	 * @param \Swift_Mailer $mailer
+	 * @param MailerInterface $mailer
 	 */
-	public function __construct(GameService $gameService, PartyService $partyService, \Swift_Mailer $mailer) {
+	public function __construct(GameService $gameService, PartyService $partyService, MailerInterface $mailer) {
 		$this->gameService  = $gameService;
 		$this->partyService = $partyService;
 		$this->mailer       = $mailer;
@@ -174,14 +177,14 @@ class GameController extends AbstractController
 	 * @param Newbie $newbie
 	 */
 	private function sendAdminMail(Newbie $newbie) {
-		$mail = new \Swift_Message();
-		$mail->setFrom('admin@fantasya-pbem.de', 'Fantasya-Administrator');
-		$mail->setTo('spielleitung@fantasya-pbem.de', 'Fantasya-Spielleitung');
-		$mail->setSubject('Neue Fantasya-Partei');
-		$mail->setBody($this->renderView('emails/admin_party.html.twig', [
-			'user'   => $this->user(),
-			'newbie' => $newbie
-		]));
-		$this->mailer->send($mail);
+		$mail = new Email();
+		$mail->from(new Address($this->getParameter('app.mail.admin.address'), $this->getParameter('app.mail.admin.name')));
+		$mail->to(new Address($this->getParameter('app.mail.game.address'), $this->getParameter('app.mail.game.name')));
+		$mail->subject('Neue Fantasya-Partei');
+		$mail->text($this->renderView('emails/admin_party.html.twig', ['user' => $this->user(), 'newbie' => $newbie]));
+		try {
+			$this->mailer->send($mail);
+		} catch (\Throwable $e) {
+		}
 	}
 }

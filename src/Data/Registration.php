@@ -14,6 +14,18 @@ class Registration extends PasswordReset
 	private $antispam = '';
 
 	/**
+	 * @var string[]
+	 */
+	private $validAnswers;
+
+	/**
+	 * @param string $answers
+	 */
+	public function __construct(string $answers) {
+		$this->validAnswers = explode(',', $answers);
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getAntispam(): string {
@@ -28,9 +40,9 @@ class Registration extends PasswordReset
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	public function getValidAnswers(): array {
-		return explode(',', getenv('ANTISPAM_ANSWER'));
+		return $this->validAnswers;
 	}
 }

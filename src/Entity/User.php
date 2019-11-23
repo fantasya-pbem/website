@@ -54,7 +54,7 @@ class User implements UserInterface {
 	 *
 	 * @var int
 	 */
-	private $flags;
+	private $flags = 0;
 
 	/**
 	 * @var string The hashed password

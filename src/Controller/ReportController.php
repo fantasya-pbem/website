@@ -120,7 +120,7 @@ class ReportController extends AbstractController
 			try {
 				$turn         = new Turn($game, $this->manager->getConnection());
 				$party        = $this->partyService->getById($partyId, $game);
-				$token        = new Token();
+				$token        = new Token($this->getParameter('app.secret'));
 				$currentToken = (string)$token->setEmail($party->getEmail())->setTurn($turn->getRound());
 				if ($tokenPart === $currentToken) {
 					$report = new Report();

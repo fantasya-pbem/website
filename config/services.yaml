@@ -4,6 +4,15 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app.antispam.question: '%env(ANTISPAM_QUESTION)%'
+    app.antispam.answer: '%env(ANTISPAM_ANSWER)%'
+    app.fcheck: '%env(FCHECK)%'
+    app.mail.server.name: '%env(MAIL_SERVER_NAME)%'
+    app.mail.admin.name: '%env(MAIL_ADMIN_NAME)%'
+    app.mail.admin.address: '%env(MAIL_ADMIN_ADDRESS)%'
+    app.mail.game.name: '%env(MAIL_GAME_NAME)%'
+    app.mail.game.address: '%env(MAIL_GAME_ADDRESS)%'
+    app.secret: '%env(APP_SECRET)%'
 
 services:
     # default configuration for services in *this* file

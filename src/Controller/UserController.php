@@ -2,11 +2,13 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use App\Security\ClientCertificate;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -30,16 +32,17 @@ class UserController extends AbstractController
 	private $passwordEncoder;
 
 	/**
-	 * @var \Swift_Mailer
+	 * @var MailerInterface
 	 */
 	private $mailer;
 
 	/**
 	 * @param UserRepository $repository
 	 * @param UserPasswordEncoderInterface $encoder
-	 * @param \Swift_Mailer $mailer
+	 * @param MailerInterface $mailer
 	 */
-	public function __construct(UserRepository $repository, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer) {
+	public function __construct(UserRepository $repository, UserPasswordEncoderInterface $encoder,
+								MailerInterface $mailer) {
 		$this->repository      = $repository;
 		$this->passwordEncoder = $encoder;
 		$this->mailer          = $mailer;
@@ -82,7 +85,8 @@ class UserController extends AbstractController
 	 * @return Response
 	 */
 	public function register(Request $request): Response {
-		$form         = $this->createForm(RegistrationType::class, new Registration());
+		$answer       = $this->getParameter('app.antispam.answer');
+		$form         = $this->createForm(RegistrationType::class, new Registration($answer));
 		$existingUser = null;
 		$form->handleRequest($request);
 
@@ -173,11 +177,11 @@ class UserController extends AbstractController
 	 * @param string $password
 	 */
 	private function sendMail(User $user, string $password) {
-		$mail = new \Swift_Message();
-		$mail->setFrom('admin@fantasya-pbem.de', 'Fantasya-Administrator');
-		$mail->setTo($user->getEmail(), $user->getName());
-		$mail->setSubject('Fantasya-Registrierung');
-		$mail->setBody($this->renderView('emails/user_reset.html.twig', ['user' => $user, 'password' => $password]));
+		$mail = new Email();
+		$mail->from(new Address($this->getParameter('app.mail.admin.address'), $this->getParameter('app.mail.admin.name')));
+		$mail->to(new Address($user->getEmail(), $user->getName()));
+		$mail->subject('Fantasya-Registrierung');
+		$mail->text($this->renderView('emails/user_reset.html.twig', ['user' => $user, 'password' => $password]));
 		$this->mailer->send($mail);
 	}
 
@@ -185,11 +189,14 @@ class UserController extends AbstractController
 	 * @param User $user
 	 */
 	private function sendAdminMail(User $user) {
-		$mail = new \Swift_Message();
-		$mail->setFrom('admin@fantasya-pbem.de', 'Fantasya-Administrator');
-		$mail->setTo('spielleitung@fantasya-pbem.de', 'Fantasya-Spielleitung');
-		$mail->setSubject('Neue Fantasya-Registrierung');
-		$mail->setBody($this->renderView('emails/admin_user.html.twig', ['user' => $user]));
-		$this->mailer->send($mail);
+		$mail = new Email();
+		$mail->from(new Address($this->getParameter('app.mail.admin.address'), $this->getParameter('app.mail.admin.name')));
+		$mail->to(new Address($this->getParameter('app.mail.game.address'), $this->getParameter('app.mail.game.name')));
+		$mail->subject('Neue Fantasya-Registrierung');
+		$mail->text($this->renderView('emails/admin_user.html.twig', ['user' => $user]));
+		try {
+			$this->mailer->send($mail);
+		} catch (\Throwable $e) {
+		}
 	}
 }
