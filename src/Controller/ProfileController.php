@@ -9,15 +9,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Crypto\SMimeSigner;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use App\Entity\User;
 use App\Service\GameService;
+use App\Service\MailService;
 use App\Service\PartyService;
 use App\Repository\UserRepository;
 
@@ -66,29 +63,29 @@ class ProfileController extends AbstractController
 	private $partyService;
 
 	/**
+	 * @var MailService
+	 */
+	private $mailService;
+
+	/**
 	 * @var UserPasswordEncoderInterface
 	 */
 	private $passwordEncoder;
 
 	/**
-	 * @var MailerInterface
-	 */
-	private $mailer;
-
-	/**
 	 * @param UserRepository $userRepository
 	 * @param GameService $gameService
 	 * @param PartyService $partyService
+	 * @param MailService $mailService
 	 * @param UserPasswordEncoderInterface $encoder
-	 * @param MailerInterface $mailer
 	 */
 	public function __construct(UserRepository $userRepository, GameService $gameService, PartyService $partyService,
-								UserPasswordEncoderInterface $encoder, MailerInterface $mailer) {
+								MailService $mailService, UserPasswordEncoderInterface $encoder) {
 		$this->userRepository  = $userRepository;
 		$this->gameService     = $gameService;
 		$this->partyService    = $partyService;
+		$this->mailService     = $mailService;
 		$this->passwordEncoder = $encoder;
-		$this->mailer          = $mailer;
 	}
 
 	/**
@@ -133,6 +130,7 @@ class ProfileController extends AbstractController
 	 *
 	 * @param Request $request
 	 * @return Response
+	 * @throws \Throwable
 	 */
 	public function change(Request $request): Response {
 		if ($request->request->has('submitName') && $request->request->has('name')) {
@@ -199,6 +197,7 @@ class ProfileController extends AbstractController
 	 *
 	 * @param Request $request
 	 * @return Response
+	 * @throws \Throwable
 	 */
 	public function settings(Request $request): Response {
 		if ($request->request->has('submitSettings') && $request->request->has('flags')) {
@@ -252,6 +251,7 @@ class ProfileController extends AbstractController
 	/**
 	 * @param User $user
 	 * @param bool $sendMail
+	 * @throws \Throwable
 	 */
 	private function save(User $user, bool $sendMail = false) {
 		$entityManager = $this->getDoctrine()->getManager();
@@ -264,26 +264,12 @@ class ProfileController extends AbstractController
 
 	/**
 	 * @param User $user
-	 */
-	private function sendMail(User $user) {
-		$mail = new Email();
-		$mail->from(new Address($this->getParameter('app.mail.admin.address'), $this->getParameter('app.mail.admin.name')));
-		$mail->to(new Address($user->getEmail(), $user->getName()));
-		$mail->subject('Fantasya-Profil geändert');
-		$mail->text($this->renderView('emails/profile_change.html.twig', ['user' => $user]));
-		$this->signAndSend($mail);
-	}
-
-	/**
-	 * @param Email $mail
 	 * @throws \Throwable
 	 */
-	private function signAndSend(Email $mail): void {
-		$cert       = __DIR__ . '/../../var/certs/' . $this->getParameter('app.mail.cert');
-		$key        = __DIR__ . '/../../var/certs/' . $this->getParameter('app.mail.key');
-		$password   = $this->getParameter('app.mail.key.password');
-		$signer     = new SMimeSigner($cert, $key, $password);
-		$signedMail = $signer->sign($mail);
-		$this->mailer->send($signedMail);
+	private function sendMail(User $user) {
+		$mail = $this->mailService->fromAdmin($user);
+		$mail->subject('Fantasya-Profil geändert');
+		$mail->text($this->renderView('emails/profile_change.html.twig', ['user' => $user]));
+		$this->mailService->signAndSend($mail);
 	}
 }

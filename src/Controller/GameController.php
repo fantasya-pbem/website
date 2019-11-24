@@ -7,10 +7,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Crypto\SMimeSigner;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Data\Newbie as NewbieData;
@@ -19,6 +15,7 @@ use App\Entity\User;
 use App\Form\NewbieType;
 use App\Game\Newbie;
 use App\Service\GameService;
+use App\Service\MailService;
 use App\Service\PartyService;
 
 /**
@@ -37,19 +34,19 @@ class GameController extends AbstractController
 	private $partyService;
 
 	/**
-	 * @var MailerInterface
+	 * @var MailService
 	 */
-	private $mailer;
+	private $mailService;
 
 	/**
 	 * @param GameService $gameService
 	 * @param PartyService $partyService
-	 * @param MailerInterface $mailer
+	 * @param MailService $mailService
 	 */
-	public function __construct(GameService $gameService, PartyService $partyService, MailerInterface $mailer) {
+	public function __construct(GameService $gameService, PartyService $partyService, MailService $mailService) {
 		$this->gameService  = $gameService;
 		$this->partyService = $partyService;
-		$this->mailer       = $mailer;
+		$this->mailService  = $mailService;
 	}
 
 	/**
@@ -57,6 +54,7 @@ class GameController extends AbstractController
 	 *
 	 * @param Request $request
 	 * @return Response
+	 * @throws DBALException
 	 */
 	public function next(Request $request): Response {
 		$games = [];
@@ -97,6 +95,7 @@ class GameController extends AbstractController
 	 *
 	 * @param Request $request
 	 * @return Response
+	 * @throws DBALException
 	 */
 	public function enter(Request $request): Response {
 		if (!$this->canEnter()) {
@@ -178,27 +177,12 @@ class GameController extends AbstractController
 	 * @param Newbie $newbie
 	 */
 	private function sendAdminMail(Newbie $newbie) {
-		$mail = new Email();
-		$mail->from(new Address($this->getParameter('app.mail.admin.address'), $this->getParameter('app.mail.admin.name')));
-		$mail->to(new Address($this->getParameter('app.mail.game.address'), $this->getParameter('app.mail.game.name')));
+		$mail = $this->mailService->toGameMaster();
 		$mail->subject('Neue Fantasya-Partei');
 		$mail->text($this->renderView('emails/admin_party.html.twig', ['user' => $this->user(), 'newbie' => $newbie]));
 		try {
-			$this->signAndSend($mail);
+			$this->mailService->signAndSend($mail);
 		} catch (\Throwable $e) {
 		}
-	}
-
-	/**
-	 * @param Email $mail
-	 * @throws \Throwable
-	 */
-	private function signAndSend(Email $mail): void {
-		$cert       = __DIR__ . '/../../var/certs/' . $this->getParameter('app.mail.cert');
-		$key        = __DIR__ . '/../../var/certs/' . $this->getParameter('app.mail.key');
-		$password   = $this->getParameter('app.mail.key.password');
-		$signer     = new SMimeSigner($cert, $key, $password);
-		$signedMail = $signer->sign($mail);
-		$this->mailer->send($signedMail);
 	}
 }
