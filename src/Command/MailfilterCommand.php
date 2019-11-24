@@ -402,6 +402,7 @@ class MailfilterCommand extends Command
 		}
 
 		$mail = new Email();
+		$mail->getHeaders()->addTextHeader('User-Agent', 'Fantasya website');
 		if (isset($this->header['Message-ID'])) {
 			$messageId = trim($this->header['Message-ID'][0], '< >');
 			$mail->getHeaders()->addIdHeader('In-Reply-To', $messageId)->addIdHeader('References', $messageId);

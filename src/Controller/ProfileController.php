@@ -267,6 +267,7 @@ class ProfileController extends AbstractController
 	 */
 	private function sendMail(User $user) {
 		$mail = new Email();
+		$mail->getHeaders()->addTextHeader('User-Agent', 'Fantasya website');
 		$mail->from(new Address($this->getParameter('app.mail.admin.address'), $this->getParameter('app.mail.admin.name')));
 		$mail->to(new Address($user->getEmail(), $user->getName()));
 		$mail->subject('Fantasya-Profil geändert');

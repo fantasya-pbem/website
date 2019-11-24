@@ -179,6 +179,7 @@ class GameController extends AbstractController
 	 */
 	private function sendAdminMail(Newbie $newbie) {
 		$mail = new Email();
+		$mail->getHeaders()->addTextHeader('User-Agent', 'Fantasya website');
 		$mail->from(new Address($this->getParameter('app.mail.admin.address'), $this->getParameter('app.mail.admin.name')));
 		$mail->to(new Address($this->getParameter('app.mail.game.address'), $this->getParameter('app.mail.game.name')));
 		$mail->subject('Neue Fantasya-Partei');
