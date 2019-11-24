@@ -17,6 +17,7 @@
 /public/css/bootstrap.*
 /public/js/bootstrap.*
 /public/js/jquery.*
+!/var/certs/.gitignore
 !/var/orders/.gitignore
 !/var/zip/.gitignore
 /composer.lock

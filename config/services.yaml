@@ -10,8 +10,11 @@ parameters:
     app.mail.server.name: '%env(MAIL_SERVER_NAME)%'
     app.mail.admin.name: '%env(MAIL_ADMIN_NAME)%'
     app.mail.admin.address: '%env(MAIL_ADMIN_ADDRESS)%'
+    app.mail.cert: '%env(MAIL_CERT)%'
     app.mail.game.name: '%env(MAIL_GAME_NAME)%'
     app.mail.game.address: '%env(MAIL_GAME_ADDRESS)%'
+    app.mail.key: '%env(MAIL_KEY)%'
+    app.mail.key.password: '%env(MAIL_KEY_PASSWORD)%'
     app.secret: '%env(APP_SECRET)%'
 
 services:

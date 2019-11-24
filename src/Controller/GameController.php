@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Crypto\SMimeSigner;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -183,8 +184,21 @@ class GameController extends AbstractController
 		$mail->subject('Neue Fantasya-Partei');
 		$mail->text($this->renderView('emails/admin_party.html.twig', ['user' => $this->user(), 'newbie' => $newbie]));
 		try {
-			$this->mailer->send($mail);
+			$this->signAndSend($mail);
 		} catch (\Throwable $e) {
 		}
+	}
+
+	/**
+	 * @param Email $mail
+	 * @throws \Throwable
+	 */
+	private function signAndSend(Email $mail): void {
+		$cert       = __DIR__ . '/../../var/certs/' . $this->getParameter('app.mail.cert');
+		$key        = __DIR__ . '/../../var/certs/' . $this->getParameter('app.mail.key');
+		$password   = $this->getParameter('app.mail.key.password');
+		$signer     = new SMimeSigner($cert, $key, $password);
+		$signedMail = $signer->sign($mail);
+		$this->mailer->send($signedMail);
 	}
 }

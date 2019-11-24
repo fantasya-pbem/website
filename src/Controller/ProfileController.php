@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Crypto\SMimeSigner;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -270,6 +271,19 @@ class ProfileController extends AbstractController
 		$mail->to(new Address($user->getEmail(), $user->getName()));
 		$mail->subject('Fantasya-Profil geändert');
 		$mail->text($this->renderView('emails/profile_change.html.twig', ['user' => $user]));
-		$this->mailer->send($mail);
+		$this->signAndSend($mail);
+	}
+
+	/**
+	 * @param Email $mail
+	 * @throws \Throwable
+	 */
+	private function signAndSend(Email $mail): void {
+		$cert       = __DIR__ . '/../../var/certs/' . $this->getParameter('app.mail.cert');
+		$key        = __DIR__ . '/../../var/certs/' . $this->getParameter('app.mail.key');
+		$password   = $this->getParameter('app.mail.key.password');
+		$signer     = new SMimeSigner($cert, $key, $password);
+		$signedMail = $signer->sign($mail);
+		$this->mailer->send($signedMail);
 	}
 }
