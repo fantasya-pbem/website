@@ -8,10 +8,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use App\Data\Order;
@@ -22,6 +18,7 @@ use App\Game\Party;
 use App\Game\Turn;
 use App\Repository\GameRepository;
 use App\Repository\UserRepository;
+use App\Service\MailService;
 use App\Service\OrderService;
 use App\Service\PartyService;
 
@@ -53,6 +50,11 @@ class MailfilterCommand extends Command
 	private $orderService;
 
 	/**
+	 * @var MailService
+	 */
+	private $mailService;
+
+	/**
 	 * @var EntityManagerInterface
 	 */
 	private $manager;
@@ -61,21 +63,6 @@ class MailfilterCommand extends Command
 	 * @var UserPasswordEncoderInterface
 	 */
 	private $encoder;
-
-	/**
-	 * @var MailerInterface
-	 */
-	private $mailer;
-
-	/**
-	 * @var string
-	 */
-	private $fromName;
-
-	/**
-	 * @var Address
-	 */
-	private $replyTo;
 
 	/**
 	 * @var User
@@ -112,25 +99,21 @@ class MailfilterCommand extends Command
 	 * @param GameRepository $gameRepository
 	 * @param PartyService $partyService
 	 * @param OrderService $orderService
+	 * @param MailService $mailService
 	 * @param EntityManagerInterface $manager
 	 * @param UserPasswordEncoderInterface $encoder
-	 * @param MailerInterface $mailer
-	 * @param ContainerBagInterface $config
 	 */
 	public function __construct(UserRepository $userRepository, GameRepository $gameRepository,
-								PartyService $partyService, OrderService $orderService,
-								EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder,
-								MailerInterface $mailer, ContainerBagInterface $config) {
+								PartyService $partyService, OrderService $orderService, MailService $mailService,
+								EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder) {
 		parent::__construct();
 		$this->userRepository = $userRepository;
 		$this->gameRepository = $gameRepository;
 		$this->partyService   = $partyService;
 		$this->orderService   = $orderService;
+		$this->mailService    = $mailService;
 		$this->manager        = $manager;
 		$this->encoder        = $encoder;
-		$this->mailer         = $mailer;
-		$this->fromName       = $config->get('app.mail.server.name');
-		$this->replyTo        = new Address($config->get('app.mail.admin.address'), $config->get('app.mail.admin.name'));
 		setlocale(LC_ALL, 'de_DE');
 	}
 
@@ -401,19 +384,15 @@ class MailfilterCommand extends Command
 			$body .= $fcheck . "\n\n";
 		}
 
-		$mail = new Email();
-		$mail->getHeaders()->addTextHeader('User-Agent', 'Fantasya website');
+		$mail = $this->mailService->fromServer($from, $this->user);
 		if (isset($this->header['Message-ID'])) {
 			$messageId = trim($this->header['Message-ID'][0], '< >');
 			$mail->getHeaders()->addIdHeader('In-Reply-To', $messageId)->addIdHeader('References', $messageId);
 		}
-		$mail->from(new Address($from, $this->fromName));
-		$mail->replyTo($this->replyTo);
-		$mail->to(new Address($this->user->getEmail(), $this->user->getName()));
 		$mail->subject($subject);
 		$mail->text($body);
 		try {
-			$this->mailer->send($mail);
+			$this->mailService->send($mail);
 		} catch (\Throwable $e) {
 			throw new MailfilterException('Die Antwortmail konnte nicht gesendet werden.', 5, $e);
 		}

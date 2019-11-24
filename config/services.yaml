@@ -15,6 +15,7 @@ parameters:
     app.mail.game.address: '%env(MAIL_GAME_ADDRESS)%'
     app.mail.key: '%env(MAIL_KEY)%'
     app.mail.key.password: '%env(MAIL_KEY_PASSWORD)%'
+    app.mail.user.agent: '%env(MAIL_USER_AGENT)%'
     app.secret: '%env(APP_SECRET)%'
 
 services:

@@ -6,11 +6,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Crypto\SMimeSigner;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Mime\Message;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -20,6 +15,7 @@ use App\Entity\User;
 use App\Form\PasswordResetType;
 use App\Form\RegistrationType;
 use App\Repository\UserRepository;
+use App\Service\MailService;
 
 class UserController extends AbstractController
 {
@@ -29,25 +25,25 @@ class UserController extends AbstractController
 	private $repository;
 
 	/**
+	 * @var MailService
+	 */
+	private $mailService;
+
+	/**
 	 * @var UserPasswordEncoderInterface
 	 */
 	private $passwordEncoder;
 
 	/**
-	 * @var MailerInterface
-	 */
-	private $mailer;
-
-	/**
 	 * @param UserRepository $repository
+	 * @param MailService $mailService
 	 * @param UserPasswordEncoderInterface $encoder
-	 * @param MailerInterface $mailer
 	 */
-	public function __construct(UserRepository $repository, UserPasswordEncoderInterface $encoder,
-								MailerInterface $mailer) {
+	public function __construct(UserRepository $repository, MailService $mailService,
+								UserPasswordEncoderInterface $encoder) {
 		$this->repository      = $repository;
+		$this->mailService     = $mailService;
 		$this->passwordEncoder = $encoder;
-		$this->mailer          = $mailer;
 	}
 
 	/**
@@ -85,6 +81,7 @@ class UserController extends AbstractController
 	 *
 	 * @param Request $request
 	 * @return Response
+	 * @throws \Throwable
 	 */
 	public function register(Request $request): Response {
 		$answer       = $this->getParameter('app.antispam.answer');
@@ -128,7 +125,7 @@ class UserController extends AbstractController
 	 *
 	 * @param Request $request
 	 * @return Response
-	 * @throws \Exception
+	 * @throws \Throwable
 	 */
 	public function reset(Request $request): Response {
 		$form  = $this->createForm(PasswordResetType::class, new PasswordReset());
@@ -177,43 +174,25 @@ class UserController extends AbstractController
 	/**
 	 * @param User $user
 	 * @param string $password
+	 * @throws \Throwable
 	 */
 	private function sendMail(User $user, string $password) {
-		$mail = new Email();
-		$mail->getHeaders()->addTextHeader('User-Agent', 'Fantasya website');
-		$mail->from(new Address($this->getParameter('app.mail.admin.address'), $this->getParameter('app.mail.admin.name')));
-		$mail->to(new Address($user->getEmail(), $user->getName()));
+		$mail = $this->mailService->fromAdmin($user);
 		$mail->subject('Fantasya-Registrierung');
 		$mail->text($this->renderView('emails/user_reset.html.twig', ['user' => $user, 'password' => $password]));
-		$this->signAndSend($mail);
+		$this->mailService->signAndSend($mail);
 	}
 
 	/**
 	 * @param User $user
 	 */
 	private function sendAdminMail(User $user) {
-		$mail = new Email();
-		$mail->getHeaders()->addTextHeader('User-Agent', 'Fantasya website');
-		$mail->from(new Address($this->getParameter('app.mail.admin.address'), $this->getParameter('app.mail.admin.name')));
-		$mail->to(new Address($this->getParameter('app.mail.game.address'), $this->getParameter('app.mail.game.name')));
+		$mail = $this->mailService->toGameMaster();
 		$mail->subject('Neue Fantasya-Registrierung');
 		$mail->text($this->renderView('emails/admin_user.html.twig', ['user' => $user]));
 		try {
-			$this->signAndSend($mail);
+			$this->mailService->signAndSend($mail);
 		} catch (\Throwable $e) {
 		}
-	}
-
-	/**
-	 * @param Email $mail
-	 * @throws \Throwable
-	 */
-	private function signAndSend(Email $mail): void {
-		$cert       = __DIR__ . '/../../var/certs/' . $this->getParameter('app.mail.cert');
-		$key        = __DIR__ . '/../../var/certs/' . $this->getParameter('app.mail.key');
-		$password   = $this->getParameter('app.mail.key.password');
-		$signer     = new SMimeSigner($cert, $key, $password);
-		$signedMail = $signer->sign($mail);
-		$this->mailer->send($signedMail);
 	}
 }
