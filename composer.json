@@ -51,7 +51,10 @@
 		"preferred-install": {
 			"*": "dist"
 		},
-		"sort-packages": true
+		"sort-packages": true,
+		"platform": {
+			"php": "7.3.19"
+		}
 	},
 	"conflict": {
 		"symfony/symfony": "*"
@@ -88,7 +91,7 @@
 	"extra": {
 		"symfony": {
 			"allow-contrib": false,
-			"require": "~5.0"
+			"require": "~5.1"
 		}
 	}
 }
