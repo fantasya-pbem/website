@@ -9,8 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Myth;
+use App\Entity\User;
 use App\Form\MythType;
 use App\Repository\MythRepository;
+use App\Service\MailService;
 
 /**
  * MythController.
@@ -23,10 +25,16 @@ class MythController extends AbstractController
 	private $repository;
 
 	/**
+	 * @var MailService
+	 */
+	private $mailService;
+
+	/**
 	 * @param MythRepository $repository
 	 */
-	public function __construct(MythRepository $repository) {
+	public function __construct(MythRepository $repository, MailService $mailService) {
 		$this->repository = $repository;
+		$this->mailService = $mailService;
 	}
 
 	/**
@@ -62,9 +70,30 @@ class MythController extends AbstractController
 			$entityManager = $this->getDoctrine()->getManager();
 			$entityManager->persist($myth);
 			$entityManager->flush();
+			$this->sendAdminMail($myth);
 			return $this->redirectToRoute('myth');
 		}
 
 		return $this->render('myth/spread.html.twig', ['form' => $form->createView()]);
+	}
+
+	/**
+	 * @return User
+	 */
+	private function user(): User {
+		return $this->getUser();
+	}
+
+	/**
+	 * @param Myth $myth
+	 */
+	private function sendAdminMail(Myth $myth) {
+		$mail = $this->mailService->toGameMaster();
+		$mail->subject('Es geht ein Gerücht um');
+		$mail->text($this->renderView('emails/admin_myth.html.twig', ['user' => $this->user(), 'myth' => $myth]));
+		try {
+			$this->mailService->signAndSend($mail);
+		} catch (\Throwable $e) {
+		}
 	}
 }
