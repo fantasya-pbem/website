@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace App\Game\Engine;
 
+use App\Game\Statistics;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Game;
@@ -77,6 +78,10 @@ class Fantasya implements Engine
 			$newbies[] = $newbie->setUser($user);
 		}
 		return $newbies;
+	}
+
+	public function getStatistics(Game $game): Statistics {
+		return new FantasyaStatistics($game, $this->manager->getConnection());
 	}
 
 	public function updateUser(User $user, Game $game): void {

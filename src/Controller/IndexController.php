@@ -2,15 +2,14 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use App\Service\EngineService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Game;
-use App\Game\Statistics;
 use App\Game\Turn;
+use App\Service\EngineService;
 
 class IndexController extends AbstractController
 {
@@ -52,7 +51,7 @@ class IndexController extends AbstractController
 	 */
 	public function world(Game $game): Response {
 		$turn       = new Turn($game, $this->engineService);
-		$statistics = new Statistics($game, $this->manager->getConnection());
+		$statistics = $this->engineService->get($game)->getStatistics($game);
 		return $this->render('index/world.html.twig', [
 			'game'       => $game,
 			'turn'       => $turn,

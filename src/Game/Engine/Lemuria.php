@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace App\Game\Engine;
 
+use JetBrains\PhpStorm\Pure;
 use Lemuria\Id;
 use Lemuria\Lemuria as LemuriaGame;
 use Lemuria\Model\Catalog;
@@ -14,6 +15,7 @@ use App\Entity\User;
 use App\Game\Engine;
 use App\Game\Newbie;
 use App\Game\Party;
+use App\Game\Statistics;
 use App\Repository\AssignmentRepository;
 
 class Lemuria implements Engine
@@ -72,6 +74,10 @@ class Lemuria implements Engine
 	 */
 	public function getNewbies(User $user, Game $game): array {
 		return [];
+	}
+
+	#[Pure] public function getStatistics(Game $game): Statistics {
+		return new LemuriaStatistics($game);
 	}
 
 	public function updateUser(User $user, Game $game): void {

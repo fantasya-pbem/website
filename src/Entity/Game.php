@@ -138,7 +138,7 @@ class Game
 		if ($this->start_day > 0) {
 			$start = Turn::createStart($this)->getTimestamp();
 			setlocale(LC_TIME, 'de_DE.utf8');
-			return strftime('%A, %H Uhr', $start);
+			return strftime('%A, %k Uhr', $start);
 		}
 		return 'täglich, ' . $this->start_hour . ' Uhr';
 	}

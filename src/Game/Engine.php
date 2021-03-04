@@ -41,6 +41,11 @@ interface Engine
 	public function getNewbies(User $user, Game $game): array;
 
 	/**
+	 * Get game statistict.
+	 */
+	public function getStatistics(Game $game): Statistics;
+
+	/**
 	 * Update eMail address of a user's parties and newbies.
 	 */
 	public function updateUser(User $user, Game $game): void;
