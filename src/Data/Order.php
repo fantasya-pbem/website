@@ -6,10 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Order
 {
-	/**
-	 * @Assert\GreaterThan(0)
-	 */
-	private int $party = 0;
+	private string $party = '';
 
 	/**
 	 * @Assert\GreaterThan(0)
@@ -20,7 +17,7 @@ class Order
 
 	private string $game = '';
 
-	public function getParty(): int {
+	public function getParty(): string {
 		return $this->party;
 	}
 
@@ -36,7 +33,7 @@ class Order
 		return $this->game;
 	}
 
-	public function setParty(int $party) {
+	public function setParty(string $party) {
 		$this->party = $party;
 	}
 

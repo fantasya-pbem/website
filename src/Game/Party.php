@@ -39,8 +39,8 @@ class Party
 		return $this->properties['beschreibung'];
 	}
 
-	public function getOwner(): int {
-		return (int)$this->properties['owner_id'];
+	public function getOwner(): string {
+		return $this->properties['owner_id'];
 	}
 
 	public function getUser(): int {

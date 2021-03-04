@@ -89,7 +89,7 @@ class OrderController extends AbstractController
 	 * @Route("/order/party/{p}/turn/{t}", name="order_success")
 	 * @throws \Exception
 	 */
-	public function party(int $p, int $t): Response {
+	public function party(string $p, int $t): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		$party   = null;
 		foreach ($parties as $userParty) {

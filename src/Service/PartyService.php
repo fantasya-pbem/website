@@ -3,9 +3,13 @@ declare (strict_types = 1);
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use JetBrains\PhpStorm\Pure;
 
 use App\Entity\Game;
 use App\Entity\User;
+use App\Exception\NoEngineException;
+use App\Game\Engine;
+use App\Game\Engine\Fantasya;
 use App\Game\Newbie;
 use App\Game\Party;
 
@@ -14,20 +18,22 @@ use App\Game\Party;
  */
 class PartyService
 {
-	public function __construct(private GameService $service, private EntityManagerInterface $manager) {
+	/**
+	 * @var array(string=>Engine)
+	 */
+	private array $engines;
+
+	#[Pure] public function __construct(private GameService $service, EntityManagerInterface $manager) {
+		$this->engines = [Engine::FANTASYA => new Fantasya($manager), Engine::LEMURIA  => null];//TODO
 	}
 
+	/**
+	 * Find a party by its Base-36 ID.
+	 *
+	 * @throws NoEngineException
+	 */
 	public function getById(string $id, Game $game): ?Party {
-		$connection = $this->manager->getConnection();
-		$table      = $game->getDb() . '.partei';
-		$sql        = "SELECT * FROM " . $table . " WHERE id = " . $this->manager->getConnection()->quote($id);
-		$stmt       = $connection->prepare($sql);
-		$stmt->execute();
-		$result = $stmt->fetchAllAssociative();
-		if (is_array($result) && isset($result[0]) && is_array($result[0])) {
-			return new Party($result[0]);
-		}
-		return null;
+		return $this->getEngine($game)->getById($id, $game);
 	}
 
 	/**
@@ -37,7 +43,7 @@ class PartyService
 		$games   = $this->service->getAll();
 		$parties = [];
 		foreach ($games as $game) {
-			$parties[$game->getId()] = $this->parties($user, $game);
+			$parties[$game->getId()] = $this->getEngine($game)->getParties($user, $game);
 		}
 		return $parties;
 	}
@@ -48,7 +54,8 @@ class PartyService
 	 * @return Party[]
 	 */
 	public function getCurrent(User $user): array {
-		return $this->parties($user, $this->service->getCurrent());
+		$game = $this->service->getCurrent();
+		return $this->getEngine($game)->getParties($user, $game);
 	}
 
 	/**
@@ -60,7 +67,7 @@ class PartyService
 		$games   = $this->service->getAll();
 		$newbies = [];
 		foreach ($games as $game) {
-			$newbies[$game->getId()] = $this->newbies($user, $game);
+			$newbies[$game->getId()] = $this->getEngine($game)->getNewbies($user, $game);
 		}
 		return $newbies;
 	}
@@ -92,95 +99,27 @@ class PartyService
 	 * Update eMail address of user's parties and newbies.
 	 */
 	public function update(User $user) {
-		$games      = $this->service->getAll();
-		$connection = $this->manager->getConnection();
-		$id         = $user->getId();
-		$email      = $connection->quote($user->getEmail());
-
+		$games = $this->service->getAll();
 		foreach ($games as $game) {
-			$table = $game->getDb() . '.partei';
-			$sql   = "UPDATE " . $table . " SET email = " . $email . " WHERE user_id = " . $id;
-			if (!$connection->prepare($sql)->execute()) {
-				throw new \RuntimeException('Could not update parties.');
-			}
-
-			$table = $game->getDb() . '.neuespieler';
-			$sql   = "UPDATE " . $table . " SET email = " . $email . " WHERE user_id = " . $id;
-			if (!$connection->prepare($sql)->execute()) {
-				throw new \RuntimeException('Could not update newbies.');
-			}
+			$this->getEngine($game)->updateUser($user, $game);
 		}
 	}
 
 	public function create(Newbie $newbie) {
-		$connection = $this->manager->getConnection();
-		$table      = $this->service->getCurrent()->getDb() . '.neuespieler';
-		$columns    = implode(',', array_keys($newbie->getProperties()));
-		$values     = $this->createValues($newbie);
-		$sql        = "INSERT INTO " . $table . " (" . $columns . ") VALUES (" . $values . ")";
-		if (!$connection->prepare($sql)->execute()) {
-			throw new \RuntimeException('Could not save Newbie.');
-		}
+		$game = $this->service->getCurrent();
+		$this->getEngine($game)->create($newbie, $game);
 	}
 
 	public function delete(Newbie $newbie) {
-		$connection = $this->manager->getConnection();
-		$table      = $this->service->getCurrent()->getDb() . '.neuespieler';
-		$values     = $this->createConstraints($newbie);
-		$sql        = "DELETE FROM " . $table . " WHERE " . $values;
-		if (!$connection->prepare($sql)->execute()) {
-			throw new \RuntimeException('Could not delete Newbie.');
-		}
+		$game = $this->service->getCurrent();
+		$this->getEngine($game)->delete($newbie, $game);
 	}
 
-	/**
-	 * @return Party[]
-	 */
-	private function parties(User $user, Game $game): array {
-		$connection = $this->manager->getConnection();
-		$table      = $game->getDb() . '.partei';
-		$sql        = "SELECT * FROM " . $table . " WHERE user_id = " . $user->getId();
-		$stmt       = $connection->prepare($sql);
-		$stmt->execute();
-		$parties = [];
-		foreach ($stmt->fetchAllAssociative() as $properties) {
-			$parties[] = new Party($properties);
+	private function getEngine(Game $game): Engine {
+		$engine = $this->engines[$game->getEngine()] ?? null;
+		if ($engine instanceof Engine) {
+			return $engine;
 		}
-		return $parties;
-	}
-
-	/**
-	 * @return Newbie[]
-	 */
-	private function newbies(User $user, Game $game): array {
-		$connection = $this->manager->getConnection();
-		$table      = $game->getDb() . '.neuespieler';
-		$sql        = "SELECT * FROM " . $table . " WHERE user_id = " . $user->getId();
-		$stmt       = $connection->prepare($sql);
-		$stmt->execute();
-		$newbies = [];
-		foreach ($stmt->fetchAllAssociative() as $properties) {
-			$newbie    = new Newbie($properties);
-			$newbies[] = $newbie->setUser($user);
-		}
-		return $newbies;
-	}
-
-	private function createValues(Newbie $newbie): string {
-		$connection = $this->manager->getConnection();
-		$properties = [];
-		foreach ($newbie->getProperties() as $value) {
-			$properties[] = is_int($value) ? $value : $connection->quote($value);
-		}
-		return implode(',', $properties);
-	}
-
-	private function createConstraints(Newbie $newbie): string {
-		$connection  = $this->manager->getConnection();
-		$constraints = [];
-		foreach ($newbie->getProperties() as $column => $value) {
-			$constraints[] = $column . ' = ' . (is_int($value) ? $value : $connection->quote($value));
-		}
-		return implode(' AND ', $constraints);
+		throw new NoEngineException($game->getEngine());
 	}
 }
