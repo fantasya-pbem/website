@@ -6,9 +6,6 @@ use JetBrains\PhpStorm\Pure;
 
 use App\Data\Report;
 
-/**
- * A service for fetching Fantasya report files.
- */
 class ReportService
 {
 	private string $baseDir;

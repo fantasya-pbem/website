@@ -7,9 +7,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 use App\Data\Order;
 
-/**
- * A service for fetching and storing Fantasya orders.
- */
 class OrderService
 {
 	private string $baseDir;

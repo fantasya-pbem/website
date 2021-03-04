@@ -9,7 +9,7 @@ class Order
 	private string $party = '';
 
 	/**
-	 * @Assert\GreaterThan(0)
+	 * @Assert\GreaterThanOrEqual(0)
 	 */
 	private int $turn = 0;
 

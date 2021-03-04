@@ -6,9 +6,6 @@ use App\Entity\Game;
 use App\Repository\GameRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-/**
- * A service for templates to fetch myths.
- */
 class GameService
 {
 	/**

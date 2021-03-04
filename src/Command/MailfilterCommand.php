@@ -3,7 +3,7 @@
 declare (strict_types = 1);
 namespace App\Command;
 
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\EngineService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -46,7 +46,7 @@ class MailfilterCommand extends Command
 
 	public function __construct(private UserRepository $userRepository, private GameRepository $gameRepository,
 								private PartyService $partyService, private OrderService $orderService,
-								private MailService $mailService, private EntityManagerInterface $manager,
+								private MailService $mailService, private EngineService $engineService,
 								private UserPasswordEncoderInterface $encoder) {
 		parent::__construct();
 		setlocale(LC_ALL, 'de_DE');
@@ -258,7 +258,7 @@ class MailfilterCommand extends Command
 	 */
 	private function getRound(): void {
 		try {
-			$current = new Turn($this->game, $this->manager->getConnection());
+			$current = new Turn($this->game, $this->engineService);
 		} catch (\Exception $e) {
 			throw new MailfilterException('Die aktuelle Runde konnte nicht ermittelt werden.', 1, $e);
 		}

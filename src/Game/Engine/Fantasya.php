@@ -28,6 +28,24 @@ class Fantasya implements Engine
 		return null;
 	}
 
+	public function getRound(Game $game): int {
+		$table = $game->getDb() . '.settings';
+		$sql   = "SELECT value FROM " . $table . " WHERE name = 'game.runde'";
+		$stmt  = $this->manager->getConnection()->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchFirstColumn();
+		return (int)($result[0] ?? 0);
+	}
+
+	public function getLastZat(Game $game): \DateTime {
+		$table = $game->getDb() . '.meldungen';
+		$sql   = "SELECT MAX(zeit) FROM " . $table;
+		$stmt  = $this->manager->getConnection()->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchFirstColumn();
+		return new \DateTime($result[0] ?? 'now');
+	}
+
 	/**
 	 * @return Party[]
 	 */
@@ -61,7 +79,7 @@ class Fantasya implements Engine
 		return $newbies;
 	}
 
-	public function updateUser(User $user, Game $game) {
+	public function updateUser(User $user, Game $game): void {
 		$id         = $user->getId();
 		$connection = $this->manager->getConnection();
 		$email      = $connection->quote($user->getEmail());

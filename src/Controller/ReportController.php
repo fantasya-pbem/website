@@ -2,7 +2,7 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\EngineService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -25,7 +25,7 @@ use App\Service\ReportService;
 class ReportController extends AbstractController
 {
 	public function __construct(private GameService $gameService, private PartyService $partyService,
-								private ReportService $reportService, private EntityManagerInterface $manager) {
+								private ReportService $reportService, private EngineService $engineService) {
 	}
 
 	/**
@@ -78,7 +78,7 @@ class ReportController extends AbstractController
 		$game = $this->getGame($gameId);
 		if ($game) {
 			try {
-				$turn         = new Turn($game, $this->manager->getConnection());
+				$turn         = new Turn($game, $this->engineService);
 				$party        = $this->partyService->getById($partyId, $game);
 				$token        = new Token($this->getParameter('app.secret'));
 				$currentToken = (string)$token->setEmail($party->getEmail())->setTurn($turn->getRound());

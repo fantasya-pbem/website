@@ -4,9 +4,6 @@ namespace App\Service;
 
 use App\Repository\MythRepository;
 
-/**
- * A service for templates to fetch myths.
- */
 class MythService
 {
 	public function __construct(private MythRepository $repository) {

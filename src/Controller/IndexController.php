@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
+use App\Service\EngineService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +14,7 @@ use App\Game\Turn;
 
 class IndexController extends AbstractController
 {
-	public function __construct(private EntityManagerInterface $manager) {
+	public function __construct(private EngineService $engineService, private EntityManagerInterface $manager) {
 		\Locale::setDefault('de_DE.utf8');
 	}
 
@@ -50,7 +51,7 @@ class IndexController extends AbstractController
 	 * @throws \Exception
 	 */
 	public function world(Game $game): Response {
-		$turn       = new Turn($game, $this->manager->getConnection());
+		$turn       = new Turn($game, $this->engineService);
 		$statistics = new Statistics($game, $this->manager->getConnection());
 		return $this->render('index/world.html.twig', [
 			'game'       => $game,

@@ -9,9 +9,6 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Crypto\SMimeSigner;
 use Symfony\Component\Mime\Email;
 
-/**
- * A service for sending Fantasya mails.
- */
 class MailService
 {
 	private string $userAgent;

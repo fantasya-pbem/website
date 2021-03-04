@@ -12,6 +12,16 @@ interface Engine
 	public const LEMURIA = 'lemuria';
 
 	/**
+	 * Get the last game round.
+	 */
+	public function getRound(Game $game): int;
+
+	/**
+	 * Get the last game round time.
+	 */
+	public function getLastZat(Game $game): \DateTime;
+
+	/**
 	 * Find a party in a game by its Base-36 ID.
 	 */
 	public function getById(string $id, Game $game): ?Party;
@@ -33,7 +43,7 @@ interface Engine
 	/**
 	 * Update eMail address of a user's parties and newbies.
 	 */
-	public function updateUser(User $user, Game $game);
+	public function updateUser(User $user, Game $game): void;
 
 	/**
 	 * Create a new party.

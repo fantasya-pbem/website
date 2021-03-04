@@ -2,7 +2,7 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use Doctrine\ORM\EntityManagerInterface;
+use JetBrains\PhpStorm\Pure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,6 +17,7 @@ use App\Data\Order;
 use App\Entity\User;
 use App\Game\Party;
 use App\Game\Turn;
+use App\Service\EngineService;
 use App\Service\GameService;
 use App\Service\OrderService;
 use App\Service\PartyService;
@@ -27,7 +28,7 @@ use App\Service\PartyService;
 class OrderController extends AbstractController
 {
 	public function __construct(private GameService $gameService, private PartyService $partyService,
-								private OrderService $orderService, private EntityManagerInterface $manager) {
+								private OrderService $orderService, private EngineService $engineService) {
 	}
 
 	/**
@@ -123,7 +124,7 @@ class OrderController extends AbstractController
 	 * @throws \Exception
 	 */
 	private function turn(Request $request): int {
-		$turn  = new Turn($this->gameService->getCurrent(), $this->manager->getConnection());
+		$turn  = new Turn($this->gameService->getCurrent(), $this->engineService);
 		$round = $turn->getRound();
 		if ($request->request->has('form')) {
 			$form = $request->request->get('form');
@@ -199,9 +200,9 @@ class OrderController extends AbstractController
 	/**
 	 * @return string[]
 	 */
-	private function getTurns(int $turn, int $min = -5, int $max = 5): array {
+	#[Pure] private function getTurns(int $turn, int $min = -5, int $max = 5): array {
 		$turns = [];
-		$next  = $turn + $min;
+		$next  = max(0, $turn + $min);
 		$last  = $turn + $max;
 		while ($next <= $last ) {
 			$round = (string)$next;

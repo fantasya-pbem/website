@@ -2,7 +2,7 @@
 declare (strict_types = 1);
 namespace App\Game;
 
-use Doctrine\DBAL\Connection;
+use App\Service\EngineService;
 
 use App\Entity\Game;
 
@@ -23,8 +23,8 @@ class Turn
 	/**
 	 * @throws \Exception
 	 */
-	public function __construct(private Game $game, Connection $connection) {
-		$this->fetchData($connection);
+	public function __construct(private Game $game, private EngineService $engineService) {
+		$this->fetchData();
 	}
 
 	public function getRound(): int {
@@ -59,20 +59,10 @@ class Turn
 	/**
 	 * @throws \Exception
 	 */
-	private function fetchData(Connection $connection) {
-		$table = $this->game->getDb() . '.settings';
-		$sql   = "SELECT value FROM " . $table . " WHERE name = 'game.runde'";
-		$stmt  = $connection->prepare($sql);
-		$stmt->execute();
-		$result = $stmt->fetchFirstColumn();
-		$this->round = (int)($result[0] ?? 0);
-
-		$table = $this->game->getDb() . '.meldungen';
-		$sql   = "SELECT MAX(zeit) FROM " . $table;
-		$stmt  = $connection->prepare($sql);
-		$stmt->execute();
-		$result = $stmt->fetchFirstColumn();
-		$this->lastZat = new \DateTime($result[0] ?? 'now');
+	private function fetchData() {
+		$engine        = $this->engineService->get($this->game);
+		$this->round   = $engine->getRound($this->game);
+		$this->lastZat = $engine->getLastZat($this->game);
 	}
 
 	private function getDateString(\DateTime $date): string {

@@ -2,29 +2,17 @@
 declare (strict_types = 1);
 namespace App\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\Pure;
 
 use App\Entity\Game;
 use App\Entity\User;
 use App\Exception\NoEngineException;
-use App\Game\Engine;
-use App\Game\Engine\Fantasya;
 use App\Game\Newbie;
 use App\Game\Party;
 
-/**
- * A service for fetching parties.
- */
 class PartyService
 {
-	/**
-	 * @var array(string=>Engine)
-	 */
-	private array $engines;
-
-	#[Pure] public function __construct(private GameService $service, EntityManagerInterface $manager) {
-		$this->engines = [Engine::FANTASYA => new Fantasya($manager), Engine::LEMURIA  => null];//TODO
+	#[Pure] public function __construct(private GameService $service, private EngineService $engineService) {
 	}
 
 	/**
@@ -33,7 +21,7 @@ class PartyService
 	 * @throws NoEngineException
 	 */
 	public function getById(string $id, Game $game): ?Party {
-		return $this->getEngine($game)->getById($id, $game);
+		return $this->engineService->get($game)->getById($id, $game);
 	}
 
 	/**
@@ -43,7 +31,7 @@ class PartyService
 		$games   = $this->service->getAll();
 		$parties = [];
 		foreach ($games as $game) {
-			$parties[$game->getId()] = $this->getEngine($game)->getParties($user, $game);
+			$parties[$game->getId()] = $this->engineService->get($game)->getParties($user, $game);
 		}
 		return $parties;
 	}
@@ -55,7 +43,7 @@ class PartyService
 	 */
 	public function getCurrent(User $user): array {
 		$game = $this->service->getCurrent();
-		return $this->getEngine($game)->getParties($user, $game);
+		return $this->engineService->get($game)->getParties($user, $game);
 	}
 
 	/**
@@ -67,7 +55,7 @@ class PartyService
 		$games   = $this->service->getAll();
 		$newbies = [];
 		foreach ($games as $game) {
-			$newbies[$game->getId()] = $this->getEngine($game)->getNewbies($user, $game);
+			$newbies[$game->getId()] = $this->engineService->get($game)->getNewbies($user, $game);
 		}
 		return $newbies;
 	}
@@ -101,25 +89,17 @@ class PartyService
 	public function update(User $user) {
 		$games = $this->service->getAll();
 		foreach ($games as $game) {
-			$this->getEngine($game)->updateUser($user, $game);
+			$this->engineService->get($game)->updateUser($user, $game);
 		}
 	}
 
 	public function create(Newbie $newbie) {
 		$game = $this->service->getCurrent();
-		$this->getEngine($game)->create($newbie, $game);
+		$this->engineService->get($game)->create($newbie, $game);
 	}
 
 	public function delete(Newbie $newbie) {
 		$game = $this->service->getCurrent();
-		$this->getEngine($game)->delete($newbie, $game);
-	}
-
-	private function getEngine(Game $game): Engine {
-		$engine = $this->engines[$game->getEngine()] ?? null;
-		if ($engine instanceof Engine) {
-			return $engine;
-		}
-		throw new NoEngineException($game->getEngine());
+		$this->engineService->get($game)->delete($newbie, $game);
 	}
 }
