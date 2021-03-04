@@ -10,14 +10,14 @@ use App\Entity\Game;
 class Statistics
 {
 	/**
-	 * @var array[]
+	 * @var array[]|null
 	 */
-	private array $parties;
+	private ?array $parties = null;
 
 	/**
-	 * @var array[]
+	 * @var array[]|null
 	 */
-	private array $newParties;
+	private ?array $newParties = null;
 
 	public function __construct(private Game $game, private Connection $connection) {
 	}
@@ -87,7 +87,7 @@ class Statistics
 		$sql   = "SELECT COUNT(*) FROM " . $table . " GROUP BY welt ORDER BY welt DESC";
 		$stmt  = $this->connection->prepare($sql);
 		$stmt->execute();
-		$result = $stmt->fetchAllAssociative();
+		$result = $stmt->fetchFirstColumn();
 		return ['world' => $result[0], 'underworld' => $result[1]];
 	}
 
