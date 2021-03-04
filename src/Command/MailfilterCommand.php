@@ -1,8 +1,8 @@
 <?php
+/** @noinspection PhpMissingFieldTypeInspection */
 declare (strict_types = 1);
 namespace App\Command;
 
-use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -29,100 +29,29 @@ class MailfilterCommand extends Command
 	 */
 	protected static $defaultName = 'mail:filter';
 
-	/**
-	 * @var UserRepository
-	 */
-	private $userRepository;
+	private User $user;
 
-	/**
-	 * @var GameRepository
-	 */
-	private $gameRepository;
+	private Game $game;
 
-	/**
-	 * @var PartyService
-	 */
-	private $partyService;
+	private ?Party $party;
 
-	/**
-	 * @var OrderService
-	 */
-	private $orderService;
-
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $manager;
-
-	/**
-	 * @var UserPasswordEncoderInterface
-	 */
-	private $encoder;
-
-	/**
-	 * @var User
-	 */
-	private $user;
-
-	/**
-	 * @var Game
-	 */
-	private $game;
-
-	/**
-	 * @var Party
-	 */
-	private $party;
-
-	/**
-	 * @var int
-	 */
-	private $round;
+	private int $round;
 
 	/**
 	 * @var string[]
 	 */
-	private $header = [];
+	private array $header = [];
 
-	/**
-	 * @var string
-	 */
-	private $content;
+	private string $content;
 
-	/**
-	 * @param UserRepository $userRepository
-	 * @param GameRepository $gameRepository
-	 * @param PartyService $partyService
-	 * @param OrderService $orderService
-	 * @param MailService $mailService
-	 * @param EntityManagerInterface $manager
-	 * @param UserPasswordEncoderInterface $encoder
-	 */
-	public function __construct(UserRepository $userRepository, GameRepository $gameRepository,
-								PartyService $partyService, OrderService $orderService, MailService $mailService,
-								EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder) {
+	public function __construct(private UserRepository $userRepository, private GameRepository $gameRepository,
+								private PartyService $partyService, private OrderService $orderService,
+								private MailService $mailService, private EntityManagerInterface $manager,
+								private UserPasswordEncoderInterface $encoder) {
 		parent::__construct();
-		$this->userRepository = $userRepository;
-		$this->gameRepository = $gameRepository;
-		$this->partyService   = $partyService;
-		$this->orderService   = $orderService;
-		$this->mailService    = $mailService;
-		$this->manager        = $manager;
-		$this->encoder        = $encoder;
 		setlocale(LC_ALL, 'de_DE');
 	}
 
-	/**
-	 * @param InputInterface $input
-	 * @param OutputInterface $output
-	 * @return int
-	 * @throws \Exception
-	 */
 	public function run(InputInterface $input, OutputInterface $output): int {
 		try {
 			return parent::run($input, $output);
@@ -139,9 +68,6 @@ class MailfilterCommand extends Command
 		}
 	}
 
-	/**
-	 * Set description and help.
-	 */
 	protected function configure(): void {
 		$this->setDescription('Receive Fantasya orders via eMail.');
 		$this->setHelp('This command is a Postfix mail filter that receives and saves Fantasya orders.');
@@ -152,9 +78,6 @@ class MailfilterCommand extends Command
 	}
 
 	/**
-	 * @param InputInterface $input
-	 * @param OutputInterface $output
-	 * @return int
 	 * @throws MailfilterException
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
@@ -174,7 +97,6 @@ class MailfilterCommand extends Command
 	}
 
 	/**
-	 * @param int $size
 	 * @throws MailfilterException
 	 */
 	private function fetchMailContent(int $size): void {
@@ -191,6 +113,7 @@ class MailfilterCommand extends Command
 		//file_put_contents(__DIR__ . '/../../var/log/email.log', date('c') . PHP_EOL . $email . PHP_EOL . PHP_EOL, FILE_APPEND);
 
 		$length = strlen($email);
+		/** @noinspection PhpStatementHasEmptyBodyInspection */
 		if ($length !== $size) {
 			// Postfix $size is not applicable to $length.
 		}
@@ -259,7 +182,6 @@ class MailfilterCommand extends Command
 	}
 
 	/**
-	 * @param string $recipient
 	 * @throws MailfilterException
 	 */
 	private function fetchGame(string $recipient): void {
@@ -269,17 +191,13 @@ class MailfilterCommand extends Command
 		}
 		$mailbox = substr($recipient, 0, $atPos);
 
-		$alias = null;
-		switch ($mailbox) {
-			case 'befehle' :
-				$alias = 'spiel';
-				break;
-			case 'beta' :
-			case 'test' :
-				$alias = 'beta';
-				break;
-			default :
-				throw new MailfilterException('Das Postfach ' . $mailbox . ' ist unbekannt.', 3);
+		try {
+			$alias = match ($mailbox) {
+				'befehle'      => 'spiel',
+				'beta', 'test' => 'beta'
+			};
+		} catch (\UnhandledMatchError $e) {
+			throw new MailfilterException('Das Postfach ' . $mailbox . ' ist unbekannt.', 3, $e);
 		}
 
 		$this->game = $this->gameRepository->findOneBy(['alias' => $alias]);
@@ -289,8 +207,8 @@ class MailfilterCommand extends Command
 	}
 
 	/**
-	 * @param string $sender (currently unused)
 	 * @throws MailfilterException
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	private function fetchUserParty(string $sender): void {
 		// Befehle extrahieren:
@@ -305,13 +223,14 @@ class MailfilterCommand extends Command
 		if (!preg_match('/^([^ ]+)[ ]+([a-zA-Z0-9]+)[ ]+"([^"]*)"$/', $firstLine, $parts) || count($parts) < 4) {
 			throw new MailfilterException('Die erste Befehlszeile ist fehlerhaft.', 2);
 		}
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$clientGame = $parts[1]; //currently unused
 		$party      = $parts[2];
 		$password   = $parts[3];
 
 		try {
 			$this->party = $this->partyService->getById($party, $this->game);
-		} catch (DBALException $e) {
+		} catch (\Exception $e) {
 			$message = 'Fehler beim Ermitteln der Partei ' . $party . ' im Spiel ' . $this->game->getName() . '.';
 			throw new MailfilterException($message, 1, $e);
 		}
@@ -340,7 +259,7 @@ class MailfilterCommand extends Command
 	private function getRound(): void {
 		try {
 			$current = new Turn($this->game, $this->manager->getConnection());
-		} catch (DBALException $e) {
+		} catch (\Exception $e) {
 			throw new MailfilterException('Die aktuelle Runde konnte nicht ermittelt werden.', 1, $e);
 		}
 		$this->round = $current->getRound();
@@ -372,8 +291,6 @@ class MailfilterCommand extends Command
 	}
 
 	/**
-	 * @param string $from
-	 * @param string $fcheck
 	 * @throws MailfilterException
 	 */
 	private function sendAnswerMail(string $from, string $fcheck): void {

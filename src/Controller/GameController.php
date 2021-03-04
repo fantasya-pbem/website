@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use Doctrine\DBAL\DBALException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,38 +22,12 @@ use App\Service\PartyService;
  */
 class GameController extends AbstractController
 {
-	/**
-	 * @var GameService
-	 */
-	private $gameService;
-
-	/**
-	 * @var PartyService
-	 */
-	private $partyService;
-
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-
-	/**
-	 * @param GameService $gameService
-	 * @param PartyService $partyService
-	 * @param MailService $mailService
-	 */
-	public function __construct(GameService $gameService, PartyService $partyService, MailService $mailService) {
-		$this->gameService  = $gameService;
-		$this->partyService = $partyService;
-		$this->mailService  = $mailService;
+	public function __construct(private GameService $gameService, private PartyService $partyService,
+		                        private MailService $mailService) {
 	}
 
 	/**
 	 * @Route("/game/next", name="game_next")
-	 *
-	 * @param Request $request
-	 * @return Response
-	 * @throws DBALException
 	 */
 	public function next(Request $request): Response {
 		$games = [];
@@ -92,19 +65,15 @@ class GameController extends AbstractController
 
 	/**
 	 * @Route("/game/enter", name="game_enter")
-	 *
-	 * @param Request $request
-	 * @return Response
-	 * @throws DBALException
 	 */
 	public function enter(Request $request): Response {
 		if (!$this->canEnter()) {
 			return $this->redirectToRoute('profile');
 		}
 
-		$newbieData= new NewbieData();
-		$resources = false;
-		$form      = $this->createForm(NewbieType::class, $newbieData);
+		$newbieData = new NewbieData();
+		$resources  = false;
+		$form       = $this->createForm(NewbieType::class, $newbieData);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -127,10 +96,6 @@ class GameController extends AbstractController
 
 	/**
 	 * @Route("/game/revoke/{name}", name="game_revoke")
-	 *
-	 * @param string $name
-	 * @return Response
-	 * @throws DBALException
 	 */
 	public function revoke(string $name): Response {
 		$user    = $this->user();
@@ -156,13 +121,12 @@ class GameController extends AbstractController
 	 * @return User
 	 */
 	private function user(): User {
-		return $this->getUser();
+		/** @var User $user */
+		$user = $this->getUser();
+		return $user;
+
 	}
 
-	/**
-	 * @return bool
-	 * @throws DBALException
-	 */
 	private function canEnter(): bool {
 		if ($this->isGranted(User::ROLE_MULTI_PLAYER)) {
 			return true;
@@ -173,16 +137,13 @@ class GameController extends AbstractController
 		return false;
 	}
 
-	/**
-	 * @param Newbie $newbie
-	 */
 	private function sendAdminMail(Newbie $newbie) {
 		$mail = $this->mailService->toGameMaster();
 		$mail->subject('Neue Fantasya-Partei');
 		$mail->text($this->renderView('emails/admin_party.html.twig', ['user' => $this->user(), 'newbie' => $newbie]));
 		try {
 			$this->mailService->signAndSend($mail);
-		} catch (\Throwable $e) {
+		} catch (\Throwable) {
 		}
 	}
 }

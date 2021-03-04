@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace App\Service;
 
-use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Game;
@@ -15,38 +14,16 @@ use App\Game\Party;
  */
 class PartyService
 {
-	/**
-	 * @var GameService
-	 */
-	private $service;
-
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $manager;
-
-	/**
-	 * @param GameService $service
-	 * @param EntityManagerInterface $manager
-	 */
-	public function __construct(GameService $service, EntityManagerInterface $manager) {
-		$this->service = $service;
-		$this->manager = $manager;
+	public function __construct(private GameService $service, private EntityManagerInterface $manager) {
 	}
 
-	/**
-	 * @param string $id
-	 * @param Game $game
-	 * @return Party|null
-	 * @throws DBALException
-	 */
 	public function getById(string $id, Game $game): ?Party {
 		$connection = $this->manager->getConnection();
 		$table      = $game->getDb() . '.partei';
 		$sql        = "SELECT * FROM " . $table . " WHERE id = " . $this->manager->getConnection()->quote($id);
 		$stmt       = $connection->prepare($sql);
 		$stmt->execute();
-		$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		$result = $stmt->fetchAllAssociative();
 		if (is_array($result) && isset($result[0]) && is_array($result[0])) {
 			return new Party($result[0]);
 		}
@@ -55,10 +32,6 @@ class PartyService
 
 	/**
 	 * Get all parties of a User.
-	 *
-	 * @param User $user
-	 * @return array
-	 * @throws DBALException
 	 */
 	public function getFor(User $user): array {
 		$games   = $this->service->getAll();
@@ -72,9 +45,7 @@ class PartyService
 	/**
 	 * Get parties in current Game of a User.
 	 *
-	 * @param User $user
 	 * @return Party[]
-	 * @throws DBALException
 	 */
 	public function getCurrent(User $user): array {
 		return $this->parties($user, $this->service->getCurrent());
@@ -83,9 +54,7 @@ class PartyService
 	/**
 	 * Get all newbies of a User.
 	 *
-	 * @param User $user
 	 * @return Newbie[]
-	 * @throws DBALException
 	 */
 	public function getNewbies(User $user): array {
 		$games   = $this->service->getAll();
@@ -98,11 +67,6 @@ class PartyService
 
 	/**
 	 * Check if a User has a Party in a Game.
-	 *
-	 * @param User $user
-	 * @param Game $game
-	 * @return bool
-	 * @throws DBALException
 	 */
 	public function hasParty(User $user, Game $game): bool {
 		$parties = $this->getFor($user);
@@ -111,11 +75,6 @@ class PartyService
 
 	/**
 	 * Check if a User has a Newbie in a Game.
-	 *
-	 * @param User $user
-	 * @param Game $game
-	 * @return bool
-	 * @throws DBALException
 	 */
 	public function hasNewbie(User $user, Game $game): bool {
 		$newbies = $this->getNewbies($user);
@@ -124,11 +83,6 @@ class PartyService
 
 	/**
 	 * Check if a User has a Party or Newbie in a Game.
-	 *
-	 * @param User $user
-	 * @param Game $game
-	 * @return bool
-	 * @throws DBALException
 	 */
 	public function hasAny(User $user, Game $game): bool {
 		return $this->hasParty($user, $game) || $this->hasNewbie($user, $game);
@@ -136,9 +90,6 @@ class PartyService
 
 	/**
 	 * Update eMail address of user's parties and newbies.
-	 *
-	 * @param User $user
-	 * @throws DBALException
 	 */
 	public function update(User $user) {
 		$games      = $this->service->getAll();
@@ -150,23 +101,17 @@ class PartyService
 			$table = $game->getDb() . '.partei';
 			$sql   = "UPDATE " . $table . " SET email = " . $email . " WHERE user_id = " . $id;
 			if (!$connection->prepare($sql)->execute()) {
-				throw new DBALException('Could not update parties.');
+				throw new \RuntimeException('Could not update parties.');
 			}
 
 			$table = $game->getDb() . '.neuespieler';
 			$sql   = "UPDATE " . $table . " SET email = " . $email . " WHERE user_id = " . $id;
 			if (!$connection->prepare($sql)->execute()) {
-				throw new DBALException('Could not update newbies.');
+				throw new \RuntimeException('Could not update newbies.');
 			}
 		}
 	}
 
-	/**
-	 * Create a Newbie.
-	 *
-	 * @param Newbie $newbie
-	 * @throws DBALException
-	 */
 	public function create(Newbie $newbie) {
 		$connection = $this->manager->getConnection();
 		$table      = $this->service->getCurrent()->getDb() . '.neuespieler';
@@ -174,30 +119,22 @@ class PartyService
 		$values     = $this->createValues($newbie);
 		$sql        = "INSERT INTO " . $table . " (" . $columns . ") VALUES (" . $values . ")";
 		if (!$connection->prepare($sql)->execute()) {
-			throw new DBALException('Could not save Newbie.');
+			throw new \RuntimeException('Could not save Newbie.');
 		}
 	}
 
-	/**
-	 * Delete a Newbie.
-	 *
-	 * @param Newbie $newbie
-	 */
 	public function delete(Newbie $newbie) {
 		$connection = $this->manager->getConnection();
 		$table      = $this->service->getCurrent()->getDb() . '.neuespieler';
 		$values     = $this->createConstraints($newbie);
 		$sql        = "DELETE FROM " . $table . " WHERE " . $values;
 		if (!$connection->prepare($sql)->execute()) {
-			throw new DBALException('Could not delete Newbie.');
+			throw new \RuntimeException('Could not delete Newbie.');
 		}
 	}
 
 	/**
-	 * @param User $user
-	 * @param Game $game
 	 * @return Party[]
-	 * @throws DBALException
 	 */
 	private function parties(User $user, Game $game): array {
 		$connection = $this->manager->getConnection();
@@ -206,17 +143,14 @@ class PartyService
 		$stmt       = $connection->prepare($sql);
 		$stmt->execute();
 		$parties = [];
-		foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $properties) {
+		foreach ($stmt->fetchAllAssociative() as $properties) {
 			$parties[] = new Party($properties);
 		}
 		return $parties;
 	}
 
 	/**
-	 * @param User $user
-	 * @param Game $game
 	 * @return Newbie[]
-	 * @throws DBALException
 	 */
 	private function newbies(User $user, Game $game): array {
 		$connection = $this->manager->getConnection();
@@ -225,17 +159,13 @@ class PartyService
 		$stmt       = $connection->prepare($sql);
 		$stmt->execute();
 		$newbies = [];
-		foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $properties) {
+		foreach ($stmt->fetchAllAssociative() as $properties) {
 			$newbie    = new Newbie($properties);
 			$newbies[] = $newbie->setUser($user);
 		}
 		return $newbies;
 	}
 
-	/**
-	 * @var Newbie $newbie
-	 * @return string
-	 */
 	private function createValues(Newbie $newbie): string {
 		$connection = $this->manager->getConnection();
 		$properties = [];
@@ -245,10 +175,6 @@ class PartyService
 		return implode(',', $properties);
 	}
 
-	/**
-	 * @var Newbie $newbie
-	 * @return string
-	 */
 	private function createConstraints(Newbie $newbie): string {
 		$connection  = $this->manager->getConnection();
 		$constraints = [];

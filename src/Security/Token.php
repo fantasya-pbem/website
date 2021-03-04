@@ -2,61 +2,34 @@
 declare (strict_types = 1);
 namespace App\Security;
 
+use JetBrains\PhpStorm\Pure;
+
 class Token
 {
-	const LENGTH = 16;
+	public const LENGTH = 16;
 
-	/**
-	 * @var string
-	 */
-	private $secret;
+	private string $email = '';
 
-	/**
-	 * @var string
-	 */
-	private $email = '';
+	private int $turn = 0;
 
-	/**
-	 * @var int
-	 */
-	private $turn = 0;
-
-	/**
-	 * Initialize secret.
-	 */
-	public function __construct(string $secret) {
-		$this->secret = $secret;
+	public function __construct(private string $secret) {
 	}
 
-	/**
-	 * @param string $email
-	 * @return Token
-	 */
 	public function setEmail(string $email): Token {
 		$this->email = $email;
 		return $this;
 	}
 
-	/**
-	 * @param int $turn
-	 * @return Token
-	 */
 	public function setTurn(int $turn): Token {
 		$this->turn = $turn;
 		return $this;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function __toString(): string {
+	#[Pure] public function __toString(): string {
 		return $this->generateToken();
 	}
 
-	/**
-	 * @return string
-	 */
-	protected function generateToken(): string {
+	#[Pure] protected function generateToken(): string {
 		$data = $this->email . $this->secret . $this->turn;
 		$hash = hash('sha256', $data);
 		return substr($hash, 0, self::LENGTH);

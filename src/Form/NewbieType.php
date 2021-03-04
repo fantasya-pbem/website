@@ -12,10 +12,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class NewbieType extends AbstractType
 {
-	/**
-	 * @param FormBuilderInterface $builder
-	 * @param array $options
-	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('name', TextType::class, [
 			'label' => 'Name der Partei'

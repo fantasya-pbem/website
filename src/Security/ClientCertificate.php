@@ -2,52 +2,30 @@
 declare (strict_types = 1);
 namespace App\Security;
 
+use JetBrains\PhpStorm\Pure;
+
 class ClientCertificate
 {
-	protected const ALLOWED_CA = [
-		'CAcert Inc.' => true,
-		'Root CA'     => true
-	];
+	protected const ALLOWED_CA = ['CAcert Inc.' => true, 'Root CA' => true];
 
-	/**
-	 * @var string
-	 */
-	private $ca;
+	private string $ca;
 
-	/**
-	 * @var int
-	 */
-	private $serialNumber;
+	private int $serialNumber;
 
-	/**
-	 * @var string
-	 */
-	private $start;
+	private string $start;
 
-	/**
-	 * @var string
-	 */
-	private $end;
+	private string $end;
 
-	/**
-	 * @var int
-	 */
-	private $remainingDays;
+	private int $remainingDays;
 
-	/**
-	 * @var string
-	 */
-	private $email;
+	private string $email;
 
-	/**
-	 * @var bool
-	 */
-	private $isVerified;
+	private bool $isVerified;
 
 	/**
 	 * Parse client certificate data in request.
 	 */
-	public function __construct() {
+	#[Pure] public function __construct() {
 		$this->ca            = $this->parse('I_DN_O');
 		$this->serialNumber  = (int)hexdec($this->parse('M_SERIAL'));
 		$this->start         = $this->parse('V_START');
@@ -57,73 +35,42 @@ class ClientCertificate
 		$this->isVerified    = $this->parse('VERIFY') === 'SUCCESS';
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getCA(): string {
 		return $this->ca;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getSerialNumber(): int {
 		return $this->serialNumber;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getStart(): string {
 		return $this->start;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getEnd(): string {
 		return $this->end;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getRemainingDays(): int {
 		return $this->remainingDays;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getEmail(): string {
 		return $this->email;
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function isVerified(): bool {
 		return $this->isVerified;
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function isAllowed(): bool {
 		return isset(self::ALLOWED_CA[$this->ca]);
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function isValid(): bool {
 		return $this->isVerified() && $this->isAllowed() && $this->getRemainingDays() > 0;
 	}
 
-	/**
-	 * @param string $key
-	 * @return string
-	 */
 	protected function parse(string $key): string {
 		return $_SERVER['REDIRECT_SSL_CLIENT_' . $key] ?? '';
 	}

@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace App\Service;
 
+use JetBrains\PhpStorm\Pure;
+
 use App\Data\Report;
 
 /**
@@ -9,19 +11,10 @@ use App\Data\Report;
  */
 class ReportService
 {
-	/**
-	 * @var string
-	 */
-	private $baseDir;
+	private string $baseDir;
 
-	/**
-	 * @var Report
-	 */
-	private $report;
+	private Report $report;
 
-	/**
-	 * Initialize order base directory.
-	 */
 	public function __construct() {
 		$this->baseDir = realpath(__DIR__ . '/../../var/zip');
 		if (!$this->baseDir) {
@@ -29,10 +22,7 @@ class ReportService
 		}
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getPath(): string {
+	#[Pure] public function getPath(): string {
 		return $this->baseDir . DIRECTORY_SEPARATOR . $this->report->getGame() . DIRECTORY_SEPARATOR .
 			   $this->report->getTurn() . DIRECTORY_SEPARATOR .
 			   $this->report->getTurn() . '-' . $this->report->getParty() . '.zip';
@@ -57,10 +47,7 @@ class ReportService
 		return $turns;
 	}
 
-	/**
-	 * @param Report $report
-	 */
-	public function setContext(Report $report) {
+	public function setContext(Report $report): void {
 		$this->report = $report;
 	}
 }

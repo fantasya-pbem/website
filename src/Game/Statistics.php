@@ -2,48 +2,29 @@
 declare (strict_types = 1);
 namespace App\Game;
 
-use App\Entity\Game;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
+use JetBrains\PhpStorm\ArrayShape;
 
-/**
- * A helper class for game statistical data.
- */
+use App\Entity\Game;
+
 class Statistics
 {
-
 	/**
-	 * @var Game
+	 * @var array[]
 	 */
-	private $game;
-
-	/**
-	 * @var Connection
-	 */
-	private $connection;
+	private array $parties;
 
 	/**
 	 * @var array[]
 	 */
-	private $parties;
+	private array $newParties;
 
-	/**
-	 * @var array[]
-	 */
-	private $newParties;
-
-	/**
-	 * @param Game $game
-	 * @param Connection $connection
-	 */
-	public function __construct(Game $game, Connection $connection) {
-		$this->game       = $game;
-		$this->connection = $connection;
+	public function __construct(private Game $game, private Connection $connection) {
 	}
 
 	/**
 	 * @return array[]
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function getParties(): array {
 		if ($this->parties === null) {
@@ -51,14 +32,13 @@ class Statistics
 			$sql   = "SELECT name, beschreibung AS description FROM " . $table . " WHERE id NOT IN ('0', 'dark', 'tier') ORDER BY name";
 			$stmt  = $this->connection->prepare($sql);
 			$stmt->execute();
-			$this->parties = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+			$this->parties = $stmt->fetchAllAssociative();
 		}
 		return $this->parties;
 	}
 
 	/**
-	 * @return int
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function getPartiesCount(): int {
 		return count($this->getParties());
@@ -66,19 +46,19 @@ class Statistics
 
 	/**
 	 * @return array[]
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function getPartyRaces(): array {
 		$table = $this->game->getDb() . '.partei';
 		$sql   = "SELECT rasse AS race, COUNT(*) AS count FROM " . $table . " WHERE id NOT IN ('0', 'dark', 'tier') GROUP BY rasse ORDER BY rasse";
 		$stmt  = $this->connection->prepare($sql);
 		$stmt->execute();
-		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		return $stmt->fetchAllAssociative();
 	}
 
 	/**
 	 * @return array[]
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function getNewbies(): array {
 		if ($this->newParties === null) {
@@ -86,90 +66,88 @@ class Statistics
 			$sql   = "SELECT name, description FROM " . $table . " ORDER BY name";
 			$stmt  = $this->connection->prepare($sql);
 			$stmt->execute();
-			$this->newParties = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+			$this->newParties = $stmt->fetchAllAssociative();
 		}
 		return $this->newParties;
 	}
 
 	/**
-	 * @return int
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function getNewbiesCount(): int {
 		return count($this->getNewbies());
 	}
 
 	/**
-	 * @return array
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
+	#[ArrayShape(['world' => "array|mixed", 'underworld' => "array|mixed"])]
 	public function getLandscape(): array {
 		$table = $this->game->getDb() . '.regionen';
 		$sql   = "SELECT COUNT(*) FROM " . $table . " GROUP BY welt ORDER BY welt DESC";
 		$stmt  = $this->connection->prepare($sql);
 		$stmt->execute();
-		$result = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+		$result = $stmt->fetchAllAssociative();
 		return ['world' => $result[0], 'underworld' => $result[1]];
 	}
 
 	/**
 	 * @return array[]
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function getWorld(): array {
 		$table = $this->game->getDb() . '.regionen';
 		$sql   = "SELECT typ, COUNT(*) AS count FROM " . $table . " WHERE welt = 1 GROUP BY typ ORDER BY typ";
 		$stmt  = $this->connection->prepare($sql);
 		$stmt->execute();
-		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		return $stmt->fetchAllAssociative();
 	}
 
 	/**
 	 * @return array[]
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function getUnderworld(): array {
 		$table = $this->game->getDb() . '.regionen';
 		$sql   = "SELECT typ, COUNT(*) AS count FROM " . $table . " WHERE welt = -1 GROUP BY typ ORDER BY typ";
 		$stmt  = $this->connection->prepare($sql);
 		$stmt->execute();
-		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		return $stmt->fetchAllAssociative();
 	}
 
 	/**
-	 * @return array
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function getPopulation(): array {
 		$table = $this->game->getDb() . '.einheiten';
 		$sql   = "SELECT COUNT(*) AS units, SUM(person) AS persons FROM " . $table . " GROUP BY welt ORDER BY welt DESC";
 		$stmt  = $this->connection->prepare($sql);
 		$stmt->execute();
-		$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		$result = $stmt->fetchAllAssociative();
 		return $result[0];
 	}
 
 	/**
 	 * @return array[]
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function getRaces(): array {
 		$table = $this->game->getDb() . '.einheiten';
 		$sql   = "SELECT rasse AS race, COUNT(*) AS units, SUM(person) AS persons FROM " . $table . " WHERE partei NOT IN (620480, 1376883) GROUP BY rasse ORDER BY rasse";
 		$stmt  = $this->connection->prepare($sql);
 		$stmt->execute();
-		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		return $stmt->fetchAllAssociative();
 	}
 
 	/**
 	 * @return array[]
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function getMonsters(): array {
 		$table = $this->game->getDb() . '.einheiten';
 		$sql   = "SELECT rasse AS race, COUNT(*) AS units, SUM(person) AS persons FROM " . $table . " WHERE partei IN (620480, 1376883) GROUP BY rasse ORDER BY rasse";
 		$stmt  = $this->connection->prepare($sql);
 		$stmt->execute();
-		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		return $stmt->fetchAllAssociative();
 	}
 }

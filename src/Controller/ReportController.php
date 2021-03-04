@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,52 +22,16 @@ use App\Service\GameService;
 use App\Service\PartyService;
 use App\Service\ReportService;
 
-/**
- *
- */
 class ReportController extends AbstractController
 {
-	/**
-	 * @var GameService
-	 */
-	private $gameService;
-
-	/**
-	 * @var PartyService
-	 */
-	private $partyService;
-
-	/**
-	 * @var ReportService
-	 */
-	private $reportService;
-
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $manager;
-
-	/**
-	 * @param GameService $gameService
-	 * @param PartyService $partyService
-	 * @param ReportService $reportService
-	 * @param EntityManagerInterface $manager
-	 */
-	public function __construct(GameService $gameService, PartyService $partyService, ReportService $reportService,
-		                        EntityManagerInterface $manager) {
-		$this->gameService   = $gameService;
-		$this->partyService  = $partyService;
-		$this->reportService = $reportService;
-		$this->manager       = $manager;
+	public function __construct(private GameService $gameService, private PartyService $partyService,
+								private ReportService $reportService, private EntityManagerInterface $manager) {
 	}
 
 	/**
 	 * @Route("/report", name="report")
 	 * @IsGranted("ROLE_USER")
-	 *
-	 * @param Request $request
-	 * @return Response
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function index(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
@@ -104,9 +67,6 @@ class ReportController extends AbstractController
 
 	/**
 	 * @Route("/report/t/{token}", name="report_download", requirements={"token"="[0-9a-f]{23,24}"}))
-	 *
-	 * @param string $token
-	 * @return Response
 	 */
 	public function download(string $token): Response {
 		$tokenPart = substr($token, 0, Token::LENGTH);
@@ -130,23 +90,18 @@ class ReportController extends AbstractController
 					$this->reportService->setContext($report);
 					return $this->file($this->reportService->getPath());
 				}
-			} catch (DBALException $e) {
+			} catch (\Exception) {
 			}
 		}
 		return $this->redirectToRoute('report');
 	}
 
-	/**
-	 * @return User
-	 */
 	private function user(): User {
-		return $this->getUser();
+		/** @var User $user */
+		$user = $this->getUser();
+		return $user;
 	}
 
-	/**
-	 * @param Report $report
-	 * @return FormInterface
-	 */
 	private function createReportForm(Report $report): FormInterface {
 		$turns = $this->reportService->getTurns();
 		$turn  = null;
@@ -167,10 +122,6 @@ class ReportController extends AbstractController
 		return $form->getForm();
 	}
 
-	/**
-	 * @param int $id
-	 * @return Game|null
-	 */
 	private function getGame(int $id): ?Game {
 		foreach ($this->gameService->getAll() as $game) {
 			if ($game->getId() === $id) {

@@ -2,8 +2,9 @@
 declare (strict_types=1);
 namespace App\Entity;
 
-use App\Game\Turn;
 use Doctrine\ORM\Mapping as ORM;
+
+use App\Game\Turn;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GameRepository")
@@ -14,182 +15,125 @@ class Game
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
 	 * @ORM\Column(type="integer")
-	 *
-	 * @var int
 	 */
-	private $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\Column(type="string", length=190, unique=true)
-	 *
-	 * @var string
 	 */
-	private $name;
+	private string $name = '';
 
 	/**
 	 * @ORM\Column(type="text")
-	 *
-	 * @var string
 	 */
-	private $description;
+	private string $description = '';
+
+	/**
+	 * @ORM\Column(type="string", length=8)
+	 */
+	private string $engine = '';
 
 	/**
 	 * @ORM\Column(type="string", length=32, unique=true)
-	 *
-	 * @var string
 	 */
-	private $db;
+	private string $db = '';
 
 	/**
 	 * @ORM\Column(type="string", length=32, unique=true)
-	 *
-	 * @var string
 	 */
-	private $alias;
+	private string $alias = '';
 
 	/**
 	 * @ORM\Column(type="boolean")
-	 *
-	 * @var bool
 	 */
-	private $is_active;
+	private bool $is_active = false;
 
 	/**
 	 * @ORM\Column(type="smallint")
-	 *
-	 * @var int
 	 */
-	private $start_day;
+	private int $start_day = 0;
 
 	/**
 	 * @ORM\Column(type="smallint")
-	 *
-	 * @var int
 	 */
-	private $start_hour;
+	private int $start_hour = 0;
 
-	/**
-	 * @return int|null
-	 */
 	public function getId(): ?int {
 		return $this->id;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getName(): ?string {
+	public function getName(): string {
 		return $this->name;
 	}
 
-	/**
-	 * @param string $name
-	 * @return Game
-	 */
 	public function setName(string $name): self {
 		$this->name = $name;
 		return $this;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getDescription(): ?string {
+	public function getDescription(): string {
 		return $this->description;
 	}
 
-	/**
-	 * @param string $description
-	 * @return Game
-	 */
 	public function setDescription(string $description): self {
 		$this->description = $description;
 		return $this;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getDb(): ?string {
+	public function getEngine(): string {
+		return $this->engine;
+	}
+
+	public function setEngine(string $engine): self {
+		$this->engine = $engine;
+		return $this;
+	}
+
+	public function getDb(): string {
 		return $this->db;
 	}
 
-	/**
-	 * @param string $db
-	 * @return Game
-	 */
 	public function setDb(string $db): self {
 		$this->db = $db;
 		return $this;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getAlias(): ?string {
+	public function getAlias(): string {
 		return $this->alias;
 	}
 
-	/**
-	 * @param string $alias
-	 * @return Game
-	 */
 	public function setAlias(string $alias): self {
 		$this->alias = $alias;
 		return $this;
 	}
 
-	/**
-	 * @return bool|null
-	 */
-	public function getIsActive(): ?bool {
+	public function getIsActive(): bool {
 		return $this->is_active;
 	}
 
-	/**
-	 * @param bool $is_active
-	 * @return Game
-	 */
 	public function setIsActive(bool $is_active): self {
 		$this->is_active = $is_active;
 		return $this;
 	}
 
-	/**
-	 * @return int|null
-	 */
-	public function getStartDay(): ?int {
+	public function getStartDay(): int {
 		return $this->start_day;
 	}
 
-	/**
-	 * @param int $start_day
-	 * @return Game
-	 */
 	public function setStartDay(int $start_day): self {
 		$this->start_day = $start_day;
 		return $this;
 	}
 
-	/**
-	 * @return int|null
-	 */
-	public function getStartHour(): ?int {
+	public function getStartHour(): int {
 		return $this->start_hour;
 	}
 
-	/**
-	 * @param int $start_hour
-	 * @return Game
-	 */
 	public function setStartHour(int $start_hour): self {
 		$this->start_hour = $start_hour;
 		return $this;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getStart(): string {
 		if ($this->start_day > 0) {
 			$start = Turn::createStart($this)->getTimestamp();

@@ -2,32 +2,22 @@
 declare (strict_types = 1);
 namespace App\Service;
 
-use App\Data\Order;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
+
+use App\Data\Order;
 
 /**
  * A service for fetching and storing Fantasya orders.
  */
 class OrderService
 {
-	/**
-	 * @var string
-	 */
-	private $baseDir;
+	private string $baseDir;
 
-	/**
-	 * @var Order
-	 */
-	private $order;
+	private Order $order;
 
-	/**
-	 * @var string
-	 */
-	private $fcheck;
+	private string $fcheck;
 
-	/**
-	 * @param ContainerBagInterface $config
-	 */
 	public function __construct(ContainerBagInterface $config) {
 		$this->baseDir = realpath(__DIR__ . '/../../var/orders');
 		if (!$this->baseDir) {
@@ -36,18 +26,12 @@ class OrderService
 		$this->fcheck = $config->get('app.fcheck');
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getPath() {
+	#[Pure] public function getPath(): string {
 		return $this->baseDir . DIRECTORY_SEPARATOR . $this->order->getGame() . DIRECTORY_SEPARATOR .
 			   $this->order->getTurn() . DIRECTORY_SEPARATOR . $this->order->getParty() . '.order';
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getOrders() {
+	public function getOrders(): string {
 		$file = $this->getPath();
 		if (is_file($file)) {
 			$contents = file_get_contents($file);
@@ -58,10 +42,7 @@ class OrderService
 		return '';
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getFcheck() {
+	public function getFcheck(): string {
 		$check   = null;
 		$command = $this->fcheck;
 		if (is_string($command) && strpos($command, '%input%') > 0 && strpos($command, '%output%') > 0) {
@@ -89,17 +70,11 @@ class OrderService
 		return $check ? $check : '';
 	}
 
-	/**
-	 * @param Order $order
-	 */
 	public function setContext(Order $order) {
 		$this->order = $order;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function saveOrders() {
+	public function saveOrders(): bool {
 		$file = $this->getPath();
 		$dir  = dirname($file);
 		umask(0002);
@@ -109,9 +84,6 @@ class OrderService
 		return file_put_contents($file, $this->cleanUp()) > 0;
 	}
 
-	/**
-	 * @return string
-	 */
 	private function cleanUp(): string {
 		$lines  = explode("\n", $this->order->getOrders());
 		$orders = '';

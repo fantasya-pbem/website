@@ -1,6 +1,37 @@
 {
+	"name": "fantasya-pbem/website",
+	"description": "The Fantasya website.",
+	"keywords": ["atlantis", "email", "eressea", "fantasya", "lemuria", "pbem", "symfony", "website"],
 	"type": "project",
+	"homepage": "https://www.fantasya-pbem.de",
+	"support": {
+		"chat": "http://webchat.freenode.net/?channels=%23fantasya&uio=OT10cnVlJjExPTQx30",
+		"email": "info@fantasya-pbem.de",
+		"forum": "https://forum.fantasya-pbem.de",
+		"irc": "irc://chat.freenode.net/fantasya",
+		"issues": "https://github.com/fantasya-pbem/website/issues",
+		"source": "https://github.com/fantasya-pbem/website",
+		"wiki": "https://wiki.fantasya-pbem.de"
+	},
+	"authors": [
+		{
+			"name": "Sascha Ternes",
+			"email": "info@fantasya-pbem.de"
+		}
+	],
+	"funding": [
+		{
+			"type": "liberapay",
+			"url": "https://liberapay.com/Fantasya"
+		},
+		{
+			"type": "other",
+			"url": "https://www.fantasya-pbem.de/donate"
+		}
+	],
 	"license": "proprietary",
+	"version": "2.3.0",
+	"time": "2021-03-04",
 
 	"require": {
 		"php": "~8.0",
@@ -35,7 +66,6 @@
 		"symfony/profiler-pack": "~1.0",
 		"symfony/test-pack": "~1.0"
 	},
-
 	"autoload": {
 		"psr-4": {
 			"App\\": "src/"

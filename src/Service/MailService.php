@@ -14,52 +14,21 @@ use Symfony\Component\Mime\Email;
  */
 class MailService
 {
-	/**
-	 * @var MailerInterface
-	 */
-	private $mailer;
+	private string $userAgent;
 
-	/**
-	 * @var string
-	 */
-	private $userAgent;
+	private string $serverName;
 
-	/**
-	 * @var string
-	 */
-	private $serverName;
+	private Address $admin;
 
-	/**
-	 * @var Address
-	 */
-	private $admin;
+	private Address $gameMaster;
 
-	/**
-	 * @var Address
-	 */
-	private $gameMaster;
+	private string $cert;
 
-	/**
-	 * @var string
-	 */
-	private $cert;
+	private string $key;
 
-	/**
-	 * @var string
-	 */
-	private $key;
+	private string $password;
 
-	/**
-	 * @var string
-	 */
-	private $password;
-
-	/**
-	 * @param MailerInterface $mailer
-	 * @param ContainerBagInterface $config
-	 */
-	public function __construct(MailerInterface $mailer, ContainerBagInterface $config) {
-		$this->mailer     = $mailer;
+	public function __construct(private MailerInterface $mailer, ContainerBagInterface $config) {
 		$this->userAgent  = $config->get('app.mail.user.agent');
 		$this->serverName = $config->get('app.mail.server.name');
 		$this->admin      = new Address($config->get('app.mail.admin.address'), $config->get('app.mail.admin.name'));
@@ -70,19 +39,12 @@ class MailService
 		$this->password   = $config->get('app.mail.key.password');
 	}
 
-	/**
-	 * @return Email
-	 */
 	public function create(): Email {
 		$mail = new Email();
 		$mail->getHeaders()->addTextHeader('User-Agent', $this->userAgent);
 		return $mail;
 	}
 
-	/**
-	 * @param User|null $to
-	 * @return Email
-	 */
 	public function fromAdmin(?User $to = null): Email {
 		$mail = $this->create()->from($this->admin);
 		if ($to) {
@@ -91,11 +53,6 @@ class MailService
 		return $mail;
 	}
 
-	/**
-	 * @param string $from
-	 * @param User|null $to
-	 * @return Email
-	 */
 	public function fromServer(string $from, ?User $to = null): Email {
 		$mail = $this->create()->from(new Address($from, $this->serverName));
 		$mail->replyTo($this->admin);
@@ -105,25 +62,14 @@ class MailService
 		return $mail;
 	}
 
-	/**
-	 * @return Email
-	 */
 	public function toGameMaster(): Email {
 		return $this->create()->from($this->admin)->to($this->gameMaster);
 	}
 
-	/**
-	 * @param Email $mail
-	 * @throws \Throwable
-	 */
 	public function send(Email $mail): void {
 		$this->mailer->send($mail);
 	}
 
-	/**
-	 * @param Email $mail
-	 * @throws \Throwable
-	 */
 	public function signAndSend(Email $mail): void {
 		$signer     = new SMimeSigner($this->cert, $this->key, $this->password);
 		$signedMail = $signer->sign($mail);

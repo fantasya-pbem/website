@@ -10,8 +10,8 @@ use App\Data\PasswordReset;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User implements UserInterface {
-
+class User implements UserInterface
+{
 	public const FLAG_WITH_ATTACHMENT = 1;
 
 	public const ROLE_ADMIN = 'ROLE_ADMIN';
@@ -30,84 +30,53 @@ class User implements UserInterface {
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
 	 * @ORM\Column(type="integer")
-	 *
-	 * @var int
 	 */
-	private $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\Column(type="string", length=190, unique=true)
-	 *
-	 * @var string
 	 */
-	private $name;
+	private string $name = '';
 
 	/**
 	 * @ORM\Column(type="json")
-	 *
 	 * @var string[]
 	 */
-	private $roles = [];
+	private array $roles = [];
 
 	/**
 	 * @ORM\Column(type="smallint")
-	 *
-	 * @var int
 	 */
-	private $flags = 0;
+	private int $flags = 0;
 
 	/**
 	 * @var string The hashed password
 	 * @ORM\Column(type="string")
-	 *
-	 * @var string
 	 */
-	private $password;
+	private string $password = '';
 
 	/**
 	 * @ORM\Column(type="string", length=190, unique=true)
-	 *
-	 * @var string
 	 */
-	private $email;
+	private string $email = '';
 
-	/**
-	 * @return int|null
-	 */
 	public function getId(): ?int {
 		return $this->id;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getName(): ?string {
+	public function getName(): string {
 		return $this->name;
 	}
 
-	/**
-	 * @param string $name
-	 * @return User
-	 */
 	public function setName(string $name): self {
 		$this->name = $name;
-
 		return $this;
 	}
 
-	/**
-	 * A visual identifier that represents this user.
-	 *
-	 * @return string
-	 */
 	public function getUsername(): string {
-		return (string)$this->name;
+		return $this->name;
 	}
 
-	/**
-	 * @param string $role
-	 * @return bool
-	 */
 	public function hasRole(string $role): bool {
 		return in_array($role, $this->getRoles());
 	}
@@ -123,65 +92,41 @@ class User implements UserInterface {
 	}
 
 	/**
-	 * @param array(string) $roles
-	 * @return User
+	 * @param string[] $roles
 	 */
 	public function setRoles(array $roles): self {
 		$this->roles = $roles;
 		return $this;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getPassword(): string {
-		return (string)$this->password;
+		return $this->password;
 	}
 
-	/**
-	 * @param string $password
-	 * @return User
-	 */
 	public function setPassword(string $password): self {
 		$this->password = $password;
 		return $this;
 	}
 
-	/**
-	 * @see UserInterface
-	 */
-	public function getSalt() {
+	public function getSalt(): ?string {
 		// not needed when using the "bcrypt" algorithm in security.yaml
+		return null;
 	}
 
-	/**
-	 * @see UserInterface
-	 */
-	public function eraseCredentials() {
+	public function eraseCredentials(): void {
 		// If you store any temporary, sensitive data on the user, clear it here
 		// $this->plainPassword = null;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getEmail(): ?string {
+	public function getEmail(): string {
 		return $this->email;
 	}
 
-	/**
-	 * @param string $email
-	 * @return User
-	 */
 	public function setEmail(string $email): self {
-		$this->email = (strtolower($email));
+		$this->email = strtolower($email);
 		return $this;
 	}
 
-	/**
-	 * @param PasswordReset $resetOrRegistration
-	 * @return User
-	 */
 	public function from(PasswordReset $resetOrRegistration): self {
 		return $this
 			->setName($resetOrRegistration->getName())
@@ -191,8 +136,6 @@ class User implements UserInterface {
 	}
 
 	/**
-	 * @param int $flag
-	 * @return bool
 	 * @throws \InvalidArgumentException
 	 */
 	public function hasFlag(int $flag): bool {
@@ -201,9 +144,6 @@ class User implements UserInterface {
 	}
 
 	/**
-	 * @param int $flag
-	 * @param bool $set
-	 * @return User
 	 * @throws \InvalidArgumentException
 	 */
 	public function setFlag(int $flag, bool $set = true): self {
@@ -217,7 +157,6 @@ class User implements UserInterface {
 	}
 
 	/**
-	 * @param int $flag
 	 * @throws \InvalidArgumentException
 	 */
 	private function validateFlag(int $flag): void {

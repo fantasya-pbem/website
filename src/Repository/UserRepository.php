@@ -12,23 +12,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\User;
 
 /**
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method find($id, ?int $lockMode = null, ?int $lockVersion = null): ?User
+ * @method findOneBy(array $criteria, ?array $orderBy = null): ?User
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-	/**
-	 * @param ManagerRegistry $registry
-	 */
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, User::class);
     }
 
 	/**
-	 * @param UserInterface $user
-	 * @param string $newEncodedPassword
 	 * @throws ORMException
 	 */
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void {
@@ -39,11 +32,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 	}
 
 	/**
-	 * @param User $user
-	 * @return User|null
 	 * @throws NonUniqueResultException
 	 */
-    public function findDuplicate(User $user) {
+    public function findDuplicate(User $user): ?User {
     	$q = $this->createQueryBuilder('u');
 		$q->andWhere($q->expr()->eq('u.name', ':name'));
 		$q->orWhere($q->expr()->eq('u.email', ':email'));
@@ -53,11 +44,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 	}
 
 	/**
-	 * @param User $user
-	 * @return User|null
 	 * @throws NonUniqueResultException
 	 */
-	public function findExisting(User $user) {
+	public function findExisting(User $user): ?User {
 		$q = $this->createQueryBuilder('u');
 		$q->andWhere($q->expr()->eq('u.name', ':name'));
 		$q->andWhere($q->expr()->eq('u.email', ':email'));

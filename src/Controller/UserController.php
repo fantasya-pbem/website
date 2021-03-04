@@ -19,37 +19,12 @@ use App\Service\MailService;
 
 class UserController extends AbstractController
 {
-	/**
-	 * @var UserRepository
-	 */
-	private $repository;
-
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-
-	/**
-	 * @var UserPasswordEncoderInterface
-	 */
-	private $passwordEncoder;
-
-	/**
-	 * @param UserRepository $repository
-	 * @param MailService $mailService
-	 * @param UserPasswordEncoderInterface $encoder
-	 */
-	public function __construct(UserRepository $repository, MailService $mailService,
-								UserPasswordEncoderInterface $encoder) {
-		$this->repository      = $repository;
-		$this->mailService     = $mailService;
-		$this->passwordEncoder = $encoder;
+	public function __construct(private UserRepository $repository, private MailService $mailService,
+								private UserPasswordEncoderInterface $passwordEncoder) {
 	}
 
 	/**
      * @Route("/user/login", name="user_login")
-	 *
-	 * @return Response
      */
     public function login(): Response {
         return $this->render('user/login.html.twig');
@@ -57,8 +32,6 @@ class UserController extends AbstractController
 
 	/**
 	 * @Route("/user/secure", name="user_secure")
-	 *
-	 * @return Response
 	 */
     public function secure(): Response {
 		return $this->login();
@@ -66,9 +39,6 @@ class UserController extends AbstractController
 
 	/**
 	 * @Route("/user/expire/{days}", name="user_expire")
-	 *
-	 * @param int $days
-	 * @return Response
 	 */
 	public function expire(int $days): Response {
     	return $this->render('user/expire.html.twig', [
@@ -78,9 +48,6 @@ class UserController extends AbstractController
 
 	/**
 	 * @Route("/user/register", name="user_register")
-	 *
-	 * @param Request $request
-	 * @return Response
 	 * @throws \Throwable
 	 */
 	public function register(Request $request): Response {
@@ -113,8 +80,6 @@ class UserController extends AbstractController
 
 	/**
 	 * @Route("/user/registered", name="user_registered")
-	 *
-	 * @return Response
 	 */
 	public function registered(): Response {
 		return $this->render('user/registered.html.twig');
@@ -122,9 +87,6 @@ class UserController extends AbstractController
 
 	/**
 	 * @Route("/user/reset", name="user_reset")
-	 *
-	 * @param Request $request
-	 * @return Response
 	 * @throws \Throwable
 	 */
 	public function reset(Request $request): Response {
@@ -154,8 +116,6 @@ class UserController extends AbstractController
 
 	/**
 	 * @Route("/user/resetted", name="user_resetted")
-	 *
-	 * @return Response
 	 */
 	public function resetted(): Response {
 		return $this->render('user/resetted.html.twig');
@@ -164,16 +124,12 @@ class UserController extends AbstractController
 	/**
 	 * @Route("/user/logout", name="user_logout")
 	 * @IsGranted("ROLE_USER")
-	 *
-	 * @return Response
 	 */
     public function logout(): Response {
     	return $this->redirectToRoute('index');
 	}
 
 	/**
-	 * @param User $user
-	 * @param string $password
 	 * @throws \Throwable
 	 */
 	private function sendMail(User $user, string $password) {
@@ -183,16 +139,13 @@ class UserController extends AbstractController
 		$this->mailService->signAndSend($mail);
 	}
 
-	/**
-	 * @param User $user
-	 */
 	private function sendAdminMail(User $user) {
 		$mail = $this->mailService->toGameMaster();
 		$mail->subject('Neue Fantasya-Registrierung');
 		$mail->text($this->renderView('emails/admin_user.html.twig', ['user' => $user]));
 		try {
 			$this->mailService->signAndSend($mail);
-		} catch (\Throwable $e) {
+		} catch (\Throwable) {
 		}
 	}
 }

@@ -11,22 +11,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class RegistrationType extends AbstractType
 {
-	/**
-	 * @var string
-	 */
-	private $question;
+	private string $question;
 
-	/**
-	 * @param ContainerBagInterface $config
-	 */
 	public function __construct(ContainerBagInterface $config) {
 		$this->question = $config->get('app.antispam.question');
 	}
 
-	/**
-	 * @param FormBuilderInterface $builder
-	 * @param array $options
-	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('name', TextType::class,[
 			'label' => 'Benutzername'
