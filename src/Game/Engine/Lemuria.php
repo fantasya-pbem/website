@@ -4,12 +4,12 @@ namespace App\Game\Engine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\Pure;
+use Lemuria\Engine\Lemuria\Storage\LemuriaConfig;
 use Lemuria\Id;
 use Lemuria\Lemuria as LemuriaGame;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Lemuria\Party as PartyModel;
-use Lemuria\Test\TestConfig;
 
 use App\Entity\Assignment;
 use App\Entity\Game;
@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Game\Engine;
 use App\Game\Newbie;
 use App\Game\Party;
+use App\Game\Race;
 use App\Game\Statistics;
 use App\Repository\AssignmentRepository;
 
@@ -24,12 +25,9 @@ class Lemuria implements Engine
 {
 	private static bool $hasBeenInitialized = false;
 
-	private static TestConfig $config;
-
 	public function __construct(private AssignmentRepository $assignmentRepository, private EntityManagerInterface $entityManager) {
 		if (!self::$hasBeenInitialized) {
-			self::$config = new TestConfig();
-			LemuriaGame::init(self::$config);
+			LemuriaGame::init(new LemuriaConfig(__DIR__ . '/../../../var/lemuria'));
 			LemuriaGame::load();
 			self::$hasBeenInitialized = true;
 		}
@@ -109,7 +107,7 @@ class Lemuria implements Engine
 	private function createParty(PartyModel $party): Party {
 		return new Party([
 			'id'           => (string)$party->Id(),
-			'rasse'        => (string)$party->Race(),
+			'rasse'        => (string)Race::lemuria((string)$party->Race()),
 			'name'         => $party->Name(),
 			'beschreibung' => $party->Description(),
 			'owner_id'     => (string)$party->Id(),

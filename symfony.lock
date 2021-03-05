@@ -86,22 +86,10 @@
     "lemuria-pbem/engine-lemuria": {
         "version": "dev-master"
     },
-    "lemuria-pbem/game-lemuria": {
-        "version": "dev-master"
-    },
     "lemuria-pbem/lemuria": {
         "version": "dev-master"
     },
     "lemuria-pbem/model-lemuria": {
-        "version": "dev-master"
-    },
-    "lemuria-pbem/renderer-magellan": {
-        "version": "dev-master"
-    },
-    "lemuria-pbem/renderer-text": {
-        "version": "dev-master"
-    },
-    "lemuria-pbem/tools-lemuria": {
         "version": "dev-master"
     },
     "monolog/monolog": {
