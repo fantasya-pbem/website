@@ -76,8 +76,10 @@
                 </p>
 
                 <p>
-                    {{ newbie.race }}
-                    (Holz: {{ newbie.wood }} &middot; Stein: {{ newbie.stone }} &middot; Eisen: {{ newbie.iron }})
+                {{ newbie.race }}
+                    {% if game.engine == 'fantasya' %}
+                            (Holz: {{ newbie.wood }} &middot; Stein: {{ newbie.stone }} &middot; Eisen: {{ newbie.iron }})
+                    {% endif %}
                 </p>
 
                 <p>{{ newbie.description }}</p>

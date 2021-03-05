@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace App\Game\Engine;
 
+use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\Pure;
 use Lemuria\Id;
 use Lemuria\Lemuria as LemuriaGame;
@@ -10,6 +11,7 @@ use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Lemuria\Party as PartyModel;
 use Lemuria\Test\TestConfig;
 
+use App\Entity\Assignment;
 use App\Entity\Game;
 use App\Entity\User;
 use App\Game\Engine;
@@ -22,10 +24,12 @@ class Lemuria implements Engine
 {
 	private static bool $hasBeenInitialized = false;
 
-	public function __construct(private AssignmentRepository $assignmentRepository) {
+	private static TestConfig $config;
+
+	public function __construct(private AssignmentRepository $assignmentRepository, private EntityManagerInterface $entityManager) {
 		if (!self::$hasBeenInitialized) {
-			$config = new TestConfig();
-			LemuriaGame::init($config);
+			self::$config = new TestConfig();
+			LemuriaGame::init(self::$config);
 			LemuriaGame::load();
 			self::$hasBeenInitialized = true;
 		}
@@ -36,7 +40,8 @@ class Lemuria implements Engine
 	}
 
 	public function getLastZat(Game $game): \DateTime {
-		return new \DateTime();
+		$dateTime = new \DateTime();
+		return $dateTime->sub(new \DateInterval('P1D'))->setTime(6, 0);
 	}
 
 	/**
@@ -53,8 +58,6 @@ class Lemuria implements Engine
 	}
 
 	/**
-	 * Find all parties of a user in a game.
-	 *
 	 * @return Party[]
 	 */
 	public function getParties(User $user, Game $game): array {
@@ -68,12 +71,14 @@ class Lemuria implements Engine
 	}
 
 	/**
-	 * Find all new parties of a user in a game.
-	 *
 	 * @return Newbie[]
 	 */
 	public function getNewbies(User $user, Game $game): array {
-		return [];
+		$newbies = [];
+		foreach ($this->assignmentRepository->findNewbiesFor($user) as $assignment) {
+			$newbies[] = Newbie::fromAssignment($assignment);
+		}
+		return $newbies;
 	}
 
 	#[Pure] public function getStatistics(Game $game): Statistics {
@@ -84,9 +89,21 @@ class Lemuria implements Engine
 	}
 
 	public function create(Newbie $newbie, Game $game): void {
+		$assignment = new Assignment();
+		$assignment->setUser($newbie->getUser());
+		$assignment->setUuid($newbie->getUuid());
+		$assignment->setNewbie($newbie->toLemuriaJson());
+		$this->entityManager->persist($assignment);
+		$this->entityManager->flush();
 	}
 
 	public function delete(Newbie $newbie, Game $game): void {
+		foreach ($this->assignmentRepository->findNewbiesFor($newbie->getUser()) as $assignment) {
+			if ($assignment->getUuid() === $newbie->getUuid()) {
+				$this->entityManager->remove($assignment);
+			}
+		}
+		$this->entityManager->flush();
 	}
 
 	private function createParty(PartyModel $party): Party {
