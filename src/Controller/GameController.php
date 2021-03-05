@@ -8,10 +8,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use App\Data\Lemurian;
 use App\Data\Newbie as NewbieData;
 use App\Entity\Game;
 use App\Entity\User;
+use App\Form\LemurianType;
 use App\Form\NewbieType;
+use App\Game\Engine;
 use App\Game\Newbie;
 use App\Service\GameService;
 use App\Service\MailService;
@@ -70,28 +73,11 @@ class GameController extends AbstractController
 		if (!$this->canEnter()) {
 			return $this->redirectToRoute('profile');
 		}
-
-		$newbieData = new NewbieData();
-		$resources  = false;
-		$form       = $this->createForm(NewbieType::class, $newbieData);
-		$form->handleRequest($request);
-
-		if ($form->isSubmitted() && $form->isValid()) {
-			/* @var NewbieData $newbieData */
-			$newbieData = $form->getData();
-			if ($newbieData->getResources() <= 90) {
-				$newbie = Newbie::fromData($newbieData)->setUser($this->user());
-				$this->partyService->create($newbie);
-				$this->sendAdminMail($newbie);
-				return $this->redirectToRoute('profile');
-			}
-			$resources = true;
-		}
-
-		return $this->render('game/enter.html.twig', [
-			'form'      => $form->createView(),
-			'resources' => $resources
-		]);
+		return match ($this->gameService->getCurrent()->getEngine()) {
+			Engine::FANTASYA => $this->enterFantasya($request),
+			Engine::LEMURIA  => $this->enterLemuria($request),
+			default          => $this->redirectToRoute('profile')
+		};
 	}
 
 	/**
@@ -135,6 +121,44 @@ class GameController extends AbstractController
 			return true;
 		}
 		return false;
+	}
+
+	private function enterFantasya(Request $request): Response {
+		$newbieData = new NewbieData();
+		$resources  = false;
+		$form       = $this->createForm(NewbieType::class, $newbieData);
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			/* @var NewbieData $newbieData */
+			$newbieData = $form->getData();
+			if ($newbieData->getResources() <= 90) {
+				$newbie = Newbie::fromData($newbieData)->setUser($this->user());
+				$this->partyService->create($newbie);
+				$this->sendAdminMail($newbie);
+				return $this->redirectToRoute('profile');
+			}
+			$resources = true;
+		}
+
+		return $this->render('game/enter-fantasya.html.twig', ['form' => $form->createView(), 'resources' => $resources]);
+	}
+
+	private function enterLemuria(Request $request): Response {
+		$lemurian = new NewbieData();
+		$form     = $this->createForm(LemurianType::class, $lemurian);
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			/* @var NewbieData $newbieData */
+			$newbieData = $form->getData();
+			$newbie     = Newbie::fromData($newbieData)->setUser($this->user());
+			$this->partyService->create($newbie);
+			$this->sendAdminMail($newbie);
+			return $this->redirectToRoute('profile');
+		}
+
+		return $this->render('game/enter-lemuria.html.twig', ['form' => $form->createView()]);
 	}
 
 	private function sendAdminMail(Newbie $newbie) {
