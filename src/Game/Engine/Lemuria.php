@@ -110,7 +110,7 @@ class Lemuria implements Engine
 			'rasse'        => (string)Race::lemuria((string)$party->Race()),
 			'name'         => $party->Name(),
 			'beschreibung' => $party->Description(),
-			'owner_id'     => (string)$party->Id(),
+			'owner_id'     => (string)$party->Uuid(),
 			'user_id'      => $party->Uuid(),
 			'email'        => ''
 		]);
