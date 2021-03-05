@@ -3,15 +3,17 @@ declare (strict_types = 1);
 namespace App\Game\Engine;
 
 use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Lemuria\Party;
 use Lemuria\Model\Lemuria\Region;
 use Lemuria\Model\Lemuria\Unit;
 
+use App\Entity\Assignment;
 use App\Entity\Game;
+use App\Game\Newbie;
 use App\Game\Statistics;
+use App\Repository\AssignmentRepository;
 
 class LemuriaStatistics implements Statistics
 {
@@ -19,6 +21,11 @@ class LemuriaStatistics implements Statistics
 	 * @var array[]|null
 	 */
 	private ?array $parties = null;
+
+	/**
+	 * @var array[]|null
+	 */
+	private ?array $newbies = null;
 
 	/**
 	 * @var array[]
@@ -39,7 +46,7 @@ class LemuriaStatistics implements Statistics
 	 */
 	private ?array $persons = null;
 
-	public function __construct(private Game $game) {
+	public function __construct(private Game $game, private AssignmentRepository $assignmentRepository) {
 	}
 
 	/**
@@ -86,13 +93,22 @@ class LemuriaStatistics implements Statistics
 	 * @throws \Exception
 	 */
 	public function getNewbies(): array {
-		return [];
+		if (!$this->newbies) {
+			$this->newbies = [];
+			foreach ($this->assignmentRepository->findAll() as $assignment /* @var Assignment $assignment */) {
+				if (str_starts_with($assignment->getUuid(), 'newbie-')) {
+					$newbie          = Newbie::fromAssignment($assignment);
+					$this->newbies[] = ['name' => $newbie->getName(), 'description' => $newbie->getDescription()];
+				}
+			}
+		}
+		return $this->newbies;
 	}
 
 	/**
 	 * @throws \Exception
 	 */
-	#[Pure] public function getNewbiesCount(): int {
+	public function getNewbiesCount(): int {
 		return count($this->getNewbies());
 	}
 

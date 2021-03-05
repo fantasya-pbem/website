@@ -82,7 +82,7 @@ class Lemuria implements Engine
 	}
 
 	#[Pure] public function getStatistics(Game $game): Statistics {
-		return new LemuriaStatistics($game);
+		return new LemuriaStatistics($game, $this->assignmentRepository);
 	}
 
 	public function updateUser(User $user, Game $game): void {

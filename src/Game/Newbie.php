@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace App\Game;
 
+use JetBrains\PhpStorm\Pure;
+
 use App\Data\Newbie as NewbieData;
 use App\Entity\Assignment;
 use App\Entity\User;
@@ -34,7 +36,7 @@ class Newbie
 		return $newbie;
 	}
 
-	public function __construct(private array $properties) {
+	#[Pure] public function __construct(private array $properties) {
 		$this->uuid = uniqid('newbie-');
 	}
 

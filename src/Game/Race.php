@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace App\Game;
 
+use JetBrains\PhpStorm\Pure;
+
 class Race implements \Stringable
 {
 	public const AQUAN = 'Aquaner';
@@ -31,7 +33,7 @@ class Race implements \Stringable
 	/**
 	 * @return string[]
 	 */
-	public static function all(): array {
+	#[Pure] public static function all(): array {
 		return array_keys(self::FANTASYA);
 	}
 
