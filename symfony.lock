@@ -83,13 +83,13 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
     },
-    "lemuria-pbem/engine-lemuria": {
+    "lemuria-pbem/engine-fantasya": {
         "version": "dev-master"
     },
     "lemuria-pbem/lemuria": {
         "version": "dev-master"
     },
-    "lemuria-pbem/model-lemuria": {
+    "lemuria-pbem/model-fantasya": {
         "version": "dev-master"
     },
     "monolog/monolog": {

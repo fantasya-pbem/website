@@ -5,9 +5,9 @@ namespace App\Game\Engine;
 use JetBrains\PhpStorm\ArrayShape;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\Region;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Unit;
 
 use App\Entity\Assignment;
 use App\Entity\Game;

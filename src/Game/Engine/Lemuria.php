@@ -4,12 +4,12 @@ namespace App\Game\Engine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\Pure;
-use Lemuria\Engine\Lemuria\Storage\LemuriaConfig;
+use Lemuria\Engine\Fantasya\Storage\LemuriaConfig;
 use Lemuria\Id;
 use Lemuria\Lemuria as LemuriaGame;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Exception\NotRegisteredException;
-use Lemuria\Model\Lemuria\Party as PartyModel;
+use Lemuria\Model\Fantasya\Party as PartyModel;
 
 use App\Entity\Assignment;
 use App\Entity\Game;

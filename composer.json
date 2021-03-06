@@ -31,7 +31,7 @@
 	],
 	"license": "proprietary",
 	"version": "2.3.0",
-	"time": "2021-03-05",
+	"time": "2021-03-06",
 
 	"require": {
 		"php": "~8.0",
@@ -41,8 +41,8 @@
 		"components/jquery": "~3.5",
 		"doctrine/annotations": "~1.12",
 		"lemuria-pbem/lemuria": "dev-master",
-		"lemuria-pbem/engine-lemuria": "dev-master",
-		"lemuria-pbem/model-lemuria": "dev-master",
+		"lemuria-pbem/engine-fantasya": "0.1.0",
+		"lemuria-pbem/model-fantasya": "dev-master",
 		"sensio/framework-extra-bundle": "~5.6",
 		"symfony/apache-pack": "~1.0",
 		"symfony/asset": "~5.2",
@@ -76,27 +76,11 @@
 		},
 		{
 			"type": "vcs",
-			"url": "git@github.com:lemuria-pbem/model-lemuria.git"
+			"url": "git@github.com:lemuria-pbem/model-fantasya.git"
 		},
 		{
 			"type": "vcs",
-			"url": "git@github.com:lemuria-pbem/engine-lemuria.git"
-		},
-		{
-			"type": "vcs",
-			"url": "git@github.com:lemuria-pbem/game-lemuria.git"
-		},
-		{
-			"type": "vcs",
-			"url": "git@github.com:lemuria-pbem/renderer-magellan.git"
-		},
-		{
-			"type": "vcs",
-			"url": "git@github.com:lemuria-pbem/renderer-text.git"
-		},
-		{
-			"type": "vcs",
-			"url": "git@github.com:lemuria-pbem/tools-lemuria.git"
+			"url": "git@github.com:lemuria-pbem/engine-fantasya.git"
 		}
 	],
 
