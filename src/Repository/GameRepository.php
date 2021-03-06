@@ -23,4 +23,8 @@ class GameRepository extends ServiceEntityRepository
 		$q->andWhere($q->expr()->eq('g.is_active', 1));
 		return $q->getQuery()->getResult();
 	}
+
+	public function findByAlias(string $alias): ?Game {
+		return $this->findOneBy(['alias' => $alias]);
+	}
 }

@@ -25,6 +25,13 @@ class PartyService
 	}
 
 	/**
+	 * Find a party in a game by its owner ID.
+	 */
+	public function getByOwner(string $owner, Game $game): ?Party {
+		return $this->engineService->get($game)->getByOwner($owner, $game);
+	}
+
+	/**
 	 * Get all parties of a User.
 	 */
 	public function getFor(User $user): array {

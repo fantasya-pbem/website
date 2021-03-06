@@ -42,9 +42,6 @@ class Lemuria implements Engine
 		return $dateTime->sub(new \DateInterval('P1D'))->setTime(6, 0);
 	}
 
-	/**
-	 * Find a party in a game by its Base-36 ID.
-	 */
 	public function getById(string $id, Game $game): ?Party {
 		try {
 			/** @var PartyModel $party */
@@ -53,6 +50,12 @@ class Lemuria implements Engine
 		} catch (NotRegisteredException) {
 			return null;
 		}
+	}
+
+	public function getByOwner(string $owner, Game $game): ?Party {
+		/** @var PartyModel $party */
+		$party = LemuriaGame::Registry()->find($owner);
+		return $party ? $this->createParty($party) : null;
 	}
 
 	/**

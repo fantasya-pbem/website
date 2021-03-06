@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace App\Game\Engine;
 
-use App\Game\Statistics;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Game;
@@ -10,6 +9,7 @@ use App\Entity\User;
 use App\Game\Engine;
 use App\Game\Newbie;
 use App\Game\Party;
+use App\Game\Statistics;
 
 class Fantasya implements Engine
 {
@@ -20,6 +20,19 @@ class Fantasya implements Engine
 		$connection = $this->manager->getConnection();
 		$table      = $game->getDb() . '.partei';
 		$sql        = "SELECT * FROM " . $table . " WHERE id = " . $this->manager->getConnection()->quote($id);
+		$stmt       = $connection->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAllAssociative();
+		if (is_array($result) && isset($result[0]) && is_array($result[0])) {
+			return new Party($result[0]);
+		}
+		return null;
+	}
+
+	public function getByOwner(string $owner, Game $game): ?Party {
+		$connection = $this->manager->getConnection();
+		$table      = $game->getDb() . '.partei';
+		$sql        = "SELECT * FROM " . $table . " WHERE owner_id = " . $this->manager->getConnection()->quote($owner);
 		$stmt       = $connection->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAllAssociative();

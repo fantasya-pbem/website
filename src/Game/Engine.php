@@ -27,6 +27,11 @@ interface Engine
 	public function getById(string $id, Game $game): ?Party;
 
 	/**
+	 * Find a party in a game by its owner ID.
+	 */
+	public function getByOwner(string $owner, Game $game): ?Party;
+
+	/**
 	 * Find all parties of a user in a game.
 	 *
 	 * @return Party[]

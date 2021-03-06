@@ -6,16 +6,20 @@ use JetBrains\PhpStorm\Pure;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 use App\Data\Order;
+use App\Repository\GameRepository;
 
 class OrderService
 {
+	private const PARTY_LINE = ['PARTEI', 'FANTASYA', 'ERESSEA', 'LEMURIA'];
+
 	private string $baseDir;
 
 	private Order $order;
 
 	private string $fcheck;
 
-	public function __construct(ContainerBagInterface $config) {
+	public function __construct(private PartyService $service, private GameRepository $repository,
+								ContainerBagInterface $config) {
 		$this->baseDir = realpath(__DIR__ . '/../../var/orders');
 		if (!$this->baseDir) {
 			throw new \RuntimeException('Orders directory not found.');
@@ -88,13 +92,19 @@ class OrderService
 		if ($n > 0) {
 			$first = strtoupper(trim($lines[0]));
 			$parts = explode(' ', $first);
-			if (count($parts) !== 3 || $parts[0] !== 'PARTEI' && $parts[0] !== 'FANTASYA' && $parts[0] !== 'ERESSEA') {
-				$orders .= 'PARTEI ' . $this->order->getParty() . ' "xxxxxxxx"' . PHP_EOL;
+			if (count($parts) !== 3 || !in_array($parts[0], self::PARTY_LINE)) {
+				$orders .= 'PARTEI ' . $this->getPartyId() . ' "xxxxxxxx"' . PHP_EOL;
 			}
 			foreach ($lines as $line) {
 				$orders .= trim($line) . PHP_EOL;
 			}
 		}
 		return $orders;
+	}
+
+	private function getPartyId(): string {
+		$owner = $this->order->getParty();
+		$game  = $this->repository->findByAlias($this->order->getGame());
+		return $this->service->getByOwner($owner, $game)->getId();
 	}
 }
