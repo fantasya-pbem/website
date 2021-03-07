@@ -72,7 +72,7 @@
             {% for newbie in newbies[game.id] %}
                 <p>
                     <strong>{{ newbie.name }} [neu angemeldet]</strong>
-                    <a href="{{ path('game_revoke', {'name': newbie.name}) }}">Anmeldung stornieren</a>
+                    <a href="{{ path('game_revoke', {'game': game.id, 'name': newbie.name}) }}">Anmeldung stornieren</a>
                 </p>
 
                 <p>

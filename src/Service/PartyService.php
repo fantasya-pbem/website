@@ -105,8 +105,7 @@ class PartyService
 		$this->engineService->get($game)->create($newbie, $game);
 	}
 
-	public function delete(Newbie $newbie) {
-		$game = $this->service->getCurrent();
+	public function delete(Newbie $newbie, Game $game) {
 		$this->engineService->get($game)->delete($newbie, $game);
 	}
 }

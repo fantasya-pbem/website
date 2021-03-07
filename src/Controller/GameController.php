@@ -81,11 +81,11 @@ class GameController extends AbstractController
 	}
 
 	/**
-	 * @Route("/game/revoke/{name}", name="game_revoke")
+	 * @Route("/game/{game}/revoke/{name}", name="game_revoke")
 	 */
-	public function revoke(string $name): Response {
+	public function revoke(Game $game, string $name): Response {
 		$user    = $this->user();
-		$game    = $this->gameService->getCurrent();
+		//$game    = $this->gameService->getCurrent();
 		$newbies = $this->partyService->getNewbies($this->user());
 		$delete  = [];
 		foreach ($newbies as $id => $gameNewbies) {
@@ -98,7 +98,7 @@ class GameController extends AbstractController
 			}
 		}
 		if (count($delete) === 1) {
-			$this->partyService->delete($delete[0]);
+			$this->partyService->delete($delete[0], $game);
 		}
 		return $this->redirectToRoute('profile');
 	}
@@ -147,15 +147,17 @@ class GameController extends AbstractController
 	private function enterLemuria(Request $request): Response {
 		$lemurian = new NewbieData();
 		$form     = $this->createForm(LemurianType::class, $lemurian);
-		$form->handleRequest($request);
-
-		if ($form->isSubmitted() && $form->isValid()) {
-			/* @var NewbieData $newbieData */
-			$newbieData = $form->getData();
-			$newbie     = Newbie::fromData($newbieData)->setUser($this->user());
-			$this->partyService->create($newbie);
-			$this->sendAdminMail($newbie);
-			return $this->redirectToRoute('profile');
+		try {
+			$form->handleRequest($request);
+			if ($form->isSubmitted() && $form->isValid()) {
+				/* @var NewbieData $newbieData */
+				$newbieData = $form->getData();
+				$newbie     = Newbie::fromData($newbieData)->setUser($this->user());
+				$this->partyService->create($newbie);
+				$this->sendAdminMail($newbie);
+				return $this->redirectToRoute('profile');
+			}
+		} catch (\InvalidArgumentException) {
 		}
 
 		return $this->render('game/enter-lemuria.html.twig', ['form' => $form->createView()]);
