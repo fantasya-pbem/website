@@ -6,38 +6,17 @@ use App\Entity\Game;
 use App\Repository\GameRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-/**
- * A service for templates to fetch myths.
- */
 class GameService
 {
 	/**
-	 * @var GameRepository
-	 */
-	private $repository;
-
-	/**
-	 * @var SessionInterface
-	 */
-	private $session;
-
-	/**
 	 * @var Game[]
 	 */
-	private $games;
+	private ?array $games = null;
 
-	/**
-	 * @param GameRepository $repository
-	 * @param SessionInterface $session
-	 */
-	public function __construct(GameRepository $repository, SessionInterface $session) {
-		$this->repository = $repository;
-		$this->session    = $session;
+	public function __construct(private GameRepository $repository, private SessionInterface $session) {
 	}
 
 	/**
-	 * Get all games.
-	 *
 	 * @return Game[]
 	 */
 	public function getAll(): array {
@@ -47,11 +26,6 @@ class GameService
 		return $this->games;
 	}
 
-	/**
-	 * Get current Game.
-	 *
-	 * @return Game
-	 */
 	public function getCurrent(): Game {
 		if ($this->session && $this->session->has('game')) {
 			 $game = $this->session->get('game');

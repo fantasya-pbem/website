@@ -2,33 +2,24 @@
 declare (strict_types = 1);
 namespace App\Service;
 
-use App\Data\Order;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
-/**
- * A service for fetching and storing Fantasya orders.
- */
+use App\Data\Order;
+use App\Repository\GameRepository;
+
 class OrderService
 {
-	/**
-	 * @var string
-	 */
-	private $baseDir;
+	private const PARTY_LINE = ['PARTEI', 'FANTASYA', 'ERESSEA', 'LEMURIA'];
 
-	/**
-	 * @var Order
-	 */
-	private $order;
+	private string $baseDir;
 
-	/**
-	 * @var string
-	 */
-	private $fcheck;
+	private Order $order;
 
-	/**
-	 * @param ContainerBagInterface $config
-	 */
-	public function __construct(ContainerBagInterface $config) {
+	private string $fcheck;
+
+	public function __construct(private PartyService $service, private GameRepository $repository,
+								ContainerBagInterface $config) {
 		$this->baseDir = realpath(__DIR__ . '/../../var/orders');
 		if (!$this->baseDir) {
 			throw new \RuntimeException('Orders directory not found.');
@@ -36,18 +27,12 @@ class OrderService
 		$this->fcheck = $config->get('app.fcheck');
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getPath() {
+	#[Pure] public function getPath(): string {
 		return $this->baseDir . DIRECTORY_SEPARATOR . $this->order->getGame() . DIRECTORY_SEPARATOR .
 			   $this->order->getTurn() . DIRECTORY_SEPARATOR . $this->order->getParty() . '.order';
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getOrders() {
+	public function getOrders(): string {
 		$file = $this->getPath();
 		if (is_file($file)) {
 			$contents = file_get_contents($file);
@@ -58,10 +43,7 @@ class OrderService
 		return '';
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getFcheck() {
+	public function getFcheck(): string {
 		$check   = null;
 		$command = $this->fcheck;
 		if (is_string($command) && strpos($command, '%input%') > 0 && strpos($command, '%output%') > 0) {
@@ -89,17 +71,11 @@ class OrderService
 		return $check ? $check : '';
 	}
 
-	/**
-	 * @param Order $order
-	 */
 	public function setContext(Order $order) {
 		$this->order = $order;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function saveOrders() {
+	public function saveOrders(): bool {
 		$file = $this->getPath();
 		$dir  = dirname($file);
 		umask(0002);
@@ -109,9 +85,6 @@ class OrderService
 		return file_put_contents($file, $this->cleanUp()) > 0;
 	}
 
-	/**
-	 * @return string
-	 */
 	private function cleanUp(): string {
 		$lines  = explode("\n", $this->order->getOrders());
 		$orders = '';
@@ -119,13 +92,19 @@ class OrderService
 		if ($n > 0) {
 			$first = strtoupper(trim($lines[0]));
 			$parts = explode(' ', $first);
-			if (count($parts) !== 3 || $parts[0] !== 'PARTEI' && $parts[0] !== 'FANTASYA' && $parts[0] !== 'ERESSEA') {
-				$orders .= 'PARTEI ' . $this->order->getParty() . ' "xxxxxxxx"' . PHP_EOL;
+			if (count($parts) !== 3 || !in_array($parts[0], self::PARTY_LINE)) {
+				$orders .= 'PARTEI ' . $this->getPartyId() . ' "xxxxxxxx"' . PHP_EOL;
 			}
 			foreach ($lines as $line) {
 				$orders .= trim($line) . PHP_EOL;
 			}
 		}
 		return $orders;
+	}
+
+	private function getPartyId(): string {
+		$owner = $this->order->getParty();
+		$game  = $this->repository->findByAlias($this->order->getGame());
+		return $this->service->getByOwner($owner, $game)->getId();
 	}
 }

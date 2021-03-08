@@ -7,38 +7,28 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MythRepository")
  */
-class Myth {
-
+class Myth
+{
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
 	 * @ORM\Column(type="integer")
 	 */
-	private $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
 	 */
-	private $myth;
+	private string $myth;
 
-	/**
-	 * @return int|null
-	 */
 	public function getId(): ?int {
 		return $this->id;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getMyth(): ?string {
+	public function getMyth(): string {
 		return $this->myth;
 	}
 
-	/**
-	 * @param string $myth
-	 * @return Myth
-	 */
 	public function setMyth(string $myth): self {
 		$this->myth = $myth;
 		return $this;

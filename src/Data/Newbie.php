@@ -8,126 +8,79 @@ class Newbie
 {
 	/**
 	 * @Assert\NotBlank
-	 * @var string
 	 */
-	private $name = '';
+	private string $name = '';
 
-	/**
-	 * @var string
-	 */
-	private $description = '';
+	private string $description = '';
 
 	/**
 	 * @Assert\Choice({"Aquaner", "Elf", "Halbling", "Mensch", "Ork", "Troll", "Zwerg"})
-	 * @var string
 	 */
-	private $race = '';
+	private string $race = '';
 
 	/**
 	 * @Assert\Range(min = 0, max = 90)
-	 * @var int
 	 */
-	private $wood = 0;
+	private int $wood = 0;
 
 	/**
 	 * @Assert\Range(min = 0, max = 90)
-	 * @var int
 	 */
-	private $stone = 0;
+	private int $stone = 0;
 
 	/**
 	 * @Assert\Range(min = 0, max = 90)
-	 * @var int
 	 */
-	private $iron = 0;
+	private int $iron = 0;
 
-	/**
-	 * @return string
-	 */
 	public function getName(): string {
 		return $this->name;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getDescription(): string {
 		return $this->description;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getRace(): string {
 		return $this->race;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getWood(): int {
 		return $this->wood;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getStone(): int {
 		return $this->stone;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getIron(): int {
 		return $this->iron;
 	}
 
-	/**
-	 * @param string $name
-	 */
-	public function setName(string $name) {
+	public function setName(string $name): void {
 		$this->name = $name;
 	}
 
-	/**
-	 * @param string $description
-	 */
-	public function setDescription(string $description) {
+	public function setDescription(string $description): void {
 		$this->description = $description;
 	}
 
-	/**
-	 * @param string $race
-	 */
-	public function setRace(string $race) {
+	public function setRace(string $race): void {
 		$this->race = $race;
 	}
 
-	/**
-	 * @param int $wood
-	 */
-	public function setWood(int $wood) {
+	public function setWood(int $wood): void {
 		$this->wood = $wood;
 	}
 
-	/**
-	 * @param int $stone
-	 */
-	public function setStone(int $stone) {
+	public function setStone(int $stone): void {
 		$this->stone = $stone;
 	}
 
-	/**
-	 * @param int $iron
-	 */
-	public function setIron(int $iron) {
+	public function setIron(int $iron): void {
 		$this->iron = $iron;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getResources(): int {
 		return $this->wood + $this->stone + $this->iron;
 	}

@@ -2,9 +2,9 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use Doctrine\DBAL\DBALException;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use JetBrains\PhpStorm\ArrayShape;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +26,7 @@ class ProfileController extends AbstractController
 	/**
 	 * @var array(string=>string)
 	 */
-	private static $roles = [
+	private static array $roles = [
 		User::ROLE_ADMIN        => 'Administrator',
 		User::ROLE_BETA_TESTER  => 'Betatester',
 		User::ROLE_MULTI_PLAYER => 'Mehrere Parteien',
@@ -36,7 +36,7 @@ class ProfileController extends AbstractController
 	/**
 	 * @var array(int=>string)
 	 */
-	private static $errors = [
+	private static array $errors = [
 		10 => 'Der Benutzername darf nicht leer sein.',
 		11 => 'Der Benutzername darf nicht länger als 190 Zeichen sein.',
 		12 => 'Es gibt bereits einen Benutzer mit diesem Namen.',
@@ -47,53 +47,14 @@ class ProfileController extends AbstractController
 		40 => 'Die Einstellungen konnten nicht gespeichert werden.'
 	];
 
-	/**
-	 * @var UserRepository
-	 */
-	private $userRepository;
-
-	/**
-	 * @var GameService
-	 */
-	private $gameService;
-
-	/**
-	 * @var PartyService
-	 */
-	private $partyService;
-
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-
-	/**
-	 * @var UserPasswordEncoderInterface
-	 */
-	private $passwordEncoder;
-
-	/**
-	 * @param UserRepository $userRepository
-	 * @param GameService $gameService
-	 * @param PartyService $partyService
-	 * @param MailService $mailService
-	 * @param UserPasswordEncoderInterface $encoder
-	 */
-	public function __construct(UserRepository $userRepository, GameService $gameService, PartyService $partyService,
-								MailService $mailService, UserPasswordEncoderInterface $encoder) {
-		$this->userRepository  = $userRepository;
-		$this->gameService     = $gameService;
-		$this->partyService    = $partyService;
-		$this->mailService     = $mailService;
-		$this->passwordEncoder = $encoder;
+	public function __construct(private UserRepository $userRepository, private GameService $gameService,
+								private PartyService $partyService, private MailService $mailService,
+								private UserPasswordEncoderInterface $passwordEncoder) {
 	}
 
 	/**
 	 * @Route("/profile", name="profile")
-	 *
-	 * @param Request $request
-	 * @return Response
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function index(Request $request): Response {
 		$roles   = $this->getRoles();
@@ -127,9 +88,6 @@ class ProfileController extends AbstractController
 
 	/**
 	 * @Route("/profile/change", name="profile_change")
-	 *
-	 * @param Request $request
-	 * @return Response
 	 * @throws \Throwable
 	 */
 	public function change(Request $request): Response {
@@ -194,9 +152,6 @@ class ProfileController extends AbstractController
 
 	/**
 	 * @Route("/profile/settings", name="profile_settings")
-	 *
-	 * @param Request $request
-	 * @return Response
 	 * @throws \Throwable
 	 */
 	public function settings(Request $request): Response {
@@ -210,7 +165,7 @@ class ProfileController extends AbstractController
 
 				$this->save($user);
 				$error = 0;
-			} catch (\Exception $e) {
+			} catch (\Exception) {
 				$error = 40;
 			}
 		}
@@ -234,6 +189,7 @@ class ProfileController extends AbstractController
 	/**
 	 * @return array(string=>string)
 	 */
+	#[ArrayShape(['withAttachment' => 'string'])]
 	private function getFlags(): array {
 		$withAttachment = $this->user()->hasFlag(User::FLAG_WITH_ATTACHMENT);
 		return [
@@ -241,16 +197,14 @@ class ProfileController extends AbstractController
 		];
 	}
 
-	/**
-	 * @return User
-	 */
 	private function user(): User {
-		return $this->getUser();
+		/** @var User $user */
+		$user = $this->getUser();
+		return $user;
+
 	}
 
 	/**
-	 * @param User $user
-	 * @param bool $sendMail
 	 * @throws \Throwable
 	 */
 	private function save(User $user, bool $sendMail = false) {
@@ -263,7 +217,6 @@ class ProfileController extends AbstractController
 	}
 
 	/**
-	 * @param User $user
 	 * @throws \Throwable
 	 */
 	private function sendMail(User $user) {

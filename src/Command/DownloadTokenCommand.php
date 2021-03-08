@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpMissingFieldTypeInspection */
 declare (strict_types = 1);
 namespace App\Command;
 
@@ -18,23 +19,14 @@ class DownloadTokenCommand extends Command
 	 */
 	protected static $defaultName = 'download:token';
 
-	/**
-	 * @var string
-	 */
-	private $secret;
+	private string $secret;
 
-	/**
-	 * @param ContainerBagInterface $config
-	 */
 	public function __construct(ContainerBagInterface $config) {
 		parent::__construct();
 		$this->secret = $config->get('app.secret');
 	}
 
-	/**
-	 * Set description and help.
-	 */
-	protected function configure() {
+	protected function configure(): void {
 		$this->setDescription('Generate a URL token for anonymous report download.');
 		$this->setHelp('This command generates a token for a given eMail address and turn number.');
 
@@ -44,11 +36,6 @@ class DownloadTokenCommand extends Command
 		$this->addArgument('turn', InputArgument::REQUIRED, 'Turn number');
 	}
 
-	/**
-	 * @param InputInterface $input
-	 * @param OutputInterface $output
-	 * @return int
-	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$game  = (int)$input->getArgument('game');
 		$party = $input->getArgument('party');

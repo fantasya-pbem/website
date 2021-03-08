@@ -3,7 +3,7 @@ declare (strict_types = 1);
 namespace App\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
-
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -22,45 +22,20 @@ class ClientCertificateAuthenticator extends AbstractGuardAuthenticator
 {
 	use TargetPathTrait;
 
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-
-	/**
- 	 * @param EntityManagerInterface $entityManager
-	 * @param UrlGeneratorInterface $urlGenerator
-	 */
-	public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator) {
-		$this->entityManager = $entityManager;
-		$this->urlGenerator  = $urlGenerator;
+	public function __construct(private EntityManagerInterface $entityManager, private UrlGeneratorInterface $urlGenerator) {
 	}
 
-	/**
-	 * @param Request $request
-	 * @return bool
-	 */
 	public function supports(Request $request): bool {
 		return $request->attributes->get('_route') === 'user_secure' && $request->isMethod('GET');
 	}
 
-	/**
-	 * @param Request $request
-	 * @return ClientCertificate
-	 */
-	public function getCredentials(Request $request): ClientCertificate {
+	#[Pure] public function getCredentials(Request $request): ClientCertificate {
 		return new ClientCertificate();
 	}
 
 	/**
 	 * @param ClientCertificate $credentials
-	 * @param UserProviderInterface $userProvider
-	 * @return UserInterface|null
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface {
 		/* @var User $user */
@@ -70,18 +45,12 @@ class ClientCertificateAuthenticator extends AbstractGuardAuthenticator
 
 	/**
 	 * @param ClientCertificate $credentials
-	 * @param UserInterface $user
-	 * @return bool
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function checkCredentials($credentials, UserInterface $user): bool {
 		return $credentials->isValid();
 	}
 
-	/**
-	 * @param Request $request
-	 * @param AuthenticationException $exception
-	 * @return Response
-	 */
 	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response {
 		if ($request->hasSession()) {
 			$request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
@@ -90,13 +59,7 @@ class ClientCertificateAuthenticator extends AbstractGuardAuthenticator
 		return new RedirectResponse($url);
 	}
 
-	/**
-	 * @param Request $request
-	 * @param TokenInterface $token
-	 * @param string $providerKey
-	 * @return Response|null
-	 */
-	public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response {
+	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey): ?Response {
 		if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
 			return new RedirectResponse($targetPath);
 		}
@@ -108,26 +71,15 @@ class ClientCertificateAuthenticator extends AbstractGuardAuthenticator
 		return new RedirectResponse($this->urlGenerator->generate('user_expire', ['days' => $days]));
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function supportsRememberMe(): bool {
 		return true;
 	}
 
-	/**
-	 * @param Request $request
-	 * @param AuthenticationException $authException
-	 * @return RedirectResponse
-	 */
-	public function start(Request $request, AuthenticationException $authException = null): RedirectResponse {
+	public function start(Request $request, ?AuthenticationException $authException = null): RedirectResponse {
 		$url = $this->getLoginUrl();
 		return new RedirectResponse($url);
 	}
 
-	/**
-	 * @return string
-	 */
 	protected function getLoginUrl(): string {
 		return $this->urlGenerator->generate('user_login');
 	}

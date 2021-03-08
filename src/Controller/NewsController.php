@@ -12,28 +12,14 @@ use App\Entity\News;
 use App\Form\NewsType;
 use App\Repository\NewsRepository;
 
-/**
- * NewsController.
- */
 class NewsController extends AbstractController
 {
-	/**
-	 * @var NewsRepository
-	 */
-	private $repository;
-
-	/**
-	 * @param NewsRepository $repository
-	 */
-	public function __construct(NewsRepository $repository) {
-		$this->repository = $repository;
+	public function __construct(private NewsRepository $repository) {
 		\Locale::setDefault('de_DE.utf8');
 	}
 
 	/**
 	 * @Route("/news", name="news")
-	 *
-	 * @return Response
 	 */
 	public function index(): Response {
 		$news = $this->repository->findAll();
@@ -43,9 +29,6 @@ class NewsController extends AbstractController
 	/**
 	 * @Route("/news/edit/{article}", name="news_edit")
 	 * @IsGranted("ROLE_NEWS_CREATOR")
-	 *
-	 * @param News|null $article
-	 * @return Response
 	 */
 	public function edit(News $article = null): Response {
 		$news       = $this->repository->findAll();
@@ -66,10 +49,6 @@ class NewsController extends AbstractController
 	/**
 	 * @Route("/news/create/{article}", name="news_create")
 	 * @IsGranted("ROLE_NEWS_CREATOR")
-	 *
-	 * @param Request $request
-	 * @param News $article
-	 * @return Response
 	 * @throws \Exception
 	 */
 	public function create(Request $request, News $article = null): Response {
@@ -98,9 +77,6 @@ class NewsController extends AbstractController
 	/**
 	 * @Route("/news/delete/{article}", name="news_delete")
 	 * @IsGranted("ROLE_NEWS_CREATOR")
-	 *
-	 * @param News $article
-	 * @return Response
 	 */
 	public function delete(News $article): Response {
 		$entityManager = $this->getDoctrine()->getManager();

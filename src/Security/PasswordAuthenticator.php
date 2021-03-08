@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace App\Security;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -21,44 +22,15 @@ class PasswordAuthenticator extends AbstractFormLoginAuthenticator
 {
 	use TargetPathTrait;
 
-	/**
-	 * @var UrlGeneratorInterface
-	 */
-	private $urlGenerator;
-
-	/**
-	 * @var CsrfTokenManagerInterface
-	 */
-	private $csrfTokenManager;
-
-	/**
-	 * @var UserPasswordEncoderInterface
-	 */
-	private $passwordEncoder;
-
-	/**
-	 * @param UrlGeneratorInterface $urlGenerator
-	 * @param CsrfTokenManagerInterface $csrfTokenManager
-	 * @param UserPasswordEncoderInterface $passwordEncoder
-	 */
-	public function __construct(UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder) {
-		$this->urlGenerator	 = $urlGenerator;
-		$this->csrfTokenManager = $csrfTokenManager;
-		$this->passwordEncoder  = $passwordEncoder;
+	public function __construct(private UrlGeneratorInterface $urlGenerator, private CsrfTokenManagerInterface $csrfTokenManager,
+								private UserPasswordEncoderInterface $passwordEncoder) {
 	}
 
-	/**
-	 * @param Request $request
-	 * @return bool
-	 */
 	public function supports(Request $request): bool {
 		return $request->attributes->get('_route') === 'user_login' && $request->isMethod('POST');
 	}
 
-	/**
-	 * @param Request $request
-	 * @return array
-	 */
+	#[ArrayShape(['name' => 'mixed', 'password' => 'mixed', 'csrf_token' => 'mixed'])]
 	public function getCredentials(Request $request): array {
 		$credentials = [
 			'name'	     => $request->request->get('name'),
@@ -71,8 +43,7 @@ class PasswordAuthenticator extends AbstractFormLoginAuthenticator
 
 	/**
 	 * @param mixed $credentials
-	 * @param UserProviderInterface $userProvider
-	 * @return UserInterface
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function getUser($credentials, UserProviderInterface $userProvider): UserInterface {
 		$token = new CsrfToken('authenticate', $credentials['csrf_token']);
@@ -88,29 +59,19 @@ class PasswordAuthenticator extends AbstractFormLoginAuthenticator
 
 	/**
 	 * @param mixed $credentials
-	 * @param UserInterface $user
-	 * @return bool
+	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function checkCredentials($credentials, UserInterface $user): bool {
 		return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
 	}
 
-	/**
-	 * @param Request $request
-	 * @param TokenInterface $token
-	 * @param string $providerKey
-	 * @return RedirectResponse
-	 */
-	public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): RedirectResponse {
+	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey): RedirectResponse {
 		if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
 			return new RedirectResponse($targetPath);
 		}
 		return new RedirectResponse($this->urlGenerator->generate('profile'));
 	}
 
-	/**
-	 * @return string
-	 */
 	protected function getLoginUrl(): string {
 		return $this->urlGenerator->generate('user_login');
 	}

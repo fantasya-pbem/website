@@ -14,34 +14,13 @@ use App\Form\MythType;
 use App\Repository\MythRepository;
 use App\Service\MailService;
 
-/**
- * MythController.
- */
 class MythController extends AbstractController
 {
-	/**
-	 * @var MythRepository
-	 */
-	private $repository;
-
-	/**
-	 * @var MailService
-	 */
-	private $mailService;
-
-	/**
-	 * @param MythRepository $repository
-	 */
-	public function __construct(MythRepository $repository, MailService $mailService) {
-		$this->repository = $repository;
-		$this->mailService = $mailService;
+	public function __construct(private MythRepository $repository, private MailService $mailService) {
 	}
 
 	/**
 	 * @Route("/myth/{page}", name="myth", requirements={"page"="\d+"})
-	 *
-	 * @param int $page
-	 * @return Response
 	 */
 	public function index(int $page = 1): Response {
 		if ($page <= 0) {
@@ -56,9 +35,6 @@ class MythController extends AbstractController
 	/**
 	 * @Route("/myth/spread", name="myth_spread")
 	 * @IsGranted("ROLE_USER")
-	 *
-	 * @param Request $request
-	 * @return Response
 	 */
 	public function spread(Request $request): Response {
 		$myth = new Myth();
@@ -77,23 +53,20 @@ class MythController extends AbstractController
 		return $this->render('myth/spread.html.twig', ['form' => $form->createView()]);
 	}
 
-	/**
-	 * @return User
-	 */
 	private function user(): User {
-		return $this->getUser();
+		/** @var User $user */
+		$user = $this->getUser();
+		return $user;
+
 	}
 
-	/**
-	 * @param Myth $myth
-	 */
 	private function sendAdminMail(Myth $myth) {
 		$mail = $this->mailService->toGameMaster();
 		$mail->subject('Es geht ein Gerücht um');
 		$mail->text($this->renderView('emails/admin_myth.html.twig', ['user' => $this->user(), 'myth' => $myth]));
 		try {
 			$this->mailService->signAndSend($mail);
-		} catch (\Throwable $e) {
+		} catch (\Throwable) {
 		}
 	}
 }

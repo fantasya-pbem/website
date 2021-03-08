@@ -8,15 +8,12 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\News;
 
 /**
- * @method News|null find($id, $lockMode = null, $lockVersion = null)
- * @method News|null findOneBy(array $criteria, array $orderBy = null)
- * @method News[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method News|null find($id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method News|null findOneBy(array $criteria, ?array $orderBy = null)
+ * @method News[] findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
  */
 class NewsRepository extends ServiceEntityRepository
 {
-	/**
-	 * @param ManagerRegistry $registry
-	 */
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, News::class);
     }

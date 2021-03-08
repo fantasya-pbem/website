@@ -5,19 +5,19 @@ namespace App\Migration;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20190302081045 extends AbstractMigration
+final class Version20210302181403 extends AbstractMigration
 {
 	public function getDescription(): string {
-		return 'Create table myth.';
+		return 'Add column engine to table game.';
 	}
 
 	public function up(Schema $schema): void {
 		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-		$this->addSql('CREATE TABLE myth (id INT AUTO_INCREMENT NOT NULL, myth VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+		$this->addSql("ALTER TABLE game ADD `engine` char(8) NOT NULL DEFAULT 'fantasya' AFTER description");
 	}
 
 	public function down(Schema $schema): void {
 		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-		$this->addSql('DROP TABLE myth');
+		$this->addSql("ALTER TABLE game DROP `engine`");
 	}
 }

@@ -2,8 +2,7 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\ORM\EntityManagerInterface;
+use JetBrains\PhpStorm\Pure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -18,6 +17,7 @@ use App\Data\Order;
 use App\Entity\User;
 use App\Game\Party;
 use App\Game\Turn;
+use App\Service\EngineService;
 use App\Service\GameService;
 use App\Service\OrderService;
 use App\Service\PartyService;
@@ -27,46 +27,13 @@ use App\Service\PartyService;
  */
 class OrderController extends AbstractController
 {
-	/**
-	 * @var GameService
-	 */
-	private $gameService;
-
-	/**
-	 * @var PartyService
-	 */
-	private $partyService;
-
-	/**
-	 * @var OrderService
-	 */
-	private $orderService;
-
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $manager;
-
-	/**
-	 * @param GameService $gameService
-	 * @param PartyService $partyService
-	 * @param OrderService $orderService
-	 * @param EntityManagerInterface $manager
-	 */
-	public function __construct(GameService $gameService, PartyService $partyService, OrderService $orderService,
-								EntityManagerInterface $manager) {
-		$this->gameService  = $gameService;
-		$this->partyService = $partyService;
-		$this->orderService = $orderService;
-		$this->manager      = $manager;
+	public function __construct(private GameService $gameService, private PartyService $partyService,
+								private OrderService $orderService, private EngineService $engineService) {
 	}
 
 	/**
 	 * @Route("/order", name="order")
-	 *
-	 * @param Request $request
-	 * @return Response
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function index(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
@@ -95,10 +62,7 @@ class OrderController extends AbstractController
 
 	/**
 	 * @Route("/order/send", name="order_send")
-	 *
-	 * @param Request $request
-	 * @return Response
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	public function send(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
@@ -124,13 +88,9 @@ class OrderController extends AbstractController
 
 	/**
 	 * @Route("/order/party/{p}/turn/{t}", name="order_success")
-	 *
-	 * @param int $p
-	 * @param int $t
-	 * @return Response
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
-	public function party(int $p, int $t): Response {
+	public function party(string $p, int $t): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		$party   = null;
 		foreach ($parties as $userParty) {
@@ -153,20 +113,18 @@ class OrderController extends AbstractController
 		return $this->render('order/index.html.twig', ['form' => $form->createView()]);
 	}
 
-	/**
-	 * @return User
-	 */
 	private function user(): User {
-		return $this->getUser();
+		/** @var User $user */
+		$user = $this->getUser();
+		return $user;
+
 	}
 
 	/**
-	 * @param Request $request
-	 * @return int
-	 * @throws DBALException
+	 * @throws \Exception
 	 */
 	private function turn(Request $request): int {
-		$turn  = new Turn($this->gameService->getCurrent(), $this->manager->getConnection());
+		$turn  = new Turn($this->gameService->getCurrent(), $this->engineService);
 		$round = $turn->getRound();
 		if ($request->request->has('form')) {
 			$form = $request->request->get('form');
@@ -181,11 +139,8 @@ class OrderController extends AbstractController
 	}
 
 	/**
-	 * @param Order $order
-	 * @param array $parties
-	 * @param int $turn
-	 * @return FormInterface
-	 * @throws DBALException
+	 * @param Party[] $parties
+	 * @throws \Exception
 	 */
 	private function createOrderForm(Order $order, array $parties, int $turn): FormInterface {
 		$form = $this->createFormBuilder($order);
@@ -206,11 +161,8 @@ class OrderController extends AbstractController
 	}
 
 	/**
-	 * @param Order $order
-	 * @param array $parties
-	 * @param int $turn
-	 * @return FormInterface
-	 * @throws DBALException
+	 * @param Party[] $parties
+	 * @throws \Exception
 	 */
 	private function createSendForm(Order $order, array $parties, int $turn): FormInterface {
 		$form = $this->createFormBuilder($order);
@@ -220,7 +172,7 @@ class OrderController extends AbstractController
 		]);
 		$form->add('turn', ChoiceType::class, [
 			'label'   => 'Runde',
-			'choices' => $this->getTurns($turn, 0, 5),
+			'choices' => $this->getTurns($turn, 0),
 			'data'    => (string)$turn
 		]);
 		$form->add('orders', TextareaType::class, [
@@ -246,14 +198,11 @@ class OrderController extends AbstractController
 	}
 
 	/**
-	 * @param int $turn
-	 * @param int|null $min
-	 * @param int|null $max
 	 * @return string[]
 	 */
-	private function getTurns(int $turn, int $min = -5, int $max = 5): array {
+	#[Pure] private function getTurns(int $turn, int $min = -5, int $max = 5): array {
 		$turns = [];
-		$next  = $turn + $min;
+		$next  = max(0, $turn + $min);
 		$last  = $turn + $max;
 		while ($next <= $last ) {
 			$round = (string)$next;

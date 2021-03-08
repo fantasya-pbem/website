@@ -2,69 +2,43 @@
 declare (strict_types = 1);
 namespace App\Service;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\ORM\EntityManagerInterface;
+use JetBrains\PhpStorm\Pure;
 
 use App\Entity\Game;
 use App\Entity\User;
+use App\Exception\NoEngineException;
 use App\Game\Newbie;
 use App\Game\Party;
 
-/**
- * A service for fetching parties.
- */
 class PartyService
 {
-	/**
-	 * @var GameService
-	 */
-	private $service;
-
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $manager;
-
-	/**
-	 * @param GameService $service
-	 * @param EntityManagerInterface $manager
-	 */
-	public function __construct(GameService $service, EntityManagerInterface $manager) {
-		$this->service = $service;
-		$this->manager = $manager;
+	#[Pure] public function __construct(private GameService $service, private EngineService $engineService) {
 	}
 
 	/**
-	 * @param string $id
-	 * @param Game $game
-	 * @return Party|null
-	 * @throws DBALException
+	 * Find a party by its Base-36 ID.
+	 *
+	 * @throws NoEngineException
 	 */
 	public function getById(string $id, Game $game): ?Party {
-		$connection = $this->manager->getConnection();
-		$table      = $game->getDb() . '.partei';
-		$sql        = "SELECT * FROM " . $table . " WHERE id = " . $this->manager->getConnection()->quote($id);
-		$stmt       = $connection->prepare($sql);
-		$stmt->execute();
-		$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-		if (is_array($result) && isset($result[0]) && is_array($result[0])) {
-			return new Party($result[0]);
-		}
-		return null;
+		return $this->engineService->get($game)->getById($id, $game);
+	}
+
+	/**
+	 * Find a party in a game by its owner ID.
+	 */
+	public function getByOwner(string $owner, Game $game): ?Party {
+		return $this->engineService->get($game)->getByOwner($owner, $game);
 	}
 
 	/**
 	 * Get all parties of a User.
-	 *
-	 * @param User $user
-	 * @return array
-	 * @throws DBALException
 	 */
 	public function getFor(User $user): array {
 		$games   = $this->service->getAll();
 		$parties = [];
 		foreach ($games as $game) {
-			$parties[$game->getId()] = $this->parties($user, $game);
+			$parties[$game->getId()] = $this->engineService->get($game)->getParties($user, $game);
 		}
 		return $parties;
 	}
@@ -72,37 +46,29 @@ class PartyService
 	/**
 	 * Get parties in current Game of a User.
 	 *
-	 * @param User $user
 	 * @return Party[]
-	 * @throws DBALException
 	 */
 	public function getCurrent(User $user): array {
-		return $this->parties($user, $this->service->getCurrent());
+		$game = $this->service->getCurrent();
+		return $this->engineService->get($game)->getParties($user, $game);
 	}
 
 	/**
 	 * Get all newbies of a User.
 	 *
-	 * @param User $user
 	 * @return Newbie[]
-	 * @throws DBALException
 	 */
 	public function getNewbies(User $user): array {
 		$games   = $this->service->getAll();
 		$newbies = [];
 		foreach ($games as $game) {
-			$newbies[$game->getId()] = $this->newbies($user, $game);
+			$newbies[$game->getId()] = $this->engineService->get($game)->getNewbies($user, $game);
 		}
 		return $newbies;
 	}
 
 	/**
 	 * Check if a User has a Party in a Game.
-	 *
-	 * @param User $user
-	 * @param Game $game
-	 * @return bool
-	 * @throws DBALException
 	 */
 	public function hasParty(User $user, Game $game): bool {
 		$parties = $this->getFor($user);
@@ -111,11 +77,6 @@ class PartyService
 
 	/**
 	 * Check if a User has a Newbie in a Game.
-	 *
-	 * @param User $user
-	 * @param Game $game
-	 * @return bool
-	 * @throws DBALException
 	 */
 	public function hasNewbie(User $user, Game $game): bool {
 		$newbies = $this->getNewbies($user);
@@ -124,11 +85,6 @@ class PartyService
 
 	/**
 	 * Check if a User has a Party or Newbie in a Game.
-	 *
-	 * @param User $user
-	 * @param Game $game
-	 * @return bool
-	 * @throws DBALException
 	 */
 	public function hasAny(User $user, Game $game): bool {
 		return $this->hasParty($user, $game) || $this->hasNewbie($user, $game);
@@ -136,125 +92,20 @@ class PartyService
 
 	/**
 	 * Update eMail address of user's parties and newbies.
-	 *
-	 * @param User $user
-	 * @throws DBALException
 	 */
 	public function update(User $user) {
-		$games      = $this->service->getAll();
-		$connection = $this->manager->getConnection();
-		$id         = $user->getId();
-		$email      = $connection->quote($user->getEmail());
-
+		$games = $this->service->getAll();
 		foreach ($games as $game) {
-			$table = $game->getDb() . '.partei';
-			$sql   = "UPDATE " . $table . " SET email = " . $email . " WHERE user_id = " . $id;
-			if (!$connection->prepare($sql)->execute()) {
-				throw new DBALException('Could not update parties.');
-			}
-
-			$table = $game->getDb() . '.neuespieler';
-			$sql   = "UPDATE " . $table . " SET email = " . $email . " WHERE user_id = " . $id;
-			if (!$connection->prepare($sql)->execute()) {
-				throw new DBALException('Could not update newbies.');
-			}
+			$this->engineService->get($game)->updateUser($user, $game);
 		}
 	}
 
-	/**
-	 * Create a Newbie.
-	 *
-	 * @param Newbie $newbie
-	 * @throws DBALException
-	 */
 	public function create(Newbie $newbie) {
-		$connection = $this->manager->getConnection();
-		$table      = $this->service->getCurrent()->getDb() . '.neuespieler';
-		$columns    = implode(',', array_keys($newbie->getProperties()));
-		$values     = $this->createValues($newbie);
-		$sql        = "INSERT INTO " . $table . " (" . $columns . ") VALUES (" . $values . ")";
-		if (!$connection->prepare($sql)->execute()) {
-			throw new DBALException('Could not save Newbie.');
-		}
+		$game = $this->service->getCurrent();
+		$this->engineService->get($game)->create($newbie, $game);
 	}
 
-	/**
-	 * Delete a Newbie.
-	 *
-	 * @param Newbie $newbie
-	 */
-	public function delete(Newbie $newbie) {
-		$connection = $this->manager->getConnection();
-		$table      = $this->service->getCurrent()->getDb() . '.neuespieler';
-		$values     = $this->createConstraints($newbie);
-		$sql        = "DELETE FROM " . $table . " WHERE " . $values;
-		if (!$connection->prepare($sql)->execute()) {
-			throw new DBALException('Could not delete Newbie.');
-		}
-	}
-
-	/**
-	 * @param User $user
-	 * @param Game $game
-	 * @return Party[]
-	 * @throws DBALException
-	 */
-	private function parties(User $user, Game $game): array {
-		$connection = $this->manager->getConnection();
-		$table      = $game->getDb() . '.partei';
-		$sql        = "SELECT * FROM " . $table . " WHERE user_id = " . $user->getId();
-		$stmt       = $connection->prepare($sql);
-		$stmt->execute();
-		$parties = [];
-		foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $properties) {
-			$parties[] = new Party($properties);
-		}
-		return $parties;
-	}
-
-	/**
-	 * @param User $user
-	 * @param Game $game
-	 * @return Newbie[]
-	 * @throws DBALException
-	 */
-	private function newbies(User $user, Game $game): array {
-		$connection = $this->manager->getConnection();
-		$table      = $game->getDb() . '.neuespieler';
-		$sql        = "SELECT * FROM " . $table . " WHERE user_id = " . $user->getId();
-		$stmt       = $connection->prepare($sql);
-		$stmt->execute();
-		$newbies = [];
-		foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $properties) {
-			$newbie    = new Newbie($properties);
-			$newbies[] = $newbie->setUser($user);
-		}
-		return $newbies;
-	}
-
-	/**
-	 * @var Newbie $newbie
-	 * @return string
-	 */
-	private function createValues(Newbie $newbie): string {
-		$connection = $this->manager->getConnection();
-		$properties = [];
-		foreach ($newbie->getProperties() as $value) {
-			$properties[] = is_int($value) ? $value : $connection->quote($value);
-		}
-		return implode(',', $properties);
-	}
-
-	/**
-	 * @var Newbie $newbie
-	 * @return string
-	 */
-	private function createConstraints(Newbie $newbie): string {
-		$connection  = $this->manager->getConnection();
-		$constraints = [];
-		foreach ($newbie->getProperties() as $column => $value) {
-			$constraints[] = $column . ' = ' . (is_int($value) ? $value : $connection->quote($value));
-		}
-		return implode(' AND ', $constraints);
+	public function delete(Newbie $newbie, Game $game) {
+		$this->engineService->get($game)->delete($newbie, $game);
 	}
 }

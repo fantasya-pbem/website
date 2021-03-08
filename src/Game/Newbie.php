@@ -2,23 +2,18 @@
 declare (strict_types = 1);
 namespace App\Game;
 
+use JetBrains\PhpStorm\Pure;
+
 use App\Data\Newbie as NewbieData;
+use App\Entity\Assignment;
 use App\Entity\User;
 
-/**
- * A helper class for newbies.
- */
 class Newbie
 {
-	/**
-	 * @var array
-	 */
-	private $properties;
+	private string $uuid;
 
-	/**
-	 * @param NewbieData $data
-	 * @return Newbie
-	 */
+	private User $user;
+
 	public static function fromData(NewbieData $data): self {
 		return new self([
 			'name'        => $data->getName(),
@@ -33,76 +28,69 @@ class Newbie
 		]);
 	}
 
-	/**
-	 * @param array $properties
-	 */
-	public function __construct(array $properties) {
-		$this->properties = $properties;
+	public static function fromAssignment(Assignment $assignment): self {
+		$data         = json_decode($assignment->getNewbie(), true);
+		$newbie       = new self($data);
+		$newbie->uuid = (string)$assignment->getUuid();
+		$newbie->setUser($assignment->getUser());
+		return $newbie;
 	}
 
-	/**
-	 * @return string
-	 */
+	#[Pure] public function __construct(private array $properties) {
+		$this->uuid = uniqid('newbie-');
+	}
+
 	public function getRace(): string {
 		return $this->properties['rasse'];
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getName(): string {
 		return $this->properties['name'];
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getDescription(): string {
 		return $this->properties['description'];
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getWood(): int {
 		return (int)$this->properties['holz'];
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getStone(): int {
 		return (int)$this->properties['steine'];
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getIron(): int {
 		return (int)$this->properties['eisen'];
 	}
 
-	/**
-	 * @return int|null
-	 */
 	public function getUserId(): ?int {
 		return $this->properties['user_id'] ?? null;
 	}
 
-	/**
-	 * @return array
-	 */
 	public function getProperties(): array {
 		return $this->properties;
 	}
 
-	/**
-	 * @param User $user
-	 * @return self
-	 */
+	public function getUuid(): string {
+		return $this->uuid;
+	}
+
+	public function getUser(): User {
+		return $this->user;
+	}
+
 	public function setUser(User $user): self {
+		$this->user = $user;
+
 		$this->properties['email']   = $user->getEmail();
 		$this->properties['user_id'] = $user->getId();
 		return $this;
+	}
+
+	public function toLemuriaJson(): string {
+		return json_encode(
+			['name' => $this->getName(), 'description' => $this->getDescription(), 'rasse' => $this->getRace()]
+		);
 	}
 }

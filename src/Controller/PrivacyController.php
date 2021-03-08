@@ -10,17 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * ContactController.
- */
 class PrivacyController extends AbstractController
 {
 	private const COOKIE = 'accept_dsgvo';
 
 	/**
 	 * @Route("/privacy", name="privacy")
-	 *
-	 * @return Response
 	 */
 	public function index(): Response {
 		$hasAccepted = isset($_COOKIE[self::COOKIE]);
@@ -34,9 +29,6 @@ class PrivacyController extends AbstractController
 
 	/**
 	 * @Route("/privacy/accept", name="privacy_accept")
-	 *
-	 * @param Request $request
-	 * @return Response
 	 */
 	public function accept(Request $request): Response {
 		$form = $this->getForm();
@@ -53,9 +45,6 @@ class PrivacyController extends AbstractController
 		]);
 	}
 
-	/**
-	 * @return FormInterface
-	 */
 	private function getForm(): FormInterface {
 		$form = $this->createFormBuilder()->setAction($this->generateUrl('privacy_accept'));
 		$form->add('isAccepted', CheckboxType::class, [
