@@ -1,0 +1,3 @@
+# Fantasya
+fantasya unix - n n - 10 pipe
+  flags=F user=www-data argv=/.../fantasya/website/bin/console mail:filter ${sender} ${size} ${recipient}
