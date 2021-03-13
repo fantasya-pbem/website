@@ -30,8 +30,8 @@
 		}
 	],
 	"license": "proprietary",
-	"version": "2.3.0",
-	"time": "2021-03-06",
+	"version": "2.3.1",
+	"time": "2021-03-13",
 
 	"require": {
 		"php": "~8.0",
