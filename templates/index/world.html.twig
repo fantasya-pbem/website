@@ -26,9 +26,9 @@
         <h3>Neue Parteien</h3>
 
         {% if statistics.newbiesCount == 1 %}
-            <p>Diese Woche startet eine neue Partei.</p>
+            <p>Im nächsten Zug startet eine neue Partei.</p>
         {% else %}
-            <p>Diese Wochen starten {{ statistics.newbiesCount|localizednumber }} neue Parteien.</p>
+            <p>Im nächsten Zug starten {{ statistics.newbiesCount|localizednumber }} neue Parteien.</p>
         {% endif %}
 
         <dl>

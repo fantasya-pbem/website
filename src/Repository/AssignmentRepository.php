@@ -9,7 +9,7 @@ use App\Entity\Assignment;
 use App\Entity\User;
 
 /**
- * @method find($id, ?int $lockMode = null, ?int $lockVersion = null): ?User
+ * @method Assignment find($id, ?int $lockMode = null, ?int $lockVersion = null)
  */
 class AssignmentRepository extends ServiceEntityRepository
 {

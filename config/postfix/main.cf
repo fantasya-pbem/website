@@ -1,0 +1,5 @@
+smtpd_recipient_restrictions = ...,
+	check_recipient_access hash:/etc/postfix/fantasya.access
+
+# Fantasya
+fantasya_destination_recipient_limit = 1
