@@ -25,9 +25,12 @@ class Lemuria implements Engine
 {
 	private static bool $hasBeenInitialized = false;
 
+	private static LemuriaConfig $config;
+
 	public function __construct(private AssignmentRepository $assignmentRepository, private EntityManagerInterface $entityManager) {
 		if (!self::$hasBeenInitialized) {
-			LemuriaGame::init(new LemuriaConfig(__DIR__ . '/../../../var/lemuria'));
+			self::$config = new LemuriaConfig(__DIR__ . '/../../../var/lemuria');
+			LemuriaGame::init(self::$config);
 			LemuriaGame::load();
 			self::$hasBeenInitialized = true;
 		}
@@ -39,7 +42,7 @@ class Lemuria implements Engine
 
 	public function getLastZat(Game $game): \DateTime {
 		$dateTime = new \DateTime();
-		return $dateTime->sub(new \DateInterval('P1D'))->setTime(6, 0);
+		return $dateTime->setTimestamp(self::$config[LemuriaConfig::MDD]);
 	}
 
 	public function getById(string $id, Game $game): ?Party {
