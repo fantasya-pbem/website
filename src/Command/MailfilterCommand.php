@@ -194,7 +194,8 @@ class MailfilterCommand extends Command
 		try {
 			$alias = match ($mailbox) {
 				'befehle'      => 'spiel',
-				'beta', 'test' => 'beta'
+				'beta', 'test' => 'beta',
+				'lemuria'      => 'lemuria'
 			};
 		} catch (\UnhandledMatchError $e) {
 			throw new MailfilterException('Das Postfach ' . $mailbox . ' ist unbekannt.', 3, $e);
