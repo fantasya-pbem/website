@@ -17,7 +17,7 @@ class Party
 	 * Convert numeric ID to Base-36 ID.
 	 */
 	#[Pure] public static function toId(int $id): string {
-		return base_convert($id, 10, 36);
+		return base_convert((string)$id, 10, 36);
 	}
 
 	public function __construct(private array $properties) {
