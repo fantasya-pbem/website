@@ -113,13 +113,14 @@ class Lemuria implements Engine
 	private function createParty(PartyModel $party): Party {
 		$uuid  = (string)$party->Uuid();
 		$email = $this->fetchEmailAddress($uuid);
+		$user  = $this->assignmentRepository->findByUuid($party->Uuid())?->getUser()->getId();
 		return new Party([
 			'id'           => (string)$party->Id(),
 			'rasse'        => (string)Race::lemuria((string)$party->Race()),
 			'name'         => $party->Name(),
 			'beschreibung' => $party->Description(),
 			'owner_id'     => $uuid,
-			'user_id'      => $party->Uuid(),
+			'user_id'      => $user,
 			'email'        => $email
 		]);
 	}
