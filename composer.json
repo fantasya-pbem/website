@@ -31,7 +31,7 @@
 	],
 	"license": "proprietary",
 	"version": "2.3.1",
-	"time": "2021-03-13",
+	"time": "2021-03-20",
 
 	"require": {
 		"php": "~8.0",
@@ -41,7 +41,7 @@
 		"components/jquery": "~3.5",
 		"doctrine/annotations": "~1.12",
 		"lemuria-pbem/lemuria": "dev-master",
-		"lemuria-pbem/engine-fantasya": "0.1.0",
+		"lemuria-pbem/engine-fantasya": "~0.1.1",
 		"lemuria-pbem/model-fantasya": "dev-master",
 		"sensio/framework-extra-bundle": "~5.6",
 		"symfony/apache-pack": "~1.0",
