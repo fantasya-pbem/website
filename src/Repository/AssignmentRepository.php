@@ -49,4 +49,10 @@ class AssignmentRepository extends ServiceEntityRepository
 	public function findByUser(User $user): array {
 		return parent::findBy(['user' => $user]);
 	}
+
+	public function findByUuid(string $uuid): ?Assignment {
+		/** @var Assignment $assignment */
+		$assignment = parent::findOneBy(['uuid' => $uuid]);
+		return $assignment;
+	}
 }
