@@ -45,11 +45,12 @@ class OrderService
 
 	public function getFcheck(): string {
 		$check   = null;
-		$command = $this->fcheck;
-		if (is_string($command) && strpos($command, '%input%') > 0 && strpos($command, '%output%') > 0) {
+		$command = $this->fcheck ?? '';
+		if (str_contains($command, '%input%') && str_contains($command, '%output%') && str_contains($command, '%game%')) {
 			$file = $this->getPath();
 			if (is_file($file)) {
 				$command = str_replace('%input%', $file, $command);
+				$command = str_replace('%game%', $this->order->getGame(), $command);
 				$output  = tempnam('/tmp', 'fcheck');
 				if ($output) {
 					$command = str_replace('%output%', $output, $command);
