@@ -48,7 +48,7 @@ class Lemuria implements Engine
 	public function getById(string $id, Game $game): ?Party {
 		try {
 			/** @var PartyModel $party */
-			$party = LemuriaGame::Catalog()->get(Id::fromId($id), Catalog::PARTIES);
+			$party = LemuriaGame::Catalog()->get(new Id((int)$id), Catalog::PARTIES);
 			return $this->createParty($party);
 		} catch (NotRegisteredException) {
 			return null;
