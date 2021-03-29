@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace App\Game\Engine;
 
 use Doctrine\ORM\EntityManagerInterface;
-use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Storage\LemuriaConfig;
 use Lemuria\Id;
 use Lemuria\Lemuria as LemuriaGame;
@@ -84,8 +83,8 @@ class Lemuria implements Engine
 		}
 		return $newbies;
 	}
+	public function getStatistics(Game $game): Statistics {
 
-	#[Pure] public function getStatistics(Game $game): Statistics {
 		return new LemuriaStatistics($game, $this->assignmentRepository);
 	}
 

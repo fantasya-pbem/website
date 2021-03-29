@@ -5,6 +5,7 @@ namespace App\Game\Engine;
 use JetBrains\PhpStorm\ArrayShape;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
+use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
@@ -46,7 +47,10 @@ class LemuriaStatistics implements Statistics
 	 */
 	private ?array $persons = null;
 
+	private Dictionary $dictionary;
+
 	public function __construct(private Game $game, private AssignmentRepository $assignmentRepository) {
+		$this->dictionary = new Dictionary();
 	}
 
 	/**
@@ -67,7 +71,7 @@ class LemuriaStatistics implements Statistics
 				$races[$race]++;
 			}
 			foreach ($races as $race => $count) {
-				$this->races[] = ['race' => $race, 'count' => $count];
+				$this->races[] = ['race' => $this->dictionary->get('race', $race), 'count' => $count];
 			}
 		}
 		return $this->parties;
@@ -129,7 +133,7 @@ class LemuriaStatistics implements Statistics
 				$this->regions++;
 			}
 			foreach ($regions as $landscape => $count) {
-				$this->landscape[] = ['typ' => $landscape, 'count' => $count];
+				$this->landscape[] = ['typ' => $this->dictionary->get('landscape', $landscape), 'count' => $count];
 			}
 		}
 		return ['world' => $this->regions, 'underworld' => 0];
@@ -170,7 +174,7 @@ class LemuriaStatistics implements Statistics
 				$count++;
 			}
 			foreach ($persons as $race => $numbers) {
-				$this->persons[] = ['race' => $race, 'units' => $numbers[0], 'persons' => $numbers[1]];
+				$this->persons[] = ['race' => $this->dictionary->get('race', $race), 'units' => $numbers[0], 'persons' => $numbers[1]];
 			}
 			$this->population = ['units' => $count, 'persons' => $total];
 		}
