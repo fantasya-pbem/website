@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace App\Game\Engine;
 
 use JetBrains\PhpStorm\ArrayShape;
+use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Dictionary;
@@ -10,11 +11,7 @@ use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
 
-use App\Entity\Assignment;
-use App\Entity\Game;
-use App\Game\Newbie;
 use App\Game\Statistics;
-use App\Repository\AssignmentRepository;
 
 class LemuriaStatistics implements Statistics
 {
@@ -49,7 +46,7 @@ class LemuriaStatistics implements Statistics
 
 	private Dictionary $dictionary;
 
-	public function __construct(private AssignmentRepository $assignmentRepository) {
+	public function __construct() {
 		$this->dictionary = new Dictionary();
 	}
 
@@ -99,11 +96,8 @@ class LemuriaStatistics implements Statistics
 	public function getNewbies(): array {
 		if (!$this->newbies) {
 			$this->newbies = [];
-			foreach ($this->assignmentRepository->findAll() as $assignment /* @var Assignment $assignment */) {
-				if (str_starts_with($assignment->getUuid(), 'newbie-')) {
-					$newbie          = Newbie::fromAssignment($assignment);
-					$this->newbies[] = ['name' => $newbie->getName(), 'description' => $newbie->getDescription()];
-				}
+			foreach (Lemuria::Debut()->getAll() as $newcomer /* @var LemuriaNewcomer $newcomer */) {
+				$this->newbies[] = ['name' => $newcomer->Name(), 'description' => $newcomer->Description()];
 			}
 		}
 		return $this->newbies;
