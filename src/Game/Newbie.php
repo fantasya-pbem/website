@@ -37,7 +37,6 @@ class Newbie
 	}
 
 	#[Pure] public function __construct(private array $properties) {
-		$this->uuid = uniqid('newbie-');
 	}
 
 	public function getRace(): string {
@@ -85,6 +84,11 @@ class Newbie
 
 		$this->properties['email']   = $user->getEmail();
 		$this->properties['user_id'] = $user->getId();
+		return $this;
+	}
+
+	public function setUuid(string $uuid): self {
+		$this->uuid = $uuid;
 		return $this;
 	}
 
