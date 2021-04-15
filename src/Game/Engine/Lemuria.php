@@ -98,7 +98,7 @@ class Lemuria implements Engine
 		foreach ($this->assignmentRepository->findByUser($user) as $assignment) {
 			try{
 				$newcomer  = LemuriaGame::Debut()->get($assignment->getUuid());
-				$newbies[] = $this->createNewbie($newcomer);
+				$newbies[] = $this->createNewbie($newcomer, $user);
 			} catch (UnknownUuidException) {
 			}
 		}
@@ -114,7 +114,8 @@ class Lemuria implements Engine
 	public function create(Newbie $newbie, Game $game): void {
 		$name        = $newbie->getName();
 		$description = $newbie->getDescription();
-		$race        = self::createRace($newbie->getRace());
+		$race        = new Race($newbie->getRace());
+		$race        = self::createRace($race->toLemuria());
 		$newcomer    = new LemuriaNewcomer();
 		$newcomer->setName($name)->setDescription($description)->setRace($race);
 		LemuriaGame::Debut()->add($newcomer);
@@ -155,14 +156,12 @@ class Lemuria implements Engine
 		]);
 	}
 
-	private function createNewbie(LemuriaNewcomer $newcomer): Newbie {
+	private function createNewbie(LemuriaNewcomer $newcomer, User $user): Newbie {
 		$data = new NewbieData();
 		$data->setName($newcomer->Name());
 		$data->setDescription($newcomer->Description());
 		$data->setRace((string)Race::lemuria((string)$newcomer->Race()));
-		$newbie = Newbie::fromData($data);
-		$newbie->setUuid($newcomer->Uuid());
-		return $newbie;
+		return Newbie::fromData($data)->setUser($user)->setUuid($newcomer->Uuid());
 	}
 
 	private function fetchEmailAddress(string $uuid): string {

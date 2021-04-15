@@ -15,8 +15,7 @@ class EngineService
 {
 	private static ?array $engines = null;
 
-	public function __construct(private GameService $service, EntityManagerInterface $manager,
-										AssignmentRepository $repository) {
+	public function __construct(EntityManagerInterface $manager, AssignmentRepository $repository) {
 		if (!self::$engines) {
 			self::$engines = [
 				Engine::FANTASYA => new Fantasya($manager), Engine::LEMURIA => new Lemuria($repository, $manager)
