@@ -49,7 +49,7 @@ class LemuriaStatistics implements Statistics
 
 	private Dictionary $dictionary;
 
-	public function __construct(private Game $game, private AssignmentRepository $assignmentRepository) {
+	public function __construct(private AssignmentRepository $assignmentRepository) {
 		$this->dictionary = new Dictionary();
 	}
 

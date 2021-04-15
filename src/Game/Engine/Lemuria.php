@@ -4,7 +4,7 @@ namespace App\Game\Engine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
-use Lemuria\Engine\Fantasya\Storage\LemuriaConfig;
+use Lemuria\Engine\Fantasya\Storage\NewcomerConfig;
 use Lemuria\Exception\UnknownUuidException;
 use Lemuria\Id;
 use Lemuria\Lemuria as LemuriaGame;
@@ -32,11 +32,11 @@ class Lemuria implements Engine
 
 	private static bool $hasBeenChanged = false;
 
-	private static LemuriaConfig $config;
+	private static NewcomerConfig $config;
 
 	public function __construct(private AssignmentRepository $assignmentRepository, private EntityManagerInterface $entityManager) {
 		if (!self::$hasBeenInitialized) {
-			self::$config = new LemuriaConfig(__DIR__ . '/../../../var/lemuria');
+			self::$config = new NewcomerConfig(__DIR__ . '/../../../var/lemuria');
 			LemuriaGame::init(self::$config);
 			LemuriaGame::load();
 			self::$hasBeenInitialized = true;
@@ -56,7 +56,7 @@ class Lemuria implements Engine
 
 	public function getLastZat(Game $game): \DateTime {
 		$dateTime = new \DateTime();
-		return $dateTime->setTimestamp(self::$config[LemuriaConfig::MDD]);
+		return $dateTime->setTimestamp(self::$config[NewcomerConfig::MDD]);
 	}
 
 	public function getById(string $id, Game $game): ?Party {
@@ -105,7 +105,7 @@ class Lemuria implements Engine
 		return $newbies;
 	}
 	public function getStatistics(Game $game): Statistics {
-		return new LemuriaStatistics($game, $this->assignmentRepository);
+		return new LemuriaStatistics($this->assignmentRepository);
 	}
 
 	public function updateUser(User $user, Game $game): void {
