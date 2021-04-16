@@ -104,8 +104,9 @@ class Lemuria implements Engine
 		}
 		return $newbies;
 	}
+
 	public function getStatistics(Game $game): Statistics {
-		return new LemuriaStatistics($this->assignmentRepository);
+		return new LemuriaStatistics();
 	}
 
 	public function updateUser(User $user, Game $game): void {
@@ -124,7 +125,6 @@ class Lemuria implements Engine
 		$assignment = new Assignment();
 		$assignment->setUser($newbie->getUser());
 		$assignment->setUuid($newcomer->Uuid());
-		$assignment->setNewbie($newbie->toLemuriaJson());
 		$this->entityManager->persist($assignment);
 		$this->entityManager->flush();
 	}

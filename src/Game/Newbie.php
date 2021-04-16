@@ -5,7 +5,6 @@ namespace App\Game;
 use JetBrains\PhpStorm\Pure;
 
 use App\Data\Newbie as NewbieData;
-use App\Entity\Assignment;
 use App\Entity\User;
 
 class Newbie
@@ -14,7 +13,7 @@ class Newbie
 
 	private User $user;
 
-	public static function fromData(NewbieData $data): self {
+	#[Pure] public static function fromData(NewbieData $data): self {
 		return new self([
 			'name'        => $data->getName(),
 			'description' => $data->getDescription(),
@@ -26,14 +25,6 @@ class Newbie
 			'insel'       => 0,
 			'password'    => ''
 		]);
-	}
-
-	public static function fromAssignment(Assignment $assignment): self {
-		$data         = json_decode($assignment->getNewbie(), true);
-		$newbie       = new self($data);
-		$newbie->uuid = (string)$assignment->getUuid();
-		$newbie->setUser($assignment->getUser());
-		return $newbie;
 	}
 
 	#[Pure] public function __construct(private array $properties) {
@@ -90,11 +81,5 @@ class Newbie
 	public function setUuid(string $uuid): self {
 		$this->uuid = $uuid;
 		return $this;
-	}
-
-	public function toLemuriaJson(): string {
-		return json_encode(
-			['name' => $this->getName(), 'description' => $this->getDescription(), 'rasse' => $this->getRace()]
-		);
 	}
 }

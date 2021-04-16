@@ -23,11 +23,6 @@ class Assignment
 	 */
 	private User $user;
 
-	/**
-	 * @ORM\Column(type="string")
-	 */
-	private ?string $newbie = null;
-
 	public function getUuid(): ?string {
 		return $this->uuid;
 	}
@@ -43,15 +38,6 @@ class Assignment
 
 	public function setUser(User $user): self {
 		$this->user = $user;
-		return $this;
-	}
-
-	public function getNewbie(): ?string {
-		return $this->newbie;
-	}
-
-	public function setNewbie(string $newbie): self {
-		$this->newbie = $newbie;
 		return $this;
 	}
 }
