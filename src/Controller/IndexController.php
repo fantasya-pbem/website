@@ -13,7 +13,7 @@ use App\Service\EngineService;
 
 class IndexController extends AbstractController
 {
-	public function __construct(private EngineService $engineService, private EntityManagerInterface $manager) {
+	public function __construct(private EngineService $engineService) {
 		\Locale::setDefault('de_DE.utf8');
 	}
 

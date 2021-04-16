@@ -69,7 +69,7 @@ class OrderService
 				}
 			}
 		}
-		return $check ? $check : '';
+		return $check ?? '';
 	}
 
 	public function setContext(Order $order) {

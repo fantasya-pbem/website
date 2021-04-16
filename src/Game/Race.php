@@ -47,6 +47,10 @@ class Race implements \Stringable
 		}
 	}
 
+	public function toLemuria(): string {
+		return self::FANTASYA[$this->name];
+	}
+
 	public function __toString(): string {
 		return $this->name;
 	}
