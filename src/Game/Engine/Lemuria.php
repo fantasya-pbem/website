@@ -51,7 +51,7 @@ class Lemuria implements Engine
 	}
 
 	public function getRound(Game $game): int {
-		return LemuriaGame::Calendar()->Round() - 1;
+		return LemuriaGame::Calendar()->Round();
 	}
 
 	public function getLastZat(Game $game): \DateTime {

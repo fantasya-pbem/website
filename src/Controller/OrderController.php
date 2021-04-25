@@ -200,10 +200,10 @@ class OrderController extends AbstractController
 	/**
 	 * @return string[]
 	 */
-	#[Pure] private function getTurns(int $turn, int $min = -5, int $max = 5): array {
+	#[Pure] private function getTurns(int $turn, int $min = -5): array {
 		$turns = [];
 		$next  = max(0, $turn + $min);
-		$last  = $turn + $max;
+		$last  = $turn + 5;
 		while ($next <= $last ) {
 			$round = (string)$next;
 			$next++;
