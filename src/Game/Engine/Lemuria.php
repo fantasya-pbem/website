@@ -50,6 +50,10 @@ class Lemuria implements Engine
 		}
 	}
 
+	public function canSimulate(Game $game, int $turn): bool {
+		return $turn === $this->getRound($game);
+	}
+
 	public function getRound(Game $game): int {
 		return LemuriaGame::Calendar()->Round();
 	}

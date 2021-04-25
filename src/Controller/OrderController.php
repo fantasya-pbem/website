@@ -54,10 +54,14 @@ class OrderController extends AbstractController
 			$order->setParty($party->getOwner());
 			$order->setTurn($turn);
 		}
-		$order->setGame($this->gameService->getCurrent()->getAlias());
+		$game = $this->gameService->getCurrent();
+		$order->setGame($game->getAlias());
 		$this->orderService->setContext($order);
+		$hasSimulation = $this->engineService->get($game)->canSimulate($game, $turn) && $this->getParameter('app.simulation'); //TODO
 
-		return $this->render('order/index.html.twig', ['form' => $form->createView()]);
+		return $this->render('order/index.html.twig', [
+			'form' => $form->createView(), 'hasSimulation' => $hasSimulation
+		]);
 	}
 
 	/**

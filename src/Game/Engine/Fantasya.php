@@ -16,6 +16,10 @@ class Fantasya implements Engine
 	public function __construct(private EntityManagerInterface $manager) {
 	}
 
+	public function canSimulate(Game $game, int $turn): bool {
+		return false;
+	}
+
 	public function getById(string $id, Game $game): ?Party {
 		$connection = $this->manager->getConnection();
 		$table      = $game->getDb() . '.partei';

@@ -18,13 +18,16 @@ class OrderService
 
 	private string $fcheck;
 
+	private string $simulation;
+
 	public function __construct(private PartyService $service, private GameRepository $repository,
 								ContainerBagInterface $config) {
 		$this->baseDir = realpath(__DIR__ . '/../../var/orders');
 		if (!$this->baseDir) {
 			throw new \RuntimeException('Orders directory not found.');
 		}
-		$this->fcheck = $config->get('app.fcheck');
+		$this->fcheck     = $config->get('app.fcheck');
+		$this->simulation = $config->get('app.simulation');
 	}
 
 	#[Pure] public function getPath(): string {
@@ -67,6 +70,21 @@ class OrderService
 					}
 					@unlink($output);
 				}
+			}
+		}
+		return $check ?? '';
+	}
+
+	public function getSimulation(): string {
+		$check   = null;
+		$command = $this->simulation ?? '';
+		if (str_contains($command, '%uuid%')) {
+			$command = str_replace('%uuid%', $this->order->getParty(), $command);
+			$result  = array();
+			$code    = -1;
+			exec($command, $result, $code);
+			if ($code === 0) {
+				$check = implode(PHP_EOL, $result);
 			}
 		}
 		return $check ?? '';

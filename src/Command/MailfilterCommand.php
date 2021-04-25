@@ -92,7 +92,13 @@ class MailfilterCommand extends Command
 		$this->saveOrders();
 
 		$fcheck = $this->orderService->getFcheck();
-		$this->sendAnswerMail($recipient, $fcheck);
+		if ($this->engineService->get($this->game)->canSimulate($this->game, $this->round)) {
+			$simulation = $this->orderService->getSimulation();
+		} else {
+			$simulation = '';
+		}
+
+		$this->sendAnswerMail($recipient, $fcheck, $simulation);
 		return 0;
 	}
 
@@ -294,12 +300,15 @@ class MailfilterCommand extends Command
 	/**
 	 * @throws MailfilterException
 	 */
-	private function sendAnswerMail(string $from, string $fcheck): void {
+	private function sendAnswerMail(string $from, string $fcheck, string $simulation): void {
 		$subject = isset($this->header['Subject'][0]) ? 'Re: ' . $this->header['Subject'][0]
 			                                          : 'Fantasya-Befehle sind angekommen';
 		$body    = "Deine Befehle für Runde " . ($this->round + 1) . " sind angekommen.\n\n";
 		if ($fcheck) {
 			$body .= $fcheck . "\n\n";
+		}
+		if ($simulation) {
+			$body .= $simulation . "\n\n";
 		}
 
 		$mail = $this->mailService->fromServer($from, $this->user);

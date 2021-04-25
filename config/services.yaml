@@ -17,6 +17,7 @@ parameters:
     app.mail.key.password: '%env(MAIL_KEY_PASSWORD)%'
     app.mail.user.agent: '%env(MAIL_USER_AGENT)%'
     app.secret: '%env(APP_SECRET)%'
+    app.simulation: '%env(SIMULATION)%'
 
 services:
     # default configuration for services in *this* file

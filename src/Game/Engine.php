@@ -12,6 +12,11 @@ interface Engine
 	public const LEMURIA = 'lemuria';
 
 	/**
+	 * Check if a turn can be simulated.
+	 */
+	public function canSimulate(Game $game, int $turn): bool;
+
+	/**
 	 * Get the last game round.
 	 */
 	public function getRound(Game $game): int;
