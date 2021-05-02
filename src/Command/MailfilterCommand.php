@@ -303,13 +303,14 @@ class MailfilterCommand extends Command
 	private function sendAnswerMail(string $from, string $fcheck, string $simulation): void {
 		$subject = isset($this->header['Subject'][0]) ? 'Re: ' . $this->header['Subject'][0]
 			                                          : 'Fantasya-Befehle sind angekommen';
-		$body    = "Deine Befehle für Runde " . ($this->round + 1) . " sind angekommen.\n\n";
+		$body    = "Deine Befehle für Runde " . ($this->round + 1) . " sind angekommen.\n";
 		if ($fcheck) {
-			$body .= $fcheck . "\n\n";
+			$body .= "\n" . rtrim($fcheck) . "\n";
 		}
 		if ($simulation) {
-			$body .= $simulation . "\n\n";
+			$body .= "\n" . $simulation;
 		}
+		$body .= "\n";
 
 		$mail = $this->mailService->fromServer($from, $this->user);
 		if (isset($this->header['Message-ID'])) {
