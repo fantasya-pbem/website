@@ -49,6 +49,10 @@ class IndexController extends AbstractController
 	 * @throws \Exception
 	 */
 	public function world(Game $game): Response {
+		if (!$game->getIsActive()) {
+			return $this->redirectToRoute('index');
+		}
+
 		$turn       = new Turn($game, $this->engineService);
 		$statistics = $this->engineService->get($game)->getStatistics($game);
 		return $this->render('index/world.html.twig', [
