@@ -5,10 +5,10 @@
 	"type": "project",
 	"homepage": "https://www.fantasya-pbem.de",
 	"support": {
-		"chat": "http://webchat.freenode.net/?channels=%23fantasya&uio=OT10cnVlJjExPTQx30",
+		"chat": "https://web.libera.chat/?channels=#fantasya",
 		"email": "info@fantasya-pbem.de",
 		"forum": "https://forum.fantasya-pbem.de",
-		"irc": "irc://chat.freenode.net/fantasya",
+		"irc": "irc://libera.chat/fantasya",
 		"issues": "https://github.com/fantasya-pbem/website/issues",
 		"source": "https://github.com/fantasya-pbem/website",
 		"wiki": "https://wiki.fantasya-pbem.de"
@@ -30,8 +30,8 @@
 		}
 	],
 	"license": "proprietary",
-	"version": "2.3.5",
-	"time": "2021-05-16",
+	"version": "2.3.6",
+	"time": "2021-05-27",
 
 	"require": {
 		"php": "~8.0",
