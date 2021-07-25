@@ -59,6 +59,9 @@ class LemuriaStatistics implements Statistics
 			$this->parties = [];
 			$races         = [];
 			foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
+				if ($party->Type() !== Party::PLAYER) {
+					continue;
+				}
 				$this->parties[] = ['name' => $party->Name(), 'description' => $party->Description()];
 
 				$race = (string)$party->Race();
@@ -157,6 +160,9 @@ class LemuriaStatistics implements Statistics
 			$count         = 0;
 			$total         = 0;
 			foreach (Lemuria::Catalog()->getAll(Catalog::UNITS) as $unit /* @var Unit $unit*/) {
+				if ($unit->Party()->Type() !== Party::PLAYER) {
+					continue;
+				}
 				$size = $unit->Size();
 				$race = (string)$unit->Race();
 				if (!isset($persons[$race])) {
