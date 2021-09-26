@@ -191,9 +191,6 @@
             "ref": "f8863cbad2f2e58c4b65fa1eac892ab189971bea"
         }
     },
-    "symfony/debug-pack": {
-        "version": "v1.0.7"
-    },
     "symfony/dependency-injection": {
         "version": "v4.2.3"
     },
@@ -310,9 +307,6 @@
     "symfony/options-resolver": {
         "version": "v4.2.3"
     },
-    "symfony/orm-pack": {
-        "version": "v1.0.6"
-    },
     "symfony/phpunit-bridge": {
         "version": "4.1",
         "recipe": {
@@ -336,9 +330,6 @@
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.10.0"
-    },
-    "symfony/profiler-pack": {
-        "version": "v1.0.4"
     },
     "symfony/property-access": {
         "version": "v4.2.3"
@@ -382,9 +373,6 @@
     "symfony/serializer": {
         "version": "v4.2.3"
     },
-    "symfony/serializer-pack": {
-        "version": "v1.0.2"
-    },
     "symfony/service-contracts": {
         "version": "v1.1.2"
     },
@@ -393,9 +381,6 @@
     },
     "symfony/string": {
         "version": "v5.1.7"
-    },
-    "symfony/test-pack": {
-        "version": "v1.0.5"
     },
     "symfony/translation-contracts": {
         "version": "v1.1.2"
