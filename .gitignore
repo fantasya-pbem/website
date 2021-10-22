@@ -21,3 +21,8 @@
 !/var/orders/.gitignore
 !/var/zip/.gitignore
 /composer.lock
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
