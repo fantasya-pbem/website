@@ -29,11 +29,10 @@ class FantasyaStatistics implements Statistics
 	 */
 	public function getParties(): array {
 		if ($this->parties === null) {
-			$table = $this->game->getDb() . '.partei';
-			$sql   = "SELECT name, beschreibung AS description FROM " . $table . " WHERE id NOT IN ('0', 'dark', 'tier') ORDER BY name";
-			$stmt  = $this->connection->prepare($sql);
-			$stmt->execute();
-			$this->parties = $stmt->fetchAllAssociative();
+			$table         = $this->game->getDb() . '.partei';
+			$sql           = "SELECT name, beschreibung AS description FROM " . $table . " WHERE id NOT IN ('0', 'dark', 'tier') ORDER BY name";
+			$stmt          = $this->connection->prepare($sql);
+			$this->parties = $stmt->executeQuery()->fetchAllAssociative();
 		}
 		return $this->parties;
 	}
@@ -53,8 +52,7 @@ class FantasyaStatistics implements Statistics
 		$table = $this->game->getDb() . '.partei';
 		$sql   = "SELECT rasse AS race, COUNT(*) AS count FROM " . $table . " WHERE id NOT IN ('0', 'dark', 'tier') GROUP BY rasse ORDER BY rasse";
 		$stmt  = $this->connection->prepare($sql);
-		$stmt->execute();
-		return $stmt->fetchAllAssociative();
+		return $stmt->executeQuery()->fetchAllAssociative();
 	}
 
 	/**
@@ -63,11 +61,10 @@ class FantasyaStatistics implements Statistics
 	 */
 	public function getNewbies(): array {
 		if ($this->newParties === null) {
-			$table = $this->game->getDb() . '.neuespieler';
-			$sql   = "SELECT name, description FROM " . $table . " ORDER BY name";
-			$stmt  = $this->connection->prepare($sql);
-			$stmt->execute();
-			$this->newParties = $stmt->fetchAllAssociative();
+			$table            = $this->game->getDb() . '.neuespieler';
+			$sql              = "SELECT name, description FROM " . $table . " ORDER BY name";
+			$stmt             = $this->connection->prepare($sql);
+			$this->newParties = $stmt->executeQuery()->fetchAllAssociative();
 		}
 		return $this->newParties;
 	}
@@ -84,11 +81,10 @@ class FantasyaStatistics implements Statistics
 	 */
 	#[ArrayShape(['world' => "array|mixed", 'underworld' => "array|mixed"])]
 	public function getLandscape(): array {
-		$table = $this->game->getDb() . '.regionen';
-		$sql   = "SELECT COUNT(*) FROM " . $table . " GROUP BY welt ORDER BY welt DESC";
-		$stmt  = $this->connection->prepare($sql);
-		$stmt->execute();
-		$result = $stmt->fetchFirstColumn();
+		$table  = $this->game->getDb() . '.regionen';
+		$sql    = "SELECT COUNT(*) FROM " . $table . " GROUP BY welt ORDER BY welt DESC";
+		$stmt   = $this->connection->prepare($sql);
+		$result = $stmt->executeQuery()->fetchFirstColumn();
 		return ['world' => $result[0], 'underworld' => $result[1]];
 	}
 
@@ -100,8 +96,7 @@ class FantasyaStatistics implements Statistics
 		$table = $this->game->getDb() . '.regionen';
 		$sql   = "SELECT typ, COUNT(*) AS count FROM " . $table . " WHERE welt = 1 GROUP BY typ ORDER BY typ";
 		$stmt  = $this->connection->prepare($sql);
-		$stmt->execute();
-		return $stmt->fetchAllAssociative();
+		return $stmt->executeQuery()->fetchAllAssociative();
 	}
 
 	/**
@@ -112,19 +107,17 @@ class FantasyaStatistics implements Statistics
 		$table = $this->game->getDb() . '.regionen';
 		$sql   = "SELECT typ, COUNT(*) AS count FROM " . $table . " WHERE welt = -1 GROUP BY typ ORDER BY typ";
 		$stmt  = $this->connection->prepare($sql);
-		$stmt->execute();
-		return $stmt->fetchAllAssociative();
+		return $stmt->executeQuery()->fetchAllAssociative();
 	}
 
 	/**
 	 * @throws \Exception
 	 */
 	public function getPopulation(): array {
-		$table = $this->game->getDb() . '.einheiten';
-		$sql   = "SELECT COUNT(*) AS units, SUM(person) AS persons FROM " . $table . " GROUP BY welt ORDER BY welt DESC";
-		$stmt  = $this->connection->prepare($sql);
-		$stmt->execute();
-		$result = $stmt->fetchAllAssociative();
+		$table  = $this->game->getDb() . '.einheiten';
+		$sql    = "SELECT COUNT(*) AS units, SUM(person) AS persons FROM " . $table . " GROUP BY welt ORDER BY welt DESC";
+		$stmt   = $this->connection->prepare($sql);
+		$result = $stmt->executeQuery()->fetchAllAssociative();
 		return $result[0];
 	}
 
@@ -136,8 +129,7 @@ class FantasyaStatistics implements Statistics
 		$table = $this->game->getDb() . '.einheiten';
 		$sql   = "SELECT rasse AS race, COUNT(*) AS units, SUM(person) AS persons FROM " . $table . " WHERE partei NOT IN (620480, 1376883) GROUP BY rasse ORDER BY rasse";
 		$stmt  = $this->connection->prepare($sql);
-		$stmt->execute();
-		return $stmt->fetchAllAssociative();
+		return $stmt->executeQuery()->fetchAllAssociative();
 	}
 
 	/**
@@ -148,7 +140,6 @@ class FantasyaStatistics implements Statistics
 		$table = $this->game->getDb() . '.einheiten';
 		$sql   = "SELECT rasse AS race, COUNT(*) AS units, SUM(person) AS persons FROM " . $table . " WHERE partei IN (620480, 1376883) GROUP BY rasse ORDER BY rasse";
 		$stmt  = $this->connection->prepare($sql);
-		$stmt->execute();
-		return $stmt->fetchAllAssociative();
+		return $stmt->executeQuery()->fetchAllAssociative();
 	}
 }

@@ -60,6 +60,10 @@ class User implements UserInterface
 	 */
 	private string $email = '';
 
+	public function getUserIdentifier(): string {
+		return 'username';
+	}
+
 	public function getId(): ?int {
 		return $this->id;
 	}
@@ -163,5 +167,9 @@ class User implements UserInterface
 		if (!in_array($flag, self::ALL_FLAGS)) {
 			throw new \InvalidArgumentException('Invalid flag: ' . $flag);
 		}
+	}
+
+	public function __call(string $name, array $arguments) {
+		// TODO: Implement @method string getUserIdentifier()
 	}
 }

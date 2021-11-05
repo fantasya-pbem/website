@@ -25,8 +25,7 @@ class Fantasya implements Engine
 		$table      = $game->getDb() . '.partei';
 		$sql        = "SELECT * FROM " . $table . " WHERE id = " . $this->manager->getConnection()->quote($id);
 		$stmt       = $connection->prepare($sql);
-		$stmt->execute();
-		$result = $stmt->fetchAllAssociative();
+		$result     = $stmt->executeQuery()->fetchAllAssociative();
 		if (is_array($result) && isset($result[0]) && is_array($result[0])) {
 			return new Party($result[0]);
 		}
@@ -38,8 +37,7 @@ class Fantasya implements Engine
 		$table      = $game->getDb() . '.partei';
 		$sql        = "SELECT * FROM " . $table . " WHERE owner_id = " . $this->manager->getConnection()->quote($owner);
 		$stmt       = $connection->prepare($sql);
-		$stmt->execute();
-		$result = $stmt->fetchAllAssociative();
+		$result     = $stmt->executeQuery()->fetchAllAssociative();
 		if (is_array($result) && isset($result[0]) && is_array($result[0])) {
 			return new Party($result[0]);
 		}
@@ -47,11 +45,10 @@ class Fantasya implements Engine
 	}
 
 	public function getRound(Game $game): int {
-		$table = $game->getDb() . '.settings';
-		$sql   = "SELECT value FROM " . $table . " WHERE name = 'game.runde'";
-		$stmt  = $this->manager->getConnection()->prepare($sql);
-		$stmt->execute();
-		$result = $stmt->fetchFirstColumn();
+		$table  = $game->getDb() . '.settings';
+		$sql    = "SELECT value FROM " . $table . " WHERE name = 'game.runde'";
+		$stmt   = $this->manager->getConnection()->prepare($sql);
+		$result = $stmt->executeQuery()->fetchFirstColumn();
 		return (int)($result[0] ?? 0);
 	}
 
@@ -59,8 +56,7 @@ class Fantasya implements Engine
 		$table = $game->getDb() . '.meldungen';
 		$sql   = "SELECT MAX(zeit) FROM " . $table;
 		$stmt  = $this->manager->getConnection()->prepare($sql);
-		$stmt->execute();
-		$result = $stmt->fetchFirstColumn();
+		$result = $stmt->executeQuery()->fetchFirstColumn();
 		return new \DateTime($result[0] ?? 'now');
 	}
 
@@ -72,9 +68,8 @@ class Fantasya implements Engine
 		$table      = $game->getDb() . '.partei';
 		$sql        = "SELECT * FROM " . $table . " WHERE user_id = " . $user->getId();
 		$stmt       = $connection->prepare($sql);
-		$stmt->execute();
-		$parties = [];
-		foreach ($stmt->fetchAllAssociative() as $properties) {
+		$parties    = [];
+		foreach ($stmt->executeQuery()->fetchAllAssociative() as $properties) {
 			$parties[] = new Party($properties);
 		}
 		return $parties;
@@ -88,9 +83,8 @@ class Fantasya implements Engine
 		$table      = $game->getDb() . '.neuespieler';
 		$sql        = "SELECT * FROM " . $table . " WHERE user_id = " . $user->getId();
 		$stmt       = $connection->prepare($sql);
-		$stmt->execute();
-		$newbies = [];
-		foreach ($stmt->fetchAllAssociative() as $properties) {
+		$newbies    = [];
+		foreach ($stmt->executeQuery()->fetchAllAssociative() as $properties) {
 			$newbie    = new Newbie($properties);
 			$newbies[] = $newbie->setUser($user);
 		}
