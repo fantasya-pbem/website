@@ -2,14 +2,16 @@
 declare (strict_types = 1);
 namespace App\Service;
 
-use App\Entity\Game;
-use App\Repository\GameRepository;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+use App\Entity\Game;
+use App\Repository\GameRepository;
+
 class GameService
 {
-	private SessionInterface $session;
+	private ?SessionInterface $session = null;
 
 	/**
 	 * @var Game[]
@@ -17,7 +19,10 @@ class GameService
 	private ?array $games = null;
 
 	public function __construct(private GameRepository $repository, private RequestStack $requestStack) {
-		$this->session = $this->requestStack->getSession();
+		try {
+			$this->session = $this->requestStack->getSession();
+		} catch (SessionNotFoundException) {
+		}
 	}
 
 	/**
