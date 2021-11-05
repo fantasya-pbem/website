@@ -4,16 +4,20 @@ namespace App\Service;
 
 use App\Entity\Game;
 use App\Repository\GameRepository;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class GameService
 {
+	private SessionInterface $session;
+
 	/**
 	 * @var Game[]
 	 */
 	private ?array $games = null;
 
-	public function __construct(private GameRepository $repository, private SessionInterface $session) {
+	public function __construct(private GameRepository $repository, private RequestStack $requestStack) {
+		$this->session = $this->requestStack->getSession();
 	}
 
 	/**

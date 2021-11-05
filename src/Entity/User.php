@@ -3,6 +3,7 @@ declare (strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 use App\Data\PasswordReset;
@@ -10,7 +11,7 @@ use App\Data\PasswordReset;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 	public const FLAG_WITH_ATTACHMENT = 1;
 
@@ -119,7 +120,6 @@ class User implements UserInterface
 
 	public function eraseCredentials(): void {
 		// If you store any temporary, sensitive data on the user, clear it here
-		// $this->plainPassword = null;
 	}
 
 	public function getEmail(): string {
@@ -167,9 +167,5 @@ class User implements UserInterface
 		if (!in_array($flag, self::ALL_FLAGS)) {
 			throw new \InvalidArgumentException('Invalid flag: ' . $flag);
 		}
-	}
-
-	public function __call(string $name, array $arguments) {
-		// TODO: Implement @method string getUserIdentifier()
 	}
 }

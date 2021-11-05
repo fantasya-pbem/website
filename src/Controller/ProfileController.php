@@ -9,8 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use App\Entity\User;
 use App\Service\GameService;
@@ -49,7 +49,7 @@ class ProfileController extends AbstractController
 
 	public function __construct(private UserRepository $userRepository, private GameService $gameService,
 								private PartyService $partyService, private MailService $mailService,
-								private UserPasswordEncoderInterface $passwordEncoder) {
+								private UserPasswordHasherInterface $passwordHasher) {
 	}
 
 	/**
@@ -139,7 +139,7 @@ class ProfileController extends AbstractController
 			$password = $request->request->get('password');
 			if ($password) {
 				$user = $this->user();
-				$user->setPassword($this->passwordEncoder->encodePassword($user, $password));
+				$user->setPassword($this->passwordHasher->hashPassword($user, $password));
 				$this->save($user, true);
 				$error = 0;
 			} else {
@@ -201,7 +201,6 @@ class ProfileController extends AbstractController
 		/** @var User $user */
 		$user = $this->getUser();
 		return $user;
-
 	}
 
 	/**

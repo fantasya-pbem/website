@@ -7,7 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 use App\Data\Order;
 use App\Entity\Game;
@@ -47,7 +47,7 @@ class MailfilterCommand extends Command
 	public function __construct(private UserRepository $userRepository, private GameRepository $gameRepository,
 								private PartyService $partyService, private OrderService $orderService,
 								private MailService $mailService, private EngineService $engineService,
-								private UserPasswordEncoderInterface $encoder) {
+								private UserPasswordHasherInterface $hasher) {
 		parent::__construct();
 		setlocale(LC_ALL, 'de_DE');
 	}
@@ -250,7 +250,7 @@ class MailfilterCommand extends Command
 		if (!$this->user) {
 			throw new MailfilterException('Der Benutzer #' . $this->party->getUser() . ' wurde nicht gefunden.', 1);
 		}
-		if (!$this->encoder->isPasswordValid($this->user, $password)) {
+		if (!$this->hasher->isPasswordValid($this->user, $password)) {
 			throw new MailfilterException('Das Kennwort ist falsch.', 4);
 		}
 		/*
