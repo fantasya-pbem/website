@@ -6,8 +6,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use App\Data\PasswordReset;
 use App\Data\Registration;
@@ -20,7 +20,7 @@ use App\Service\MailService;
 class UserController extends AbstractController
 {
 	public function __construct(private UserRepository $repository, private MailService $mailService,
-								private UserPasswordEncoderInterface $passwordEncoder) {
+								private UserPasswordHasherInterface $passwordHasher) {
 	}
 
 	/**
@@ -62,7 +62,7 @@ class UserController extends AbstractController
 			$existingUser = $this->repository->findDuplicate($user);
 			if (!$existingUser) {
 				$password = uniqid();
-				$user->setPassword($this->passwordEncoder->encodePassword($user, $password));
+				$user->setPassword($this->passwordHasher->hashPassword($user, $password));
 				$entityManager = $this->getDoctrine()->getManager();
 				$entityManager->persist($user);
 				$entityManager->flush();
@@ -99,8 +99,8 @@ class UserController extends AbstractController
 			$resetUser->from($form->getData());
 			$user = $this->repository->findExisting($resetUser);
 			if ($user) {
-				$password = bin2hex(random_bytes(5));
-				$user->setPassword($this->passwordEncoder->encodePassword($user, $password));
+				$password = uniqid();
+				$user->setPassword($this->passwordHasher->hashPassword($user, $password));
 				$entityManager = $this->getDoctrine()->getManager();
 				$entityManager->persist($user);
 				$entityManager->flush();

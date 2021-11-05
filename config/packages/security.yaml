@@ -1,8 +1,7 @@
 security:
-    encoders:
-        App\Entity\User:
-            algorithm: auto
-
+    enable_authenticator_manager: true
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     role_hierarchy:
         ROLE_BETA_TESTER:  ROLE_USER
         ROLE_MULTI_PLAYER: ROLE_USER
@@ -18,13 +17,9 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: true
             lazy: true
-            guard:
-                authenticators:
-                    - App\Security\ClientCertificateAuthenticator
-                    - App\Security\PasswordAuthenticator
-                entry_point: App\Security\ClientCertificateAuthenticator
+            provider: app_user_provider
+            entry_point: App\Security\ClientCertificateAuthenticator
             logout:
                 path: user_logout
             remember_me:
@@ -37,8 +32,13 @@ security:
             # http_basic: true
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
 
-            # form_login: true
-            # https://symfony.com/doc/current/security/form_login_setup.html
+            form_login:
+                login_path: user_login
+                check_path: user_login
+                default_target_path: profile
+
+            x509:
+                provider: app_user_provider
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

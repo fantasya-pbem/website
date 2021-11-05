@@ -18,6 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 use App\Entity\User;
 
+/**
+ * @todo This class is not used anymore and must be reimplemented.
+ * @see https://symfony.com/doc/current/security/custom_authenticator.html
+ */
 class ClientCertificateAuthenticator extends AbstractGuardAuthenticator
 {
 	use TargetPathTrait;
