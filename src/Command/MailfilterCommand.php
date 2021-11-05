@@ -3,7 +3,6 @@
 declare (strict_types = 1);
 namespace App\Command;
 
-use App\Service\EngineService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,6 +17,7 @@ use App\Game\Party;
 use App\Game\Turn;
 use App\Repository\GameRepository;
 use App\Repository\UserRepository;
+use App\Service\EngineService;
 use App\Service\MailService;
 use App\Service\OrderService;
 use App\Service\PartyService;
