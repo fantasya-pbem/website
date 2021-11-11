@@ -41,10 +41,12 @@ class OrderController extends AbstractController
 			return $this->redirectToRoute('profile');
 		}
 
-		$party = $parties[0];
-		$turn  = $this->turn($request);
-		$order = new Order();
-		$form  = $this->createOrderForm($order, $parties, $turn);
+		$game   = $this->gameService->getCurrent();
+		$engine = $this->engineService->get($game);
+		$party  = $parties[0];
+		$turn   = $this->turn($request);
+		$order  = new Order();
+		$form   = $this->createOrderForm($order, $parties, $turn, $engine->getTurnOffset());
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -54,10 +56,9 @@ class OrderController extends AbstractController
 			$order->setParty($party->getOwner());
 			$order->setTurn($turn);
 		}
-		$game = $this->gameService->getCurrent();
 		$order->setGame($game->getAlias());
 		$this->orderService->setContext($order);
-		$hasSimulation = $this->engineService->get($game)->canSimulate($game, $turn) && $this->getParameter('app.simulation'); //TODO
+		$hasSimulation = $engine->canSimulate($game, $turn) && $this->getParameter('app.simulation'); //TODO
 
 		return $this->render('order/index.html.twig', [
 			'form' => $form->createView(), 'hasSimulation' => $hasSimulation
@@ -107,14 +108,20 @@ class OrderController extends AbstractController
 			return $this->redirectToRoute('profile');
 		}
 
-		$order = new Order();
+		$game          = $this->gameService->getCurrent();
+		$engine        = $this->engineService->get($game);
+		$hasSimulation = $engine->canSimulate($game, $t) && $this->getParameter('app.simulation'); //TODO
+
+		$order  = new Order();
 		$order->setParty($p);
 		$order->setTurn($t);
-		$order->setGame($this->gameService->getCurrent()->getAlias());
+		$order->setGame($game->getAlias());
 		$this->orderService->setContext($order);
-		$form = $this->createOrderForm($order, $parties, $t);
+		$form = $this->createOrderForm($order, $parties, $t, $engine->getTurnOffset());
 
-		return $this->render('order/index.html.twig', ['form' => $form->createView()]);
+		return $this->render('order/index.html.twig', [
+			'form' => $form->createView(), 'hasSimulation' => $hasSimulation
+		]);
 	}
 
 	private function user(): User {
@@ -146,7 +153,7 @@ class OrderController extends AbstractController
 	 * @param Party[] $parties
 	 * @throws \Exception
 	 */
-	private function createOrderForm(Order $order, array $parties, int $turn): FormInterface {
+	private function createOrderForm(Order $order, array $parties, int $turn, int $offset): FormInterface {
 		$form = $this->createFormBuilder($order);
 		$form->setAction($this->generateUrl('order'));
 		$form->add('party', ChoiceType::class, [
@@ -155,7 +162,7 @@ class OrderController extends AbstractController
 		]);
 		$form->add('turn', ChoiceType::class, [
 			'label'   => 'Runde',
-			'choices' => $this->getTurns($turn),
+			'choices' => $this->getTurns($turn, $offset),
 			'data'    => (string)$turn
 		]);
 		$form->add('submit', SubmitType::class, [
@@ -204,15 +211,15 @@ class OrderController extends AbstractController
 	/**
 	 * @return string[]
 	 */
-	#[Pure] private function getTurns(int $turn, int $min = -5): array {
+	#[Pure] private function getTurns(int $turn, int $offset, int $min = -5): array {
 		$turns = [];
 		$next  = max(0, $turn + $min);
 		$last  = $turn + 5;
 		while ($next <= $last ) {
-			$round = (string)$next;
-			$next++;
-			$turn         = (string)$next;
+			$round        = (string)$next;
+			$turn         = (string)($next + $offset);
 			$turns[$turn] = $round;
+			$next++;
 		}
 		return $turns;
 	}

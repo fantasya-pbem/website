@@ -22,6 +22,11 @@ interface Engine
 	public function getRound(Game $game): int;
 
 	/**
+	 * Get the turn offset for order form.
+	 */
+	public function getTurnOffset(): int;
+
+	/**
 	 * Get the last game round time.
 	 */
 	public function getLastZat(Game $game): \DateTime;

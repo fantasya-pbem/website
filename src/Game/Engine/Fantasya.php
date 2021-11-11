@@ -52,6 +52,10 @@ class Fantasya implements Engine
 		return (int)($result[0] ?? 0);
 	}
 
+	public function getTurnOffset(): int {
+		return 1;
+	}
+
 	public function getLastZat(Game $game): \DateTime {
 		$table = $game->getDb() . '.meldungen';
 		$sql   = "SELECT MAX(zeit) FROM " . $table;
