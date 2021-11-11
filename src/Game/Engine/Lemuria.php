@@ -3,7 +3,9 @@ declare(strict_types = 1);
 namespace App\Game\Engine;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
+use Lemuria\Engine\Fantasya\Storage\LemuriaConfig;
 use Lemuria\Engine\Fantasya\Storage\NewcomerConfig;
 use Lemuria\Exception\UnknownUuidException;
 use Lemuria\Id;
@@ -12,6 +14,7 @@ use Lemuria\Model\Catalog;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party as PartyModel;
+use Lemuria\Version\VersionFinder;
 
 use App\Data\Newbie as NewbieData;
 use App\Entity\Assignment;
@@ -34,7 +37,8 @@ class Lemuria implements Engine
 
 	private static NewcomerConfig $config;
 
-	public function __construct(private AssignmentRepository $assignmentRepository, private EntityManagerInterface $entityManager) {
+	public function __construct(private ContainerBagInterface $container, private AssignmentRepository $assignmentRepository,
+								private EntityManagerInterface $entityManager) {
 		if (!self::$hasBeenInitialized) {
 			self::$config = new NewcomerConfig(__DIR__ . '/../../../var/lemuria');
 			LemuriaGame::init(self::$config);
@@ -64,7 +68,7 @@ class Lemuria implements Engine
 
 	public function getLastZat(Game $game): \DateTime {
 		$dateTime = new \DateTime();
-		return $dateTime->setTimestamp(self::$config[NewcomerConfig::MDD]);
+		return $dateTime->setTimestamp(self::$config[LemuriaConfig::MDD]);
 	}
 
 	public function getById(string $id, Game $game): ?Party {
@@ -115,6 +119,12 @@ class Lemuria implements Engine
 
 	public function getStatistics(Game $game): Statistics {
 		return new LemuriaStatistics();
+	}
+
+	public function getVersion(): string {
+		$versionFinder = new VersionFinder($this->container->get('app.game.lemuria'));
+		$version = $versionFinder->get();
+		return $version->name . ' ' . $version->version;
 	}
 
 	public function updateUser(User $user, Game $game): void {

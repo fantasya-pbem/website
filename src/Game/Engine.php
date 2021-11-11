@@ -61,6 +61,11 @@ interface Engine
 	public function getStatistics(Game $game): Statistics;
 
 	/**
+	 * Get game version.
+	 */
+	public function getVersion(): string;
+
+	/**
 	 * Update eMail address of a user's parties and newbies.
 	 */
 	public function updateUser(User $user, Game $game): void;
