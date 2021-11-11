@@ -66,6 +66,27 @@ class OrderController extends AbstractController
 	}
 
 	/**
+	 * @Route("/order/simulation", name="order_simulation")
+	 */
+	public function simulation(Request $request): Response {
+		$parties = $this->partyService->getCurrent($this->user());
+		if (empty($parties)) {
+			return new Response(status: Response::HTTP_NOT_FOUND);
+		}
+
+		$game  = $this->gameService->getCurrent();
+		$party = $parties[0];
+		$order = new Order();
+		$order->setParty($party->getOwner());
+		$order->setTurn($this->turn($request));
+		$order->setGame($game->getAlias());
+		$this->orderService->setContext($order);
+		$simulation = $this->orderService->getSimulation();
+
+		return new Response(content: $simulation, headers: ['Content-Type' => 'text/plain']);
+	}
+
+	/**
 	 * @Route("/order/send", name="order_send")
 	 * @throws \Exception
 	 */
