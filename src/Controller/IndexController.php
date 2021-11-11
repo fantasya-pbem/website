@@ -54,11 +54,14 @@ class IndexController extends AbstractController
 		}
 
 		$turn       = new Turn($game, $this->engineService);
-		$statistics = $this->engineService->get($game)->getStatistics($game);
+		$engine     = $this->engineService->get($game);
+		$statistics = $engine->getStatistics($game);
+		$version    = $engine->getVersion();
 		return $this->render('index/world.html.twig', [
 			'game'       => $game,
 			'turn'       => $turn,
-			'statistics' => $statistics
+			'statistics' => $statistics,
+			'version'    => $version
 		]);
 	}
 }

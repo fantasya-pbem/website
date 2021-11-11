@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace App\Game\Engine;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 use App\Entity\Game;
 use App\Entity\User;
@@ -13,7 +14,7 @@ use App\Game\Statistics;
 
 class Fantasya implements Engine
 {
-	public function __construct(private EntityManagerInterface $manager) {
+	public function __construct(private ContainerBagInterface $container, private EntityManagerInterface $manager) {
 	}
 
 	public function canSimulate(Game $game, int $turn): bool {
@@ -50,6 +51,10 @@ class Fantasya implements Engine
 		$stmt   = $this->manager->getConnection()->prepare($sql);
 		$result = $stmt->executeQuery()->fetchFirstColumn();
 		return (int)($result[0] ?? 0);
+	}
+
+	public function getTurnOffset(): int {
+		return 1;
 	}
 
 	public function getLastZat(Game $game): \DateTime {
@@ -93,6 +98,15 @@ class Fantasya implements Engine
 
 	public function getStatistics(Game $game): Statistics {
 		return new FantasyaStatistics($game, $this->manager->getConnection());
+	}
+
+	public function getVersion(): string {
+		$command = $this->container->get('app.game.fantasya');
+		exec($command, $output, $result);
+		if ($result) {
+			return '';
+		}
+		return $output[0];
 	}
 
 	public function updateUser(User $user, Game $game): void {

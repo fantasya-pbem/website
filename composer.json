@@ -2,6 +2,7 @@
 	"name": "fantasya-pbem/website",
 	"description": "The Fantasya website.",
 	"keywords": ["atlantis", "email", "eressea", "fantasya", "lemuria", "pbem", "symfony", "website"],
+	"license": "proprietary",
 	"type": "project",
 	"homepage": "https://www.fantasya-pbem.de",
 	"support": {
@@ -13,12 +14,6 @@
 		"source": "https://github.com/fantasya-pbem/website",
 		"wiki": "https://wiki.fantasya-pbem.de"
 	},
-	"authors": [
-		{
-			"name": "Sascha Ternes",
-			"email": "info@fantasya-pbem.de"
-		}
-	],
 	"funding": [
 		{
 			"type": "liberapay",
@@ -29,7 +24,12 @@
 			"url": "https://www.fantasya-pbem.de/donate"
 		}
 	],
-	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Sascha Ternes",
+			"email": "info@fantasya-pbem.de"
+		}
+	],
 	"version": "2.5.0",
 	"time": "2021-11-11",
 

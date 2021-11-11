@@ -109,10 +109,17 @@ class OrderService
 		$orders = '';
 		$n      = count($lines);
 		if ($n > 0) {
-			$first = strtoupper(trim($lines[0]));
+			$first = trim($lines[0]);
 			$parts = explode(' ', $first);
-			if (count($parts) !== 3 || !in_array($parts[0], self::PARTY_LINE)) {
+			if (!in_array(strtoupper($parts[0]), self::PARTY_LINE)) {
 				$orders .= 'PARTEI ' . $this->getPartyId() . ' "xxxxxxxx"' . PHP_EOL;
+			} elseif (count($parts) < 2) {
+				$lines[0] .= ' ' . $this->getPartyId() . ' "xxxxxxxx"';
+			} elseif (count($parts) < 3) {
+				$lines[0] .= ' "xxxxxxxx"';
+			} else {
+				$parts[2] = '"xxxxxxxx"';
+				$lines[0] = implode(' ', $parts);
 			}
 			foreach ($lines as $line) {
 				$orders .= trim($line) . PHP_EOL;

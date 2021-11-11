@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 use App\Entity\Game;
 use App\Exception\NoEngineException;
@@ -15,10 +16,12 @@ class EngineService
 {
 	private static ?array $engines = null;
 
-	public function __construct(EntityManagerInterface $manager, AssignmentRepository $repository) {
+	public function __construct(ContainerBagInterface $container, EntityManagerInterface $manager,
+								AssignmentRepository $repository) {
 		if (!self::$engines) {
 			self::$engines = [
-				Engine::FANTASYA => new Fantasya($manager), Engine::LEMURIA => new Lemuria($repository, $manager)
+				Engine::FANTASYA => new Fantasya($container, $manager),
+				Engine::LEMURIA => new Lemuria($container, $repository, $manager)
 			];
 		}
 	}

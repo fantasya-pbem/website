@@ -41,6 +41,7 @@ class ReportService
 				}
 			}
 		}
+		asort($turns);
 		return $turns;
 	}
 
