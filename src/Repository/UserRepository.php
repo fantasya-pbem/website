@@ -4,8 +4,8 @@ namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -15,20 +15,28 @@ use App\Entity\User;
  * @method find($id, ?int $lockMode = null, ?int $lockVersion = null): ?User
  * @method findOneBy(array $criteria, ?array $orderBy = null): ?User
  */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, UserLoaderInterface
 {
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, User::class);
     }
 
-	/**
-	 * @throws ORMException
-	 */
-    public function upgradePassword(UserInterface $user, string $newEncodedPassword): void {
+    public function upgradePassword(UserInterface $user, string $newHashedPassword): void {
 		if ($user instanceof User) {
-			$user->setPassword($newEncodedPassword);
+			$user->setPassword($newHashedPassword);
 			$this->getEntityManager()->flush($user);
 		}
+	}
+
+	public function loadUserByIdentifier(string $identifier): ?User {
+    	if (filter_var($identifier, FILTER_VALIDATE_EMAIL)) {
+    		return $this->findOneBy(['email' => $identifier]);
+		}
+    	return $this->findOneBy(['name' => $identifier]);
+	}
+
+	public function loadUserByUsername(string $username): User {
+		return $this->loadUserByIdentifier($username);
 	}
 
 	/**

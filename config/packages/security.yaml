@@ -11,7 +11,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: name
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -19,18 +19,12 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            entry_point: App\Security\ClientCertificateAuthenticator
             logout:
                 path: user_logout
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800 # 1 week in seconds
                 path: /
-
-            # activate different ways to authenticate
-
-            # http_basic: true
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
 
             form_login:
                 login_path: user_login
@@ -39,6 +33,8 @@ security:
 
             x509:
                 provider: app_user_provider
+                user: REDIRECT_SSL_CLIENT_S_DN_Email
+                credentials: REDIRECT_SSL_CLIENT_S_DN_CN
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

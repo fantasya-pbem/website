@@ -116,13 +116,13 @@ class Fantasya implements Engine
 
 		$table = $game->getDb() . '.partei';
 		$sql   = "UPDATE " . $table . " SET email = " . $email . " WHERE user_id = " . $id;
-		if (!$connection->prepare($sql)->execute()) {
+		if (!$connection->prepare($sql)->executeStatement()) {
 			throw new \RuntimeException('Could not update parties.');
 		}
 
 		$table = $game->getDb() . '.neuespieler';
 		$sql   = "UPDATE " . $table . " SET email = " . $email . " WHERE user_id = " . $id;
-		if (!$connection->prepare($sql)->execute()) {
+		if (!$connection->prepare($sql)->executeStatement()) {
 			throw new \RuntimeException('Could not update newbies.');
 		}
 	}
@@ -133,7 +133,7 @@ class Fantasya implements Engine
 		$columns    = implode(',', array_keys($newbie->getProperties()));
 		$values     = $this->createValues($newbie);
 		$sql        = "INSERT INTO " . $table . " (" . $columns . ") VALUES (" . $values . ")";
-		if (!$connection->prepare($sql)->execute()) {
+		if (!$connection->prepare($sql)->executeStatement()) {
 			throw new \RuntimeException('Could not save Newbie.');
 		}
 	}
@@ -143,7 +143,7 @@ class Fantasya implements Engine
 		$table      = $game->getDb() . '.neuespieler';
 		$values     = $this->createConstraints($newbie);
 		$sql        = "DELETE FROM " . $table . " WHERE " . $values;
-		if (!$connection->prepare($sql)->execute()) {
+		if (!$connection->prepare($sql)->executeStatement()) {
 			throw new \RuntimeException('Could not delete Newbie.');
 		}
 	}

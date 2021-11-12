@@ -34,7 +34,7 @@ class UserController extends AbstractController
 	 * @Route("/user/secure", name="user_secure")
 	 */
     public function secure(): Response {
-		return $this->login();
+		return $this->redirectToRoute('profile');
 	}
 
 	/**
