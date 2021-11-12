@@ -44,9 +44,7 @@ class GameService
 		}
 		$games = $this->getAll();
 		$game  = current($games);
-		if ($this->session) {
-			$this->session->set('game', $game);
-		}
+		$this->session?->set('game', $game);
 		return $game;
 	}
 }

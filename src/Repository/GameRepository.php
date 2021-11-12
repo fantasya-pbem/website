@@ -8,7 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Game;
 
 /**
- * @method findOneBy(array $criteria, ?array $orderBy = null): ?Game
+ * @method Game|null findOneBy(array $criteria, ?array $orderBy = null)
  */
 class GameRepository extends ServiceEntityRepository
 {

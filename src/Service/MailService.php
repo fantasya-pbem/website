@@ -2,12 +2,13 @@
 declare (strict_types = 1);
 namespace App\Service;
 
-use App\Entity\User;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Crypto\SMimeSigner;
 use Symfony\Component\Mime\Email;
+
+use App\Entity\User;
 
 class MailService
 {
