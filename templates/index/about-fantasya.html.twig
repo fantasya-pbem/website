@@ -9,18 +9,73 @@
 {% endblock %}
 
 {% block content %}
-    <p>Fantasya ist eine Welt voll mit Elfen, Zwergen und anderen Lebewesen. Die Unterwelt ist überrannt worden von Drachen und Zombies, die darauf warten, durch Höhlen zur Oberwelt zu gelangen. Fantasya ist ein kostenloses Runden-Strategiespiel, bei dem Du Deine eigene Zivilisation gründen und Dich mit anderen Spielern messen kannst. Tauche ein in die Welt von Fantasya und führe Dein Volk zur dominantesten Macht.</p>
+    <p>
+        Fantasya ist eine Welt voll mit Elfen, Zwergen und anderen Lebewesen. Die Unterwelt ist überrannt worden von
+        Drachen und Zombies, die darauf warten, durch Höhlen zur Oberwelt zu gelangen. Fantasya ist ein kostenloses
+        Runden-Strategiespiel, bei dem Du Deine eigene Zivilisation gründen und Dich mit anderen Spielern messen kannst.
+        Tauche ein in die Welt von Fantasya und führe Dein Volk zur dominantesten Macht.
+    </p>
 
-    <p>In Fantasya kannst Du eine Rasse auswählen und mit anderen Spielern oder gegen andere Spieler spielen. Das Spiel ist in Runden aufgeteilt und eine Runde dauert eine Woche. Was jeder Spieler mit seinem Volk macht, ist ihm selbst überlassen, es gibt kein festes Spielziel.</p>
+    <p>
+        In Fantasya kannst Du eine Rasse auswählen und mit anderen Spielern oder gegen andere Spieler spielen. Das Spiel
+        ist in Runden aufgeteilt und eine Runde dauert eine Woche. Was jeder Spieler mit seinem Volk macht, ist ihm
+        selbst überlassen, es gibt kein festes Spielziel.
+    </p>
 
     <h2>Spielziele</h2>
 
     <ul>
-        <li>Erkunde eine riesige Welt mit über hundertausenden Regionen.</li>
+        <li>Erkunde eine riesige Welt mit hunderten von Regionen.</li>
         <li>Vergrößere Dein Volk, in dem Du neue Kolonien gründest oder fremde Kolonien eroberst</li>
         <li>Sorge Dich um das Wohl Deines Volkes und kümmere Dich um die Bedürfnisse Deiner Bauern.</li>
         <li>Investiere in Deine Wirtschaft und erhebe Steuern, um neue Gebäude und größere Schiffe bauen zu können.</li>
         <li>Entwerfe Deine Streitmacht ganz nach Deinen eigenen Vorstellungen, und führe Schlachten gegen Monsterhorden und feindliche Zivilisationen.</li>
         <li>Verbessere Deine Beziehungen zu anderen Völkern, und schließe Bündnisse mit ihnen oder treibe Handel.</li>
     </ul>
+
+    <h2>Teilnehmen</h2>
+
+    <ol>
+        <li>Registriere ein <a href="{{ path('user_register') }}">Benutzerkonto</a>.</li>
+        <li>Wähle eine Spielwelt:
+            <ul>
+                {% for game in game_service.all %}
+                    <li class="nav-item">
+                        <a href="{{ path('world', {'game': game.id}) }}">{{ game.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>Erstelle eine neue Partei.</li>
+    </ol>
+
+    <p>Du kannst in jeder Welt mit einer Partei teilnehmen.</p>
+
+    <h3>Spielzug</h3>
+
+    <p>
+        Nachdem Du Deine Partei registriert hast, bekommst Du beim nächsten Auswertungstermin eine E-Mail mit Deiner
+        ersten Auswertung, und kannst danach Deinen ersten Spielzug planen. In der
+        <a href="//wiki.fantasya-pbem.de">Bibliothek</a> von Fantasya findest Du eine Menge Informationen dazu, welche
+        Spielaktionen möglich sind.
+    </p>
+
+    <p>
+        Ein Spielzug ist eine Liste von Aktionen („Befehle“), die von Deinen Spielfiguren („Einheiten“) ausgeführt
+        werden sollen. Eine solche Liste kannst Du selbst aufschreiben, oder Du benutzt ein Hilfsprogramm wie
+        <a href="http://sourceforge.net/projects/magellan-client">Magellan</a>, das Dir dabei helfen
+        kann, den Überblick über Deine Partei zu behalten.<br>
+        Die Befehle sendest Du vor dem nächsten Spielzugtermin per E-Mail an den Server, oder Du sendest die Befehle
+        über ein Formular in Deinem Benutzerkonto ein. Dort kannst Du auch die Befehle der früheren Runden nochmal
+        anschauen, Befehle für mehrere Wochen im Voraus eingeben, und sogar Auswertungen nochmal herunterladen.
+    </p>
+
+    <h3>Taverne</h3>
+
+    <p>
+        Fantasya bietet Dir auch die Möglichkeit, Dich in der <a href="//forum.fantasya-pbem.de">Taverne</a> (ein Forum)
+        mit anderen Spielern auszutauschen. Dies kannst Du von Spieler zu Spieler tun, oder in die Rolle Deiner
+        Spielfiguren schlüpfen und diplomatische Verhandlungen mit den anderen Parteien führen (Rollenspiel). Wirf mal
+        einen Blick in die Taverne – auch ohne eine Registrierug kannst Du Dich dort umschauen.
+    </p>
 {% endblock %}
