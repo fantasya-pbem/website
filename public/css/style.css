@@ -216,7 +216,7 @@ main .card-body {
 }
 
 main a:before {
-	content: '»\2009'
+	content: '»\a0'
 }
 
 .article.card {
