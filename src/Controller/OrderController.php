@@ -46,7 +46,7 @@ class OrderController extends AbstractController
 		$party  = $parties[0];
 		$turn   = $this->turn($request);
 		$order  = new Order();
-		$form   = $this->createOrderForm($order, $parties, $turn, $engine->getTurnOffset());
+		$form   = $this->createOrderForm($order, $parties, $turn);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -138,7 +138,7 @@ class OrderController extends AbstractController
 		$order->setTurn($t);
 		$order->setGame($game->getAlias());
 		$this->orderService->setContext($order);
-		$form = $this->createOrderForm($order, $parties, $t, $engine->getTurnOffset());
+		$form = $this->createOrderForm($order, $parties, $t);
 
 		return $this->render('order/index.html.twig', [
 			'form' => $form->createView(), 'hasSimulation' => $hasSimulation
@@ -173,7 +173,7 @@ class OrderController extends AbstractController
 	 * @param Party[] $parties
 	 * @throws \Exception
 	 */
-	private function createOrderForm(Order $order, array $parties, int $turn, int $offset): FormInterface {
+	private function createOrderForm(Order $order, array $parties, int $turn): FormInterface {
 		$form = $this->createFormBuilder($order);
 		$form->setAction($this->generateUrl('order'));
 		$form->add('party', ChoiceType::class, [
@@ -182,7 +182,7 @@ class OrderController extends AbstractController
 		]);
 		$form->add('turn', ChoiceType::class, [
 			'label'   => 'Runde',
-			'choices' => $this->getTurns($turn, $offset),
+			'choices' => $this->getTurns($turn),
 			'data'    => (string)$turn
 		]);
 		$form->add('submit', SubmitType::class, [
@@ -203,7 +203,7 @@ class OrderController extends AbstractController
 		]);
 		$form->add('turn', ChoiceType::class, [
 			'label'   => 'Runde',
-			'choices' => $this->getTurns($turn, 0),
+			'choices' => $this->getTurns($turn),
 			'data'    => (string)$turn
 		]);
 		$form->add('orders', TextareaType::class, [
@@ -231,15 +231,15 @@ class OrderController extends AbstractController
 	/**
 	 * @return string[]
 	 */
-	#[Pure] private function getTurns(int $turn, int $offset, int $min = -5): array {
+	#[Pure] private function getTurns(int $turn, int $min = -5): array {
 		$turns = [];
 		$next  = max(0, $turn + $min);
 		$last  = $turn + 5;
 		while ($next <= $last ) {
-			$round        = (string)$next;
-			$turn         = (string)($next + $offset);
-			$turns[$turn] = $round;
+			$round = (string)$next;
 			$next++;
+			$turn         = (string)$next;
+			$turns[$turn] = $round;
 		}
 		return $turns;
 	}
