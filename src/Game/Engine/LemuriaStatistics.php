@@ -39,6 +39,8 @@ class LemuriaStatistics implements Statistics
 
 	private ?array $population = null;
 
+	private ?array $mosters = null;
+
 	/**
 	 * @var array[]|null
 	 */
@@ -52,7 +54,6 @@ class LemuriaStatistics implements Statistics
 
 	/**
 	 * @return array[]
-	 * @throws \Exception
 	 */
 	public function getParties(): array {
 		if ($this->parties === null) {
@@ -77,16 +78,12 @@ class LemuriaStatistics implements Statistics
 		return $this->parties;
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function getPartiesCount(): int {
 		return count($this->getParties());
 	}
 
 	/**
 	 * @return array[]
-	 * @throws \Exception
 	 */
 	public function getPartyRaces(): array {
 		return $this->races;
@@ -94,7 +91,6 @@ class LemuriaStatistics implements Statistics
 
 	/**
 	 * @return array[]
-	 * @throws \Exception
 	 */
 	public function getNewbies(): array {
 		if (!$this->newbies) {
@@ -106,16 +102,10 @@ class LemuriaStatistics implements Statistics
 		return $this->newbies;
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function getNewbiesCount(): int {
 		return count($this->getNewbies());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	#[ArrayShape(['world' => "array|mixed", 'underworld' => "array|mixed"])]
 	public function getLandscape(): array {
 		if (!$this->landscape) {
@@ -150,31 +140,41 @@ class LemuriaStatistics implements Statistics
 		return [];
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function getPopulation(): array {
 		if (!$this->population) {
 			$this->persons = [];
 			$persons       = [];
+			$this->mosters = [];
+			$monsters      = [];
 			$count         = 0;
 			$total         = 0;
 			foreach (Lemuria::Catalog()->getAll(Catalog::UNITS) as $unit /* @var Unit $unit*/) {
-				if ($unit->Party()->Type() !== Party::PLAYER) {
-					continue;
-				}
-				$size = $unit->Size();
+				$type = $unit->Party()->Type();
 				$race = (string)$unit->Race();
-				if (!isset($persons[$race])) {
-					$persons[$race] = [0, 0];
+				$size = $unit->Size();
+
+				if ($type === Party::PLAYER) {
+					if (!isset($persons[$race])) {
+						$persons[$race] = [0, 0];
+					}
+					$persons[$race][0]++;
+					$persons[$race][1] += $size;
+				} elseif ($type === Party::MONSTER) {
+					if (!isset($monsters[$race])) {
+						$monsters[$race] = [0, 0];
+					}
+					$monsters[$race][0]++;
+					$monsters[$race][1] += $size;
 				}
-				$persons[$race][0]++;
-				$persons[$race][1] += $size;
-				$total             += $size;
+				$total += $size;
 				$count++;
 			}
+
 			foreach ($persons as $race => $numbers) {
 				$this->persons[] = ['race' => $this->dictionary->get('race', $race), 'units' => $numbers[0], 'persons' => $numbers[1]];
+			}
+			foreach ($monsters as $race => $numbers) {
+				$this->mosters[] = ['race' => $this->dictionary->get('race', $race), 'units' => $numbers[0], 'persons' => $numbers[1]];
 			}
 			$this->population = ['units' => $count, 'persons' => $total];
 		}
@@ -183,7 +183,6 @@ class LemuriaStatistics implements Statistics
 
 	/**
 	 * @return array[]
-	 * @throws \Exception
 	 */
 	public function getRaces(): array {
 		return $this->persons;
@@ -193,6 +192,6 @@ class LemuriaStatistics implements Statistics
 	 * @return array[]
 	 */
 	public function getMonsters(): array {
-		return [];
+		return $this->mosters;
 	}
 }
