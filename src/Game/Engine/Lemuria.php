@@ -62,10 +62,6 @@ class Lemuria implements Engine
 		return LemuriaGame::Calendar()->Round();
 	}
 
-	public function getTurnOffset(): int {
-		return 0;
-	}
-
 	public function getLastZat(Game $game): \DateTime {
 		$dateTime = new \DateTime();
 		return $dateTime->setTimestamp(self::$config[LemuriaConfig::MDD]);
