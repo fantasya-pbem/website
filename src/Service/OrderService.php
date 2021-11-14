@@ -16,22 +16,19 @@ class OrderService
 
 	private Order $order;
 
-	private string $fcheck;
-
 	private string $simulation;
 
-	public function __construct(private PartyService $service, private GameRepository $repository,
-								ContainerBagInterface $config) {
+	public function __construct(private PartyService $service, private CheckService $checkService,
+								private GameRepository $repository, ContainerBagInterface $config) {
 		$this->baseDir = realpath(__DIR__ . '/../../var/orders');
 		if (!$this->baseDir) {
 			throw new \RuntimeException('Orders directory not found.');
 		}
-		$this->fcheck     = $config->get('app.fcheck');
 		$this->simulation = $config->get('app.simulation');
 	}
 
 	#[Pure] public function getPath(): string {
-		return $this->baseDir . DIRECTORY_SEPARATOR . $this->order->getGame() . DIRECTORY_SEPARATOR .
+		return $this->baseDir . DIRECTORY_SEPARATOR . $this->order->getGame()->getAlias() . DIRECTORY_SEPARATOR .
 			   $this->order->getTurn() . DIRECTORY_SEPARATOR . $this->order->getParty() . '.order';
 	}
 
@@ -46,33 +43,12 @@ class OrderService
 		return '';
 	}
 
-	public function getFcheck(): string {
-		$check   = null;
-		$command = $this->fcheck ?? '';
-		if (str_contains($command, '%input%') && str_contains($command, '%output%') && str_contains($command, '%game%')) {
-			$file = $this->getPath();
-			if (is_file($file)) {
-				$command = str_replace('%input%', $file, $command);
-				$command = str_replace('%game%', $this->order->getGame(), $command);
-				$output  = tempnam('/tmp', 'fcheck');
-				if ($output) {
-					$command = str_replace('%output%', $output, $command);
-					$result  = array();
-					$code    = -1;
-					exec($command, $result, $code);
-					if ($code === 0) {
-						$check = file_get_contents($output);
-					} else {
-						if (count($result) === 3) {
-							$result[1] = basename($result[1]);
-							$check     = implode(' ', $result);
-						}
-					}
-					@unlink($output);
-				}
-			}
-		}
-		return $check ?? '';
+	public function getCheck(): string {
+		$rules = __DIR__ . '/../../var/check/' . $this->order->getGame()->getEngine() . '.tpl';
+		$this->checkService->readRules($rules);
+		$commands = file_get_contents($this->getPath());
+		$check    = $this->checkService->check($commands);
+		return empty($check) ? 'Die Befehle scheinen in Ordnung zu sein.' : implode(PHP_EOL, $check);
 	}
 
 	public function getSimulation(): string {
@@ -130,7 +106,7 @@ class OrderService
 
 	private function getPartyId(): string {
 		$owner = $this->order->getParty();
-		$game  = $this->repository->findByAlias($this->order->getGame());
+		$game  = $this->repository->findByAlias($this->order->getGame()->getAlias());
 		return $this->service->getByOwner($owner, $game)->getId();
 	}
 }

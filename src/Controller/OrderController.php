@@ -56,7 +56,7 @@ class OrderController extends AbstractController
 			$order->setParty($party->getOwner());
 			$order->setTurn($turn);
 		}
-		$order->setGame($game->getAlias());
+		$order->setGame($game);
 		$this->orderService->setContext($order);
 		$hasSimulation = $engine->canSimulate($game, $turn) && $this->getParameter('app.simulation'); //TODO
 
@@ -79,7 +79,7 @@ class OrderController extends AbstractController
 		$order = new Order();
 		$order->setParty($party->getOwner());
 		$order->setTurn($this->turn($request));
-		$order->setGame($game->getAlias());
+		$order->setGame($game);
 		$this->orderService->setContext($order);
 		$simulation = $this->orderService->getSimulation();
 
@@ -103,7 +103,7 @@ class OrderController extends AbstractController
 		if ($form->isSubmitted() && $form->isValid()) {
 			/* @var Order $order */
 			$order = $form->getData();
-			$order->setGame($this->gameService->getCurrent()->getAlias());
+			$order->setGame($this->gameService->getCurrent());
 			$this->orderService->setContext($order);
 			$this->orderService->saveOrders();
 			return $this->redirectToRoute('order_success', ['p' => $order->getParty(), 't' => $turn]);
@@ -136,7 +136,7 @@ class OrderController extends AbstractController
 		$order  = new Order();
 		$order->setParty($p);
 		$order->setTurn($t);
-		$order->setGame($game->getAlias());
+		$order->setGame($game);
 		$this->orderService->setContext($order);
 		$form = $this->createOrderForm($order, $parties, $t);
 

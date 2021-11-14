@@ -11,7 +11,7 @@
 {% block content %}
     {{ include('forms/order.html.twig') }}
 
-    <pre><strong>{{ order_service.fcheck }}</strong></pre>
+    <pre><strong>{{ order_service.check }}</strong></pre>
 
     {% if hasSimulation %}
         <h2>

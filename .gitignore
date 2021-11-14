@@ -18,6 +18,7 @@
 /public/js/bootstrap.*
 /public/js/jquery.*
 !/var/certs/.gitignore
+!/var/check/fantasya.tpl
 !/var/orders/.gitignore
 !/var/zip/.gitignore
 /composer.lock
