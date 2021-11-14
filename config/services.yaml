@@ -6,7 +6,6 @@
 parameters:
     app.antispam.question: '%env(ANTISPAM_QUESTION)%'
     app.antispam.answer: '%env(ANTISPAM_ANSWER)%'
-    app.fcheck: '%env(FCHECK)%'
     app.game.fantasya: '%env(GAME_FANTASYA)%'
     app.game.lemuria: '%env(GAME_LEMURIA)%'
     app.mail.server.name: '%env(MAIL_SERVER_NAME)%'

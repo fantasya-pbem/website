@@ -16,3 +16,7 @@ echo Creating Bootstrap JS links...
 rm -f public/js/jquery.*
 ln -s ../../vendor/components/jquery/jquery.min.js public/js/jquery.min.js
 ln -s ../../vendor/components/jquery/jquery.min.map public/js/jquery.min.map
+
+echo Creating Lemuria fcheck template link...
+rm -f var/check/lemuria.tpl
+ln -s ../../vendor/lemuria-pbem/engine-fantasya/fcheck/lemuria.tpl var/check/lemuria.tpl

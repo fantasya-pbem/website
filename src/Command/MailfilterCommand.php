@@ -90,14 +90,14 @@ class MailfilterCommand extends Command
 		$this->getRound();
 		$this->saveOrders();
 
-		$fcheck = $this->orderService->getFcheck();
+		$check = $this->orderService->getCheck();
 		if ($this->engineService->get($this->game)->canSimulate($this->game, $this->round)) {
 			$simulation = $this->orderService->getSimulation();
 		} else {
 			$simulation = '';
 		}
 
-		$this->sendAnswerMail($recipient, $fcheck, $simulation);
+		$this->sendAnswerMail($recipient, $check, $simulation);
 		return 0;
 	}
 
@@ -287,7 +287,7 @@ class MailfilterCommand extends Command
 	private function saveOrders(): void {
 		$order = new Order();
 		$order->setParty($this->party->getOwner());
-		$order->setGame($this->game->getAlias());
+		$order->setGame($this->game);
 		$order->setTurn($this->round);
 		$order->setOrders($this->content);
 		$this->orderService->setContext($order);
@@ -299,12 +299,12 @@ class MailfilterCommand extends Command
 	/**
 	 * @throws MailfilterException
 	 */
-	private function sendAnswerMail(string $from, string $fcheck, string $simulation): void {
+	private function sendAnswerMail(string $from, string $check, string $simulation): void {
 		$subject = isset($this->header['Subject'][0]) ? 'Re: ' . $this->header['Subject'][0]
 			                                          : 'Fantasya-Befehle sind angekommen';
 		$body    = "Deine Befehle für Runde " . ($this->round + 1) . " sind angekommen.\n";
-		if ($fcheck) {
-			$body .= "\n" . rtrim($fcheck) . "\n";
+		if ($check) {
+			$body .= "\n" . rtrim($check) . "\n";
 		}
 		if ($simulation) {
 			$body .= "\n" . $simulation;

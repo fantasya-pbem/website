@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace App\Data;
 
+use App\Entity\Game;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Order
@@ -15,7 +16,7 @@ class Order
 
 	private string $orders = '';
 
-	private string $game = '';
+	private Game $game;
 
 	public function getParty(): string {
 		return $this->party;
@@ -29,7 +30,7 @@ class Order
 		return $this->orders;
 	}
 
-	public function getGame(): string {
+	public function getGame(): Game {
 		return $this->game;
 	}
 
@@ -45,7 +46,7 @@ class Order
 		$this->orders = $orders;
 	}
 
-	public function setGame(string $game) {
+	public function setGame(Game $game) {
 		$this->game = $game;
 	}
 }
