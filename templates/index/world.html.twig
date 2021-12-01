@@ -19,8 +19,8 @@
 
     <p>
         <strong>Version: </strong>{{ version }}<br>
-        <strong>Letzter Zug: </strong>Runde {{ turn.round|localizednumber }} vom {{ turn.start }}<br>
-        <strong>Nächster Zug: </strong>Runde {{ (turn.round + 1)|localizednumber }} am {{ turn.next }}
+        <strong>Letzter Zug: </strong>Runde {{ turn.round|format_number(locale='de') }} vom {{ turn.start }}<br>
+        <strong>Nächster Zug: </strong>Runde {{ (turn.round + 1)|format_number(locale='de') }} am {{ turn.next }}
     </p>
 
     {% if statistics.newbiesCount > 0 %}
@@ -29,7 +29,7 @@
         {% if statistics.newbiesCount == 1 %}
             <p>Im nächsten Zug startet eine neue Partei.</p>
         {% else %}
-            <p>Im nächsten Zug starten {{ statistics.newbiesCount|localizednumber }} neue Parteien.</p>
+            <p>Im nächsten Zug starten {{ statistics.newbiesCount|format_number(locale='de') }} neue Parteien.</p>
         {% endif %}
 
         <dl>
@@ -44,7 +44,7 @@
 
     <h4>Regionen</h4>
 
-    <p>Es gibt {{ statistics.landscape.world|localizednumber }} Regionen auf dieser Spielwelt und {{ statistics.landscape.underworld|localizednumber }} Regionen in der Unterwelt.</p>
+    <p>Es gibt {{ statistics.landscape.world|format_number(locale='de') }} Regionen auf dieser Spielwelt und {{ statistics.landscape.underworld|format_number(locale='de') }} Regionen in der Unterwelt.</p>
 
     <table class="table table-borderless table-sm">
         <thead></thead>
@@ -56,7 +56,7 @@
         <tbody>
         <tr>
             {% for region in statistics.world %}
-                <td>{{ region.count|localizednumber }}</td>
+                <td>{{ region.count|format_number(locale='de') }}</td>
             {% endfor %}
         </tr>
         </tbody>
@@ -72,7 +72,7 @@
         <tbody>
         <tr>
             {% for region in statistics.underworld %}
-                <td>{{ region.count|localizednumber }}</td>
+                <td>{{ region.count|format_number(locale='de') }}</td>
             {% endfor %}
         </tr>
         </tbody>
@@ -80,7 +80,7 @@
 
     <h4>Bevölkerung</h4>
 
-    <p>Es gibt insgesamt {{ statistics.population.units|localizednumber }} Einheiten mit {{ statistics.population.persons|localizednumber }} Individuen (Spieler und Monster).</p>
+    <p>Es gibt insgesamt {{ statistics.population.units|format_number(locale='de') }} Einheiten mit {{ statistics.population.persons|format_number(locale='de') }} Individuen (Spieler und Monster).</p>
 
     <table class="table table-borderless table-sm">
         <thead></thead>
@@ -92,7 +92,7 @@
         <tbody>
         <tr>
             {% for player in statistics.races %}
-                <td>{{ player.units|localizednumber }}/{{ player.persons|localizednumber }}</td>
+                <td>{{ player.units|format_number(locale='de') }}/{{ player.persons|format_number(locale='de') }}</td>
             {% endfor %}
         </tr>
         </tbody>
@@ -108,7 +108,7 @@
         <tbody>
         <tr>
             {% for monster in statistics.monsters %}
-                <td>{{ monster.units|localizednumber }}/{{ monster.persons|localizednumber }}</td>
+                <td>{{ monster.units|format_number(locale='de') }}/{{ monster.persons|format_number(locale='de') }}</td>
             {% endfor %}
         </tr>
         </tbody>
@@ -116,7 +116,7 @@
 
     <h4>Parteien</h4>
 
-    <p>Diese Spielwelt wird von {{ statistics.partiesCount|localizednumber }} Parteien bevölkert.</p>
+    <p>Diese Spielwelt wird von {{ statistics.partiesCount|format_number(locale='de') }} Parteien bevölkert.</p>
 
     <table class="table table-borderless table-sm">
         <thead></thead>
@@ -128,7 +128,7 @@
         <tbody>
         <tr>
             {% for player in statistics.partyRaces %}
-                <td>{{ player.count|localizednumber }}</td>
+                <td>{{ player.count|format_number(locale='de') }}</td>
             {% endfor %}
         </tr>
         </tbody>
