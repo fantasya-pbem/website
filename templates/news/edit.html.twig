@@ -18,7 +18,7 @@
     {% if news|length > 0 %}
         {% for article in news %}
             <div class="article card">
-                <h3 class="card-header">{{ article.createdAt|localizeddate('long', 'none') }} – {{ article.title }}</h3>
+                <h3 class="card-header">{{ article.createdAt|format_date('long', locale='de') }} – {{ article.title }}</h3>
                 <div class="card-body">{{ article.content|raw|nl2br }}</div>
                 <div class="card-footer">
                     <a href="{{ path('news_edit', {'article': article.id}) }}">Bearbeiten</a>
