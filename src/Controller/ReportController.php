@@ -96,6 +96,7 @@ class ReportController extends AbstractController
 		return $this->redirectToRoute('report');
 	}
 
+	/** @noinspection PhpUnnecessaryLocalVariableInspection */
 	private function user(): User {
 		/** @var User $user */
 		$user = $this->getUser();
