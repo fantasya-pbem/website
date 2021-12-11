@@ -37,7 +37,6 @@ class GameController extends AbstractController
 		foreach ($this->gameService->getAll() as $game) {
 			$games[$game->getId()] = $game;
 		}
-		reset($games);
 		/* @var Game $game */
 		$game = current($games);
 
@@ -103,9 +102,7 @@ class GameController extends AbstractController
 		return $this->redirectToRoute('profile');
 	}
 
-	/**
-	 * @return User
-	 */
+	/** @noinspection PhpUnnecessaryLocalVariableInspection */
 	private function user(): User {
 		/** @var User $user */
 		$user = $this->getUser();

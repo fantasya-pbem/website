@@ -24,6 +24,7 @@ class AssignmentRepository extends ServiceEntityRepository
 		return parent::findBy(['user' => $user]);
 	}
 
+	/** @noinspection PhpUnnecessaryLocalVariableInspection */
 	public function findByUuid(string $uuid): ?Assignment {
 		/** @var Assignment $assignment */
 		$assignment = parent::findOneBy(['uuid' => $uuid]);
