@@ -27,7 +27,7 @@ class Fantasya implements Engine
 		$sql        = "SELECT * FROM " . $table . " WHERE id = " . $this->manager->getConnection()->quote($id);
 		$stmt       = $connection->prepare($sql);
 		$result     = $stmt->executeQuery()->fetchAllAssociative();
-		if (is_array($result) && isset($result[0]) && is_array($result[0])) {
+		if (isset($result[0]) && is_array($result[0])) {
 			return new Party($result[0]);
 		}
 		return null;
@@ -39,7 +39,7 @@ class Fantasya implements Engine
 		$sql        = "SELECT * FROM " . $table . " WHERE owner_id = " . $this->manager->getConnection()->quote($owner);
 		$stmt       = $connection->prepare($sql);
 		$result     = $stmt->executeQuery()->fetchAllAssociative();
-		if (is_array($result) && isset($result[0]) && is_array($result[0])) {
+		if (isset($result[0]) && is_array($result[0])) {
 			return new Party($result[0]);
 		}
 		return null;

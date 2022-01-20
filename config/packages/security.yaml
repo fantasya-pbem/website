@@ -16,6 +16,7 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
             lazy: true
             provider: app_user_provider
@@ -31,13 +32,5 @@ security:
                 check_path: user_login
                 default_target_path: profile
 
-            x509:
-                provider: app_user_provider
-                user: REDIRECT_SSL_CLIENT_S_DN_Email
-                credentials: REDIRECT_SSL_CLIENT_S_DN_CN
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
-    access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+            custom_authenticators:
+                - App\Security\X509\ClientCertificateAuthenticator

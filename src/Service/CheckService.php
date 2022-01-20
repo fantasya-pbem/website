@@ -7,16 +7,34 @@ class CheckService
 	protected ?array $rules = null;
 
 	public function check(string $commands): array {
-		$result = [];
-		$i      = 0;
-		foreach (explode(PHP_EOL, $commands) as $command) {
+		$result   = [];
+		$i        = 0;
+		$command  = null;
+		$continue = false;
+		foreach (explode(PHP_EOL, $commands) as $line) {
 			$i++;
-			$command = trim($command);
-			if ($command) {
+			$line     = trim($line);
+			$continue = str_ends_with($line, '\\');
+			if ($continue) {
+				$line = trim(rtrim($line, '\\'));
+			}
+			if ($line) {
+				if ($command) {
+					$command .= ' ' . $line;
+				} else {
+					$command = $line;
+				}
+				if ($continue) {
+					continue;
+				}
 				if (!$this->isValid($command)) {
 					$result[] = 'Zeile ' . $i . ": '" . $command . "' ist kein gültiger Befehl.";
 				}
+				$command = null;
 			}
+		}
+		if ($continue) {
+			$result[] = 'Zeile ' . $i . ": '" . $command . "' ist kein gültiger Befehl.";
 		}
 		return $result;
 	}

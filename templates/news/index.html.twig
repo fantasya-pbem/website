@@ -9,12 +9,20 @@
 {% endblock %}
 
 {% block content %}
-    <p>Seit Anfang 2015 ist Fantasya wieder online!</p>
-
     <p>
-        Spielbefehle bitte an die E-Mail-Adresse <strong>befehle(at)fantasya-pbem.de</strong> senden. Für Fragen ist
-        unser Forum, die Taverne, der geeignete Ort.
+        Im März 2021 ist mit <strong>Lemuria</strong> ein neues Spiel gestartet. Lemuria ist eine Weiterentwicklung von
+        Fantasya mit dem Ziel, Mikromanagement zu reduzieren und schneller und flexibler neue Spielideen ausprobieren zu
+        können. Das ältere, schon viele Jahre laufende Fantasya-Spiel gibt es auch weiterhin.
     </p>
+
+    <p>Spielbefehle bitte an folgende E-Mail-Adressen senden:</p>
+
+    <ul>
+        <li>Fantasya: <strong>befehle(at)fantasya-pbem.de</strong></li>
+        <li>Lemuria: <strong>lemuria(at)fantasya-pbem.de</strong></li>
+    </ul>
+
+    <p>Für Fragen ist unser Forum, die <a href="//forum.fantasya-pbem.de">Taverne</a>, der geeignete Ort.</p>
 
     {% if is_granted('ROLE_NEWS_CREATOR') %}
         <p class="float-right">

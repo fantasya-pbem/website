@@ -32,7 +32,7 @@ class OrderService
 			   $this->order->getTurn() . DIRECTORY_SEPARATOR . $this->order->getParty() . '.order';
 	}
 
-	public function getOrders(): string {
+	#[Pure] public function getOrders(): string {
 		$file = $this->getPath();
 		if (is_file($file)) {
 			$contents = file_get_contents($file);

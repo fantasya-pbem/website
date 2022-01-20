@@ -63,6 +63,7 @@ class Newbie
 
 	public function setDescription(string $description): void {
 		$this->description = $description;
+		$this->cleanDescription();
 	}
 
 	public function setRace(string $race): void {
@@ -83,5 +84,11 @@ class Newbie
 
 	public function getResources(): int {
 		return $this->wood + $this->stone + $this->iron;
+	}
+
+	private function cleanDescription(): void {
+		$this->description = str_replace(["\e", "\f", "\r", "\v"], '', $this->description);
+		$this->description = str_replace(["\t", "\n"], ' ', $this->description);
+		$this->description = trim($this->description, "\"'`^°§$%&/()={[]}\\+*~#<>|,-;:_ ");
 	}
 }

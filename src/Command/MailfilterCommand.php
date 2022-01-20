@@ -314,7 +314,7 @@ class MailfilterCommand extends Command
 		$mail = $this->mailService->fromServer($from, $this->user);
 		if (isset($this->header['Message-ID'])) {
 			$messageId = trim($this->header['Message-ID'][0], '< >');
-			$mail->getHeaders()->addIdHeader('In-Reply-To', $messageId)->addIdHeader('References', $messageId);
+			$mail->getHeaders()->addTextHeader('In-Reply-To', $messageId)->addTextHeader('References', $messageId);
 		}
 		$mail->subject($subject);
 		$mail->text($body);
