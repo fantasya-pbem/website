@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use JetBrains\PhpStorm\ArrayShape;
@@ -47,9 +49,12 @@ class ProfileController extends AbstractController
 		40 => 'Die Einstellungen konnten nicht gespeichert werden.'
 	];
 
+	private EntityManager $entityManager;
+
 	public function __construct(private UserRepository $userRepository, private GameService $gameService,
 								private PartyService $partyService, private MailService $mailService,
-								private UserPasswordHasherInterface $passwordHasher) {
+								private UserPasswordHasherInterface $passwordHasher, ManagerRegistry $managerRegistry) {
+		$this->entityManager = $managerRegistry->getManager();
 	}
 
 	/**
@@ -208,9 +213,8 @@ class ProfileController extends AbstractController
 	 * @throws \Throwable
 	 */
 	private function save(User $user, bool $sendMail = false) {
-		$entityManager = $this->getDoctrine()->getManager();
-		$entityManager->persist($user);
-		$entityManager->flush();
+		$this->entityManager->persist($user);
+		$this->entityManager->flush();
 		if ($sendMail) {
 			$this->sendMail($user);
 		}

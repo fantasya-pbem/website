@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace App\Game\Engine;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Engine\Fantasya\Storage\LemuriaConfig;
@@ -37,8 +38,11 @@ class Lemuria implements Engine
 
 	private static NewcomerConfig $config;
 
+	private EntityManagerInterface $entityManager;
+
 	public function __construct(private ContainerBagInterface $container, private AssignmentRepository $assignmentRepository,
-								private EntityManagerInterface $entityManager) {
+								ManagerRegistry $managerRegistry) {
+		$this->entityManager = $managerRegistry->getManager();
 		if (!self::$hasBeenInitialized) {
 			self::$config = new NewcomerConfig(__DIR__ . '/../../../var/lemuria');
 			LemuriaGame::init(self::$config);

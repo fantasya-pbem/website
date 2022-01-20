@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +16,10 @@ use App\Repository\NewsRepository;
 
 class NewsController extends AbstractController
 {
-	public function __construct(private NewsRepository $repository) {
+	private EntityManagerInterface $entityManager;
+
+	public function __construct(private NewsRepository $repository, ManagerRegistry $managerRegistry) {
+		$this->entityManager = $managerRegistry->getManager();
 		\Locale::setDefault('de_DE.utf8');
 	}
 
@@ -62,12 +67,11 @@ class NewsController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
-			/* @var News $news */
+			/** @var News $article */
 			$article = $form->getData();
 			$article->setCreatedAt($date);
-			$entityManager = $this->getDoctrine()->getManager();
-			$entityManager->persist($article);
-			$entityManager->flush();
+			$this->entityManager->persist($article);
+			$this->entityManager->flush();
 			return $this->redirectToRoute('news');
 		}
 
@@ -79,9 +83,8 @@ class NewsController extends AbstractController
 	 * @IsGranted("ROLE_NEWS_CREATOR")
 	 */
 	public function delete(News $article): Response {
-		$entityManager = $this->getDoctrine()->getManager();
-		$entityManager->remove($article);
-		$entityManager->flush();
+		$this->entityManager->remove($article);
+		$this->entityManager->flush();
 
 		return $this->redirectToRoute('news');
 	}

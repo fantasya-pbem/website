@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use App\Service\EngineService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -18,6 +17,7 @@ use App\Entity\User;
 use App\Game\Party;
 use App\Game\Turn;
 use App\Security\Token;
+use App\Service\EngineService;
 use App\Service\GameService;
 use App\Service\PartyService;
 use App\Service\ReportService;
@@ -51,7 +51,7 @@ class ReportController extends AbstractController
 			$form->handleRequest($request);
 
 			if ($form->isSubmitted() && $form->isValid()) {
-				/* @var Report $report */
+				/** @var Report $report */
 				$report = $form->getData();
 				$report->setGame($this->gameService->getCurrent()->getAlias());
 				$this->reportService->setContext($report);
