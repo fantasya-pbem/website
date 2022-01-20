@@ -8,3 +8,7 @@ twig:
         myth_service: '@App\Service\MythService'
         party_service: '@App\Service\PartyService'
         order_service: '@App\Service\OrderService'
+
+when@test:
+    twig:
+        strict_variables: true
