@@ -159,7 +159,7 @@ class OrderController extends AbstractController
 		$turn  = new Turn($this->gameService->getCurrent(), $this->engineService);
 		$round = $turn->getRound();
 		if ($request->request->has('form')) {
-			$form = $request->request->get('form');
+			$form = $request->request->all('form');
 			if (isset($form['turn'])) {
 				$r = (int)$form['turn'];
 				if ($r > 0) {

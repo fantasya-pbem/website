@@ -46,7 +46,11 @@ class OrderService
 	public function getCheck(): string {
 		$rules = __DIR__ . '/../../var/check/' . $this->order->getGame()->getEngine() . '.tpl';
 		$this->checkService->readRules($rules);
-		$commands = file_get_contents($this->getPath());
+		$path = $this->getPath();
+		if (!is_file($path)) {
+			return 'Für Runde ' . $this->order->getTurn() . ' sind keine Befehle vorhanden.';
+		}
+		$commands = file_get_contents($path);
 		$check    = $this->checkService->check($commands);
 		return empty($check) ? 'Die Befehle scheinen in Ordnung zu sein.' : implode(PHP_EOL, $check);
 	}
