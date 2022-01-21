@@ -50,7 +50,7 @@ class OrderController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
-			/* @var Order $order */
+			/** @var Order $order */
 			$order = $form->getData();
 		} else {
 			$order->setParty($party->getOwner());
@@ -58,7 +58,7 @@ class OrderController extends AbstractController
 		}
 		$order->setGame($game);
 		$this->orderService->setContext($order);
-		$hasSimulation = $engine->canSimulate($game, $turn) && $this->getParameter('app.simulation'); //TODO
+		$hasSimulation = $engine->canSimulate($game, $turn) && $this->getParameter('app.simulation');
 
 		return $this->render('order/index.html.twig', [
 			'form' => $form->createView(), 'hasSimulation' => $hasSimulation
@@ -101,7 +101,7 @@ class OrderController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
-			/* @var Order $order */
+			/** @var Order $order */
 			$order = $form->getData();
 			$order->setGame($this->gameService->getCurrent());
 			$this->orderService->setContext($order);
@@ -131,7 +131,7 @@ class OrderController extends AbstractController
 
 		$game          = $this->gameService->getCurrent();
 		$engine        = $this->engineService->get($game);
-		$hasSimulation = $engine->canSimulate($game, $t) && $this->getParameter('app.simulation'); //TODO
+		$hasSimulation = $engine->canSimulate($game, $t) && $this->getParameter('app.simulation');
 
 		$order  = new Order();
 		$order->setParty($p);
@@ -159,7 +159,7 @@ class OrderController extends AbstractController
 		$turn  = new Turn($this->gameService->getCurrent(), $this->engineService);
 		$round = $turn->getRound();
 		if ($request->request->has('form')) {
-			$form = $request->request->get('form');
+			$form = $request->request->all('form');
 			if (isset($form['turn'])) {
 				$r = (int)$form['turn'];
 				if ($r > 0) {

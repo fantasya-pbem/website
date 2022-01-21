@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +21,11 @@ use App\Service\MailService;
 
 class UserController extends AbstractController
 {
+	private EntityManagerInterface $entityManager;
+
 	public function __construct(private UserRepository $repository, private MailService $mailService,
-								private UserPasswordHasherInterface $passwordHasher) {
+								private UserPasswordHasherInterface $passwordHasher, ManagerRegistry $managerRegistry) {
+		$this->entityManager = $managerRegistry->getManager();
 	}
 
 	/**
@@ -63,9 +68,8 @@ class UserController extends AbstractController
 			if (!$existingUser) {
 				$password = uniqid();
 				$user->setPassword($this->passwordHasher->hashPassword($user, $password));
-				$entityManager = $this->getDoctrine()->getManager();
-				$entityManager->persist($user);
-				$entityManager->flush();
+				$this->entityManager->persist($user);
+				$this->entityManager->flush();
 				$this->sendMail($user, $password);
 				$this->sendAdminMail($user);
 				return $this->redirectToRoute('user_registered');
@@ -101,9 +105,8 @@ class UserController extends AbstractController
 			if ($user) {
 				$password = uniqid();
 				$user->setPassword($this->passwordHasher->hashPassword($user, $password));
-				$entityManager = $this->getDoctrine()->getManager();
-				$entityManager->persist($user);
-				$entityManager->flush();
+				$this->entityManager->persist($user);
+				$this->entityManager->flush();
 				$this->sendMail($user, $password);
 				return $this->redirectToRoute('user_resetted');
 			} else {

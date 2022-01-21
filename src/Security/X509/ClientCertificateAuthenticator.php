@@ -4,6 +4,7 @@ namespace App\Security\X509;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,10 @@ class ClientCertificateAuthenticator extends AbstractAuthenticator
 {
 	use TargetPathTrait;
 
-	public function __construct(private EntityManagerInterface $entityManager, private UrlGeneratorInterface $urlGenerator) {
+	private EntityManagerInterface $entityManager;
+
+	public function __construct(ManagerRegistry $managerRegistry, private UrlGeneratorInterface $urlGenerator) {
+		$this->entityManager = $managerRegistry->getManager();
 	}
 
 	public function supports(Request $request): bool {

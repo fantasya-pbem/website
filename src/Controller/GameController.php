@@ -37,12 +37,12 @@ class GameController extends AbstractController
 		foreach ($this->gameService->getAll() as $game) {
 			$games[$game->getId()] = $game;
 		}
-		/* @var Game $game */
+		/** @var Game $game */
 		$game = current($games);
 
 		$session = $request->getSession();
 		if ($session && $session->has('game')) {
-			/* @var Game $current */
+			/** @var Game $current */
 			$current = $session->get('game');
 			$id      = $current->getId();
 			while (key($games) !== $id) {
@@ -84,7 +84,6 @@ class GameController extends AbstractController
 	 */
 	public function revoke(Game $game, string $name): Response {
 		$user    = $this->user();
-		//$game    = $this->gameService->getCurrent();
 		$newbies = $this->partyService->getNewbies($this->user());
 		$delete  = [];
 		foreach ($newbies as $id => $gameNewbies) {
@@ -127,7 +126,7 @@ class GameController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
-			/* @var NewbieData $newbieData */
+			/** @var NewbieData $newbieData */
 			$newbieData = $form->getData();
 			if ($newbieData->getResources() <= 90) {
 				$newbie = Newbie::fromData($newbieData)->setUser($this->user());
@@ -147,7 +146,7 @@ class GameController extends AbstractController
 		try {
 			$form->handleRequest($request);
 			if ($form->isSubmitted() && $form->isValid()) {
-				/* @var NewbieData $newbieData */
+				/** @var NewbieData $newbieData */
 				$newbieData = $form->getData();
 				$newbie     = Newbie::fromData($newbieData)->setUser($this->user());
 				$this->partyService->create($newbie);

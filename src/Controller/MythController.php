@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +18,11 @@ use App\Service\MailService;
 
 class MythController extends AbstractController
 {
-	public function __construct(private MythRepository $repository, private MailService $mailService) {
+	private EntityManagerInterface $entityManager;
+
+	public function __construct(private MythRepository $repository, private MailService $mailService,
+		                        ManagerRegistry $managerRegistry) {
+		$this->entityManager = $managerRegistry->getManager();
 	}
 
 	/**
@@ -42,10 +48,9 @@ class MythController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
-			$myth          = $form->getData();
-			$entityManager = $this->getDoctrine()->getManager();
-			$entityManager->persist($myth);
-			$entityManager->flush();
+			$myth = $form->getData();
+			$this->entityManager->persist($myth);
+			$this->entityManager->flush();
 			$this->sendAdminMail($myth);
 			return $this->redirectToRoute('myth');
 		}

@@ -2,8 +2,9 @@
 declare (strict_types = 1);
 namespace App\Data;
 
-use App\Entity\Game;
 use Symfony\Component\Validator\Constraints as Assert;
+
+use App\Entity\Game;
 
 class Order
 {
