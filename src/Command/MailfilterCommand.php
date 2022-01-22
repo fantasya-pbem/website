@@ -319,7 +319,7 @@ class MailfilterCommand extends Command
 		$mail->subject($subject);
 		$mail->text($body);
 		try {
-			$this->mailService->send($mail);
+			$this->mailService->signAndSend($mail);
 		} catch (\Throwable $e) {
 			throw new MailfilterException('Die Antwortmail konnte nicht gesendet werden.', 5, $e);
 		}
