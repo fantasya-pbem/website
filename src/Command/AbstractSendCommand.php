@@ -22,13 +22,13 @@ use App\Service\PartyService;
 
 abstract class AbstractSendCommand extends Command
 {
+	protected ?Game $game;
+
 	protected int $round;
 
 	private DownloadToken $token;
 
 	private OutputInterface $output;
-
-	private ?Game $game;
 
 	private bool $doSend;
 
@@ -62,6 +62,10 @@ abstract class AbstractSendCommand extends Command
 			$output->writeln('Game ' . $gameAlias . ' does not exist.');
 			return 1;
 		}
+		if ($this->game->getEngine() !== $this->getEngine()) {
+			$output->writeln('Game ' . $gameAlias . ' has wrong engine.');
+			return 1;
+		}
 
 		$partyId = $input->getOption('party');
 		if ($partyId) {
@@ -79,10 +83,14 @@ abstract class AbstractSendCommand extends Command
 			$parties = $this->partyService->getAll($this->game);
 		}
 
-		$turn        = new Turn($this->game, $this->engineService);
-		$current     = $turn->getRound();
-		$round       = (int)$input->getOption('round');
-		$this->round = $round > 0 && $round <= $current ? $round : $current;
+		$round = (int)$input->getOption('round');
+		if ($round > 0) {
+			$this->round = $round;
+		} else {
+			$turn        = new Turn($this->game, $this->engineService);
+			$this->round = $turn->getRound();
+			$output->writeln('Current round is ' . $this->round . '.', OutputInterface::VERBOSITY_DEBUG);
+		}
 
 		$this->doSend = !$input->getOption('dry-run');
 		if (!$this->doSend) {
@@ -120,7 +128,7 @@ abstract class AbstractSendCommand extends Command
 		$report = null;
 		if ($user->hasFlag(User::FLAG_WITH_ATTACHMENT)) {
 			$file   = $this->round . '-' . $partyId . '.zip';
-			$report = realpath(__DIR__ . '/../../../var/zip/' . $this->game->getAlias() . '/' . $this->round . '/' . $file);
+			$report = realpath(__DIR__ . '/../../var/zip/' . $this->game->getAlias() . '/' . $this->round . '/' . $file);
 			if (!$report || !is_file($report)) {
 				throw new \RuntimeException('Report ' . $file . ' does not exist.');
 			}
@@ -147,6 +155,8 @@ abstract class AbstractSendCommand extends Command
 		$this->output->writeln($throwable->getMessage());
 		return 255;
 	}
+
+	abstract protected function getEngine(): string;
 
 	abstract protected function getSubject(): string;
 

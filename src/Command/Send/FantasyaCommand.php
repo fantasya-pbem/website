@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace App\Command\Send;
 
+use JetBrains\PhpStorm\Pure;
+
 use App\Command\AbstractSendCommand;
 
 class FantasyaCommand extends AbstractSendCommand
@@ -11,8 +13,12 @@ class FantasyaCommand extends AbstractSendCommand
 	 */
 	protected static $defaultName = 'send:fantasya';
 
-	protected function getSubject(): string {
-		return 'Fantasya AW ' . $this->round;
+	protected function getEngine(): string {
+		return 'fantasya';
+	}
+
+	#[Pure] protected function getSubject(): string {
+		return $this->game->getName() . ' AW ' . $this->round;
 	}
 
 	protected function getTemplate(): string {
