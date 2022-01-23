@@ -21,7 +21,7 @@ class EngineService
 		if (!self::$engines) {
 			self::$engines = [
 				Engine::FANTASYA => new Fantasya($container, $managerRegistry),
-				Engine::LEMURIA => new Lemuria($container, $repository, $managerRegistry)
+				Engine::LEMURIA  => new Lemuria($container, $repository, $managerRegistry)
 			];
 		}
 	}

@@ -15,6 +15,10 @@ class PartyService
 	#[Pure] public function __construct(private GameService $service, private EngineService $engineService) {
 	}
 
+	public function getAll(Game $game): array {
+		return $this->engineService->get($game)->getAll($game);
+	}
+
 	/**
 	 * Find a party by its Base-36 ID.
 	 *

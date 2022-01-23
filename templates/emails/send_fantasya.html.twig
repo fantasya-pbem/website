@@ -1,0 +1,24 @@
+Hallo {{ user.name }},
+
+Du bist beim Spiel Fantasya registriert und nimmst mit einer Partei am
+Spiel teil. Deine Auswertung für die Runde {{ round }} ist fertig.
+
+{% if withReport %}
+Die Auswertung findest Du im Anhang.
+
+Du kannst sie auch jederzeit über die Fantasya-Webseite herunterladen.
+{% else %}
+Du kannst sie über den folgenden Link herunterladen:
+
+{{ url('report_download', {token: token}) }}
+
+Der Link ist eine Woche lang gültig und verfällt dann. Falls der Link
+nicht funktioniert, melde Dich bitte an der Webseite an, um an Deine
+Auswertung zu gelangen.
+{% endif %}
+
+Viel Spaß!
+
+Gruß, Thalian
+
+Fantasya: {{ url('index') }}

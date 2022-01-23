@@ -27,6 +27,13 @@ interface Engine
 	public function getLastZat(Game $game): \DateTime;
 
 	/**
+	 * Get all parties in a game.
+	 *
+	 * @return Party[]
+	 */
+	public function getAll(Game $game): array;
+
+	/**
 	 * Find a party in a game by its Base-36 ID.
 	 */
 	public function getById(string $id, Game $game): ?Party;

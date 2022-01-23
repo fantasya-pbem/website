@@ -6,21 +6,22 @@ use JetBrains\PhpStorm\Pure;
 
 use App\Command\AbstractSendCommand;
 
-class LemuriaCommand extends AbstractSendCommand
+class FantasyaCommand extends AbstractSendCommand
 {
 	/**
 	 * @var string
 	 */
-	protected static $defaultName = 'send:lemuria';
+	protected static $defaultName = 'send:fantasya';
 
 	protected function getEngine(): string {
-		return 'lemuria';
+		return 'fantasya';
 	}
 
 	#[Pure] protected function getSubject(): string {
-		return $this->game->getName() . ' AW ' . $this->round;	}
+		return $this->game->getName() . ' AW ' . $this->round;
+	}
 
 	protected function getTemplate(): string {
-		return 'emails/send_lemuria.html.twig';
+		return 'emails/send_fantasya.html.twig';
 	}
 }
