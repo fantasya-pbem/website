@@ -10,6 +10,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 use App\Exception\MailfilterException;
 
+/**
+ * @deprecated Has been replaced with a PHP-only checker in "Check Fantasya" and "Check Lemuria" commands.
+ */
 class FcheckCommand extends Command
 {
 	/**

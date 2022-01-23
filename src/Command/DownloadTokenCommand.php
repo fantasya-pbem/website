@@ -9,8 +9,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 use App\Game\Party;
-use App\Security\Token;
+use App\Security\DownloadToken;
 
+/**
+ * @deprecated Will be replaced with the new "Send Lemuria" command.
+ */
 class DownloadTokenCommand extends Command
 {
 	/**
@@ -37,15 +40,14 @@ class DownloadTokenCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$game  = (int)$input->getArgument('game');
-		$party = $input->getArgument('party');
+		$party = Party::fromId($input->getArgument('party'));
 		$email = $input->getArgument('email');
 		$turn  = (int)$input->getArgument('turn');
 
-		$idPart = dechex(2 ** 24 * $game + Party::fromId($party));
-		$token  = new Token($this->secret);
-		$token->setEmail($email)->setTurn($turn);
+		$token  = new DownloadToken($this->secret);
+		$token->setEmail($email)->setGame($game)->setParty($party)->setTurn($turn);
 
-		$output->writeln($token . $idPart);
+		$output->writeln((string)$token);
 		return 0;
 	}
 }

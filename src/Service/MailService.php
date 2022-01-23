@@ -2,9 +2,11 @@
 declare (strict_types = 1);
 namespace App\Service;
 
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\BodyRendererInterface;
 use Symfony\Component\Mime\Crypto\SMimeSigner;
 use Symfony\Component\Mime\Email;
 
@@ -26,7 +28,8 @@ class MailService
 
 	private string $password;
 
-	public function __construct(private MailerInterface $mailer, ContainerBagInterface $config) {
+	public function __construct(ContainerBagInterface $config, private MailerInterface $mailer,
+		                        private BodyRendererInterface $bodyRenderer) {
 		$this->userAgent  = $config->get('app.mail.user.agent');
 		$this->serverName = $config->get('app.mail.server.name');
 		$this->admin      = new Address($config->get('app.mail.admin.address'), $config->get('app.mail.admin.name'));
@@ -37,8 +40,10 @@ class MailService
 		$this->password   = $config->get('app.mail.key.password');
 	}
 
-	public function create(): Email {
-		$mail = new Email();
+	public function create(?Email $mail = null): Email {
+		if (!$mail) {
+			$mail = new Email();
+		}
 		$mail->getHeaders()->addTextHeader('User-Agent', $this->userAgent);
 		return $mail;
 	}
@@ -64,11 +69,23 @@ class MailService
 		return $this->create()->from($this->admin)->to($this->gameMaster);
 	}
 
+	public function withReport(?User $to = null): TemplatedEmail {
+		$mail = new TemplatedEmail();
+		$this->create($mail)->from($this->admin); //TODO: Replace with game master.
+		if ($to) {
+			$mail->to(new Address($to->getEmail(), $to->getName()));
+		}
+		return $mail;
+	}
+
 	public function send(Email $mail): void {
 		$this->mailer->send($mail);
 	}
 
 	public function signAndSend(Email $mail): void {
+		if ($mail instanceof TemplatedEmail) {
+			$this->bodyRenderer->render($mail);
+		}
 		$signer     = new SMimeSigner($this->cert, $this->key, $this->password);
 		$signedMail = $signer->sign($mail);
 		$this->mailer->send($signedMail);
