@@ -50,4 +50,8 @@ class Party
 	public function getEmail(): string {
 		return $this->properties['email'];
 	}
+
+	public function isPlayer(): bool {
+		return !$this->properties['monster'];
+	}
 }

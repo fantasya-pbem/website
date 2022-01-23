@@ -71,6 +71,18 @@ class Lemuria implements Engine
 		return $dateTime->setTimestamp(self::$config[LemuriaConfig::MDD]);
 	}
 
+	/**
+	 * @return Party[]
+	 */
+	public function getAll(Game $game): array {
+		$parties = [];
+		foreach (LemuriaGame::Catalog()->getAll(Catalog::PARTIES) as $party) {
+			/** @var PartyModel $party */
+			$parties[] = $this->createParty($party);
+		}
+		return $parties;
+	}
+
 	public function getById(string $id, Game $game): ?Party {
 		try {
 			/** @var PartyModel $party */
@@ -170,7 +182,8 @@ class Lemuria implements Engine
 			'beschreibung' => $party->Description(),
 			'owner_id'     => $uuid,
 			'user_id'      => $user,
-			'email'        => $email
+			'email'        => $email,
+			'monster'      => $party->Type() !== PartyModel::PLAYER
 		]);
 	}
 

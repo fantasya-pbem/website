@@ -25,6 +25,21 @@ class Fantasya implements Engine
 		return false;
 	}
 
+	/**
+	 * @return Party[]
+	 */
+	public function getAll(Game $game): array {
+		$parties    = [];
+		$connection = $this->entityManager->getConnection();
+		$table      = $game->getDb() . '.partei';
+		$sql        = "SELECT * FROM " . $table;
+		$stmt       = $connection->prepare($sql);
+		foreach ($stmt->executeQuery()->fetchAllAssociative() as $row) {
+			$parties[] = new Party($row);
+		}
+		return $parties;
+	}
+
 	public function getById(string $id, Game $game): ?Party {
 		$connection = $this->entityManager->getConnection();
 		$table      = $game->getDb() . '.partei';
