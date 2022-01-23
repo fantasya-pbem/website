@@ -4,18 +4,18 @@ namespace App\Command\Send;
 
 use App\Command\AbstractSendCommand;
 
-class LemuriaCommand extends AbstractSendCommand
+class FantasyaCommand extends AbstractSendCommand
 {
 	/**
 	 * @var string
 	 */
-	protected static $defaultName = 'send:lemuria';
+	protected static $defaultName = 'send:fantasya';
 
 	protected function getSubject(): string {
-		return 'Lemuria AW ' . $this->round;
+		return 'Fantasya AW ' . $this->round;
 	}
 
 	protected function getTemplate(): string {
-		return 'emails/send_lemuria.html.twig';
+		return 'emails/send_fantasya.html.twig';
 	}
 }

@@ -71,7 +71,7 @@ class MailService
 
 	public function withReport(?User $to = null): TemplatedEmail {
 		$mail = new TemplatedEmail();
-		$this->create($mail)->from($this->admin); //TODO: Replace with game master.
+		$this->create($mail)->from($this->gameMaster);
 		if ($to) {
 			$mail->to(new Address($to->getEmail(), $to->getName()));
 		}
