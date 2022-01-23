@@ -56,18 +56,15 @@ class OrderService
 	}
 
 	public function getSimulation(): string {
-		$check   = null;
+		$check   = '';
 		$command = $this->simulation ?? '';
 		if (str_contains($command, '%uuid%')) {
 			$command = str_replace('%uuid%', $this->order->getParty(), $command);
 			$result  = array();
-			$code    = -1;
-			exec($command, $result, $code);
-			if ($code === 0) {
-				$check = implode(PHP_EOL, $result);
-			}
+			exec($command, $result);
+			$check = implode(PHP_EOL, $result);
 		}
-		return $check ?? '';
+		return $check;
 	}
 
 	public function setContext(Order $order) {
