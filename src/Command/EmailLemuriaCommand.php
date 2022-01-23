@@ -9,6 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use App\Repository\AssignmentRepository;
 
+/**
+ * @deprecated Will be replaced with the new "Send Lemuria" command.
+ */
 class EmailLemuriaCommand extends Command
 {
 	/**

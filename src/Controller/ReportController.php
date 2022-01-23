@@ -16,7 +16,7 @@ use App\Entity\Game;
 use App\Entity\User;
 use App\Game\Party;
 use App\Game\Turn;
-use App\Security\Token;
+use App\Security\DownloadToken;
 use App\Service\EngineService;
 use App\Service\GameService;
 use App\Service\PartyService;
@@ -69,28 +69,32 @@ class ReportController extends AbstractController
 	 * @Route("/report/t/{token}", name="report_download", requirements={"token"="[0-9a-f]{23,24}"}))
 	 */
 	public function download(string $token): Response {
-		$tokenPart = substr($token, 0, Token::LENGTH);
-		$idPart    = substr($token, Token::LENGTH);
-		$gameAndId = hexdec($idPart);
-		$gameId    = $gameAndId >> 24;
-		$partyId   = Party::toId($gameAndId % 2 ** 24);
+		$secret        = $this->getParameter('app.secret');
+		$downloadToken = new DownloadToken($secret);
+		$downloadToken->parse($token);
 
-		$game = $this->getGame($gameId);
+		$partyId = $downloadToken->getParty();
+		$gameId  = $downloadToken->getGame();
+		$game    = $this->getGame($gameId);
 		if ($game) {
-			try {
-				$turn         = new Turn($game, $this->engineService);
-				$party        = $this->partyService->getById($partyId, $game);
-				$token        = new Token($this->getParameter('app.secret'));
-				$currentToken = (string)$token->setEmail($party->getEmail())->setTurn($turn->getRound());
-				if ($tokenPart === $currentToken) {
-					$report = new Report();
-					$report->setGame($game->getAlias());
-					$report->setParty($party->getId());
-					$report->setTurn($turn->getRound());
-					$this->reportService->setContext($report);
-					return $this->file($this->reportService->getPath());
+			$party = $this->partyService->getById(Party::toId($partyId), $game);
+			if ($party) {
+				try {
+					$turn         = new Turn($game, $this->engineService);
+					$round        = $turn->getRound();
+					$email        = $party->getEmail();
+					$currentToken = new DownloadToken($secret);
+					$currentToken->setGame($gameId)->setParty($partyId)->setEmail($email)->setTurn($round);
+					if ($downloadToken->setEmail($email)->setTurn($round)->equals($currentToken)) {
+						$report = new Report();
+						$report->setGame($game->getAlias());
+						$report->setParty($party->getId());
+						$report->setTurn($turn->getRound());
+						$this->reportService->setContext($report);
+						return $this->file($this->reportService->getPath());
+					}
+				} catch (\Exception) {
 				}
-			} catch (\Exception) {
 			}
 		}
 		return $this->redirectToRoute('report');
