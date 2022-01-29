@@ -49,19 +49,19 @@ then
 			monsterParties=$monsterParties,$number
 		fi
 	done
-	mysql -h $HOST -D $DATABASE_GAME -u $USER_GAME -p$PASSWORD_GAME -e "DELETE FROM meldungen WHERE kategorie = 'Battle' AND partei NOT IN ($monsterParties)" 2>&1 >> $LOG
+	mysql -h $HOST -D $DATABASE_GAME -u $USER_GAME -p$PASSWORD_GAME -e "DELETE FROM meldungen WHERE kategorie = 'Battle' AND partei NOT IN ($monsterParties)" >> $LOG 2>&1
 fi
 echo >> $LOG
 
 echo "Running the game..." >> $LOG
 TIMER_START=`date +%s`
-java -jar fantasya.jar -server $HOST:3306 -datenbank $DATABASE_GAME -benutzer $USER_GAME -passwort $PASSWORD_GAME -zat -ohnemonster 2>&1 > $ZAT_LOG
+java -jar fantasya.jar -server $HOST:3306 -datenbank $DATABASE_GAME -benutzer $USER_GAME -passwort $PASSWORD_GAME -zat -ohnemonster > $ZAT_LOG 2>&1
 ZAT_RESULT=$?
 echo "Fantasya exit code: $ZAT_RESULT" >> $LOG
 TIMER_END=`date +%s`
 let DURATION=($TIMER_END-$TIMER_START+30)/60
 echo "This AW took $DURATION minutes." >> $LOG
-mv log-*.txt $LOG_DIR 2>&1 >> $LOG
+mv log-*.txt $LOG_DIR >> $LOG 2>&1
 if [ $ZAT_RESULT -gt 0 ]
 then
 	echo "Game aborted!" >> $LOG
@@ -70,17 +70,17 @@ fi
 echo >> $LOG
 
 echo "Moving reports..." >> $LOG
-mkdir $REPORT_DIR/$TURN 2>&1 >> $LOG
-mv $REPORT_DIR/$TURN-* $REPORT_DIR/$TURN/ 2>&1 >> $LOG
+mkdir $REPORT_DIR/$TURN >> $LOG 2>&1
+mv $REPORT_DIR/$TURN-* $REPORT_DIR/$TURN/ >> $LOG 2>&1
 for zip in $ZIP_DIR/$TURN/*.zip
 do
-	mv $zip $ZIP_DIR/$TURN/$TURN-$(basename $zip) 2>&1 >> $LOG
+	mv $zip $ZIP_DIR/$TURN/$TURN-$(basename $zip) >> $LOG 2>&1
 done
 echo >> $LOG
 
 # Send emails via website command.
 echo "Sending e-mails..." >> $LOG
-EMAIL_RESULT=`EMAIL_COMMAND 2>&! >> $LOG`
+EMAIL_RESULT=`EMAIL_COMMAND >> $LOG 2>&1`
 if [ $EMAIL_RESULT -ne 0 ]
 then
 	echo "Sending e-mails failed (code $EMAIL_RESULT)!" >> $LOG
