@@ -80,7 +80,8 @@ echo >> $LOG
 
 # Send emails via website command.
 echo "Sending e-mails..." >> $LOG
-EMAIL_RESULT=`EMAIL_COMMAND >> $LOG 2>&1`
+$EMAIL_COMMAND >> $LOG 2>&1
+EMAIL_RESULT=$?
 if [ $EMAIL_RESULT -ne 0 ]
 then
 	echo "Sending e-mails failed (code $EMAIL_RESULT)!" >> $LOG
