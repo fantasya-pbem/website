@@ -4,6 +4,7 @@ namespace App\Game\Engine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Lemuria\Model\Domain;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Engine\Fantasya\Storage\LemuriaConfig;
@@ -11,10 +12,10 @@ use Lemuria\Engine\Fantasya\Storage\NewcomerConfig;
 use Lemuria\Exception\UnknownUuidException;
 use Lemuria\Id;
 use Lemuria\Lemuria as LemuriaGame;
-use Lemuria\Model\Catalog;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party as PartyModel;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Version\VersionFinder;
 
 use App\Data\Newbie as NewbieData;
@@ -76,7 +77,7 @@ class Lemuria implements Engine
 	 */
 	public function getAll(Game $game): array {
 		$parties = [];
-		foreach (LemuriaGame::Catalog()->getAll(Catalog::PARTIES) as $party) {
+		foreach (LemuriaGame::Catalog()->getAll(Domain::PARTY) as $party) {
 			/** @var PartyModel $party */
 			$parties[] = $this->createParty($party);
 		}
@@ -86,7 +87,7 @@ class Lemuria implements Engine
 	public function getById(string $id, Game $game): ?Party {
 		try {
 			/** @var PartyModel $party */
-			$party = LemuriaGame::Catalog()->get(Id::fromId($id), Catalog::PARTIES);
+			$party = LemuriaGame::Catalog()->get(Id::fromId($id), Domain::PARTY);
 			return $this->createParty($party);
 		} catch (NotRegisteredException) {
 			return null;
@@ -183,7 +184,7 @@ class Lemuria implements Engine
 			'owner_id'     => $uuid,
 			'user_id'      => $user,
 			'email'        => $email,
-			'monster'      => $party->Type() !== PartyModel::PLAYER
+			'monster'      => $party->Type() !== Type::PLAYER
 		]);
 	}
 
