@@ -30,8 +30,8 @@
 			"email": "info@fantasya-pbem.de"
 		}
 	],
-	"version": "2.6.2",
-	"time": "2022-01-23",
+	"version": "2.7.0",
+	"time": "2022-02-15",
 
 	"require": {
 		"php": "~8.0",
@@ -43,9 +43,9 @@
 		"doctrine/doctrine-bundle": "~2.5",
 		"doctrine/doctrine-migrations-bundle": "~3.2",
 		"doctrine/orm": "~2.11",
-		"lemuria-pbem/engine-fantasya": "~0.9.0",
-		"lemuria-pbem/lemuria": "~0.9.0",
-		"lemuria-pbem/model-fantasya": "~0.9.0",
+		"lemuria-pbem/engine-fantasya": "~0.10.0",
+		"lemuria-pbem/lemuria": "~0.10.0",
+		"lemuria-pbem/model-fantasya": "~0.10.0",
 		"phpdocumentor/reflection-docblock": "~5.3",
 		"sensio/framework-extra-bundle": "~6.2",
 		"symfony/apache-pack": "~1.0",
@@ -112,7 +112,11 @@
 		"preferred-install": {
 			"*": "dist"
 		},
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"symfony/flex": true,
+			"symfony/runtime": true
+		}
 	},
 	"conflict": {
 		"symfony/symfony": "*"

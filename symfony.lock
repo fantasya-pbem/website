@@ -38,12 +38,10 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "2.4",
-            "ref": "f98f1affe028f8153a459d15f220ada3826b5aa2"
+            "ref": "c2f0222df1e65fd8bf4c627caee03ac5c0a0d047"
         },
         "files": [
             "config/packages/doctrine.yaml",
-            "config/packages/prod/doctrine.yaml",
-            "config/packages/test/doctrine.yaml",
             "src/Entity/.gitignore",
             "src/Repository/.gitignore"
         ]
@@ -357,7 +355,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "5.4",
-            "ref": "d4131812e20853626928e73d3effef44014944c0"
+            "ref": "3cd216a4d007b78d8554d44a5b1c0a446dab24fb"
         },
         "files": [
             "config/packages/cache.yaml",
@@ -412,13 +410,10 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "3.7",
-            "ref": "a7bace7dbc5a7ed5608dbe2165e0774c87175fe6"
+            "ref": "213676c4ec929f046dfde5ea8e97625b81bc0578"
         },
         "files": [
-            "config/packages/dev/monolog.yaml",
-            "config/packages/prod/deprecations.yaml",
-            "config/packages/prod/monolog.yaml",
-            "config/packages/test/monolog.yaml"
+            "config/packages/monolog.yaml"
         ]
     },
     "symfony/options-resolver": {
@@ -478,7 +473,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "6.0",
-            "ref": "ab9ad892b7bba7ac584f6dc2ccdb659d358c63c5"
+            "ref": "eb3b377a4dc07006c4bdb2c773652cc9434f5246"
         },
         "files": [
             "config/packages/routing.yaml",
@@ -494,7 +489,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "5.3",
-            "ref": "09b5e809bd7a992061febd05b797c64a2d93b5cd"
+            "ref": "98f1f2b0d635908c2b40f3675da2d23b1a069d30"
         },
         "files": [
             "config/packages/security.yaml"
@@ -533,7 +528,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "5.4",
-            "ref": "bffbb8f1a849736e64006735afae730cb428b6ff"
+            "ref": "bb2178c57eee79e6be0b297aa96fc0c0def81387"
         },
         "files": [
             "config/packages/twig.yaml",

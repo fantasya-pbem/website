@@ -3,12 +3,14 @@ declare (strict_types = 1);
 namespace App\Game\Engine;
 
 use JetBrains\PhpStorm\ArrayShape;
+
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
 use Lemuria\Model\Dictionary;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Unit;
 
 use App\Game\Statistics;
@@ -59,8 +61,8 @@ class LemuriaStatistics implements Statistics
 		if ($this->parties === null) {
 			$this->parties = [];
 			$races         = [];
-			foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
-				if ($party->Type() !== Party::PLAYER) {
+			foreach (Lemuria::Catalog()->getAll(Domain::PARTY) as $party /* @var Party $party */) {
+				if ($party->Type() !== Type::PLAYER) {
 					continue;
 				}
 				$this->parties[] = ['name' => $party->Name(), 'description' => $party->Description()];
@@ -111,7 +113,7 @@ class LemuriaStatistics implements Statistics
 		if (!$this->landscape) {
 			$this->landscape = [];
 			$regions         = [];
-			foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
+			foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
 				$landscape = (string)$region->Landscape();
 				if (!isset($regions[$landscape])) {
 					$regions[$landscape] = 0;
@@ -148,18 +150,18 @@ class LemuriaStatistics implements Statistics
 			$monsters      = [];
 			$count         = 0;
 			$total         = 0;
-			foreach (Lemuria::Catalog()->getAll(Catalog::UNITS) as $unit /* @var Unit $unit*/) {
+			foreach (Lemuria::Catalog()->getAll(Domain::UNIT) as $unit /* @var Unit $unit*/) {
 				$type = $unit->Party()->Type();
 				$race = (string)$unit->Race();
 				$size = $unit->Size();
 
-				if ($type === Party::PLAYER) {
+				if ($type === Type::PLAYER) {
 					if (!isset($persons[$race])) {
 						$persons[$race] = [0, 0];
 					}
 					$persons[$race][0]++;
 					$persons[$race][1] += $size;
-				} elseif ($type === Party::MONSTER) {
+				} elseif ($type === Type::MONSTER) {
 					if (!isset($monsters[$race])) {
 						$monsters[$race] = [0, 0];
 					}
