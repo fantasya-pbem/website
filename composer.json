@@ -30,8 +30,8 @@
 			"email": "info@fantasya-pbem.de"
 		}
 	],
-	"version": "2.7.0",
-	"time": "2022-02-15",
+	"version": "2.7.1",
+	"time": "2022-02-19",
 
 	"require": {
 		"php": "~8.0",
