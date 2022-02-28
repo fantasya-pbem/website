@@ -68,7 +68,7 @@ class CheckService
 				$line = fgets($file);
 				if ($line) {
 					$line = trim($line);
-					if ($line) {
+					if ($line && !str_starts_with($line, ';')) {
 						$this->rules[] = '#' . $line . '#';
 					}
 				}
