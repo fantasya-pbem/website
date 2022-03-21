@@ -54,4 +54,8 @@ class Party
 	public function isPlayer(): bool {
 		return !$this->properties['monster'];
 	}
+
+	public function isRetired(): bool {
+		return isset($this->properties['retired']);
+	}
 }
