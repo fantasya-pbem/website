@@ -101,6 +101,11 @@ abstract class AbstractSendCommand extends Command
 		foreach ($parties as $party) {
 			/** @var Party $party */
 			if (!$party->isPlayer()) {
+				$output->writeln('Skipping non-player party ' . $party->getName() . '.');
+				continue;
+			}
+			if ($party->isRetired()) {
+				$output->writeln('Skipping retired party ' . $party->getName() . '.');
 				continue;
 			}
 			try {

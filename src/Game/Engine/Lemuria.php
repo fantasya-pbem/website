@@ -184,7 +184,8 @@ class Lemuria implements Engine
 			'owner_id'     => $uuid,
 			'user_id'      => $user,
 			'email'        => $email,
-			'monster'      => $party->Type() !== Type::PLAYER
+			'monster'      => $party->Type() !== Type::PLAYER,
+			'retired'      => $party->hasRetired()
 		]);
 	}
 
