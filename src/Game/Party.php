@@ -56,6 +56,6 @@ class Party
 	}
 
 	public function isRetired(): bool {
-		return isset($this->properties['retired']);
+		return isset($this->properties['retired']) && $this->properties['retired'];
 	}
 }
