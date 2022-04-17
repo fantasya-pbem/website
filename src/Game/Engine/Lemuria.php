@@ -33,6 +33,8 @@ class Lemuria implements Engine
 {
 	use BuilderTrait;
 
+	private const LOG_FILE = 'website-engine.log';
+
 	private static bool $hasBeenInitialized = false;
 
 	private static bool $hasBeenChanged = false;
@@ -46,7 +48,7 @@ class Lemuria implements Engine
 		$this->entityManager = $managerRegistry->getManager();
 		if (!self::$hasBeenInitialized) {
 			self::$config = new NewcomerConfig(__DIR__ . '/../../../var/lemuria');
-			LemuriaGame::init(self::$config);
+			LemuriaGame::init(self::$config->setLogFile(self::LOG_FILE));
 			LemuriaGame::load();
 			self::$hasBeenInitialized = true;
 		}
