@@ -41,7 +41,7 @@ class GameController extends AbstractController
 		$game = current($games);
 
 		$session = $request->getSession();
-		if ($session && $session->has('game')) {
+		if ($session->has('game')) {
 			/** @var Game $current */
 			$current = $session->get('game');
 			$id      = $current->getId();
@@ -101,7 +101,6 @@ class GameController extends AbstractController
 		return $this->redirectToRoute('profile');
 	}
 
-	/** @noinspection PhpUnnecessaryLocalVariableInspection */
 	private function user(): User {
 		/** @var User $user */
 		$user = $this->getUser();

@@ -35,19 +35,19 @@ class Order
 		return $this->game;
 	}
 
-	public function setParty(string $party) {
+	public function setParty(string $party): void {
 		$this->party = $party;
 	}
 
-	public function setTurn(int $turn) {
+	public function setTurn(int $turn): void {
 		$this->turn = $turn;
 	}
 
-	public function setOrders(string $orders) {
+	public function setOrders(string $orders): void {
 		$this->orders = $orders;
 	}
 
-	public function setGame(Game $game) {
+	public function setGame(Game $game): void {
 		$this->game = $game;
 	}
 }

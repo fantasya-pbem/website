@@ -32,7 +32,7 @@ class OrderService
 			   $this->order->getTurn() . DIRECTORY_SEPARATOR . $this->order->getParty() . '.order';
 	}
 
-	#[Pure] public function getOrders(): string {
+	public function getOrders(): string {
 		$file = $this->getPath();
 		if (is_file($file)) {
 			$contents = file_get_contents($file);
@@ -67,7 +67,7 @@ class OrderService
 		return $check;
 	}
 
-	public function setContext(Order $order) {
+	public function setContext(Order $order): void {
 		$this->order = $order;
 	}
 

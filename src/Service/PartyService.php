@@ -97,19 +97,19 @@ class PartyService
 	/**
 	 * Update eMail address of user's parties and newbies.
 	 */
-	public function update(User $user) {
+	public function update(User $user): void {
 		$games = $this->service->getAll();
 		foreach ($games as $game) {
 			$this->engineService->get($game)->updateUser($user, $game);
 		}
 	}
 
-	public function create(Newbie $newbie) {
+	public function create(Newbie $newbie): void {
 		$game = $this->service->getCurrent();
 		$this->engineService->get($game)->create($newbie, $game);
 	}
 
-	public function delete(Newbie $newbie, Game $game) {
+	public function delete(Newbie $newbie, Game $game): void {
 		$this->engineService->get($game)->delete($newbie, $game);
 	}
 }

@@ -8,6 +8,8 @@ use App\Entity\Game;
 
 class Turn
 {
+	private const DATETIME_FORMAT = "EEEE, d. MMMM yyyy, k:mm 'Uhr'";
+
 	private static string $dateBase = '2017-12-31';
 
 	private int $round;
@@ -32,7 +34,7 @@ class Turn
 	}
 
 	public function getStart(): string {
-		return $this->getDateString($this->lastZat);
+		return Game::dateFormat(self::DATETIME_FORMAT)->format($this->lastZat);
 	}
 
 	public function getNext(): string {
@@ -53,20 +55,15 @@ class Turn
 				$start->add(new \DateInterval('P1D'));
 			}
 		}
-		return $this->getDateString($start);
+		return Game::dateFormat(self::DATETIME_FORMAT)->format($start);
 	}
 
 	/**
 	 * @throws \Exception
 	 */
-	private function fetchData() {
+	private function fetchData(): void {
 		$engine        = $this->engineService->get($this->game);
 		$this->round   = $engine->getRound($this->game);
 		$this->lastZat = $engine->getLastZat($this->game);
-	}
-
-	private function getDateString(\DateTime $date): string {
-		setlocale(LC_TIME, 'de_DE.utf8');
-		return strftime('%A, %e. %B %Y, %k:%M Uhr', $date->getTimestamp());
 	}
 }

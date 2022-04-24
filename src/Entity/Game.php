@@ -58,6 +58,10 @@ class Game
 	 */
 	private int $start_hour = 0;
 
+	public static function dateFormat(string $pattern = ''): \IntlDateFormatter {
+		return new \IntlDateFormatter('de-DE', \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT, pattern: $pattern);
+	}
+
 	public function getId(): ?int {
 		return $this->id;
 	}
@@ -137,8 +141,7 @@ class Game
 	public function getStart(): string {
 		if ($this->start_day > 0) {
 			$start = Turn::createStart($this)->getTimestamp();
-			setlocale(LC_TIME, 'de_DE.utf8');
-			return strftime('%A, %k Uhr', $start);
+			return self::dateFormat("EEEE, k 'Uhr'")->format($start);
 		}
 		return 'täglich, ' . $this->start_hour . ' Uhr';
 	}
