@@ -188,6 +188,7 @@ class MailfilterCommand extends Command
 
 	/**
 	 * @throws MailfilterException
+	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
 	private function fetchGame(string $recipient): void {
 		$atPos = strpos($recipient, '@fantasya-pbem.de');
@@ -215,6 +216,7 @@ class MailfilterCommand extends Command
 	/**
 	 * @throws MailfilterException
 	 * @noinspection PhpUnusedParameterInspection
+	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
 	private function fetchUserParty(string $sender): void {
 		// Befehle extrahieren:
@@ -226,7 +228,7 @@ class MailfilterCommand extends Command
 		if (strlen($firstLine) <= 0) {
 			throw new MailfilterException('Die erste Befehlszeile ist leer.', 2);
 		}
-		if (!preg_match('/^([^ ]+)[ ]+([a-zA-Z0-9]+)[ ]+"([^"]*)"$/', $firstLine, $parts) || count($parts) < 4) {
+		if (!preg_match('/^([^ ]+) +([a-zA-Z0-9]+) +"([^"]*)"$/', $firstLine, $parts) || count($parts) < 4) {
 			throw new MailfilterException('Die erste Befehlszeile ist fehlerhaft.', 2);
 		}
 		/** @noinspection PhpUnusedLocalVariableInspection */
@@ -270,7 +272,7 @@ class MailfilterCommand extends Command
 		}
 		$this->round = $current->getRound();
 
-		if (preg_match('/^RUNDE\h+([0-9]+)\s*$/im', $this->content, $matches)) {
+		if (preg_match('/^RUNDE\h+(\d+)\s*$/im', $this->content, $matches)) {
 			$maxRound = $this->round + 3;
 			$round    = (int)$matches[1] - 1;
 			if ($round >= $this->round && $round <= $maxRound) {

@@ -12,12 +12,10 @@ final class Version20210302181403 extends AbstractMigration
 	}
 
 	public function up(Schema $schema): void {
-		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 		$this->addSql("ALTER TABLE game ADD `engine` char(8) NOT NULL DEFAULT 'fantasya' AFTER description");
 	}
 
 	public function down(Schema $schema): void {
-		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 		$this->addSql("ALTER TABLE game DROP `engine`");
 	}
 }

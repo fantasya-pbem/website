@@ -202,7 +202,6 @@ class ProfileController extends AbstractController
 		];
 	}
 
-	/** @noinspection PhpUnnecessaryLocalVariableInspection */
 	private function user(): User {
 		/** @var User $user */
 		$user = $this->getUser();

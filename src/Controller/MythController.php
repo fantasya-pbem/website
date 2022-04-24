@@ -58,7 +58,6 @@ class MythController extends AbstractController
 		return $this->render('myth/spread.html.twig', ['form' => $form->createView()]);
 	}
 
-	/** @noinspection PhpUnnecessaryLocalVariableInspection */
 	private function user(): User {
 		/** @var User $user */
 		$user = $this->getUser();

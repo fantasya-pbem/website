@@ -12,12 +12,10 @@ final class Version20190824091202 extends AbstractMigration
 	}
 
 	public function up(Schema $schema): void {
-		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 		$this->addSql('ALTER TABLE user ADD flags SMALLINT NOT NULL DEFAULT 0 AFTER roles');
 	}
 
 	public function down(Schema $schema): void {
-		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 		$this->addSql('ALTER TABLE user DROP flags');
 	}
 }

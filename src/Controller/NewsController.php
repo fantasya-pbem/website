@@ -20,7 +20,6 @@ class NewsController extends AbstractController
 
 	public function __construct(private NewsRepository $repository, ManagerRegistry $managerRegistry) {
 		$this->entityManager = $managerRegistry->getManager();
-		\Locale::setDefault('de_DE.utf8');
 	}
 
 	/**
