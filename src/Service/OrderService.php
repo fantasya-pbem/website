@@ -32,6 +32,11 @@ class OrderService
 			   $this->order->getTurn() . DIRECTORY_SEPARATOR . $this->order->getParty() . '.order';
 	}
 
+	public function getAvailable(): bool {
+		$file = $this->getPath();
+		return is_file($file);
+	}
+
 	public function getOrders(): string {
 		$file = $this->getPath();
 		if (is_file($file)) {
