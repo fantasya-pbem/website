@@ -13,24 +13,26 @@
 
     <pre><strong>{{ order_service.check }}</strong></pre>
 
-    {% if hasSimulation %}
-        <h2>
-            Simulation
-            <button class="btn dropdown-toggle collapsed" data-toggle="collapse" data-target="#simulation" aria-expanded="true" aria-controls="simulation"></button>
-        </h2>
-        <div id="simulation" class="collapse">
-            <div class="spinner-border m-5" role="status">
-                <span class="sr-only">Simulation wird geladen...</span>
+    {% if order_service.available %}
+        {% if hasSimulation %}
+            <h2>
+                Simulation
+                <button class="btn dropdown-toggle collapsed" data-toggle="collapse" data-target="#simulation" aria-expanded="true" aria-controls="simulation"></button>
+            </h2>
+            <div id="simulation" class="collapse">
+                <div class="spinner-border m-5" role="status">
+                    <span class="sr-only">Simulation wird geladen...</span>
+                </div>
+                <pre></pre>
             </div>
-            <pre></pre>
+        {% endif %}
+
+        <h2>
+            Befehle
+            <button class="btn dropdown-toggle" data-toggle="collapse" data-target="#orders" aria-expanded="true" aria-controls="orders"></button>
+        </h2>
+        <div id="orders" class="collapse show">
+            <pre>{{ order_service.orders }}</pre>
         </div>
     {% endif %}
-
-    <h2>
-        Befehle
-        <button class="btn dropdown-toggle" data-toggle="collapse" data-target="#orders" aria-expanded="true" aria-controls="orders"></button>
-    </h2>
-    <div id="orders" class="collapse show">
-        <pre>{{ order_service.orders }}</pre>
-    </div>
 {% endblock %}
