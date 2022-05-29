@@ -99,6 +99,9 @@
     "lemuria-pbem/model-fantasya": {
         "version": "dev-master"
     },
+    "masterminds/html5": {
+        "version": "2.7.5"
+    },
     "monolog/monolog": {
         "version": "1.24.0"
     },
@@ -447,16 +450,13 @@
     "symfony/property-info": {
         "version": "v4.2.3"
     },
-    "symfony/proxy-manager-bridge": {
-        "version": "v5.2.3"
-    },
     "symfony/routing": {
-        "version": "6.0",
+        "version": "6.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "6.0",
-            "ref": "eb3b377a4dc07006c4bdb2c773652cc9434f5246"
+            "branch": "main",
+            "version": "6.1",
+            "ref": "a44010c0d06989bd4f154aa07d2542d47caf5b83"
         },
         "files": [
             "config/packages/routing.yaml",
@@ -485,9 +485,6 @@
         "version": "v4.2.3"
     },
     "symfony/security-http": {
-        "version": "v4.2.3"
-    },
-    "symfony/serializer": {
         "version": "v4.2.3"
     },
     "symfony/service-contracts": {
