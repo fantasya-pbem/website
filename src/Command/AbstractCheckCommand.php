@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace App\Command;
 
-use App\Service\CheckService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 use App\Exception\MailfilterException;
+use App\Service\CheckService;
 
 abstract class AbstractCheckCommand extends Command
 {
@@ -20,9 +20,7 @@ abstract class AbstractCheckCommand extends Command
 	}
 
 	protected function configure(): void {
-		$this->setDescription('Check an order file.');
 		$this->setHelp('This command allows to check an order file.');
-
 		$this->addArgument('orders', InputArgument::REQUIRED, 'Order file');
 	}
 

@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace App\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,13 +22,9 @@ use App\Service\MailService;
 use App\Service\OrderService;
 use App\Service\PartyService;
 
+#[AsCommand('mail:filter', 'Receive Fantasya orders via eMail.')]
 class MailfilterCommand extends Command
 {
-	/**
-	 * @var string
-	 */
-	protected static $defaultName = 'mail:filter';
-
 	private User $user;
 
 	private Game $game;
@@ -68,9 +65,7 @@ class MailfilterCommand extends Command
 	}
 
 	protected function configure(): void {
-		$this->setDescription('Receive Fantasya orders via eMail.');
 		$this->setHelp('This command is a Postfix mail filter that receives and saves Fantasya orders.');
-
 		$this->addArgument('sender', InputArgument::REQUIRED, 'Mail sender');
 		$this->addArgument('size', InputArgument::REQUIRED, 'Mail size');
 		$this->addArgument('recipient', InputArgument::REQUIRED, 'Recipient address');
