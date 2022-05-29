@@ -41,7 +41,6 @@ abstract class AbstractSendCommand extends Command
 	}
 
 	protected function configure(): void {
-		$this->setDescription('Send game report emails to players.');
 		$this->setHelp('After a turn has been evaluated, this command is called to send the reports by email.');
 
 		$this->addArgument('game', InputArgument::REQUIRED, 'Game alias');

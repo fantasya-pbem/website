@@ -3,16 +3,13 @@ declare (strict_types = 1);
 namespace App\Command\Send;
 
 use JetBrains\PhpStorm\Pure;
+use Symfony\Component\Console\Attribute\AsCommand;
 
 use App\Command\AbstractSendCommand;
 
+#[AsCommand('check:fantasya', 'Send game report emails to players.')]
 class LemuriaCommand extends AbstractSendCommand
 {
-	/**
-	 * @var string
-	 */
-	protected static $defaultName = 'send:lemuria';
-
 	protected function getEngine(): string {
 		return 'lemuria';
 	}
