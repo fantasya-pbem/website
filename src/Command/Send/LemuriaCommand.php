@@ -7,7 +7,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 
 use App\Command\AbstractSendCommand;
 
-#[AsCommand('check:fantasya', 'Send game report emails to players.')]
+#[AsCommand('send:lemuria', 'Send game report emails to players.')]
 class LemuriaCommand extends AbstractSendCommand
 {
 	protected function getEngine(): string {
