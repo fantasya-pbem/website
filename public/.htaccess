@@ -50,7 +50,7 @@ DirectoryIndex index.php
 
     # Redirect to PrivacyController if DSGVO cookie is not set.
     RewriteCond %{HTTP_COOKIE} !accept_dsgvo
-    RewriteCond %{REQUEST_URI} !^/(contact)|(privacy(/.*)?)|(upload/[a-z]+)|(/_.*)$
+    RewriteCond %{REQUEST_URI} !^/(contact)|(privacy(/.*)?)|(_.*)|(css/.+)|(images/.+)|(js/.+)|(favicon\.ico)|(humans\.txt)|(robots\.txt)$
     RewriteRule ^ %{ENV:BASE}/privacy [R=302,L]
 
     # If the requested filename exists, simply serve it.
