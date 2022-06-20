@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
-use App\Exception\MailfilterException;
 use App\Service\CheckService;
 
 abstract class AbstractCheckCommand extends Command
@@ -24,9 +23,6 @@ abstract class AbstractCheckCommand extends Command
 		$this->addArgument('orders', InputArgument::REQUIRED, 'Order file');
 	}
 
-	/**
-	 * @throws MailfilterException
-	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$orders = $input->getArgument('orders');
 		$this->checkService->readRules($this->rules);

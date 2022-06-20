@@ -49,9 +49,6 @@ abstract class AbstractSendCommand extends Command
 		$this->addOption('round', 'r', InputOption::VALUE_REQUIRED, 'Override round number (default: current)');
 	}
 
-	/**
-	 * @throws MailfilterException
-	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$this->output = $output;
 

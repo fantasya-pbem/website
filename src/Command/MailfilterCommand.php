@@ -9,12 +9,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-use App\Data\Order;
-use App\Entity\Game;
-use App\Entity\User;
-use App\Exception\MailfilterException;
-use App\Game\Party;
-use App\Game\Turn;
+use App\Exception\OrderException;
+use App\Game\OrderTrait;
 use App\Repository\GameRepository;
 use App\Repository\UserRepository;
 use App\Service\EngineService;
@@ -25,25 +21,17 @@ use App\Service\PartyService;
 #[AsCommand('mail:filter', 'Receive Fantasya orders via eMail.')]
 class MailfilterCommand extends Command
 {
-	private User $user;
-
-	private Game $game;
-
-	private ?Party $party;
-
-	private int $round;
+	use OrderTrait;
 
 	/**
 	 * @var string[]
 	 */
 	private array $header = [];
 
-	private string $content;
-
-	public function __construct(private UserRepository $userRepository, private GameRepository $gameRepository,
-								private PartyService $partyService, private OrderService $orderService,
-								private MailService $mailService, private EngineService $engineService,
-								private UserPasswordHasherInterface $hasher) {
+	public function __construct(private readonly UserRepository $userRepository, private readonly GameRepository $gameRepository,
+								private readonly PartyService $partyService, private readonly OrderService $orderService,
+								private readonly MailService $mailService, private readonly EngineService $engineService,
+								private readonly UserPasswordHasherInterface $hasher) {
 		parent::__construct();
 		setlocale(LC_ALL, 'de_DE');
 	}
@@ -51,7 +39,7 @@ class MailfilterCommand extends Command
 	public function run(InputInterface $input, OutputInterface $output): int {
 		try {
 			return parent::run($input, $output);
-		} catch (MailfilterException $e) {
+		} catch (OrderException $e) {
 			$output->writeln($e->getMessage());
 			if ($e->getPrevious()) {
 				$output->writeln($e->getPrevious()->getMessage());
@@ -72,16 +60,15 @@ class MailfilterCommand extends Command
 	}
 
 	/**
-	 * @throws MailfilterException
+	 * @throws OrderException
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$sender    = $input->getArgument('sender');
 		$size      = (int)$input->getArgument('size');
 		$recipient = $input->getArgument('recipient');
 
 		$this->fetchMailContent($size);
 		$this->fetchGame($recipient);
-		$this->fetchUserParty($sender);
+		$this->fetchUserParty();
 		$this->getRound();
 		$this->saveOrders();
 
@@ -97,12 +84,12 @@ class MailfilterCommand extends Command
 	}
 
 	/**
-	 * @throws MailfilterException
+	 * @throws OrderException
 	 */
 	private function fetchMailContent(int $size): void {
 		$file = @fopen('php://stdin', 'r');
 		if (!$file) {
-			throw new MailfilterException('Die E-Mail konnte nicht eingelesen werden.', 2);
+			throw new OrderException('Die E-Mail konnte nicht eingelesen werden.', 2);
 		}
 
 		$email = '';
@@ -122,11 +109,11 @@ class MailfilterCommand extends Command
 		$email        = str_replace("\r\n", "\n", $email);
 		$firstLinePos = strpos($email, "\n\n");
 		if (!$firstLinePos) {
-			throw new MailfilterException('Anfang der Befehle nicht gefunden.', 2);
+			throw new OrderException('Anfang der Befehle nicht gefunden.', 2);
 		}
 		$headers = trim(substr($email, 0, $firstLinePos));
 		if (strlen($headers) <= 0) {
-			throw new MailfilterException('Keine E-Mail-Header vorhanden.', 2);
+			throw new OrderException('Keine E-Mail-Header vorhanden.', 2);
 		}
 		$this->content = substr($email, $firstLinePos + 2);
 
@@ -144,7 +131,7 @@ class MailfilterCommand extends Command
 		$contentType = explode(';', $this->header['Content-Type'][0] ?? '');
 		$type        = strtolower(trim($contentType[0]));
 		if ($type !== 'text/plain') {
-			throw new MailfilterException('Falsches E-Mail-Format: ' . $type, 2);
+			throw new OrderException('Falsches E-Mail-Format: ' . $type, 2);
 		}
 		$charset = 'UTF-8';
 		for ($i = 1; $i < count($contentType); $i++) {
@@ -172,23 +159,23 @@ class MailfilterCommand extends Command
 		if ($charset !== 'UTF-8') {
 			$this->content = iconv($charset, 'UTF-8//TRANSLIT', $this->content);
 			if ($this->content === false) {
-				throw new MailfilterException('E-Mail mit Charset ' . $charset . ' wird nicht unterstützt.', 2);
+				throw new OrderException('E-Mail mit Charset ' . $charset . ' wird nicht unterstützt.', 2);
 			}
 		}
 		$this->content = trim($this->content);
 		if (strlen($this->content) <= 0) {
-			throw new MailfilterException('Leerer E-Mail-Text.', 2);
+			throw new OrderException('Leerer E-Mail-Text.', 2);
 		}
 	}
 
 	/**
-	 * @throws MailfilterException
+	 * @throws OrderException
 	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
 	private function fetchGame(string $recipient): void {
 		$atPos = strpos($recipient, '@fantasya-pbem.de');
 		if ($atPos <= 0) {
-			throw new MailfilterException('Die Empfängeradresse ist fehlerhaft.', 3);
+			throw new OrderException('Die Empfängeradresse ist fehlerhaft.', 3);
 		}
 		$mailbox = substr($recipient, 0, $atPos);
 
@@ -199,102 +186,17 @@ class MailfilterCommand extends Command
 				'lemuria'      => 'lemuria'
 			};
 		} catch (\UnhandledMatchError $e) {
-			throw new MailfilterException('Das Postfach ' . $mailbox . ' ist unbekannt.', 3, $e);
+			throw new OrderException('Das Postfach ' . $mailbox . ' ist unbekannt.', 3, $e);
 		}
 
 		$this->game = $this->gameRepository->findOneBy(['alias' => $alias]);
 		if (!$this->game) {
-			throw new MailfilterException('Die Postfachzuordnung ist fehlerhaft.', 1);
+			throw new OrderException('Die Postfachzuordnung ist fehlerhaft.', 1);
 		}
 	}
 
 	/**
-	 * @throws MailfilterException
-	 * @noinspection PhpUnusedParameterInspection
-	 * @noinspection PhpConditionAlreadyCheckedInspection
-	 */
-	private function fetchUserParty(string $sender): void {
-		// Befehle extrahieren:
-		$endOfLine = strpos($this->content, "\n");
-		if (!$endOfLine) {
-			throw new MailfilterException('Die Befehle bestehen nur aus einer Zeile.', 2);
-		}
-		$firstLine = substr($this->content, 0, $endOfLine);
-		if (strlen($firstLine) <= 0) {
-			throw new MailfilterException('Die erste Befehlszeile ist leer.', 2);
-		}
-		if (!preg_match('/^([^ ]+) +([a-zA-Z0-9]+) +"([^"]*)"$/', $firstLine, $parts) || count($parts) < 4) {
-			throw new MailfilterException('Die erste Befehlszeile ist fehlerhaft.', 2);
-		}
-		/** @noinspection PhpUnusedLocalVariableInspection */
-		$clientGame = $parts[1]; //currently unused
-		$party      = $parts[2];
-		$password   = $parts[3];
-
-		try {
-			$this->party = $this->partyService->getById($party, $this->game);
-		} catch (\Exception $e) {
-			$message = 'Fehler beim Ermitteln der Partei ' . $party . ' im Spiel ' . $this->game->getName() . '.';
-			throw new MailfilterException($message, 1, $e);
-		}
-		if (!$this->party) {
-			$message = 'Die Partei ' . $party . ' existiert nicht im Spiel ' . $this->game->getName() . '.';
-			throw new MailfilterException($message, 4);
-		}
-
-		$this->user = $this->userRepository->find($this->party->getUser());
-		if (!$this->user) {
-			throw new MailfilterException('Der Benutzer #' . $this->party->getUser() . ' wurde nicht gefunden.', 1);
-		}
-		if (!$this->hasher->isPasswordValid($this->user, $password)) {
-			throw new MailfilterException('Das Kennwort ist falsch.', 4);
-		}
-		/*
-		if ($sender !== $this->user->getEmail()) {
-			throw new MailfilterException('Die Absenderadresse ist falsch.', 4);
-		}
-		*/
-	}
-
-	/**
-	 * @throws MailfilterException
-	 */
-	private function getRound(): void {
-		try {
-			$current = new Turn($this->game, $this->engineService);
-		} catch (\Exception $e) {
-			throw new MailfilterException('Die aktuelle Runde konnte nicht ermittelt werden.', 1, $e);
-		}
-		$this->round = $current->getRound();
-
-		if (preg_match('/^RUNDE\h+(\d+)\s*$/im', $this->content, $matches)) {
-			$maxRound = $this->round + 3;
-			$round    = (int)$matches[1] - 1;
-			if ($round >= $this->round && $round <= $maxRound) {
-				$this->round = $round;
-			} else {
-				throw new MailfilterException('RUNDE ' . $round . ' ist nicht gültig.', 4);
-			}
-		}
-	}
-
-	/**
-	 * @throws MailfilterException
-	 */
-	private function saveOrders(): void {
-		$order = new Order();
-		$order->setParty($this->party->getOwner());
-		$order->setGame($this->game);
-		$order->setTurn($this->round);
-		$order->setOrders($this->content);
-		$this->orderService->setContext($order);
-		if (!$this->orderService->saveOrders()) {
-			throw new MailfilterException('Die Befehle konnten nicht gespeichert werden.', 1);
-		}
-	}
-
-	/**
-	 * @throws MailfilterException
+	 * @throws OrderException
 	 */
 	private function sendAnswerMail(string $from, string $check, string $simulation): void {
 		$subject = isset($this->header['Subject'][0]) ? 'Re: ' . $this->header['Subject'][0]
@@ -318,7 +220,7 @@ class MailfilterCommand extends Command
 		try {
 			$this->mailService->signAndSend($mail);
 		} catch (\Throwable $e) {
-			throw new MailfilterException('Die Antwortmail konnte nicht gesendet werden.', 5, $e);
+			throw new OrderException('Die Antwortmail konnte nicht gesendet werden.', 5, $e);
 		}
 	}
 }
