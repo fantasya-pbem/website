@@ -49,6 +49,11 @@ class Game
 	private bool $is_active = false;
 
 	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	private bool $can_enter = false;
+
+	/**
 	 * @ORM\Column(type="smallint")
 	 */
 	private int $start_day = 0;
@@ -117,6 +122,15 @@ class Game
 
 	public function setIsActive(bool $is_active): self {
 		$this->is_active = $is_active;
+		return $this;
+	}
+
+	public function getCanEnter(): bool {
+		return $this->can_enter;
+	}
+
+	public function setCanEnter(bool $can_enter): self {
+		$this->can_enter = $can_enter;
 		return $this;
 	}
 

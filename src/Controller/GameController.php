@@ -109,10 +109,14 @@ class GameController extends AbstractController
 	}
 
 	private function canEnter(): bool {
+		$game = $this->gameService->getCurrent();
+		if (!$game->getCanEnter()) {
+			return false;
+		}
 		if ($this->isGranted(User::ROLE_MULTI_PLAYER)) {
 			return true;
 		}
-		if (!$this->partyService->hasAny($this->user(), $this->gameService->getCurrent())) {
+		if (!$this->partyService->hasAny($this->user(), $game)) {
 			return true;
 		}
 		return false;
