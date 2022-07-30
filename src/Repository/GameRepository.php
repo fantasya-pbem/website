@@ -21,6 +21,7 @@ class GameRepository extends ServiceEntityRepository
 	public function findAll(): array {
 		$q = $this->createQueryBuilder('g');
 		$q->andWhere($q->expr()->eq('g.is_active', 1));
+		$q->orderBy('g.can_enter', 'DESC');
 		return $q->getQuery()->getResult();
 	}
 
