@@ -40,19 +40,10 @@
 
     <ol>
         <li>Registriere ein <a href="{{ path('user_register') }}">Benutzerkonto</a>.</li>
-        <li>Wähle eine Spielwelt:
-            <ul>
-                {% for game in game_service.all %}
-                    <li class="nav-item">
-                        <a href="{{ path('world', {'game': game.id}) }}">{{ game.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </li>
-        <li>Erstelle eine neue Partei.</li>
+        <li>Erstelle eine neue Partei in der Lemuria-Spielwelt.</li>
     </ol>
 
-    <p>Du kannst in jeder Welt mit einer Partei teilnehmen.</p>
+    <p>Hinweis: Die alte Fantasya-Spielwelt ist für neue Spieler nicht mehr zugänglich.</p>
 
     <h3>Spielzug</h3>
 
