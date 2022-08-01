@@ -35,6 +35,20 @@ class Order
 		return $this->game;
 	}
 
+	public function getPartyId(): string {
+		$orders = explode("\r\n", $this->orders);
+		$line = explode(' ', strtolower(trim($orders[0] ?? '')));
+		switch ($line[0]) {
+			case 'eressea' :
+			case 'fantasya' :
+			case 'lemuria' :
+			case 'partei' :
+				return $this->parsePartyId($line);
+			default :
+				return '';
+		}
+	}
+
 	public function setParty(string $party): void {
 		$this->party = $party;
 	}
@@ -49,5 +63,15 @@ class Order
 
 	public function setGame(Game $game): void {
 		$this->game = $game;
+	}
+
+	private function parsePartyId(array $line): string {
+		for ($i = 1; $i < count($line); $i++) {
+			$id = strtolower(trim($line[$i]));
+			if (strlen($id) > 0) {
+				return $id;
+			}
+		}
+		return '';
 	}
 }
