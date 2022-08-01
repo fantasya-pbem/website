@@ -17,6 +17,12 @@
     </div>
 </div>
 
+{% if (isWrongParty) %}
+    <p class="text-danger">
+        <strong>Fehler: In den Befehlen ist in der ersten Zeile keine passende Partei angegeben.</strong>
+    </p>
+{% endif %}
+
 <div class="row">
     <div class="col-12">
         {{ form_row(form.orders) }}

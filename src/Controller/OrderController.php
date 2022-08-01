@@ -100,16 +100,22 @@ class OrderController extends AbstractController
 		$form = $this->createSendForm(new Order(), $parties, $turn);
 		$form->handleRequest($request);
 
+		$isWrongParty = false;
 		if ($form->isSubmitted() && $form->isValid()) {
 			/** @var Order $order */
 			$order = $form->getData();
-			$order->setGame($this->gameService->getCurrent());
-			$this->orderService->setContext($order);
-			$this->orderService->saveOrders();
-			return $this->redirectToRoute('order_success', ['p' => $order->getParty(), 't' => $turn]);
+			$game  = $this->gameService->getCurrent();
+			$party = $this->partyService->getById($order->getPartyId(), $game);
+			if ($order->getParty() === $party?->getOwner()) {
+				$order->setGame($game);
+				$this->orderService->setContext($order);
+				$this->orderService->saveOrders();
+				return $this->redirectToRoute('order_success', ['p' => $order->getParty(), 't' => $turn]);
+			}
+			$isWrongParty = true;
 		}
 
-		return $this->render('order/send.html.twig', ['form' => $form->createView()]);
+		return $this->render('order/send.html.twig', ['form' => $form->createView(), 'isWrongParty' => $isWrongParty]);
 	}
 
 	/**
