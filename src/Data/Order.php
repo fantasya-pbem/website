@@ -37,7 +37,9 @@ class Order
 
 	public function getPartyId(): string {
 		$orders = explode("\r\n", $this->orders);
-		$line = explode(' ', strtolower(trim($orders[0] ?? '')));
+		$line   = $orders[0] ?? '';
+		$cPos   = strpos($line, ';');
+		$line   = explode(' ', strtolower(trim(substr($line, 0, $cPos > 0 ? $cPos : null))));
 		switch ($line[0]) {
 			case 'eressea' :
 			case 'fantasya' :
