@@ -8,6 +8,8 @@ use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Lemuria;
 use Lemuria\Model\Dictionary;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Commodity\Griffin;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Party\Type;
@@ -17,6 +19,8 @@ use App\Game\Statistics;
 
 class LemuriaStatistics implements Statistics
 {
+	use BuilderTrait;
+
 	/**
 	 * @var array[]|null
 	 */
@@ -150,28 +154,8 @@ class LemuriaStatistics implements Statistics
 			$monsters      = [];
 			$count         = 0;
 			$total         = 0;
-			foreach (Lemuria::Catalog()->getAll(Domain::UNIT) as $unit /* @var Unit $unit*/) {
-				$type = $unit->Party()->Type();
-				$race = (string)$unit->Race();
-				$size = $unit->Size();
-
-				if ($type === Type::PLAYER) {
-					if (!isset($persons[$race])) {
-						$persons[$race] = [0, 0];
-					}
-					$persons[$race][0]++;
-					$persons[$race][1] += $size;
-				} elseif ($type === Type::MONSTER) {
-					if (!isset($monsters[$race])) {
-						$monsters[$race] = [0, 0];
-					}
-					$monsters[$race][0]++;
-					$monsters[$race][1] += $size;
-				}
-				$total += $size;
-				$count++;
-			}
-
+			$this->getUnitPopulation($persons, $monsters, $count, $total);
+			$this->getResourcesPopulation($monsters, $count, $total);
 			foreach ($persons as $race => $numbers) {
 				$this->persons[] = ['race' => $this->dictionary->get('race', $race), 'units' => $numbers[0], 'persons' => $numbers[1]];
 			}
@@ -195,5 +179,48 @@ class LemuriaStatistics implements Statistics
 	 */
 	public function getMonsters(): array {
 		return $this->mosters;
+	}
+
+	protected function getUnitPopulation(array &$persons, array &$monsters, int &$count, int &$total): void {
+		foreach (Lemuria::Catalog()->getAll(Domain::UNIT) as $unit /* @var Unit $unit */) {
+			$type = $unit->Party()->Type();
+			$race = (string)$unit->Race();
+			$size = $unit->Size();
+
+			if ($type === Type::PLAYER) {
+				if (!isset($persons[$race])) {
+					$persons[$race] = [0, 0];
+				}
+				$persons[$race][0]++;
+				$persons[$race][1] += $size;
+			} elseif ($type === Type::MONSTER) {
+				if (!isset($monsters[$race])) {
+					$monsters[$race] = [0, 0];
+				}
+				$monsters[$race][0]++;
+				$monsters[$race][1] += $size;
+			}
+			$total += $size;
+			$count++;
+		}
+	}
+
+	protected function getResourcesPopulation(array &$monsters, int &$count, int &$total): void {
+		$griffin      = self::createCommodity(Griffin::class);
+		$griffinCount = 0;
+		$griffinSize  = 0;
+		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+			$resources = $region->Resources();
+			$griffins  = $resources[$griffin]->Count();
+			if ($griffins > 0) {
+				$griffinCount++;
+				$count++;
+				$griffinSize += $griffins;
+				$total       += $griffins;
+			}
+		}
+		if ($griffinCount) {
+			$monsters[(string)$griffin] = [$griffinCount, $griffinSize];
+		}
 	}
 }
