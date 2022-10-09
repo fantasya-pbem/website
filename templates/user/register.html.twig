@@ -9,6 +9,10 @@
 {% endblock %}
 
 {% block content %}
+    <p>
+        Registriere hier Dein Benutzerkonto. Du erhältst dann eine E-Mail als Bestätigung. Melde Dich danach an, um ein
+        neues Spiel zu starten und die Einzelheiten Deiner Partei festzulegen.
+    </p>
     {% if existing %}
         {% if existing.name == form.name.vars.value %}
             <p>Es gibt bereits einen Benutzer mit diesem Namen. Bitte wähle einen anderen Benutzernamen.</p>
