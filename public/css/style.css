@@ -219,6 +219,15 @@ main a:before {
 	content: '»\a0'
 }
 
+main a.inline.image:before {
+	content: unset;
+}
+
+main a.inline img {
+	vertical-align: text-top;
+	margin-left: 0.5rem;
+}
+
 .article.card {
 	border: 1px solid #90602a;
 }

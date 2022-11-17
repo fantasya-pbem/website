@@ -23,9 +23,12 @@
         </li>
     </ul>
 
-    <p>Befehle für das alte Fantasya können weiterhin an <strong>befehle(at)fantasya-pbem.de</strong> gesendet werden.</p>
-
-    <p>Für Fragen ist unser Forum, die <a href="//forum.fantasya-pbem.de">Taverne</a>, der geeignete Ort.</p>
+    <p>
+        Besucht regelmäßig unser Forum, die <a href="//forum.fantasya-pbem.de">Taverne</a>, oder folgt uns auf
+        <a class="inline image" href="{{ mastodon_url }}" target="fantasya_mastodon">
+            <img src="{{ asset('images/mastodon.png') }}" alt="Mastodon">
+        </a>.
+    </p>
 
     {% if is_granted('ROLE_NEWS_CREATOR') %}
         <p class="float-right">
