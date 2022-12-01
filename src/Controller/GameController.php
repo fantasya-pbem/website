@@ -2,11 +2,11 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Data\Lemurian;
 use App\Data\Newbie as NewbieData;
@@ -16,13 +16,12 @@ use App\Form\LemurianType;
 use App\Form\NewbieType;
 use App\Game\Engine;
 use App\Game\Newbie;
+use App\Security\Role;
 use App\Service\GameService;
 use App\Service\MailService;
 use App\Service\PartyService;
 
-/**
- * @IsGranted("ROLE_USER")
- */
+#[IsGranted(Role::USER)]
 class GameController extends AbstractController
 {
 	public function __construct(private GameService $gameService, private PartyService $partyService,
@@ -113,7 +112,7 @@ class GameController extends AbstractController
 		if (!$game->getCanEnter()) {
 			return false;
 		}
-		if ($this->isGranted(User::ROLE_MULTI_PLAYER)) {
+		if ($this->isGranted(Role::MULTI_PLAYER)) {
 			return true;
 		}
 		if (!$this->partyService->hasAny($this->user(), $game)) {

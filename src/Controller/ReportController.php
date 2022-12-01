@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace App\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -10,6 +9,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Data\Report;
 use App\Entity\Game;
@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Game\Party;
 use App\Game\Turn;
 use App\Security\DownloadToken;
+use App\Security\Role;
 use App\Service\EngineService;
 use App\Service\GameService;
 use App\Service\PartyService;
@@ -25,14 +26,14 @@ use App\Service\ReportService;
 class ReportController extends AbstractController
 {
 	public function __construct(private GameService $gameService, private PartyService $partyService,
-								private ReportService $reportService, private EngineService $engineService) {
+		                        private ReportService $reportService, private EngineService $engineService) {
 	}
 
 	/**
 	 * @Route("/report", name="report")
-	 * @IsGranted("ROLE_USER")
 	 * @throws \Exception
 	 */
+	#[IsGranted(Role::USER)]
 	public function index(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		if (empty($parties)) {

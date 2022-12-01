@@ -4,16 +4,17 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Entity\Myth;
 use App\Entity\User;
 use App\Form\MythType;
 use App\Repository\MythRepository;
+use App\Security\Role;
 use App\Service\MailService;
 
 class MythController extends AbstractController
@@ -40,8 +41,8 @@ class MythController extends AbstractController
 
 	/**
 	 * @Route("/myth/spread", name="myth_spread")
-	 * @IsGranted("ROLE_USER")
 	 */
+	#[IsGranted(Role::USER)]
 	public function spread(Request $request): Response {
 		$myth = new Myth();
 		$form = $this->createForm(MythType::class, $myth);

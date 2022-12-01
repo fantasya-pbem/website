@@ -3,7 +3,6 @@ declare (strict_types = 1);
 namespace App\Controller;
 
 use JetBrains\PhpStorm\Pure;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -12,19 +11,19 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Data\Order;
 use App\Entity\User;
 use App\Game\Party;
 use App\Game\Turn;
+use App\Security\Role;
 use App\Service\EngineService;
 use App\Service\GameService;
 use App\Service\OrderService;
 use App\Service\PartyService;
 
-/**
- * @IsGranted("ROLE_USER")
- */
+#[IsGranted(Role::USER)]
 class OrderController extends AbstractController
 {
 	public function __construct(private GameService $gameService, private PartyService $partyService,
