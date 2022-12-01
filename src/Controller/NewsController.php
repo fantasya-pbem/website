@@ -4,15 +4,16 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Entity\News;
 use App\Form\NewsType;
 use App\Repository\NewsRepository;
+use App\Security\Role;
 
 class NewsController extends AbstractController
 {
@@ -32,8 +33,8 @@ class NewsController extends AbstractController
 
 	/**
 	 * @Route("/news/edit/{article}", name="news_edit")
-	 * @IsGranted("ROLE_NEWS_CREATOR")
 	 */
+	#[IsGranted(Role::NEWS_CREATOR)]
 	public function edit(News $article = null): Response {
 		$news       = $this->repository->findAll();
 		$parameters = [];
@@ -52,9 +53,9 @@ class NewsController extends AbstractController
 
 	/**
 	 * @Route("/news/create/{article}", name="news_create")
-	 * @IsGranted("ROLE_NEWS_CREATOR")
 	 * @throws \Exception
 	 */
+	#[IsGranted(Role::NEWS_CREATOR)]
 	public function create(Request $request, News $article = null): Response {
 		if ($article) {
 			$date = $article->getCreatedAt();
@@ -79,8 +80,8 @@ class NewsController extends AbstractController
 
 	/**
 	 * @Route("/news/delete/{article}", name="news_delete")
-	 * @IsGranted("ROLE_NEWS_CREATOR")
 	 */
+	#[IsGranted(Role::NEWS_CREATOR)]
 	public function delete(News $article): Response {
 		$this->entityManager->remove($article);
 		$this->entityManager->flush();

@@ -4,12 +4,12 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Data\PasswordReset;
 use App\Data\Registration;
@@ -126,8 +126,8 @@ class UserController extends AbstractController
 
 	/**
 	 * @Route("/user/logout", name="user_logout")
-	 * @IsGranted("ROLE_USER")
 	 */
+	#[IsGranted(Role::USER)]
     public function logout(): Response {
     	return $this->redirectToRoute('index');
 	}

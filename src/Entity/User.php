@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 use App\Data\PasswordReset;
+use App\Security\Role;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -14,16 +15,6 @@ use App\Data\PasswordReset;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 	public const FLAG_WITH_ATTACHMENT = 1;
-
-	public const ROLE_ADMIN = 'ROLE_ADMIN';
-
-	public const ROLE_BETA_TESTER = 'ROLE_BETA_TESTER';
-
-	public const ROLE_MULTI_PLAYER = 'ROLE_MULTI_PLAYER';
-
-	public const ROLE_NEWS_CREATOR = 'ROLE_NEWS_CREATOR';
-
-	public const ROLE_USER = 'ROLE_USER';
 
 	private const ALL_FLAGS = [self::FLAG_WITH_ATTACHMENT];
 
@@ -91,8 +82,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 */
 	public function getRoles(): array {
 		$roles = $this->roles;
-		// guarantee every user at least has ROLE_USER
-		$roles[] = self::ROLE_USER;
+		// guarantee every user at least has Role::USER
+		$roles[] = Role::USER;
 		return array_unique($roles);
 	}
 
@@ -136,7 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 			->setName($resetOrRegistration->getName())
 			->setPassword('')
 			->setEmail($resetOrRegistration->getEmail())
-			->setRoles([User::ROLE_USER]);
+			->setRoles([Role::USER]);
 	}
 
 	/**

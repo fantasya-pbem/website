@@ -7,32 +7,31 @@ use Doctrine\Persistence\ManagerRegistry;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use JetBrains\PhpStorm\ArrayShape;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Entity\User;
 use App\Service\GameService;
 use App\Service\MailService;
 use App\Service\PartyService;
 use App\Repository\UserRepository;
+use App\Security\Role;
 
-/**
- * @IsGranted("ROLE_USER")
- */
+#[IsGranted(Role::USER)]
 class ProfileController extends AbstractController
 {
 	/**
 	 * @var array(string=>string)
 	 */
 	private static array $roles = [
-		User::ROLE_ADMIN        => 'Administrator',
-		User::ROLE_BETA_TESTER  => 'Betatester',
-		User::ROLE_MULTI_PLAYER => 'Mehrere Parteien',
-		User::ROLE_NEWS_CREATOR => 'News verfassen'
+		Role::ADMIN        => 'Administrator',
+		Role::BETA_TESTER  => 'Betatester',
+		Role::MULTI_PLAYER => 'Mehrere Parteien',
+		Role::NEWS_CREATOR => 'News verfassen'
 	];
 
 	/**
@@ -184,7 +183,7 @@ class ProfileController extends AbstractController
 	private function getRoles(): array {
 		$roles = [];
 		foreach ($this->user()->getRoles() as $role) {
-			if ($role !== User::ROLE_USER) {
+			if ($role !== Role::USER) {
 				$roles[] = self::$roles[$role] ?? $role;
 			}
 		}
