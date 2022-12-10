@@ -20,9 +20,11 @@ class Race implements \Stringable
 
 	public const TROLL = 'Troll';
 
+	public const MONSTER = 'Monster';
+
 	protected const FANTASYA = [
 		self::AQUAN => 'Aquan', self::ELF => 'Elf', self::HALFLING => 'Halfling', self::HUMAN => 'Human',
-		self::ORC   => 'Orc', self::TROLL => 'Troll', self::DWARF  => 'Dwarf'
+		self::ORC   => 'Orc', self::TROLL => 'Troll', self::DWARF  => 'Dwarf', self::MONSTER  => 'Monster'
 	];
 
 	protected const LEMURIA = [
@@ -38,10 +40,10 @@ class Race implements \Stringable
 	}
 
 	public static function lemuria(string $name): self {
-		return new self(self::LEMURIA[$name] ?? '');
+		return new self(self::LEMURIA[$name] ?? self::MONSTER);
 	}
 
-	public function __construct(private string $name) {
+	public function __construct(private readonly string $name) {
 		if (!isset(self::FANTASYA[$name])) {
 			throw new \RuntimeException('Invalid race: ' . $name);
 		}
