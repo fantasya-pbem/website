@@ -23,6 +23,11 @@ class Assignment
 	 */
 	private User $user;
 
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	private bool $retired = false;
+
 	public function getUuid(): ?string {
 		return $this->uuid;
 	}
@@ -38,6 +43,15 @@ class Assignment
 
 	public function setUser(User $user): self {
 		$this->user = $user;
+		return $this;
+	}
+
+	public function hasRetired(): bool {
+		return $this->retired;
+	}
+
+	public function retire(): self {
+		$this->retired = true;
 		return $this;
 	}
 }
