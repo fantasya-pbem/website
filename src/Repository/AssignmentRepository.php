@@ -21,7 +21,7 @@ class AssignmentRepository extends ServiceEntityRepository
 	 * @return Assignment[]
 	 */
 	public function findByUser(User $user): array {
-		return parent::findBy(['user' => $user]);
+		return parent::findBy(['user' => $user, 'retired' => false]);
 	}
 
 	public function findByUuid(string $uuid): ?Assignment {
