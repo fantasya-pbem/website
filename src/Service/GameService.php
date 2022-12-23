@@ -14,11 +14,11 @@ class GameService
 	private ?SessionInterface $session = null;
 
 	/**
-	 * @var Game[]
+	 * @var array<Game>
 	 */
 	private ?array $games = null;
 
-	public function __construct(private GameRepository $repository, private RequestStack $requestStack) {
+	public function __construct(private readonly GameRepository $repository, private readonly RequestStack $requestStack) {
 		try {
 			$this->session = $this->requestStack->getSession();
 		} catch (SessionNotFoundException) {

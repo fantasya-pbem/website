@@ -25,8 +25,8 @@ use App\Service\ReportService;
 
 class ReportController extends AbstractController
 {
-	public function __construct(private GameService $gameService, private PartyService $partyService,
-		                        private ReportService $reportService, private EngineService $engineService) {
+	public function __construct(private readonly GameService $gameService, private readonly PartyService $partyService,
+		                        private readonly ReportService $reportService, private readonly EngineService $engineService) {
 	}
 
 	/**

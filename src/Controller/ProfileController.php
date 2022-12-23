@@ -14,7 +14,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use App\Entity\Game;
 use App\Entity\User;
+use App\Game\Newbie;
+use App\Game\Party;
 use App\Service\GameService;
 use App\Service\MailService;
 use App\Service\PartyService;
@@ -25,7 +28,7 @@ use App\Security\Role;
 class ProfileController extends AbstractController
 {
 	/**
-	 * @var array(string=>string)
+	 * @var array<string, string>
 	 */
 	private static array $roles = [
 		Role::ADMIN        => 'Administrator',
@@ -35,7 +38,7 @@ class ProfileController extends AbstractController
 	];
 
 	/**
-	 * @var array(int=>string)
+	 * @var array<int, string>
 	 */
 	private static array $errors = [
 		10 => 'Der Benutzername darf nicht leer sein.',
@@ -50,9 +53,9 @@ class ProfileController extends AbstractController
 
 	private EntityManager $entityManager;
 
-	public function __construct(private UserRepository $userRepository, private GameService $gameService,
-								private PartyService $partyService, private MailService $mailService,
-								private UserPasswordHasherInterface $passwordHasher, ManagerRegistry $managerRegistry) {
+	public function __construct(private readonly UserRepository $userRepository, private readonly GameService $gameService,
+								private readonly PartyService $partyService, private readonly MailService $mailService,
+								private readonly UserPasswordHasherInterface $passwordHasher, readonly ManagerRegistry $managerRegistry) {
 		$this->entityManager = $managerRegistry->getManager();
 	}
 
@@ -66,6 +69,7 @@ class ProfileController extends AbstractController
 		$games   = $this->gameService->getAll();
 		$parties = $this->partyService->getFor($this->user());
 		$newbies = $this->partyService->getNewbies($this->user());
+		$this->removeEmptyGameParties($games, $parties, $newbies);
 
 		$success   = null;
 		$errorCode = 0;
@@ -175,6 +179,26 @@ class ProfileController extends AbstractController
 		}
 
 		return $this->redirectToRoute('profile', isset($error) ? ['error' => $error] : []);
+	}
+
+	/**
+	 * @param array<Game> $games
+	 * @param array<int, array<Party>> $parties
+	 * @param array<int, array<Newbie>> $newbies
+	 */
+	private function removeEmptyGameParties(array &$games, array &$parties, array &$newbies): void {
+		$gameById = [];
+		foreach ($games as $i => $game) {
+			$gameById[$game->getId()] = $i;
+		}
+		foreach ($gameById as $id => $i) {
+			if (empty($parties[$id]) && empty($newbies[$id])) {
+				unset($games[$i]);
+				unset($parties[$id]);
+				unset($newbies[$id]);
+			}
+		}
+		$games = array_values($games);
 	}
 
 	/**

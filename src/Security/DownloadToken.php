@@ -16,7 +16,7 @@ class DownloadToken
 
 	private int $turn = 0;
 
-	public function __construct(private string $secret) {
+	public function __construct(private readonly string $secret) {
 	}
 
 	public function setEmail(string $email): DownloadToken {

@@ -30,8 +30,8 @@
 			"email": "info@fantasya-pbem.de"
 		}
 	],
-	"version": "2.12.2",
-	"time": "2022-12-21",
+	"version": "2.12.3",
+	"time": "2022-12-23",
 
 	"require": {
 		"php": "~8.1",
@@ -39,7 +39,7 @@
 		"components/jquery": "~3.6",
 		"doctrine/doctrine-bundle": "~2.7",
 		"doctrine/doctrine-migrations-bundle": "~3.2",
-		"doctrine/orm": "~2.13",
+		"doctrine/orm": "~2.14",
 		"lemuria-pbem/engine-fantasya": "~1.1.0",
 		"lemuria-pbem/lemuria": "~1.1.0",
 		"lemuria-pbem/model-fantasya": "~1.1.0",

@@ -20,7 +20,7 @@ class FantasyaStatistics implements Statistics
 	 */
 	private ?array $newParties = null;
 
-	public function __construct(private Game $game, private Connection $connection) {
+	public function __construct(private readonly Game $game, private readonly Connection $connection) {
 	}
 
 	/**

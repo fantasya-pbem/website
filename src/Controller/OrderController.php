@@ -26,8 +26,8 @@ use App\Service\PartyService;
 #[IsGranted(Role::USER)]
 class OrderController extends AbstractController
 {
-	public function __construct(private GameService $gameService, private PartyService $partyService,
-								private OrderService $orderService, private EngineService $engineService) {
+	public function __construct(private readonly GameService $gameService, private readonly PartyService $partyService,
+								private readonly OrderService $orderService, private readonly EngineService $engineService) {
 	}
 
 	/**

@@ -17,7 +17,7 @@ class Fantasya implements Engine
 {
 	private EntityManagerInterface $entityManager;
 
-	public function __construct(private ContainerBagInterface $container, ManagerRegistry $managerRegistry) {
+	public function __construct(private readonly ContainerBagInterface $container, ManagerRegistry $managerRegistry) {
 		$this->entityManager = $managerRegistry->getManager();
 	}
 

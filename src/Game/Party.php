@@ -20,7 +20,7 @@ class Party
 		return base_convert((string)$id, 10, 36);
 	}
 
-	public function __construct(private array $properties) {
+	public function __construct(private readonly array $properties) {
 	}
 
 	public function getId(): string {

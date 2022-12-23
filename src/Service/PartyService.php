@@ -7,12 +7,13 @@ use JetBrains\PhpStorm\Pure;
 use App\Entity\Game;
 use App\Entity\User;
 use App\Exception\NoEngineException;
+use App\Game\Engine;
 use App\Game\Newbie;
 use App\Game\Party;
 
 class PartyService
 {
-	#[Pure] public function __construct(private GameService $service, private EngineService $engineService) {
+	#[Pure] public function __construct(private readonly GameService $service, private readonly EngineService $engineService) {
 	}
 
 	public function getAll(Game $game): array {
@@ -37,6 +38,8 @@ class PartyService
 
 	/**
 	 * Get all parties of a User.
+	 *
+	 * @return array<int, array<Party>>
 	 */
 	public function getFor(User $user): array {
 		$games   = $this->service->getAll();
@@ -60,7 +63,7 @@ class PartyService
 	/**
 	 * Get all newbies of a User.
 	 *
-	 * @return Newbie[]
+	 * @return array<int, array<Newbie>>
 	 */
 	public function getNewbies(User $user): array {
 		$games   = $this->service->getAll();
@@ -92,6 +95,21 @@ class PartyService
 	 */
 	public function hasAny(User $user, Game $game): bool {
 		return $this->hasParty($user, $game) || $this->hasNewbie($user, $game);
+	}
+
+	/**
+	 * Check if a User has a Party in a legacy game.
+	 */
+	public function hasLegacy(User $user): bool {
+		foreach ($this->service->getAll() as $game) {
+			if ($game->getEngine() === Engine::FANTASYA) {
+				$parties = $this->engineService->get($game)->getParties($user, $game);
+				if (!empty($parties)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**

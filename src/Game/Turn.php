@@ -25,7 +25,7 @@ class Turn
 	/**
 	 * @throws \Exception
 	 */
-	public function __construct(private Game $game, private EngineService $engineService) {
+	public function __construct(private readonly Game $game, private readonly EngineService $engineService) {
 		$this->fetchData();
 	}
 

@@ -19,7 +19,7 @@ class NewsController extends AbstractController
 {
 	private EntityManagerInterface $entityManager;
 
-	public function __construct(private NewsRepository $repository, ManagerRegistry $managerRegistry) {
+	public function __construct(private readonly NewsRepository $repository, ManagerRegistry $managerRegistry) {
 		$this->entityManager = $managerRegistry->getManager();
 	}
 

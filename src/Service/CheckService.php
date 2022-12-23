@@ -4,6 +4,9 @@ namespace App\Service;
 
 class CheckService
 {
+	/**
+	 * @var array<string>
+	 */
 	protected ?array $rules = null;
 
 	public function check(string $commands): array {

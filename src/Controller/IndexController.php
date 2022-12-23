@@ -12,7 +12,7 @@ use App\Service\EngineService;
 
 class IndexController extends AbstractController
 {
-	public function __construct(private EngineService $engineService) {
+	public function __construct(private readonly EngineService $engineService) {
 	}
 
 	/**

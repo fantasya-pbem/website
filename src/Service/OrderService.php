@@ -18,8 +18,8 @@ class OrderService
 
 	private string $simulation;
 
-	public function __construct(private PartyService $service, private CheckService $checkService,
-								private GameRepository $repository, ContainerBagInterface $config) {
+	public function __construct(private readonly PartyService $service, private readonly CheckService $checkService,
+								private readonly GameRepository $repository, ContainerBagInterface $config) {
 		$this->baseDir = realpath(__DIR__ . '/../../var/orders');
 		if (!$this->baseDir) {
 			throw new \RuntimeException('Orders directory not found.');
