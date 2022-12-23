@@ -25,7 +25,7 @@ class ClientCertificateAuthenticator extends AbstractAuthenticator
 
 	private EntityManagerInterface $entityManager;
 
-	public function __construct(ManagerRegistry $managerRegistry, private UrlGeneratorInterface $urlGenerator) {
+	public function __construct(ManagerRegistry $managerRegistry, private readonly UrlGeneratorInterface $urlGenerator) {
 		$this->entityManager = $managerRegistry->getManager();
 	}
 

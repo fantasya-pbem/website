@@ -24,8 +24,8 @@ use App\Service\PartyService;
 #[IsGranted(Role::USER)]
 class GameController extends AbstractController
 {
-	public function __construct(private GameService $gameService, private PartyService $partyService,
-		                        private MailService $mailService) {
+	public function __construct(private readonly GameService $gameService, private readonly PartyService $partyService,
+		                        private readonly MailService $mailService) {
 	}
 
 	/**
@@ -54,12 +54,12 @@ class GameController extends AbstractController
 				$game = $next;
 			}
 		}
-		$session->set('game', $game);
 
 		$parties = $this->partyService->getFor($this->user());
 		if (empty($parties[$game->getId()])) {
 			return $this->redirectToRoute('profile');
 		} else {
+			$session->set('game', $game);
 			return $this->redirectToRoute('order');
 		}
 	}

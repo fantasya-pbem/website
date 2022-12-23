@@ -21,7 +21,7 @@ class MythController extends AbstractController
 {
 	private EntityManagerInterface $entityManager;
 
-	public function __construct(private MythRepository $repository, private MailService $mailService,
+	public function __construct(private readonly MythRepository $repository, private readonly MailService $mailService,
 		                        ManagerRegistry $managerRegistry) {
 		$this->entityManager = $managerRegistry->getManager();
 	}

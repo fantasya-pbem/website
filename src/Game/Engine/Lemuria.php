@@ -43,7 +43,7 @@ class Lemuria implements Engine
 
 	private EntityManagerInterface $entityManager;
 
-	public function __construct(private ContainerBagInterface $container, private AssignmentRepository $assignmentRepository,
+	public function __construct(private readonly ContainerBagInterface $container, private readonly AssignmentRepository $assignmentRepository,
 								ManagerRegistry $managerRegistry) {
 		$this->entityManager = $managerRegistry->getManager();
 		if (!self::$hasBeenInitialized) {

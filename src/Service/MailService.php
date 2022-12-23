@@ -28,8 +28,8 @@ class MailService
 
 	private string $password;
 
-	public function __construct(ContainerBagInterface $config, private MailerInterface $mailer,
-		                        private BodyRendererInterface $bodyRenderer) {
+	public function __construct(ContainerBagInterface $config, private readonly MailerInterface $mailer,
+		                        private readonly BodyRendererInterface $bodyRenderer) {
 		$this->userAgent  = $config->get('app.mail.user.agent');
 		$this->serverName = $config->get('app.mail.server.name');
 		$this->admin      = new Address($config->get('app.mail.admin.address'), $config->get('app.mail.admin.name'));

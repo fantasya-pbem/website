@@ -32,9 +32,9 @@ abstract class AbstractSendCommand extends Command
 
 	private bool $doSend;
 
-	public function __construct(ContainerBagInterface $config, private GameRepository $gameRepository,
-		                        private UserRepository $userRepository, private EngineService $engineService,
-		                        private MailService $mailService, private PartyService $partyService
+	public function __construct(ContainerBagInterface $config, private readonly GameRepository $gameRepository,
+		                        private readonly UserRepository $userRepository, private readonly EngineService $engineService,
+		                        private readonly MailService $mailService, private readonly PartyService $partyService
 	) {
 		parent::__construct();
 		$this->token = new DownloadToken($config->get('app.secret'));

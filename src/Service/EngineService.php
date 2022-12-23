@@ -14,6 +14,9 @@ use App\Repository\AssignmentRepository;
 
 class EngineService
 {
+	/**
+	 * @var array<string, Engine>
+	 */
 	private static ?array $engines = null;
 
 	public function __construct(ContainerBagInterface $container, ManagerRegistry $managerRegistry,

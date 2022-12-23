@@ -40,15 +40,10 @@ class Order
 		$line   = $orders[0] ?? '';
 		$cPos   = strpos($line, ';');
 		$line   = explode(' ', strtolower(trim(substr($line, 0, $cPos > 0 ? $cPos : null))));
-		switch ($line[0]) {
-			case 'eressea' :
-			case 'fantasya' :
-			case 'lemuria' :
-			case 'partei' :
-				return $this->parsePartyId($line);
-			default :
-				return '';
-		}
+		return match ($line[0]) {
+			'eressea', 'fantasya', 'lemuria', 'partei' => $this->parsePartyId($line),
+			default                                    => '',
+		};
 	}
 
 	public function setParty(string $party): void {

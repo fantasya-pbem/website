@@ -23,8 +23,8 @@ class UserController extends AbstractController
 {
 	private EntityManagerInterface $entityManager;
 
-	public function __construct(private UserRepository $repository, private MailService $mailService,
-								private UserPasswordHasherInterface $passwordHasher, ManagerRegistry $managerRegistry) {
+	public function __construct(private readonly UserRepository $repository, private readonly MailService $mailService,
+								private readonly UserPasswordHasherInterface $passwordHasher, ManagerRegistry $managerRegistry) {
 		$this->entityManager = $managerRegistry->getManager();
 	}
 

@@ -3,9 +3,11 @@
     <li class="nav-item">
         <a href="{{ path('profile') }}" class="nav-link">Profil</a>
     </li>
-    <li class="nav-item">
-        <a href="{{ path('game_next') }}" class="nav-link">Aktuelle Welt: {{ game_service.current.name }}</a>
-    </li>
+    {% if party_service.legacy(app.user) %}
+        <li class="nav-item">
+            <a href="{{ path('game_next') }}" class="nav-link">Aktuelle Welt: {{ game_service.current.name }}</a>
+        </li>
+    {% endif %}
     {% if party_service.party(app.user, game_service.current) %}
         <li class="nav-item"><a href="{{ path('order') }}" class="nav-link">Befehle kontrollieren</a></li>
         <li class="nav-item"><a href="{{ path('order_send') }}" class="nav-link">Befehle senden</a></li>
