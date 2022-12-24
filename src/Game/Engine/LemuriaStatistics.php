@@ -211,7 +211,8 @@ class LemuriaStatistics implements Statistics
 		$griffinSize  = 0;
 		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
 			$resources = $region->Resources();
-			$griffins  = $resources[$griffin]->Count();
+			/** @noinspection PhpIllegalArrayKeyTypeInspection */
+			$griffins = $resources[$griffin]->Count();
 			if ($griffins > 0) {
 				$griffinCount++;
 				$count++;

@@ -11,18 +11,12 @@ use App\Repository\GameRepository;
 
 class GameService
 {
-	private ?SessionInterface $session = null;
-
 	/**
 	 * @var array<Game>
 	 */
 	private ?array $games = null;
 
 	public function __construct(private readonly GameRepository $repository, private readonly RequestStack $requestStack) {
-		try {
-			$this->session = $this->requestStack->getSession();
-		} catch (SessionNotFoundException) {
-		}
 	}
 
 	/**
@@ -36,15 +30,24 @@ class GameService
 	}
 
 	public function getCurrent(): Game {
-		if ($this->session && $this->session->has('game')) {
-			 $game = $this->session->get('game');
+		$session = $this->getSession();
+		if ($session && $session->has('game')) {
+			 $game = $session->get('game');
 			 if ($game instanceof Game) {
 			 	return $game;
 			 }
 		}
 		$games = $this->getAll();
 		$game  = current($games);
-		$this->session?->set('game', $game);
+		$session?->set('game', $game);
 		return $game;
+	}
+
+	protected function getSession(): ?SessionInterface {
+		try {
+			return $this->requestStack->getSession();
+		} catch (SessionNotFoundException) {
+			return null;
+		}
 	}
 }
