@@ -81,7 +81,7 @@ class Lemuria implements Engine
 	 */
 	public function getAll(Game $game): array {
 		$parties = [];
-		foreach (LemuriaGame::Catalog()->getAll(Domain::PARTY) as $party) {
+		foreach (LemuriaGame::Catalog()->getAll(Domain::Party) as $party) {
 			/** @var PartyModel $party */
 			$parties[] = $this->createParty($party);
 		}
@@ -91,7 +91,7 @@ class Lemuria implements Engine
 	public function getById(string $id, Game $game): ?Party {
 		try {
 			/** @var PartyModel $party */
-			$party = LemuriaGame::Catalog()->get(Id::fromId($id), Domain::PARTY);
+			$party = LemuriaGame::Catalog()->get(Id::fromId($id), Domain::Party);
 			return $this->createParty($party);
 		} catch (NotRegisteredException) {
 			return null;
@@ -188,7 +188,7 @@ class Lemuria implements Engine
 			'owner_id'     => $uuid,
 			'user_id'      => $user,
 			'email'        => $email,
-			'monster'      => $party->Type() !== Type::PLAYER,
+			'monster'      => $party->Type() !== Type::Player,
 			'retirement'   => $party->Retirement()
 		]);
 	}
