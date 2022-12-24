@@ -4,14 +4,16 @@ namespace App\Game\Engine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Lemuria\Model\Domain;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
+
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Engine\Fantasya\Storage\LemuriaConfig;
 use Lemuria\Engine\Fantasya\Storage\NewcomerConfig;
+use Lemuria\Engine\Newcomer;
 use Lemuria\Exception\UnknownUuidException;
 use Lemuria\Id;
 use Lemuria\Lemuria as LemuriaGame;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party as PartyModel;
@@ -79,7 +81,7 @@ class Lemuria implements Engine
 	 */
 	public function getAll(Game $game): array {
 		$parties = [];
-		foreach (LemuriaGame::Catalog()->getAll(Domain::PARTY) as $party) {
+		foreach (LemuriaGame::Catalog()->getAll(Domain::Party) as $party) {
 			/** @var PartyModel $party */
 			$parties[] = $this->createParty($party);
 		}
@@ -89,7 +91,7 @@ class Lemuria implements Engine
 	public function getById(string $id, Game $game): ?Party {
 		try {
 			/** @var PartyModel $party */
-			$party = LemuriaGame::Catalog()->get(Id::fromId($id), Domain::PARTY);
+			$party = LemuriaGame::Catalog()->get(Id::fromId($id), Domain::Party);
 			return $this->createParty($party);
 		} catch (NotRegisteredException) {
 			return null;
@@ -186,17 +188,20 @@ class Lemuria implements Engine
 			'owner_id'     => $uuid,
 			'user_id'      => $user,
 			'email'        => $email,
-			'monster'      => $party->Type() !== Type::PLAYER,
-			'retired'      => $party->hasRetired()
+			'monster'      => $party->Type() !== Type::Player,
+			'retirement'   => $party->Retirement()
 		]);
 	}
 
-	private function createNewbie(LemuriaNewcomer $newcomer, User $user): Newbie {
-		$data = new NewbieData();
-		$data->setName($newcomer->Name());
-		$data->setDescription($newcomer->Description());
-		$data->setRace((string)Race::lemuria((string)$newcomer->Race()));
-		return Newbie::fromData($data)->setUser($user)->setUuid($newcomer->Uuid());
+	private function createNewbie(Newcomer $newcomer, User $user): Newbie {
+		if ($newcomer instanceof LemuriaNewcomer) {
+			$data = new NewbieData();
+			$data->setName($newcomer->Name());
+			$data->setDescription($newcomer->Description());
+			$data->setRace((string)Race::lemuria((string)$newcomer->Race()));
+			return Newbie::fromData($data)->setUser($user)->setUuid($newcomer->Uuid());
+		}
+		throw new \RuntimeException('Invalid Newcomer object.');
 	}
 
 	private function fetchEmailAddress(string $uuid): string {

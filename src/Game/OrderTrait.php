@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpPrivateFieldCanBeLocalVariableInspection */
 declare(strict_types = 1);
 namespace App\Game;
 

@@ -65,8 +65,8 @@ class LemuriaStatistics implements Statistics
 		if ($this->parties === null) {
 			$this->parties = [];
 			$races         = [];
-			foreach (Lemuria::Catalog()->getAll(Domain::PARTY) as $party /* @var Party $party */) {
-				if ($party->Type() !== Type::PLAYER) {
+			foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+				if ($party->Type() !== Type::Player) {
 					continue;
 				}
 				$this->parties[] = ['name' => $party->Name(), 'description' => $party->Description()];
@@ -117,7 +117,7 @@ class LemuriaStatistics implements Statistics
 		if (!$this->landscape) {
 			$this->landscape = [];
 			$regions         = [];
-			foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+			foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
 				$landscape = (string)$region->Landscape();
 				if (!isset($regions[$landscape])) {
 					$regions[$landscape] = 0;
@@ -182,18 +182,18 @@ class LemuriaStatistics implements Statistics
 	}
 
 	protected function getUnitPopulation(array &$persons, array &$monsters, int &$count, int &$total): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::UNIT) as $unit /* @var Unit $unit */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Unit) as $unit /* @var Unit $unit */) {
 			$type = $unit->Party()->Type();
 			$race = (string)$unit->Race();
 			$size = $unit->Size();
 
-			if ($type === Type::PLAYER) {
+			if ($type === Type::Player) {
 				if (!isset($persons[$race])) {
 					$persons[$race] = [0, 0];
 				}
 				$persons[$race][0]++;
 				$persons[$race][1] += $size;
-			} elseif ($type === Type::MONSTER) {
+			} elseif ($type === Type::Monster) {
 				if (!isset($monsters[$race])) {
 					$monsters[$race] = [0, 0];
 				}
@@ -209,9 +209,10 @@ class LemuriaStatistics implements Statistics
 		$griffin      = self::createCommodity(Griffin::class);
 		$griffinCount = 0;
 		$griffinSize  = 0;
-		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
 			$resources = $region->Resources();
-			$griffins  = $resources[$griffin]->Count();
+			/** @noinspection PhpIllegalArrayKeyTypeInspection */
+			$griffins = $resources[$griffin]->Count();
 			if ($griffins > 0) {
 				$griffinCount++;
 				$count++;
