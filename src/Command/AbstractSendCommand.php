@@ -100,7 +100,7 @@ abstract class AbstractSendCommand extends Command
 				$output->writeln('Skipping non-player party ' . $party->getName() . '.');
 				continue;
 			}
-			if ($party->isRetired()) {
+			if ($party->isRetired() && $party->getRetirement() < $this->round) {
 				$output->writeln('Skipping retired party ' . $party->getName() . '.');
 				continue;
 			}
