@@ -11,9 +11,9 @@ use App\Game\Engine;
 use App\Game\Newbie;
 use App\Game\Party;
 
-class PartyService
+readonly class PartyService
 {
-	#[Pure] public function __construct(private readonly GameService $service, private readonly EngineService $engineService) {
+	#[Pure] public function __construct(private GameService $service, private EngineService $engineService) {
 	}
 
 	public function getAll(Game $game): array {

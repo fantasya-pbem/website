@@ -4,7 +4,7 @@ namespace App\Game;
 
 use JetBrains\PhpStorm\Pure;
 
-class Party
+readonly class Party
 {
 	/**
 	 * Convert Base-36 ID to numeric ID.
@@ -20,7 +20,7 @@ class Party
 		return base_convert((string)$id, 10, 36);
 	}
 
-	public function __construct(private readonly array $properties) {
+	public function __construct(private array $properties) {
 	}
 
 	public function getId(): string {
