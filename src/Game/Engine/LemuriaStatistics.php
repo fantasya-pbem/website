@@ -66,7 +66,7 @@ class LemuriaStatistics implements Statistics
 			$this->parties = [];
 			$races         = [];
 			foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
-				if ($party->Type() !== Type::Player) {
+				if ($party->Type() !== Type::Player || $party->hasRetired()) {
 					continue;
 				}
 				$this->parties[] = ['name' => $party->Name(), 'description' => $party->Description()];

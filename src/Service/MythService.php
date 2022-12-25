@@ -4,9 +4,9 @@ namespace App\Service;
 
 use App\Repository\MythRepository;
 
-class MythService
+readonly class MythService
 {
-	public function __construct(private readonly MythRepository $repository) {
+	public function __construct(private MythRepository $repository) {
 	}
 
 	public function getLatest(): string {
