@@ -30,13 +30,14 @@
 			"email": "info@fantasya-pbem.de"
 		}
 	],
-	"version": "2.13.1",
-	"time": "2022-12-25",
+	"version": "2.13.2",
+	"time": "2023-01-04",
 
 	"require": {
 		"php": "~8.2",
 		"ext-iconv": "~8.2",
 		"components/jquery": "~3.6",
+		"doctrine/annotations": "~1.14",
 		"doctrine/doctrine-bundle": "~2.7",
 		"doctrine/doctrine-migrations-bundle": "~3.2",
 		"doctrine/orm": "~2.14",
