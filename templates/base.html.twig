@@ -6,8 +6,10 @@
         <meta name="keywords" content="Fantasya PBEM Fantasy Rollenspiel">
         <meta name="description" content="Fantasya ist eine Welt voll mit Elfen, Zwergen und anderen Lebewesen. Die Unterwelt ist überrannt worden von Drachen und Zombies, die darauf warten durch Höhlen zur Oberwelt zu gelangen. Fantasya ist ein kostenloses Runden-Strategiespiel, bei dem Du Deine eigene Zivilisation gründen und Dich mit anderen Spielern messen kannst.">
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        <script src="{{ asset('js/bootstrap.min.js') }}" async></script>
+        <script src="{{ asset('js/script.js') }}" async></script>
     </head>
     <body>
         <header>
@@ -112,9 +114,6 @@
                     </div>
                 </div>
             </div>
-            <script src="{{ asset('js/jquery.min.js') }}"></script>
-            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-            <script src="{{ asset('js/script.js') }}"></script>
         </footer>
     </body>
 </html>

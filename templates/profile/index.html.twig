@@ -13,7 +13,7 @@
         {% if error.code > 0 and error.code < 40 %}
             <h2>
                 Zugangsdaten
-                <button class="btn dropdown-toggle" data-toggle="collapse" data-target="#profile-form" aria-expanded="true" aria-controls="profile-form"></button>
+                <button class="btn dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#profile-form" aria-expanded="true" aria-controls="profile-form"></button>
             </h2>
             <div id="profile-form" class="collapse show">
                 {{ include('forms/profile.html.twig') }}
@@ -22,7 +22,7 @@
         {% else %}
             <h2>
                 Zugangsdaten
-                <button class="btn dropdown-toggle collapsed" data-toggle="collapse" data-target="#profile-form" aria-expanded="false" aria-controls="profile-form"></button>
+                <button class="btn dropdown-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#profile-form" aria-expanded="false" aria-controls="profile-form"></button>
             </h2>
             <div id="profile-form" class="collapse">
                 {{ include('forms/profile.html.twig') }}
@@ -34,7 +34,7 @@
         {% if error.code >= 40 %}
             <h2>
                 Einstellungen
-                <button class="btn dropdown-toggle" data-toggle="collapse" data-target="#settings-form" aria-expanded="false" aria-controls="settings-form"></button>
+                <button class="btn dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#settings-form" aria-expanded="false" aria-controls="settings-form"></button>
             </h2>
             <div id="settings-form" class="collapse show">
                 {{ include('forms/settings.html.twig', {'flags': flags}) }}
@@ -43,7 +43,7 @@
         {% else %}
             <h2>
                 Einstellungen
-                <button class="btn dropdown-toggle collapsed" data-toggle="collapse" data-target="#settings-form" aria-expanded="false" aria-controls="settings-form"></button>
+                <button class="btn dropdown-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#settings-form" aria-expanded="false" aria-controls="settings-form"></button>
             </h2>
             <div id="settings-form" class="collapse">
                 {{ include('forms/settings.html.twig') }}

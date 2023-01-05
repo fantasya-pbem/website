@@ -30,13 +30,12 @@
 			"email": "info@fantasya-pbem.de"
 		}
 	],
-	"version": "2.13.2",
+	"version": "2.14.0",
 	"time": "2023-01-05",
 
 	"require": {
 		"php": "~8.2",
 		"ext-iconv": "~8.2",
-		"components/jquery": "~3.6",
 		"doctrine/annotations": "~1.14",
 		"doctrine/doctrine-bundle": "~2.8",
 		"doctrine/doctrine-migrations-bundle": "~3.2",
@@ -59,7 +58,7 @@
 		"symfony/twig-bundle": "~6.2",
 		"symfony/validator": "~6.2",
 		"symfony/yaml": "~6.2",
-		"twbs/bootstrap": "~4.6",
+		"twbs/bootstrap": "~5.2",
 		"twig/extra-bundle": "~3.5",
 		"twig/intl-extra": "~3.5"
 	},

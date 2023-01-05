@@ -17,11 +17,11 @@
         {% if hasSimulation %}
             <h2>
                 Simulation
-                <button class="btn dropdown-toggle collapsed" data-toggle="collapse" data-target="#simulation" aria-expanded="true" aria-controls="simulation"></button>
+                <button class="btn dropdown-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#simulation" aria-expanded="true" aria-controls="simulation"></button>
             </h2>
             <div id="simulation" class="collapse">
                 <div class="spinner-border m-5" role="status">
-                    <span class="sr-only">Simulation wird geladen...</span>
+                    <span class="visually-hidden-focusable">Simulation wird geladen...</span>
                 </div>
                 <pre></pre>
             </div>
@@ -29,7 +29,7 @@
 
         <h2>
             Befehle
-            <button class="btn dropdown-toggle" data-toggle="collapse" data-target="#orders" aria-expanded="true" aria-controls="orders"></button>
+            <button class="btn dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#orders" aria-expanded="true" aria-controls="orders"></button>
         </h2>
         <div id="orders" class="collapse show">
             <pre>{{ order_service.orders }}</pre>
