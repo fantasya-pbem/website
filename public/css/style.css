@@ -11,11 +11,13 @@ h1, h2, h3, h4 {
 }
 
 h1 {
-	color: #fff3d1;
 	font-size: 1.5rem;
 }
+h1.card-header {
+	color: #fff3d1;
+}
 
-h2, h3, h4 {
+h2, h3, h3.card-header, h4 {
 	color: #e13900;
 }
 
@@ -39,12 +41,17 @@ address {
 	color: #4d2d09;
 }
 
-a {
+a, a.nav-link {
 	color: #704a21;
+	text-decoration: none;
 }
-a:hover {
+a:hover, a.nav-link:hover, a.nav-link:focus {
 	color: #4d2d09;
 	text-decoration: none;
+}
+
+ol, ul {
+	padding-inline-start: 40px;
 }
 
 ul {
@@ -78,6 +85,11 @@ img.icon {
 	font-weight: 700;
 }
 
+@media (min-width: 1400px) {
+	.container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+		max-width: 1180px;
+	}
+}
 /* Header drop-down collapse */
 
 h2 .btn.dropdown-toggle {
@@ -107,6 +119,7 @@ h2 .btn.dropdown-toggle.collapsed::after {
 
 form label {
 	vertical-align: text-top;
+	margin-bottom: 0.5rem;
 }
 
 form .form-check-label {
@@ -122,6 +135,10 @@ form .btn-primary:hover {
 	background-color: #4d2d09;
 }
 
+form .btn-block {
+	width: 100%;
+}
+
 form .row {
 	margin-left: 0;
 	margin-right: 0;
@@ -133,6 +150,14 @@ form .row > div {
 
 form .row > div:last-child {
 	padding-right: 0;
+}
+
+.form-group {
+	margin-bottom: 1rem;
+}
+
+.form-control, .form-select {
+	border-radius: 0;
 }
 
 /* Header */
@@ -216,10 +241,10 @@ main .card-body {
 }
 
 main a:before {
-	content: '»\a0'
+	content: '» '
 }
 
-main a.inline.image:before {
+main a.inline.image:before, main .undecorated-link a:before {
 	content: unset;
 }
 
@@ -243,6 +268,10 @@ main a.inline img {
 
 p.myth {
 	font-style: italic;
+}
+
+div#liberapay-receiving a span:nth-child(2) > span:first-child {
+	display: none;
 }
 
 /* Footer */

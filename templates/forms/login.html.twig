@@ -1,11 +1,11 @@
 <form method="post" action="{{ path('user_login') }}">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
     <div class="form-group">
-        <label for="username" class="sr-only">Benutzername</label>
+        <label for="username" class="visually-hidden-focusable">Benutzername</label>
         <input type="text" name="_username" id="username" class="form-control" placeholder="Benutzername" required>
     </div>
     <div class="form-group">
-        <label for="password" class="sr-only">Passwort</label>
+        <label for="password" class="visually-hidden-focusable">Passwort</label>
         <input type="password" name="_password" id="password" class="form-control" placeholder="Passwort" required>
     </div>
     <div class="form-group form-check">
