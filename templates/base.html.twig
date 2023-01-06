@@ -6,10 +6,10 @@
         <meta name="keywords" content="Fantasya PBEM Fantasy Rollenspiel">
         <meta name="description" content="Fantasya ist eine Welt voll mit Elfen, Zwergen und anderen Lebewesen. Die Unterwelt ist überrannt worden von Drachen und Zombies, die darauf warten durch Höhlen zur Oberwelt zu gelangen. Fantasya ist ein kostenloses Runden-Strategiespiel, bei dem Du Deine eigene Zivilisation gründen und Dich mit anderen Spielern messen kannst.">
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}?v=2.14.0">
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=2.14.0">
-        <script src="{{ asset('js/bootstrap.min.js') }}?v=2.14.0" async></script>
-        <script src="{{ asset('js/script.js') }}?v=2.14.0" async></script>
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}?v=2.14.1">
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=2.14.1">
+        <script src="{{ asset('js/bootstrap.min.js') }}?v=2.14.1" async></script>
+        <script src="{{ asset('js/script.js') }}?v=2.14.1" async></script>
     </head>
     <body>
         <header>
@@ -32,79 +32,85 @@
             </div>
         </header>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-6 col-md-4 col-lg-3 offset-xl-1">
-                    <div class="card">
-                        <h1 class="card-header">Fantasya</h1>
-                        <nav class="card-body">
-                            {{ include('includes/fantasya.html.twig') }}
-                        </nav>
-                    </div>
+        <section class="privacy-attention">
+            {% block attention %}{% endblock %}
+        </section>
 
-                    <div class="card d-md-none">
-                        {{ include('includes/worlds.html.twig') }}
-                    </div>
-
-
-                    <div class="card d-none d-md-block">
-                        <h1 class="card-header">Anmeldung</h1>
-                        <div class="card-body">
-                            {% if is_granted('ROLE_USER') %}
-                                {{ include('includes/menu.html.twig') }}
-                            {% else %}
-                                {{ include('forms/login.html.twig') }}
-                                {{ include('includes/login.html.twig') }}
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="card d-none d-md-block">
-                        {{ include('includes/worlds.html.twig') }}
-                    </div>
-
-                    <div class="card d-none d-md-block">
-                        <h1 class="card-header">Links</h1>
-                        <nav class="card-body">
-                            {{ include('includes/links.html.twig') }}
-                        </nav>
-                    </div>
-                </div>
-
-                <div class="col-6 d-md-none">
-                    <div class="card">
-                        <h1 class="card-header">Anmeldung</h1>
-                        <div class="card-body">
-                            {% if is_granted('ROLE_USER') %}
-                                {{ include('includes/menu.html.twig') }}
-                            {% else %}
-                                {{ include('forms/login.html.twig') }}
-                                {{ include('includes/login.html.twig') }}
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-8 col-lg-9 col-xl-7">
-                    <main>
+        <section class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6 col-md-4 col-lg-3 offset-xl-1">
                         <div class="card">
-                            <h1 class="card-header">{% block header %}{% endblock %}</h1>
-
-                            <div class="card-body">{% block content %}{% endblock %}</div>
+                            <h1 class="card-header">Fantasya</h1>
+                            <nav class="card-body">
+                                {{ include('includes/fantasya.html.twig') }}
+                            </nav>
                         </div>
-                    </main>
-                </div>
 
-                <div class="col-6 d-md-none">
-                    <div class="card">
-                        <h1 class="card-header">Links</h1>
-                        <nav class="card-body">
-                            {{ include('includes/links.html.twig') }}
-                        </nav>
+                        <div class="card d-md-none">
+                            {{ include('includes/worlds.html.twig') }}
+                        </div>
+
+
+                        <div class="card d-none d-md-block">
+                            <h1 class="card-header">Anmeldung</h1>
+                            <div class="card-body">
+                                {% if is_granted('ROLE_USER') %}
+                                    {{ include('includes/menu.html.twig') }}
+                                {% else %}
+                                    {{ include('forms/login.html.twig') }}
+                                    {{ include('includes/login.html.twig') }}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="card d-none d-md-block">
+                            {{ include('includes/worlds.html.twig') }}
+                        </div>
+
+                        <div class="card d-none d-md-block">
+                            <h1 class="card-header">Links</h1>
+                            <nav class="card-body">
+                                {{ include('includes/links.html.twig') }}
+                            </nav>
+                        </div>
+                    </div>
+
+                    <div class="col-6 d-md-none">
+                        <div class="card">
+                            <h1 class="card-header">Anmeldung</h1>
+                            <div class="card-body">
+                                {% if is_granted('ROLE_USER') %}
+                                    {{ include('includes/menu.html.twig') }}
+                                {% else %}
+                                    {{ include('forms/login.html.twig') }}
+                                    {{ include('includes/login.html.twig') }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-8 col-lg-9 col-xl-7">
+                        <main>
+                            <div class="card">
+                                <h1 class="card-header">{% block header %}{% endblock %}</h1>
+
+                                <div class="card-body">{% block content %}{% endblock %}</div>
+                            </div>
+                        </main>
+                    </div>
+
+                    <div class="col-6 d-md-none">
+                        <div class="card">
+                            <h1 class="card-header">Links</h1>
+                            <nav class="card-body">
+                                {{ include('includes/links.html.twig') }}
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
         <footer>
             <div class="container-fluid">
