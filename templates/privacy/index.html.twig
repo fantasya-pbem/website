@@ -1,5 +1,17 @@
 {% extends 'base.html.twig' %}
 
+{% block attention %}
+    {% if not hasAccepted %}
+        <div class="container">
+            <div class="row">
+                <div class="col-10 col-md-12 offset-1 offset-md-0">
+                    <h2 class="text-center">Bitte beachte unseren Datenschutzhinweis und erkläre Deine Zustimmung.</h2>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
 {% block title %}
     Fantasya-Datenschutz
 {% endblock %}
