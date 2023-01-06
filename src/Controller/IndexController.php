@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,38 +15,30 @@ class IndexController extends AbstractController
 	public function __construct(private readonly EngineService $engineService) {
 	}
 
-	/**
-	 * @Route("/", name="index")
-	 */
+	#[Route('/', 'index')]
 	public function index(): Response {
 		return $this->redirectToRoute('news');
 	}
 
-	/**
-	 * @Route("/about-fantasya", name="about-fantasya")
-	 */
+	#[Route('/about-fantasya', 'about-fantasya')]
 	public function about(): Response {
 		return $this->render('index/about-fantasya.html.twig');
 	}
 
-	/**
-	 * @Route("/contact", name="contact")
-	 */
+	#[Route('/contact', 'contact')]
 	public function contact(): Response {
 		return $this->render('index/contact.html.twig');
 	}
 
-	/**
-	 * @Route("/donate", name="donate")
-	 */
+	#[Route('/donate', 'donate')]
 	public function donate(): Response {
 		return $this->render('index/donate.html.twig');
 	}
 
 	/**
-	 * @Route("/world/{game}", name="world")
 	 * @throws \Exception
 	 */
+	#[Route('/world/{game}', 'world')]
 	public function world(Game $game): Response {
 		if (!$game->getIsActive()) {
 			return $this->redirectToRoute('index');

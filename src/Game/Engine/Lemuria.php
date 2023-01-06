@@ -77,7 +77,7 @@ class Lemuria implements Engine
 	}
 
 	/**
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	public function getAll(Game $game): array {
 		$parties = [];
@@ -105,7 +105,7 @@ class Lemuria implements Engine
 	}
 
 	/**
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	public function getParties(User $user, Game $game): array {
 		$parties = [];
@@ -120,7 +120,7 @@ class Lemuria implements Engine
 	}
 
 	/**
-	 * @return Newbie[]
+	 * @return array<Newbie>
 	 */
 	public function getNewbies(User $user, Game $game): array {
 		$newbies = [];

@@ -1,19 +1,16 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Data;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PasswordReset
 {
-	/**
-	 * @Assert\NotBlank
-	 */
+	#[NotBlank]
 	private string $name = '';
 
-	/**
-	 * @Assert\Email
-	 */
+	#[Email]
 	private string $email = '';
 
 	public function getName(): string {

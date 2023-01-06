@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,9 +26,7 @@ class MythController extends AbstractController
 		$this->entityManager = $managerRegistry->getManager();
 	}
 
-	/**
-	 * @Route("/myth/{page}", name="myth", requirements={"page"="\d+"})
-	 */
+	#[Route('/myth/{page}', 'myth', ['page' => '\d+'])]
 	public function index(int $page = 1): Response {
 		if ($page <= 0) {
 			$page = 1;
@@ -39,10 +37,8 @@ class MythController extends AbstractController
 		return $this->render('myth/index.html.twig', ['myths' => $myths, 'page' => $page, 'next' => $next]);
 	}
 
-	/**
-	 * @Route("/myth/spread", name="myth_spread")
-	 */
 	#[IsGranted(Role::USER)]
+	#[Route('/myth/spread', 'myth_spread')]
 	public function spread(Request $request): Response {
 		$myth = new Myth();
 		$form = $this->createForm(MythType::class, $myth);

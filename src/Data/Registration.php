@@ -1,19 +1,17 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Data;
 
 use JetBrains\PhpStorm\Pure;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Expression;
 
 class Registration extends PasswordReset
 {
-	/**
-	 * @Assert\Expression("value in this.getValidAnswers()", message="Das ist nicht die richtige Antwort.")
-	 */
+	#[Expression('value in this.getValidAnswers()', 'Das ist nicht die richtige Antwort.')]
 	private string $antispam = '';
 
 	/**
-	 * @var string[]
+	 * @var array<string>
 	 */
 	private array $validAnswers;
 
@@ -30,7 +28,7 @@ class Registration extends PasswordReset
 	}
 
 	/**
-	 * @return string[]
+	 * @return array<string>
 	 */
 	public function getValidAnswers(): array {
 		return $this->validAnswers;

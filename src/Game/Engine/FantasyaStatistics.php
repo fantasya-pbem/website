@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Game\Engine;
 
 use Doctrine\DBAL\Connection;
@@ -11,12 +11,12 @@ use App\Game\Statistics;
 class FantasyaStatistics implements Statistics
 {
 	/**
-	 * @var array[]|null
+	 * @var array<array>|null
 	 */
 	private ?array $parties = null;
 
 	/**
-	 * @var array[]|null
+	 * @var array<array>|null
 	 */
 	private ?array $newParties = null;
 
@@ -24,7 +24,7 @@ class FantasyaStatistics implements Statistics
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 * @throws \Exception
 	 */
 	public function getParties(): array {
@@ -45,7 +45,7 @@ class FantasyaStatistics implements Statistics
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 * @throws \Exception
 	 */
 	public function getPartyRaces(): array {
@@ -56,7 +56,7 @@ class FantasyaStatistics implements Statistics
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 * @throws \Exception
 	 */
 	public function getNewbies(): array {
@@ -89,7 +89,7 @@ class FantasyaStatistics implements Statistics
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 * @throws \Exception
 	 */
 	public function getWorld(): array {
@@ -100,7 +100,7 @@ class FantasyaStatistics implements Statistics
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 * @throws \Exception
 	 */
 	public function getUnderworld(): array {
@@ -122,7 +122,7 @@ class FantasyaStatistics implements Statistics
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 * @throws \Exception
 	 */
 	public function getRaces(): array {
@@ -133,7 +133,7 @@ class FantasyaStatistics implements Statistics
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 * @throws \Exception
 	 */
 	public function getMonsters(): array {

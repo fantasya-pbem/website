@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Service;
 
 use JetBrains\PhpStorm\Pure;
@@ -26,7 +26,7 @@ class ReportService
 	}
 
 	/**
-	 * @return int[]
+	 * @return array<int>
 	 */
 	public function getTurns(): array {
 		$turns   = [];

@@ -2,23 +2,22 @@
 declare (strict_types=1);
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\MythRepository")
- */
+use App\Repository\MythRepository;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+
+#[Entity(repositoryClass: MythRepository::class)]
 class Myth
 {
-	/**
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="integer")
-	 */
+	#[Column]
+	#[GeneratedValue]
+	#[Id]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 */
+	#[Column]
 	private string $myth;
 
 	public function getId(): ?int {

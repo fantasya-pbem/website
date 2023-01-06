@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Game\Engine;
 
 use JetBrains\PhpStorm\ArrayShape;
@@ -22,22 +22,22 @@ class LemuriaStatistics implements Statistics
 	use BuilderTrait;
 
 	/**
-	 * @var array[]|null
+	 * @var array<array>|null
 	 */
 	private ?array $parties = null;
 
 	/**
-	 * @var array[]|null
+	 * @var array<array>|null
 	 */
 	private ?array $newbies = null;
 
 	/**
-	 * @var array[]
+	 * @var array<array>
 	 */
 	private array $races = [];
 
 	/**
-	 * @var array[]|null
+	 * @var array<array>|null
 	 */
 	private ?array $landscape = null;
 
@@ -48,7 +48,7 @@ class LemuriaStatistics implements Statistics
 	private ?array $mosters = null;
 
 	/**
-	 * @var array[]|null
+	 * @var array<array>|null
 	 */
 	private ?array $persons = null;
 
@@ -59,7 +59,7 @@ class LemuriaStatistics implements Statistics
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 */
 	public function getParties(): array {
 		if ($this->parties === null) {
@@ -89,14 +89,14 @@ class LemuriaStatistics implements Statistics
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 */
 	public function getPartyRaces(): array {
 		return $this->races;
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 */
 	public function getNewbies(): array {
 		if (!$this->newbies) {
@@ -133,14 +133,14 @@ class LemuriaStatistics implements Statistics
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 */
 	public function getWorld(): array {
 		return $this->landscape;
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 */
 	public function getUnderworld(): array {
 		return [];
@@ -168,14 +168,14 @@ class LemuriaStatistics implements Statistics
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 */
 	public function getRaces(): array {
 		return $this->persons;
 	}
 
 	/**
-	 * @return array[]
+	 * @return array<array>
 	 */
 	public function getMonsters(): array {
 		return $this->mosters;

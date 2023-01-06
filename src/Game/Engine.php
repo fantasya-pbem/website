@@ -29,7 +29,7 @@ interface Engine
 	/**
 	 * Get all parties in a game.
 	 *
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	public function getAll(Game $game): array;
 
@@ -46,14 +46,14 @@ interface Engine
 	/**
 	 * Find all parties of a user in a game.
 	 *
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	public function getParties(User $user, Game $game): array;
 
 	/**
 	 * Find all new parties of a user in a game.
 	 *
-	 * @return Newbie[]
+	 * @return array<Newbie>
 	 */
 	public function getNewbies(User $user, Game $game): array;
 

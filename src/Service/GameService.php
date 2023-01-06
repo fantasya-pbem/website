@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Service;
 
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
@@ -20,7 +20,7 @@ class GameService
 	}
 
 	/**
-	 * @return Game[]
+	 * @return array<Game>
 	 */
 	public function getAll(): array {
 		if ($this->games === null) {

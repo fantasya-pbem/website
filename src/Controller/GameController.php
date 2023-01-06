@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,7 +12,6 @@ use App\Data\Lemurian;
 use App\Data\Newbie as NewbieData;
 use App\Entity\Game;
 use App\Entity\User;
-use App\Form\LemurianType;
 use App\Form\NewbieType;
 use App\Game\Engine;
 use App\Game\Newbie;
@@ -28,9 +27,7 @@ class GameController extends AbstractController
 		                        private readonly MailService $mailService) {
 	}
 
-	/**
-	 * @Route("/game/next", name="game_next")
-	 */
+	#[Route('/game/next', 'game_next')]
 	public function next(Request $request): Response {
 		$games = [];
 		foreach ($this->gameService->getAll() as $game) {
@@ -64,23 +61,34 @@ class GameController extends AbstractController
 		}
 	}
 
-	/**
-	 * @Route("/game/enter", name="game_enter")
-	 */
+	#[Route('/game/enter', 'game_enter')]
 	public function enter(Request $request): Response {
 		if (!$this->canEnter()) {
 			return $this->redirectToRoute('profile');
 		}
-		return match ($this->gameService->getCurrent()->getEngine()) {
-			Engine::FANTASYA => $this->enterFantasya($request),
-			Engine::LEMURIA  => $this->enterLemuria($request),
-			default          => $this->redirectToRoute('profile')
-		};
+		if ($this->gameService->getCurrent()->getEngine() !== Engine::LEMURIA) {
+			return $this->redirectToRoute('profile');
+		}
+
+		$lemurian = new NewbieData();
+		$form     = $this->createForm(NewbieType::class, $lemurian);
+		try {
+			$form->handleRequest($request);
+			if ($form->isSubmitted() && $form->isValid()) {
+				/** @var NewbieData $newbieData */
+				$newbieData = $form->getData();
+				$newbie     = Newbie::fromData($newbieData)->setUser($this->user());
+				$this->partyService->create($newbie);
+				$this->sendAdminMail($newbie);
+				return $this->redirectToRoute('profile');
+			}
+		} catch (\InvalidArgumentException) {
+		}
+
+		return $this->render('game/enter.html.twig', ['form' => $form->createView()]);
 	}
 
-	/**
-	 * @Route("/game/{game}/revoke/{name}", name="game_revoke")
-	 */
+	#[Route('/game/{game}/revoke/{name}', 'game_revoke')]
 	public function revoke(Game $game, string $name): Response {
 		$user    = $this->user();
 		$newbies = $this->partyService->getNewbies($this->user());
@@ -119,46 +127,6 @@ class GameController extends AbstractController
 			return true;
 		}
 		return false;
-	}
-
-	private function enterFantasya(Request $request): Response {
-		$newbieData = new NewbieData();
-		$resources  = false;
-		$form       = $this->createForm(NewbieType::class, $newbieData);
-		$form->handleRequest($request);
-
-		if ($form->isSubmitted() && $form->isValid()) {
-			/** @var NewbieData $newbieData */
-			$newbieData = $form->getData();
-			if ($newbieData->getResources() <= 90) {
-				$newbie = Newbie::fromData($newbieData)->setUser($this->user());
-				$this->partyService->create($newbie);
-				$this->sendAdminMail($newbie);
-				return $this->redirectToRoute('profile');
-			}
-			$resources = true;
-		}
-
-		return $this->render('game/enter-fantasya.html.twig', ['form' => $form->createView(), 'resources' => $resources]);
-	}
-
-	private function enterLemuria(Request $request): Response {
-		$lemurian = new NewbieData();
-		$form     = $this->createForm(LemurianType::class, $lemurian);
-		try {
-			$form->handleRequest($request);
-			if ($form->isSubmitted() && $form->isValid()) {
-				/** @var NewbieData $newbieData */
-				$newbieData = $form->getData();
-				$newbie     = Newbie::fromData($newbieData)->setUser($this->user());
-				$this->partyService->create($newbie);
-				$this->sendAdminMail($newbie);
-				return $this->redirectToRoute('profile');
-			}
-		} catch (\InvalidArgumentException) {
-		}
-
-		return $this->render('game/enter-lemuria.html.twig', ['form' => $form->createView()]);
 	}
 
 	private function sendAdminMail(Newbie $newbie) {

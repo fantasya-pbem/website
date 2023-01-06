@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Security\X509;
 
 use Doctrine\ORM\EntityManagerInterface;

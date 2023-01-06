@@ -33,7 +33,7 @@ class Race implements \Stringable
 	];
 
 	/**
-	 * @return string[]
+	 * @return array<string>
 	 */
 	#[Pure] public static function all(): array {
 		return array_keys(self::FANTASYA);

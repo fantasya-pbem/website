@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Controller;
 
 use JetBrains\PhpStorm\Pure;
@@ -31,9 +31,9 @@ class OrderController extends AbstractController
 	}
 
 	/**
-	 * @Route("/order", name="order")
 	 * @throws \Exception
 	 */
+	#[Route('/order', 'order')]
 	public function index(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		if (empty($parties)) {
@@ -64,9 +64,7 @@ class OrderController extends AbstractController
 		]);
 	}
 
-	/**
-	 * @Route("/order/simulation", name="order_simulation")
-	 */
+	#[Route('/order/simulation', 'order_simulation')]
 	public function simulation(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		if (empty($parties)) {
@@ -86,9 +84,9 @@ class OrderController extends AbstractController
 	}
 
 	/**
-	 * @Route("/order/send", name="order_send")
 	 * @throws \Exception
 	 */
+	#[Route('/order/send', 'order_send')]
 	public function send(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		if (empty($parties)) {
@@ -118,9 +116,9 @@ class OrderController extends AbstractController
 	}
 
 	/**
-	 * @Route("/order/party/{p}/turn/{t}", name="order_success")
 	 * @throws \Exception
 	 */
+	#[Route('/order/party/{p}/turn/{t}', 'order_success')]
 	public function party(string $p, int $t): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		$party   = null;
@@ -175,7 +173,7 @@ class OrderController extends AbstractController
 	}
 
 	/**
-	 * @param Party[] $parties
+	 * @param array<Party> $parties
 	 * @throws \Exception
 	 */
 	private function createOrderForm(Order $order, array $parties, int $turn): FormInterface {
@@ -197,7 +195,7 @@ class OrderController extends AbstractController
 	}
 
 	/**
-	 * @param Party[] $parties
+	 * @param array<Party> $parties
 	 * @throws \Exception
 	 */
 	private function createSendForm(Order $order, array $parties, int $turn): FormInterface {
@@ -222,8 +220,8 @@ class OrderController extends AbstractController
 	}
 
 	/**
-	 * @param Party[] $parties
-	 * @return string[]
+	 * @param array<Party> $parties
+	 * @return array<string>
 	 */
 	private function getParties(array $parties): array {
 		$choices = [];
@@ -234,7 +232,7 @@ class OrderController extends AbstractController
 	}
 
 	/**
-	 * @return string[]
+	 * @return array<string>
 	 */
 	#[Pure] private function getTurns(int $turn, int $min = -5): array {
 		$turns = [];

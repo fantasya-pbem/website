@@ -2,44 +2,39 @@
 declare (strict_types=1);
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\NewsRepository")
- */
+use App\Repository\NewsRepository;
+
+#[Entity(repositoryClass: NewsRepository::class)]
 class News
 {
-	/**
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="integer")
-	 */
+	#[Column]
+	#[GeneratedValue]
+	#[Id]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="date", unique=true)
-	 */
-	private ?\DateTimeInterface $created_at = null;
+	#[Column(unique: true)]
+	private ?\DateTime $created_at = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 */
+	#[Column]
 	private string $title = '';
 
-	/**
-	 * @ORM\Column(type="text")
-	 */
+	#[Column(type: 'text')]
 	private string $content = '';
 
 	public function getId(): ?int {
 		return $this->id;
 	}
 
-	public function getCreatedAt(): ?\DateTimeInterface {
+	public function getCreatedAt(): ?\DateTime {
 		return $this->created_at;
 	}
 
-	public function setCreatedAt(\DateTimeInterface $createdAt): self {
+	public function setCreatedAt(\DateTime $createdAt): self {
 		$this->created_at = $createdAt;
 		return $this;
 	}

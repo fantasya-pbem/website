@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManager;
@@ -60,9 +60,9 @@ class ProfileController extends AbstractController
 	}
 
 	/**
-	 * @Route("/profile", name="profile")
 	 * @throws \Exception
 	 */
+	#[Route('/profile', 'profile')]
 	public function index(Request $request): Response {
 		$roles   = $this->getRoles();
 		$flags   = $this->getFlags();
@@ -95,9 +95,9 @@ class ProfileController extends AbstractController
 	}
 
 	/**
-	 * @Route("/profile/change", name="profile_change")
 	 * @throws \Throwable
 	 */
+	#[Route('/profile/change', 'profile_change')]
 	public function change(Request $request): Response {
 		if ($request->request->has('submitName') && $request->request->has('name')) {
 			$name = $request->request->get('name');
@@ -159,18 +159,15 @@ class ProfileController extends AbstractController
 	}
 
 	/**
-	 * @Route("/profile/settings", name="profile_settings")
 	 * @throws \Throwable
 	 */
+	#[Route('/profile/settings', 'profile_settings')]
 	public function settings(Request $request): Response {
-		if ($request->request->has('submitSettings') && $request->request->has('flags')) {
-			$user  = $this->user();
-			$flags = $request->request->get('flags');
-
+		if ($request->request->has('submitSettings')) {
+			$user = $this->user();
 			try {
-				$withAttachment = $flags['withAttachment'] ?? false;
-				$user->setFlag(User::FLAG_WITH_ATTACHMENT, (bool)$withAttachment);
-
+				$withAttachment = $request->request->has('withAttachment');
+				$user->setFlag(User::FLAG_WITH_ATTACHMENT, $withAttachment);
 				$this->save($user);
 				$error = 0;
 			} catch (\Exception) {
@@ -202,7 +199,7 @@ class ProfileController extends AbstractController
 	}
 
 	/**
-	 * @return string[]
+	 * @return array<string>
 	 */
 	private function getRoles(): array {
 		$roles = [];
@@ -215,7 +212,7 @@ class ProfileController extends AbstractController
 	}
 
 	/**
-	 * @return array(string=>string)
+	 * @return array<string, string>
 	 */
 	#[ArrayShape(['withAttachment' => 'string'])]
 	private function getFlags(): array {

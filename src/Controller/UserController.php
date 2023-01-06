@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,23 +28,17 @@ class UserController extends AbstractController
 		$this->entityManager = $managerRegistry->getManager();
 	}
 
-	/**
-     * @Route("/user/login", name="user_login")
-     */
+	#[Route('/user/login', 'user_login')]
     public function login(): Response {
         return $this->render('user/login.html.twig');
     }
 
-	/**
-	 * @Route("/user/secure", name="user_secure")
-	 */
+	#[Route('/user/secure', 'user_secure')]
     public function secure(): Response {
 		return $this->redirectToRoute('profile');
 	}
 
-	/**
-	 * @Route("/user/expire/{days}", name="user_expire")
-	 */
+	#[Route('/user/expire/{days}', 'user_expire')]
 	public function expire(int $days): Response {
     	return $this->render('user/expire.html.twig', [
     		'days' => $days
@@ -52,9 +46,9 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/user/register", name="user_register")
 	 * @throws \Throwable
 	 */
+	#[Route('/user/register', 'user_register')]
 	public function register(Request $request): Response {
 		$answer       = $this->getParameter('app.antispam.answer');
 		$form         = $this->createForm(RegistrationType::class, new Registration($answer));
@@ -82,17 +76,15 @@ class UserController extends AbstractController
 		]);
 	}
 
-	/**
-	 * @Route("/user/registered", name="user_registered")
-	 */
+	#[Route('/user/registered', 'user_registered')]
 	public function registered(): Response {
 		return $this->render('user/registered.html.twig');
 	}
 
 	/**
-	 * @Route("/user/reset", name="user_reset")
 	 * @throws \Throwable
 	 */
+	#[Route('/user/reset', 'user_reset')]
 	public function reset(Request $request): Response {
 		$form  = $this->createForm(PasswordResetType::class, new PasswordReset());
 		$error = null;
@@ -117,17 +109,13 @@ class UserController extends AbstractController
 		return $this->render('user/reset.html.twig', ['form' => $form->createView(), 'error' => $error]);
 	}
 
-	/**
-	 * @Route("/user/resetted", name="user_resetted")
-	 */
+	#[Route('/user/resetted', 'user_resetted')]
 	public function resetted(): Response {
 		return $this->render('user/resetted.html.twig');
 	}
 
-	/**
-	 * @Route("/user/logout", name="user_logout")
-	 */
 	#[IsGranted(Role::USER)]
+	#[Route('/user/logout', 'user_logout')]
     public function logout(): Response {
     	return $this->redirectToRoute('index');
 	}

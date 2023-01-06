@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 if ($argc >= 2 && $argc <= 3) {
     if ($argc === 2) {

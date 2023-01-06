@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,9 +14,7 @@ class PrivacyController extends AbstractController
 {
 	private const COOKIE = 'accept_dsgvo';
 
-	/**
-	 * @Route("/privacy", name="privacy")
-	 */
+	#[Route('/privacy', 'privacy')]
 	public function index(): Response {
 		$hasAccepted = isset($_COOKIE[self::COOKIE]);
 		$form        = $this->getForm()->createView();
@@ -27,9 +25,7 @@ class PrivacyController extends AbstractController
 		]);
 	}
 
-	/**
-	 * @Route("/privacy/accept", name="privacy_accept")
-	 */
+	#[Route('/privacy/accept', 'privacy_accept')]
 	public function accept(Request $request): Response {
 		$form = $this->getForm();
 

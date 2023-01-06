@@ -2,65 +2,47 @@
 declare (strict_types=1);
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
 
 use App\Game\Turn;
+use App\Repository\GameRepository;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\GameRepository")
- */
+#[Entity(repositoryClass: GameRepository::class)]
 class Game
 {
-	/**
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="integer")
-	 */
+	#[Column]
+	#[GeneratedValue]
+	#[Id]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="string", length=190, unique=true)
-	 */
+	#[Column(length: 190, unique: true)]
 	private string $name = '';
 
-	/**
-	 * @ORM\Column(type="text")
-	 */
+	#[Column(type: 'text')]
 	private string $description = '';
 
-	/**
-	 * @ORM\Column(type="string", length=8)
-	 */
+	#[Column(length: 8)]
 	private string $engine = '';
 
-	/**
-	 * @ORM\Column(type="string", length=32, unique=true)
-	 */
+	#[Column(length: 32, unique: true)]
 	private string $db = '';
 
-	/**
-	 * @ORM\Column(type="string", length=32, unique=true)
-	 */
+	#[Column(length: 32, unique: true)]
 	private string $alias = '';
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
+	#[Column]
 	private bool $is_active = false;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
+	#[Column]
 	private bool $can_enter = false;
 
-	/**
-	 * @ORM\Column(type="smallint")
-	 */
+	#[Column(type: 'smallint')]
 	private int $start_day = 0;
 
-	/**
-	 * @ORM\Column(type="smallint")
-	 */
+	#[Column(type: 'smallint')]
 	private int $start_hour = 0;
 
 	public static function dateFormat(string $pattern = ''): \IntlDateFormatter {

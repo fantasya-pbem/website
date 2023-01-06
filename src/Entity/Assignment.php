@@ -2,30 +2,24 @@
 declare(strict_types = 1);
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\ManyToOne;
 
 use App\Repository\AssignmentRepository;
 
-/**
- * @ORM\Entity(repositoryClass=AssignmentRepository::class)
- */
+#[Entity(repositoryClass: AssignmentRepository::class)]
 class Assignment
 {
-	/**
-	 * @ORM\Id()
-	 * @ORM\Column(type="string", length=36)
-	 */
+	#[Column(length: 36)]
+	#[Id]
 	private string $uuid = '';
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class)
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private User $user;
+	#[ManyToOne(targetEntity: User::class)]
+	private ?User $user = null;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
+	#[Column]
 	private bool $retired = false;
 
 	public function getUuid(): ?string {
@@ -37,7 +31,7 @@ class Assignment
 		return $this;
 	}
 
-	public function getUser(): User {
+	public function getUser(): ?User {
 		return $this->user;
 	}
 
