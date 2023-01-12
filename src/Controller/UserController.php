@@ -18,13 +18,15 @@ use App\Form\PasswordResetType;
 use App\Form\RegistrationType;
 use App\Repository\UserRepository;
 use App\Service\MailService;
+use App\Service\PrivacyService;
 
 class UserController extends AbstractController
 {
 	private EntityManagerInterface $entityManager;
 
 	public function __construct(private readonly UserRepository $repository, private readonly MailService $mailService,
-								private readonly UserPasswordHasherInterface $passwordHasher, ManagerRegistry $managerRegistry) {
+	                            private readonly PrivacyService $userService, private readonly UserPasswordHasherInterface $passwordHasher,
+	                            ManagerRegistry $managerRegistry) {
 		$this->entityManager = $managerRegistry->getManager();
 	}
 
@@ -50,6 +52,10 @@ class UserController extends AbstractController
 	 */
 	#[Route('/user/register', 'user_register')]
 	public function register(Request $request): Response {
+		if (!$this->userService->hasAcceptedDsgvo()) {
+			return $this->redirectToRoute('privacy', ['return' => 'user_register']);
+		}
+
 		$answer       = $this->getParameter('app.antispam.answer');
 		$form         = $this->createForm(RegistrationType::class, new Registration($answer));
 		$existingUser = null;
@@ -86,6 +92,10 @@ class UserController extends AbstractController
 	 */
 	#[Route('/user/reset', 'user_reset')]
 	public function reset(Request $request): Response {
+		if (!$this->userService->hasAcceptedDsgvo()) {
+			return $this->redirectToRoute('privacy', ['return' => 'user_reset']);
+		}
+
 		$form  = $this->createForm(PasswordResetType::class, new PasswordReset());
 		$error = null;
 		$form->handleRequest($request);
