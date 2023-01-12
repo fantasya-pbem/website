@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Service;
 
 use JetBrains\PhpStorm\Pure;
@@ -53,7 +53,7 @@ readonly class PartyService
 	/**
 	 * Get parties in current Game of a User.
 	 *
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	public function getCurrent(User $user): array {
 		$game = $this->service->getCurrent();

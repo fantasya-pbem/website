@@ -1,59 +1,67 @@
 <?php
-declare (strict_types=1);
+declare(strict_types = 1);
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 use App\Data\PasswordReset;
+use App\Repository\UserRepository;
 use App\Security\Role;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- */
+#[Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-	public const FLAG_WITH_ATTACHMENT = 1;
+	public final const FLAG_WITH_ATTACHMENT = 1;
 
 	private const ALL_FLAGS = [self::FLAG_WITH_ATTACHMENT];
 
-	/**
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="integer")
-	 */
+	#[Column]
+	#[GeneratedValue]
+	#[Id]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="string", length=190, unique=true)
-	 */
+	#[Column(length: 190, unique: true)]
 	private string $name = '';
 
 	/**
-	 * @ORM\Column(type="json")
-	 * @var string[]
+	 * @var array<string>
 	 */
+	#[Column(type: 'json')]
 	private array $roles = [];
 
-	/**
-	 * @ORM\Column(type="smallint")
-	 */
+	#[Column(type: 'smallint')]
 	private int $flags = 0;
 
-	/**
-	 * @var string The hashed password
-	 * @ORM\Column(type="string")
-	 */
+	#[Column]
 	private string $password = '';
 
-	/**
-	 * @ORM\Column(type="string", length=190, unique=true)
-	 */
+	#[Column(length: 190, unique: true)]
 	private string $email = '';
+
+	/**
+	 * @return array<string>
+	 */
+	public function getRoles(): array {
+		$roles = $this->roles;
+		// guarantee every user at least has Role::USER
+		$roles[] = Role::USER;
+		return array_unique($roles);
+	}
+
+	public function eraseCredentials(): void {
+	}
 
 	public function getUserIdentifier(): string {
 		return $this->name;
+	}
+
+	public function getPassword(): string {
+		return $this->password;
 	}
 
 	public function getId(): ?int {
@@ -78,39 +86,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	}
 
 	/**
-	 * @return string[]
-	 */
-	public function getRoles(): array {
-		$roles = $this->roles;
-		// guarantee every user at least has Role::USER
-		$roles[] = Role::USER;
-		return array_unique($roles);
-	}
-
-	/**
-	 * @param string[] $roles
+	 * @param array<string> $roles
 	 */
 	public function setRoles(array $roles): self {
 		$this->roles = $roles;
 		return $this;
 	}
 
-	public function getPassword(): string {
-		return $this->password;
-	}
-
 	public function setPassword(string $password): self {
 		$this->password = $password;
 		return $this;
-	}
-
-	public function getSalt(): ?string {
-		// not needed when using the "bcrypt" algorithm in security.yaml
-		return null;
-	}
-
-	public function eraseCredentials(): void {
-		// If you store any temporary, sensitive data on the user, clear it here
 	}
 
 	public function getEmail(): string {
@@ -120,14 +105,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	public function setEmail(string $email): self {
 		$this->email = strtolower($email);
 		return $this;
-	}
-
-	public function from(PasswordReset $resetOrRegistration): self {
-		return $this
-			->setName($resetOrRegistration->getName())
-			->setPassword('')
-			->setEmail($resetOrRegistration->getEmail())
-			->setRoles([Role::USER]);
 	}
 
 	/**
@@ -159,4 +136,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 			throw new \InvalidArgumentException('Invalid flag: ' . $flag);
 		}
 	}
+
+	public function from(PasswordReset $resetOrRegistration): self {
+		return $this
+			->setName($resetOrRegistration->getName())
+			->setPassword('')
+			->setEmail($resetOrRegistration->getEmail())
+			->setRoles([Role::USER]);
+	}
+
 }

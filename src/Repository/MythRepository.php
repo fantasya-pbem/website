@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -13,7 +13,7 @@ use App\Entity\Myth;
 /**
  * @method Myth|null find($id, ?int $lockMode = null, ?int $lockVersion = null)
  * @method Myth|null findOneBy(array $criteria, ?array $orderBy = null)
- * @method Myth[] findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
+ * @method array<Myth> findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
  */
 class MythRepository extends ServiceEntityRepository
 {

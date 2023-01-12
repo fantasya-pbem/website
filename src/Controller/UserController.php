@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,33 +18,29 @@ use App\Form\PasswordResetType;
 use App\Form\RegistrationType;
 use App\Repository\UserRepository;
 use App\Service\MailService;
+use App\Service\PrivacyService;
 
 class UserController extends AbstractController
 {
 	private EntityManagerInterface $entityManager;
 
 	public function __construct(private readonly UserRepository $repository, private readonly MailService $mailService,
-								private readonly UserPasswordHasherInterface $passwordHasher, ManagerRegistry $managerRegistry) {
+	                            private readonly PrivacyService $userService, private readonly UserPasswordHasherInterface $passwordHasher,
+	                            ManagerRegistry $managerRegistry) {
 		$this->entityManager = $managerRegistry->getManager();
 	}
 
-	/**
-     * @Route("/user/login", name="user_login")
-     */
+	#[Route('/user/login', 'user_login')]
     public function login(): Response {
         return $this->render('user/login.html.twig');
     }
 
-	/**
-	 * @Route("/user/secure", name="user_secure")
-	 */
+	#[Route('/user/secure', 'user_secure')]
     public function secure(): Response {
 		return $this->redirectToRoute('profile');
 	}
 
-	/**
-	 * @Route("/user/expire/{days}", name="user_expire")
-	 */
+	#[Route('/user/expire/{days}', 'user_expire')]
 	public function expire(int $days): Response {
     	return $this->render('user/expire.html.twig', [
     		'days' => $days
@@ -52,13 +48,18 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/user/register", name="user_register")
 	 * @throws \Throwable
 	 */
+	#[Route('/user/register', 'user_register')]
 	public function register(Request $request): Response {
+		if (!$this->userService->hasAcceptedDsgvo()) {
+			return $this->redirectToRoute('privacy', ['return' => 'user_register']);
+		}
+
 		$answer       = $this->getParameter('app.antispam.answer');
 		$form         = $this->createForm(RegistrationType::class, new Registration($answer));
 		$existingUser = null;
+		$forumUrl     = $this->getParameter('app.antispam.url');
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -78,22 +79,25 @@ class UserController extends AbstractController
 
 		return $this->render('user/register.html.twig', [
 			'form'     => $form->createView(),
-			'existing' => $existingUser
+			'existing' => $existingUser,
+			'antispam' => $forumUrl
 		]);
 	}
 
-	/**
-	 * @Route("/user/registered", name="user_registered")
-	 */
+	#[Route('/user/registered', 'user_registered')]
 	public function registered(): Response {
 		return $this->render('user/registered.html.twig');
 	}
 
 	/**
-	 * @Route("/user/reset", name="user_reset")
 	 * @throws \Throwable
 	 */
+	#[Route('/user/reset', 'user_reset')]
 	public function reset(Request $request): Response {
+		if (!$this->userService->hasAcceptedDsgvo()) {
+			return $this->redirectToRoute('privacy', ['return' => 'user_reset']);
+		}
+
 		$form  = $this->createForm(PasswordResetType::class, new PasswordReset());
 		$error = null;
 		$form->handleRequest($request);
@@ -117,17 +121,13 @@ class UserController extends AbstractController
 		return $this->render('user/reset.html.twig', ['form' => $form->createView(), 'error' => $error]);
 	}
 
-	/**
-	 * @Route("/user/resetted", name="user_resetted")
-	 */
+	#[Route('/user/resetted', 'user_resetted')]
 	public function resetted(): Response {
 		return $this->render('user/resetted.html.twig');
 	}
 
-	/**
-	 * @Route("/user/logout", name="user_logout")
-	 */
 	#[IsGranted(Role::USER)]
+	#[Route('/user/logout', 'user_logout')]
     public function logout(): Response {
     	return $this->redirectToRoute('index');
 	}

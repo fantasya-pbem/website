@@ -1,19 +1,16 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Data;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class Report
 {
-	/**
-	 * @Assert\NotBlank
-	 */
+	#[NotBlank]
 	private string $party = '';
 
-	/**
-	 * @Assert\GreaterThanOrEqual(0)
-	 */
+	#[GreaterThanOrEqual(0)]
 	private int $turn = 0;
 
 	private string $game = '';

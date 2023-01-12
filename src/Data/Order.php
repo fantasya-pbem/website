@@ -1,8 +1,8 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Data;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 use App\Entity\Game;
 
@@ -10,9 +10,7 @@ class Order
 {
 	private string $party = '';
 
-	/**
-	 * @Assert\GreaterThanOrEqual(0)
-	 */
+	#[GreaterThanOrEqual(0)]
 	private int $turn = 0;
 
 	private string $orders = '';

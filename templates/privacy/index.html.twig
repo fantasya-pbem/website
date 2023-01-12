@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block attention %}
-    {% if not hasAccepted %}
+    {% if not privacy_service.acceptedDsgvo %}
         <div class="container">
             <div class="row">
                 <div class="col-10 col-md-12 offset-1 offset-md-0">
@@ -81,7 +81,7 @@
         weitergegebenen Daten haben wir natürlich keinen Einfluss.
     </p>
 
-    {% if hasAccepted %}
+    {% if privacy_service.acceptedDsgvo %}
         <p><strong>Du hast bereits Deine Zustimmung gegeben.</strong></p>
     {% else %}
         {{ form(form) }}

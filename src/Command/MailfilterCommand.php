@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -24,7 +24,7 @@ class MailfilterCommand extends Command
 	use OrderTrait;
 
 	/**
-	 * @var string[]
+	 * @var array<string>
 	 */
 	private array $header = [];
 

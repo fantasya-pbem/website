@@ -1,52 +1,54 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+
+use App\Service\PrivacyService;
 
 class PrivacyController extends AbstractController
 {
-	private const COOKIE = 'accept_dsgvo';
+	public final const COOKIE = 'accept_dsgvo';
 
-	/**
-	 * @Route("/privacy", name="privacy")
-	 */
-	public function index(): Response {
-		$hasAccepted = isset($_COOKIE[self::COOKIE]);
-		$form        = $this->getForm()->createView();
+	private const RETURN = 'news';
 
-		return $this->render('privacy/index.html.twig', [
-			'hasAccepted' => $hasAccepted,
-			'form'        => $form
-		]);
+	public function __construct(private readonly PrivacyService $service) {
 	}
 
-	/**
-	 * @Route("/privacy/accept", name="privacy_accept")
-	 */
-	public function accept(Request $request): Response {
+	#[Route('/privacy/{return}', 'privacy')]
+	public function index(Request $request, string $return = ''): Response {
 		$form = $this->getForm();
 
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			setcookie(self::COOKIE, '1', time() + 365 * 24 * 60 * 60, '/');
-			return $this->redirectToRoute('news');
+			return $this->redirectToRoute($return ?: self::RETURN);
 		}
 
-		return $this->render('privacy/index.html.twig', [
-			'hasAccepted' => false,
-			'form'        => $form->createView()
-		]);
+		if ($this->service->hasAcceptedDsgvo() && $return) {
+			try {
+				return $this->redirectToRoute($return);
+			} catch (RouteNotFoundException) {
+				return $this->redirectToRoute('privacy');
+			}
+		}
+		return $this->render('privacy/index.html.twig', ['form' => $form->createView()]);
+	}
+
+	public function askAction(): RedirectResponse {
+		return $this->redirectToRoute('privacy', ['return' => $this->service->getReturn()]);
 	}
 
 	private function getForm(): FormInterface {
-		$form = $this->createFormBuilder()->setAction($this->generateUrl('privacy_accept'));
+		$form = $this->createFormBuilder();
 		$form->add('isAccepted', CheckboxType::class, [
 			'label' => 'Ich möchte an Fantasya teilnehmen und akzeptiere diese Bedingungen.'
 		]);

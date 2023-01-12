@@ -1,26 +1,28 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Form;
 
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class NewbieType extends LemurianType
+use App\Game\Race;
+
+class NewbieType extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		parent::buildForm($builder, $options);
-		$builder->add('wood', IntegerType::class, [
-			'label' => 'Holz',
-			'attr' => ['min' => 0, 'max' => 90]
+		$builder->add('name', TextType::class, [
+			'label' => 'Name der Partei'
 		]);
-		$builder->add('stone', IntegerType::class, [
-			'label' => 'Stein',
-			'attr' => ['min' => 0, 'max' => 90]
+		$builder->add('description', TextareaType::class, [
+			'label' => 'Beschreibung'
 		]);
-		$builder->add('iron', IntegerType::class, [
-			'label' => 'Eisen',
-			'attr' => ['min' => 0, 'max' => 90]
+		$builder->add('race', ChoiceType::class, [
+			'label'   => 'Rasse',
+			'choices' => array_combine(Race::all(), Race::all())
 		]);
 		$builder->add('submit', SubmitType::class, [
 			'label' => 'Partei erstellen'

@@ -33,7 +33,19 @@
         </header>
 
         <section class="privacy-attention">
-            {% block attention %}{% endblock %}
+            {% block attention %}
+                {% if not privacy_service.acceptedDsgvo %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-10 col-md-12 offset-1 offset-md-0">
+                                <h2 class="text-center">
+                                    <a href="{{ path('privacy') }}">Bitte beachte unseren Datenschutzhinweis und erkläre Deine Zustimmung.</a>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endblock %}
         </section>
 
         <section class="main">

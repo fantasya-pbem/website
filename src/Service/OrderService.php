@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Service;
 
 use JetBrains\PhpStorm\Pure;
@@ -57,7 +57,7 @@ class OrderService
 		}
 		$commands = file_get_contents($path);
 		$check    = $this->checkService->check($commands);
-		return empty($check) ? 'Die Befehle scheinen in Ordnung zu sein.' : implode(PHP_EOL, $check);
+		return empty($check) ? 'Die Schreiweise der Befehle scheint in Ordnung zu sein.' : implode(PHP_EOL, $check);
 	}
 
 	public function getSimulation(): string {

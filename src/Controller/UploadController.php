@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,9 +25,9 @@ class UploadController extends AbstractController
 	}
 
 	/**
-	 * @Route("/upload/{alias}", name="upload")
 	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
+	#[Route('/upload/{alias}', 'upload')]
 	public function index(string $alias): Response {
 		$this->game = $this->gameRepository->findByAlias($alias);
 		if (!$this->game) {

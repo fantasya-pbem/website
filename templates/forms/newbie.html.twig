@@ -1,4 +1,4 @@
-{{ form_start(form, {'attr': {'id': 'newbie-form'}}) }}
+{{ form_start(form) }}
     <div class="row">
         <div class="col-12">
             {{ form_errors(form) }}
@@ -10,25 +10,13 @@
             {{ form_row(form.name) }}
         </div>
         <div class="col-12 col-sm-6">
-            {{ form_row(form.race, {'id': 'newbie-race'}) }}
+            {{ form_row(form.race) }}
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col-12">
             {{ form_row(form.description) }}
-        </div>
-    </div>
-
-    <div class="row my-3">
-        <div class="col-4">
-            {{ form_row(form.wood, {'id': 'newbie-wood', 'attr': {'class': 'resource'}}) }}
-        </div>
-        <div class="col-4">
-            {{ form_row(form.stone, {'id': 'newbie-stone', 'attr': {'class': 'resource'}}) }}
-        </div>
-        <div class="col-4">
-            {{ form_row(form.iron, {'id': 'newbie-iron', 'attr': {'class': 'resource'}}) }}
         </div>
     </div>
 {{ form_end(form) }}

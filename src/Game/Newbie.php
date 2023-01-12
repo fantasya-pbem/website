@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Game;
 
 use JetBrains\PhpStorm\Pure;
@@ -18,9 +18,6 @@ class Newbie
 			'name'        => $data->getName(),
 			'description' => $data->getDescription(),
 			'rasse'       => $data->getRace(),
-			'holz'        => $data->getWood(),
-			'steine'      => $data->getStone(),
-			'eisen'       => $data->getIron(),
 			'tarnung'     => '',
 			'insel'       => 0,
 			'password'    => ''
@@ -40,18 +37,6 @@ class Newbie
 
 	public function getDescription(): string {
 		return $this->properties['description'];
-	}
-
-	public function getWood(): int {
-		return (int)$this->properties['holz'];
-	}
-
-	public function getStone(): int {
-		return (int)$this->properties['steine'];
-	}
-
-	public function getIron(): int {
-		return (int)$this->properties['eisen'];
 	}
 
 	public function getUserId(): ?int {

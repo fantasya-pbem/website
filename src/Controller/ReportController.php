@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,10 +30,10 @@ class ReportController extends AbstractController
 	}
 
 	/**
-	 * @Route("/report", name="report")
 	 * @throws \Exception
 	 */
 	#[IsGranted(Role::USER)]
+	#[Route('/report', 'report')]
 	public function index(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		if (empty($parties)) {
@@ -66,9 +66,7 @@ class ReportController extends AbstractController
 		]);
 	}
 
-	/**
-	 * @Route("/report/t/{token}", name="report_download", requirements={"token"="[0-9a-f]{23,24}"}))
-	 */
+	#[Route('/report/t/{token}', 'report_download', ['token' => '[0-9a-f]{23,24}'])]
 	public function download(string $token): Response {
 		$secret        = $this->getParameter('app.secret');
 		$downloadToken = new DownloadToken($secret);
