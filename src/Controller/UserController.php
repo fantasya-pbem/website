@@ -59,6 +59,7 @@ class UserController extends AbstractController
 		$answer       = $this->getParameter('app.antispam.answer');
 		$form         = $this->createForm(RegistrationType::class, new Registration($answer));
 		$existingUser = null;
+		$forumUrl     = $this->getParameter('app.antispam.url');
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -78,7 +79,8 @@ class UserController extends AbstractController
 
 		return $this->render('user/register.html.twig', [
 			'form'     => $form->createView(),
-			'existing' => $existingUser
+			'existing' => $existingUser,
+			'antispam' => $forumUrl
 		]);
 	}
 
