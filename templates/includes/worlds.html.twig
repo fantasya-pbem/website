@@ -3,7 +3,7 @@
     <ul class="nav flex-column">
         {% for game in game_service.all %}
             <li class="nav-item">
-                <a href="{{ path('world', {'game': game.id}) }}" class="nav-link">{{ game.name }}</a>
+                <a href="{{ path('world', {'alias': game.name | lower}) }}" class="nav-link">{{ game.name }}</a>
             </li>
         {% endfor %}
     </ul>

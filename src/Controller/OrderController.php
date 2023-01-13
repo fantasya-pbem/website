@@ -33,7 +33,7 @@ class OrderController extends AbstractController
 	/**
 	 * @throws \Exception
 	 */
-	#[Route('/order', 'order')]
+	#[Route('/befehle-kontrollieren', 'order')]
 	public function index(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		if (empty($parties)) {
@@ -64,7 +64,7 @@ class OrderController extends AbstractController
 		]);
 	}
 
-	#[Route('/order/simulation', 'order_simulation')]
+	#[Route('/befehle-simulieren', 'order_simulation')]
 	public function simulation(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		if (empty($parties)) {
@@ -86,7 +86,7 @@ class OrderController extends AbstractController
 	/**
 	 * @throws \Exception
 	 */
-	#[Route('/order/send', 'order_send')]
+	#[Route('/befehle-senden', 'order_send')]
 	public function send(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		if (empty($parties)) {
@@ -118,7 +118,7 @@ class OrderController extends AbstractController
 	/**
 	 * @throws \Exception
 	 */
-	#[Route('/order/party/{p}/turn/{t}', 'order_success')]
+	#[Route('/befehle-senden/partei/{p}/runde/{t}', 'order_success')]
 	public function party(string $p, int $t): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		$party   = null;

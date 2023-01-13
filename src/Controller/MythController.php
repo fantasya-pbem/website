@@ -26,7 +26,7 @@ class MythController extends AbstractController
 		$this->entityManager = $managerRegistry->getManager();
 	}
 
-	#[Route('/myth/{page}', 'myth', ['page' => '\d+'])]
+	#[Route('/geruechte/{page}', 'myth', ['page' => '\d+'])]
 	public function index(int $page = 1): Response {
 		if ($page <= 0) {
 			$page = 1;
@@ -38,7 +38,7 @@ class MythController extends AbstractController
 	}
 
 	#[IsGranted(Role::USER)]
-	#[Route('/myth/spread', 'myth_spread')]
+	#[Route('/geruecht-verbreiten', 'myth_spread')]
 	public function spread(Request $request): Response {
 		$myth = new Myth();
 		$form = $this->createForm(MythType::class, $myth);

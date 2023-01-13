@@ -27,7 +27,7 @@ class UploadController extends AbstractController
 	/**
 	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
-	#[Route('/upload/{alias}', 'upload')]
+	#[Route('/magellan/{alias}', 'upload')]
 	public function index(string $alias): Response {
 		$this->game = $this->gameRepository->findByAlias($alias);
 		if (!$this->game) {

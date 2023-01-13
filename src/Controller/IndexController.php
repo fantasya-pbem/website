@@ -6,13 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-use App\Entity\Game;
 use App\Game\Turn;
+use App\Repository\GameRepository;
 use App\Service\EngineService;
 
 class IndexController extends AbstractController
 {
-	public function __construct(private readonly EngineService $engineService) {
+	public function __construct(private readonly GameRepository $gameRepository, private readonly EngineService $engineService) {
 	}
 
 	#[Route('/', 'index')]
@@ -20,17 +20,17 @@ class IndexController extends AbstractController
 		return $this->redirectToRoute('news');
 	}
 
-	#[Route('/about-fantasya', 'about-fantasya')]
+	#[Route('/ueber-fantasya', 'about-fantasya')]
 	public function about(): Response {
 		return $this->render('index/about-fantasya.html.twig');
 	}
 
-	#[Route('/contact', 'contact')]
+	#[Route('/kontakt', 'contact')]
 	public function contact(): Response {
 		return $this->render('index/contact.html.twig');
 	}
 
-	#[Route('/donate', 'donate')]
+	#[Route('/spenden', 'donate')]
 	public function donate(): Response {
 		return $this->render('index/donate.html.twig');
 	}
@@ -38,9 +38,18 @@ class IndexController extends AbstractController
 	/**
 	 * @throws \Exception
 	 */
-	#[Route('/world/{game}', 'world')]
-	public function world(Game $game): Response {
-		if (!$game->getIsActive()) {
+	#[Route('/welt/{alias}', 'world')]
+	public function world(string $alias): Response {
+		$id = (int)$alias;
+		if ((string)$id === $alias) {
+			$game = $this->gameRepository->find($id);
+		} else {
+			$game = $this->gameRepository->findByAlias($alias);
+			if (!$game) {
+				$game = $this->gameRepository->findByName($alias);
+			}
+		}
+		if (!$game?->getIsActive()) {
 			return $this->redirectToRoute('index');
 		}
 
