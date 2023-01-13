@@ -25,6 +25,10 @@ class GameRepository extends ServiceEntityRepository
 		return $q->getQuery()->getResult();
 	}
 
+	public function findByName(string $name): ?Game {
+		return $this->findOneBy(['name' => $name]);
+	}
+
 	public function findByAlias(string $alias): ?Game {
 		return $this->findOneBy(['alias' => $alias]);
 	}

@@ -33,7 +33,7 @@ class ReportController extends AbstractController
 	 * @throws \Exception
 	 */
 	#[IsGranted(Role::USER)]
-	#[Route('/report', 'report')]
+	#[Route('/auswertung', 'report')]
 	public function index(Request $request): Response {
 		$parties = $this->partyService->getCurrent($this->user());
 		if (empty($parties)) {
@@ -66,7 +66,7 @@ class ReportController extends AbstractController
 		]);
 	}
 
-	#[Route('/report/t/{token}', 'report_download', ['token' => '[0-9a-f]{23,24}'])]
+	#[Route('/auswertung/{token}', 'report_download', ['token' => '[0-9a-f]{23,24}'])]
 	public function download(string $token): Response {
 		$secret        = $this->getParameter('app.secret');
 		$downloadToken = new DownloadToken($secret);

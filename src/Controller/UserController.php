@@ -30,17 +30,17 @@ class UserController extends AbstractController
 		$this->entityManager = $managerRegistry->getManager();
 	}
 
-	#[Route('/user/login', 'user_login')]
+	#[Route('/anmeldung-fehlgeschlagen', 'user_login')]
     public function login(): Response {
         return $this->render('user/login.html.twig');
     }
 
-	#[Route('/user/secure', 'user_secure')]
+	#[Route('/anmelden', 'user_secure')]
     public function secure(): Response {
 		return $this->redirectToRoute('profile');
 	}
 
-	#[Route('/user/expire/{days}', 'user_expire')]
+	#[Route('/zertifikatshinweis/{days}/tage', 'user_expire')]
 	public function expire(int $days): Response {
     	return $this->render('user/expire.html.twig', [
     		'days' => $days
@@ -50,7 +50,7 @@ class UserController extends AbstractController
 	/**
 	 * @throws \Throwable
 	 */
-	#[Route('/user/register', 'user_register')]
+	#[Route('/registrieren', 'user_register')]
 	public function register(Request $request): Response {
 		if (!$this->userService->hasAcceptedDsgvo()) {
 			return $this->redirectToRoute('privacy', ['return' => 'user_register']);
@@ -84,7 +84,7 @@ class UserController extends AbstractController
 		]);
 	}
 
-	#[Route('/user/registered', 'user_registered')]
+	#[Route('/registrierung-erfolgreich', 'user_registered')]
 	public function registered(): Response {
 		return $this->render('user/registered.html.twig');
 	}
@@ -92,7 +92,7 @@ class UserController extends AbstractController
 	/**
 	 * @throws \Throwable
 	 */
-	#[Route('/user/reset', 'user_reset')]
+	#[Route('/passwort-vergessen', 'user_reset')]
 	public function reset(Request $request): Response {
 		if (!$this->userService->hasAcceptedDsgvo()) {
 			return $this->redirectToRoute('privacy', ['return' => 'user_reset']);
@@ -121,13 +121,13 @@ class UserController extends AbstractController
 		return $this->render('user/reset.html.twig', ['form' => $form->createView(), 'error' => $error]);
 	}
 
-	#[Route('/user/resetted', 'user_resetted')]
+	#[Route('/passwort-zurueckgesetzt', 'user_resetted')]
 	public function resetted(): Response {
 		return $this->render('user/resetted.html.twig');
 	}
 
 	#[IsGranted(Role::USER)]
-	#[Route('/user/logout', 'user_logout')]
+	#[Route('/abmelden', 'user_logout')]
     public function logout(): Response {
     	return $this->redirectToRoute('index');
 	}

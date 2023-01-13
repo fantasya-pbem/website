@@ -12,7 +12,7 @@ document.addEventListener('readystatechange', () => {
 
 		const simulation = document.getElementById('simulation');
 		const fetchSimulation = function () {
-			fetch('/order/simulation')
+			fetch('/befehle-simulieren')
 				.then((response) => response.text())
 				.then((text) => {
 					document.querySelector('#simulation pre').textContent = text;

@@ -27,7 +27,7 @@ class GameController extends AbstractController
 		                        private readonly MailService $mailService) {
 	}
 
-	#[Route('/game/next', 'game_next')]
+	#[Route('/welt', 'game_next')]
 	public function next(Request $request): Response {
 		$games = [];
 		foreach ($this->gameService->getAll() as $game) {
@@ -61,7 +61,7 @@ class GameController extends AbstractController
 		}
 	}
 
-	#[Route('/game/enter', 'game_enter')]
+	#[Route('/betreten', 'game_enter')]
 	public function enter(Request $request): Response {
 		if (!$this->canEnter()) {
 			return $this->redirectToRoute('profile');
@@ -88,7 +88,7 @@ class GameController extends AbstractController
 		return $this->render('game/enter.html.twig', ['form' => $form->createView()]);
 	}
 
-	#[Route('/game/{game}/revoke/{name}', 'game_revoke')]
+	#[Route('/verlassen/{game}/{name}', 'game_revoke')]
 	public function revoke(Game $game, string $name): Response {
 		$user    = $this->user();
 		$newbies = $this->partyService->getNewbies($this->user());

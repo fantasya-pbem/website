@@ -62,7 +62,7 @@ class ProfileController extends AbstractController
 	/**
 	 * @throws \Exception
 	 */
-	#[Route('/profile', 'profile')]
+	#[Route('/profil', 'profile')]
 	public function index(Request $request): Response {
 		$roles   = $this->getRoles();
 		$flags   = $this->getFlags();
@@ -97,7 +97,7 @@ class ProfileController extends AbstractController
 	/**
 	 * @throws \Throwable
 	 */
-	#[Route('/profile/change', 'profile_change')]
+	#[Route('/profil-aendern', 'profile_change')]
 	public function change(Request $request): Response {
 		if ($request->request->has('submitName') && $request->request->has('name')) {
 			$name = $request->request->get('name');
@@ -161,7 +161,7 @@ class ProfileController extends AbstractController
 	/**
 	 * @throws \Throwable
 	 */
-	#[Route('/profile/settings', 'profile_settings')]
+	#[Route('/profil/einstellungen', 'profile_settings')]
 	public function settings(Request $request): Response {
 		if ($request->request->has('submitSettings')) {
 			$user = $this->user();

@@ -23,14 +23,14 @@ class NewsController extends AbstractController
 		$this->entityManager = $managerRegistry->getManager();
 	}
 
-	#[Route('/news', 'news')]
+	#[Route('/neuigkeiten', 'news')]
 	public function index(): Response {
 		$news = $this->repository->findAll();
 		return $this->render('news/index.html.twig', ['news' => $news]);
 	}
 
 	#[IsGranted(Role::NEWS_CREATOR)]
-	#[Route('/news/edit/{article}', 'news_edit')]
+	#[Route('/neuigkeit/bearbeiten/{article}', 'news_edit')]
 	public function edit(News $article = null): Response {
 		$news       = $this->repository->findAll();
 		$parameters = [];
@@ -51,7 +51,7 @@ class NewsController extends AbstractController
 	 * @throws \Exception
 	 */
 	#[IsGranted(Role::NEWS_CREATOR)]
-	#[Route('/news/create/{article}', 'news_create')]
+	#[Route('/neuigkeit/erstellen/{article}', 'news_create')]
 	public function create(Request $request, News $article = null): Response {
 		if ($article) {
 			$date = $article->getCreatedAt();
@@ -75,7 +75,7 @@ class NewsController extends AbstractController
 	}
 
 	#[IsGranted(Role::NEWS_CREATOR)]
-	#[Route('/news/delete/{article}', 'news_delete')]
+	#[Route('/neuigkeit/{article}/loeschen', 'news_delete')]
 	public function delete(News $article): Response {
 		$this->entityManager->remove($article);
 		$this->entityManager->flush();

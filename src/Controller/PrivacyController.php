@@ -23,7 +23,7 @@ class PrivacyController extends AbstractController
 	public function __construct(private readonly PrivacyService $service) {
 	}
 
-	#[Route('/privacy/{return}', 'privacy')]
+	#[Route('/datenschutz/{return}', 'privacy')]
 	public function index(Request $request, string $return = ''): Response {
 		$form = $this->getForm();
 

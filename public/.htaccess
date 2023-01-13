@@ -68,3 +68,21 @@ DirectoryIndex index.php
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
+
+Redirect 301 /about-fantasya /ueber-fantasya
+Redirect 301 /contact        /kontakt
+Redirect 301 /donate         /spenden
+Redirect 301 /game/next      /welt
+Redirect 301 /logout         /abmelden
+Redirect 301 /myth           /geruechte
+Redirect 301 /news           /neuigkeiten
+Redirect 301 /order          /befehle-kontrollieren
+Redirect 301 /order/send     /befehle-senden
+Redirect 301 /privacy        /datenschutz
+Redirect 301 /profile        /profil
+Redirect 301 /report         /auswertung
+Redirect 301 /user/register  /registrieren
+Redirect 301 /user/reset     /passwort-vergessen
+Redirect 301 /user/secure    /anmeldung
+Redirect 301 /world/1        /welt/fantasya
+Redirect 301 /world/4        /welt/lemuria
