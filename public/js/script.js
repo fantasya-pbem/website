@@ -10,17 +10,64 @@ document.addEventListener('readystatechange', () => {
 			});
 		});
 
-		const simulation = document.getElementById('simulation');
+		const simulationToggle = document.getElementById('simulation');
+		const simulationModeAll = document.getElementById('simulation-mode-all');
+		const simulationModeProblems = document.getElementById('simulation-mode-problems');
+		const simulationText = document.querySelector('#simulation pre');
+		let simulation;
+		let simulationMode = 'problems';
+
+		const switchSimulationMode = function () {
+			let text;
+			if (simulationMode === 'problems') {
+				text = '';
+				let unit = '', messages = [];
+				simulation.split("\n").forEach((line) => {
+					if (line === "") {
+						if (messages.length) {
+							if (text) {
+								text += "\n";
+							}
+							text += unit + "\n" + messages.join("\n") + "\n";
+							messages = [];
+						}
+					} else {
+						if (line.charAt(0) === '[') {
+							if (line.charAt(1) !== ' ') {
+								messages.push(line);
+							}
+						} else {
+							unit = line;
+						}
+					}
+				});
+				simulationMode = 'all';
+				simulationModeProblems.classList.add('visually-hidden');
+				simulationModeAll.classList.remove('visually-hidden');
+			} else {
+				text = simulation;
+				simulationMode = 'problems';
+				simulationModeAll.classList.add('visually-hidden');
+				simulationModeProblems.classList.remove('visually-hidden');
+			}
+			simulationText.textContent = text;
+		};
+
 		const fetchSimulation = function () {
 			fetch('/befehle-simulieren')
 				.then((response) => response.text())
 				.then((text) => {
-					document.querySelector('#simulation pre').textContent = text;
+					simulation = text;
+					switchSimulationMode();
+					simulationText.classList.remove('visually-hidden');
 				}).finally(() => {
 				document.querySelector('#simulation .spinner-border').classList.add('d-none');
 			});
-			simulation.removeEventListener('show.bs.collapse', fetchSimulation);
+			simulationToggle.removeEventListener('show.bs.collapse', fetchSimulation);
 		};
-		simulation && simulation.addEventListener('show.bs.collapse', fetchSimulation);
+
+		simulationToggle && simulationToggle.addEventListener('show.bs.collapse', fetchSimulation);
+		simulationModeAll && simulationModeAll.addEventListener('click', switchSimulationMode);
+		simulationModeProblems && simulationModeProblems.addEventListener('click', switchSimulationMode);
 	}
 });
