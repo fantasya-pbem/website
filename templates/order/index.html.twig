@@ -20,10 +20,16 @@
                 <button class="btn dropdown-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#simulation" aria-expanded="true" aria-controls="simulation"></button>
             </h2>
             <div id="simulation" class="collapse">
+                <p id="simulation-mode-all" class="visually-hidden">
+                    <a href="javascript:">alles anzeigen</a>
+                </p>
+                <p id="simulation-mode-problems" class="visually-hidden">
+                    <a href="javascript:">nur Probleme anzeigen</a>
+                </p>
+                <pre class="visually-hidden"></pre>
                 <div class="spinner-border m-5" role="status">
                     <span class="visually-hidden-focusable">Simulation wird geladen...</span>
                 </div>
-                <pre></pre>
             </div>
         {% endif %}
 
