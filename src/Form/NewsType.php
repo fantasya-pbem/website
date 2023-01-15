@@ -12,7 +12,8 @@ class NewsType extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('title', TextType::class,[
-			'label' => 'Titel'
+			'label' => 'Titel',
+			'attr'  => ['autofocus' => true]
 		]);
 		$builder->add('content', TextareaType::class,[
 			'label' => 'Nachricht (HTML wird unterstützt)',

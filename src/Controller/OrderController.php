@@ -167,19 +167,22 @@ class OrderController extends AbstractController
 		$form = $this->createFormBuilder($order);
 		$form->add('party', ChoiceType::class, [
 			'label'   => 'Partei',
-			'choices' => $this->getParties($parties)
+			'choices' => $this->getParties($parties),
+			'attr'    => ['tabindex' => 4]
 		]);
 		$form->add('turn', ChoiceType::class, [
 			'label'   => 'Runde',
 			'choices' => $this->getTurns($turn, 0),
-			'data'    => (string)$turn
+			'data'    => (string)$turn,
+			'attr'    => ['tabindex' => 3]
 		]);
 		$form->add('orders', TextareaType::class, [
 			'label' => 'Befehle',
-			'attr'  => ['rows' => 10]
+			'attr'  => ['autofocus' => true, 'rows' => 10, 'tabindex' => 1]
 		]);
 		$form->add('submit', SubmitType::class, [
-			'label' => 'Befehle senden'
+			'label' => 'Befehle senden',
+			'attr'  => ['tabindex' => 2]
 		]);
 		return $form->getForm();
 	}

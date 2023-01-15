@@ -18,5 +18,123 @@
         Anschließend kannst Du die ersten Befehle abgeben.
     </p>
 
-    {{ include('forms/newbie.html.twig') }}
+    {% if form is defined %}
+        <p>
+            <strong>Wähle den Namen und eine Beschreibung Deiner neuen Partei:</strong>
+        </p>
+        {{ include('forms/newbie.html.twig') }}
+    {% else %}
+        <strong>Wähle zunächst die Rasse Deiner Einheiten im Spiel:</strong>
+        <div class="undecorated-link row">
+            <div class="col-12 col-lg-6">
+                <a href="{{ path('game_enter', {'race': 'Aquaner'}) }}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Aquaner</h3>
+                            <h4 class="card-subtitle text-muted">Die geborenen Seefahrer</h4>
+                            <p class="card-text">
+                                Die Aquaner stammen von den Menschen ab. Sie haben sich auf das Meer und den
+                                Handel spezialisiert, und die Seefahrt liegt ihnen im Blut. Aquaner kommen zur See eine
+                                Region weiter als alle anderen, ganz gleich mit welchem Schiffstyp sie fahren.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-lg-6">
+                <a href="{{ path('game_enter', {'race': 'Elf'}) }}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Elfen</h3>
+                            <h4 class="card-subtitle text-muted">Wachsam und unauffällig</h4>
+                            <p class="card-text">
+                                Hervorrangende Sinne, gute Reflexe und eine enge Verbundenheit zur Natur zeichnen die
+                                Elfen aus. Schwere Waffen und schwere Arbeit können sie hingegen überhaupt nicht
+                                ausstehen. In Wäldern haben Elfen einen Bonus von 1 auf Wahrnehmung und Tarnung.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-lg-6">
+                <a href="{{ path('game_enter', {'race': 'Halbling'}) }}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Halblinge</h3>
+                            <h4 class="card-subtitle text-muted">Die geselligen Leichtgewichte</h4>
+                            <p class="card-text">
+                                Halblinge sind eine sehr gesellige Rasse, über deren Ursprung nicht sehr viel bekannt
+                                ist. Sicher ist jedoch, dass sie treue Gefährten sind und nichts mehr lieben, als ein
+                                gutes Mahl und einen guten Wein. Halblinge wiegen weniger als andere Rassen, können aber
+                                trotzdem ebenso viel tragen.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-lg-6">
+                <a href="{{ path('game_enter', {'race': 'Mensch'}) }}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Menschen</h3>
+                            <h4 class="card-subtitle text-muted">Die universellen Talente</h4>
+                            <p class="card-text">
+                                Manche meinen, die Menschen seien die Multitalente unter den Völkern. Andere vertreten
+                                die Ansicht, sie seien zu ewiger Durchschnitt&dash;lichkeit verdammt. Im Laufe der Zeit
+                                hat sich die Rasse der Aquaner von ihnen abgespalten. Menschen sind die einzige
+                                Rasse, die auch angehörige anderer Rassen in ihren Reihen aufnehmen kann.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-lg-6">
+                <a href="{{ path('game_enter', {'race': 'Ork'}) }}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Orks</h3>
+                            <h4 class="card-subtitle text-muted">Die geborenen Kämpfer</h4>
+                            <p class="card-text">
+                                Orks sind eine kriegerische Rasse. Sie haben eine festgelegte millitärische Hierarchie,
+                                die nur durch einen Zweikampf durchbrochen werden kann. Alle Orks haben Grundkenntnisse
+                                im Umgang mit Hieb- und Stangenwaffen. Außerdem sind sie die einzige Rasse mit einem
+                                Bonus auf Taktik.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-lg-6">
+                <a href="{{ path('game_enter', {'race': 'Troll'}) }}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Trolle</h3>
+                            <h4 class="card-subtitle text-muted">Stark wie Ochsen</h4>
+                            <p class="card-text">
+                                Sie sind große und kräftige Wesen, wodurch sie sich besonders für schwere Arbeiten und
+                                den Umgang mit schweren Waffen eignen. Trolle können zu zweit einen Wagen ziehen, ohne
+                                Pferde zu benötigen. Sie wiegen doppelt so viel und können auch doppelt so viel tragen
+                                wie alle anderen.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-lg-6">
+                <a href="{{ path('game_enter', {'race': 'Zwerg'}) }}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Zwerge</h3>
+                            <h4 class="card-subtitle text-muted">Die zähen Gebirgskämpfer</h4>
+                            <p class="card-text">
+                                Ihre Heimat sind die Berge, ihr Leben ist das Erschaffen. Nicht liegt ihnen näher als
+                                die unbearbeitete Natur, was ihnen auch Schwierigkeiten beim Umgang mit Magie beschert.
+                                Auf Bergen und Gletschern haben Zwerge einen Bonus von 1 auf das Talent Taktik.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

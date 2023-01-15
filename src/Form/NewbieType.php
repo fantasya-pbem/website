@@ -15,17 +15,22 @@ class NewbieType extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('name', TextType::class, [
-			'label' => 'Name der Partei'
+			'label' => 'Name der Partei',
+			'attr'  => ['autofocus' => true, 'tabindex' => 1]
 		]);
 		$builder->add('description', TextareaType::class, [
-			'label' => 'Beschreibung'
+			'label'    => 'Beschreibung',
+			'required' => false,
+			'attr'     => ['tabindex' => 2]
 		]);
 		$builder->add('race', ChoiceType::class, [
 			'label'   => 'Rasse',
-			'choices' => array_combine(Race::all(), Race::all())
+			'choices' => array_combine(Race::all(), Race::all()),
+			'attr'    => ['tabindex' => 4]
 		]);
 		$builder->add('submit', SubmitType::class, [
-			'label' => 'Partei erstellen'
+			'label' => 'Partei erstellen',
+			'attr'  => ['tabindex' => 3]
 		]);
 	}
 }

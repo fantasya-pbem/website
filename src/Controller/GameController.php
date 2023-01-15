@@ -15,6 +15,7 @@ use App\Entity\User;
 use App\Form\NewbieType;
 use App\Game\Engine;
 use App\Game\Newbie;
+use App\Game\Race;
 use App\Security\Role;
 use App\Service\GameService;
 use App\Service\MailService;
@@ -61,8 +62,8 @@ class GameController extends AbstractController
 		}
 	}
 
-	#[Route('/betreten', 'game_enter')]
-	public function enter(Request $request): Response {
+	#[Route('/betreten/{race}', 'game_enter')]
+	public function enter(Request $request, string $race = ''): Response {
 		if (!$this->canEnter()) {
 			return $this->redirectToRoute('profile');
 		}
@@ -70,8 +71,13 @@ class GameController extends AbstractController
 			return $this->redirectToRoute('profile');
 		}
 
+		if (empty($race) || !in_array($race, Race::all())) {
+			return $this->render('game/enter.html.twig');
+		}
+
 		$lemurian = new NewbieData();
-		$form     = $this->createForm(NewbieType::class, $lemurian);
+		$lemurian->setRace($race);
+		$form = $this->createForm(NewbieType::class, $lemurian);
 		try {
 			$form->handleRequest($request);
 			if ($form->isSubmitted() && $form->isValid()) {
