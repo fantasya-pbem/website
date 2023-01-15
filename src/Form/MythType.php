@@ -11,7 +11,8 @@ class MythType extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('myth', TextType::class,[
-			'label' => '...das da lautet:'
+			'label' => '...das da lautet:',
+			'attr'  => ['autofocus' => true]
 		]);
 		$builder->add('submit', SubmitType::class, [
 			'label' => 'Gerücht verbreiten'

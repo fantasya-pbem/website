@@ -117,7 +117,8 @@ class ReportController extends AbstractController
 		$form->add('turn', ChoiceType::class, [
 			'label'   => 'Runde',
 			'choices' => $turns,
-			'data'    => $turn
+			'data'    => $turn,
+			'attr'    => ['autofocus' => true]
 		]);
 		$form->add('submit', SubmitType::class, [
 			'label' => 'Herunterladen'

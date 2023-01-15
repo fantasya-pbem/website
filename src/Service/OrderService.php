@@ -96,9 +96,9 @@ class OrderService
 			if (!in_array(strtoupper($parts[0]), self::PARTY_LINE)) {
 				$orders .= 'PARTEI ' . $this->getPartyId() . ' "xxxxxxxx"' . PHP_EOL;
 			} elseif (count($parts) < 2) {
-				$lines[0] .= ' ' . $this->getPartyId() . ' "xxxxxxxx"';
+				$lines[0] = $first . ' ' . $this->getPartyId() . ' "xxxxxxxx"';
 			} elseif (count($parts) < 3) {
-				$lines[0] .= ' "xxxxxxxx"';
+				$lines[0] = $first . ' "xxxxxxxx"';
 			} else {
 				$parts[2] = '"xxxxxxxx"';
 				$lines[0] = implode(' ', $parts);
