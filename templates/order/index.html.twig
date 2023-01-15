@@ -9,9 +9,39 @@
 {% endblock %}
 
 {% block content %}
-    {{ include('forms/order.html.twig') }}
+    <ul class="nav nav-tabs">
+        {% for key, party in parties %}
+            <li class="nav-item">
+                <a class="nav-link{{ key == id ? ' active' : '' }} px-3 py-2" aria-current="page" href="{{ key == id ? 'javascript:' : path('order', {'id': key}) }}">{{ party.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
 
-    <pre><strong>{{ order_service.check }}</strong></pre>
+    <nav aria-label="Rundenauswahl">
+        <ul class="pagination pagination-sm justify-content-end mt-2">
+            <li class="page-item{{ round <= 0 ? ' disabled' : '' }}">
+                <a class="page-link px-3" href="{{ path('order', {'id': id, 'turn': turn - 1}) }}" aria-label="Vor">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% for key, t in turns %}
+                {% if t == turn %}
+                    <li class="page-item active{{ t == round ? ' current-round' : '' }}">
+                        <span class="page-link" href="{{ path('order', {'id': id, 'turn': t}) }}">{{ key }}</span>
+                    </li>
+                {% else %}
+                    <li class="page-item{{ t == round ? ' current-round' : '' }}">
+                        <a class="page-link" href="{{ path('order', {'id': id, 'turn': t}) }}">{{ key }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            <li class="page-item">
+                <a class="page-link px-3" href="{{ path('order', {'id': id, 'turn': turn + 1}) }}" aria-label="Zurück">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 
     {% if order_service.available %}
         {% if hasSimulation %}
@@ -32,6 +62,8 @@
                 </div>
             </div>
         {% endif %}
+
+        <pre class="mt-4"><strong>{{ order_service.check }}</strong></pre>
 
         <h2>
             Befehle

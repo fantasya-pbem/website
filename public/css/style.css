@@ -248,6 +248,39 @@ main a:before {
 	content: '» '
 }
 
+main .nav-tabs, main .nav-tabs .nav-link.active, main .nav-tabs .nav-link:hover, main .nav-tabs .nav-link:focus, main .pagination a, main .pagination a:hover, main .pagination .active span {
+	border-color: #704a21;
+}
+main .nav-tabs .nav-link, main .pagination .page-link {
+	color: #fff3d1;
+	background-color: #704a21;
+}
+main .nav-tabs .nav-link.active {
+	color: #fff3d1;
+	background-color: #e13900;
+	font-weight: bold;
+	border-bottom-color: #fff3d1;
+}
+main .nav-tabs a:hover, main .nav-tabs a:focus, main .pagination a:hover, main .pagination a:focus {
+	color: #fff;
+}
+main .nav-tabs a:before, main .pagination a:before {
+	content: unset;
+}
+
+main .page-item.active .page-link {
+	background-color: #e13900;
+	font-weight: bold;
+}
+
+main .page-item:not(:first-child) .page-link {
+	margin-left: 0;
+}
+
+main .pagination .current-round {
+	margin: 0 0.3rem;
+}
+
 main a.inline.image:before, main .undecorated-link a:before {
 	content: unset;
 }

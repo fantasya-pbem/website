@@ -33,34 +33,40 @@ class OrderController extends AbstractController
 	/**
 	 * @throws \Exception
 	 */
-	#[Route('/befehle-kontrollieren', 'order')]
-	public function index(Request $request): Response {
-		$parties = $this->partyService->getCurrent($this->user());
-		if (empty($parties)) {
+	#[Route('/befehle-kontrollieren/{id}/{turn}', 'order')]
+	public function index(Request $request, string $id = '', int $turn = 0): Response {
+		$parties = $this->parties();
+		if (empty($parties) || $id && !isset($parties[$id])) {
 			return $this->redirectToRoute('profile');
 		}
 
-		$game   = $this->gameService->getCurrent();
-		$engine = $this->engineService->get($game);
-		$party  = $parties[0];
-		$turn   = $this->turn($request);
-		$order  = new Order();
-		$form   = $this->createOrderForm($order, $parties, $turn);
-		$form->handleRequest($request);
-
-		if ($form->isSubmitted() && $form->isValid()) {
-			/** @var Order $order */
-			$order = $form->getData();
-		} else {
-			$order->setParty($party->getOwner());
-			$order->setTurn($turn);
+		if (!$id) {
+			$id = key($parties);
 		}
-		$order->setGame($game);
-		$this->orderService->setContext($order);
+		if (!$turn) {
+			$turn = $this->turn($request);
+		}
+
+		$party         = $parties[$id];
+		$game          = $this->gameService->getCurrent();
+		$engine        = $this->engineService->get($game);
+		$turns         = $this->getTurns($turn);
+		$round         = $engine->getRound($game);
 		$hasSimulation = $engine->canSimulate($game, $turn) && $this->getParameter('app.simulation');
 
+		$order = new Order();
+		$order->setParty($party->getOwner());
+		$order->setTurn($turn);
+		$order->setGame($game);
+		$this->orderService->setContext($order);
+
 		return $this->render('order/index.html.twig', [
-			'form' => $form->createView(), 'hasSimulation' => $hasSimulation
+			'id' => $id,
+			'turn' => $turn,
+			'hasSimulation' => $hasSimulation,
+			'round' => $round,
+			'parties' => $parties,
+			'turns' => $turns
 		]);
 	}
 
@@ -94,7 +100,7 @@ class OrderController extends AbstractController
 		}
 
 		$turn = $this->turn($request);
-		$form = $this->createSendForm(new Order(), $parties, $turn);
+		$form = $this->createOrderForm(new Order(), $parties, $turn);
 		$form->handleRequest($request);
 
 		$isWrongParty = false;
@@ -102,56 +108,37 @@ class OrderController extends AbstractController
 			/** @var Order $order */
 			$order = $form->getData();
 			$game  = $this->gameService->getCurrent();
-			$party = $this->partyService->getById($order->getPartyId(), $game);
+			$id    = $order->getPartyId();
+			try {
+				$party = $this->partyService->getById($id, $game);
+			} catch (\Exception) {
+				$party = null;
+			}
 			if ($order->getParty() === $party?->getOwner()) {
 				$order->setGame($game);
 				$this->orderService->setContext($order);
 				$this->orderService->saveOrders();
-				return $this->redirectToRoute('order_success', ['p' => $order->getParty(), 't' => $turn]);
+				return $this->redirectToRoute('order', ['id' => $party->getId(), 'turn' => $turn]);
 			}
+
 			$isWrongParty = true;
 		}
 
 		return $this->render('order/send.html.twig', ['form' => $form->createView(), 'isWrongParty' => $isWrongParty]);
 	}
 
-	/**
-	 * @throws \Exception
-	 */
-	#[Route('/befehle-senden/partei/{p}/runde/{t}', 'order_success')]
-	public function party(string $p, int $t): Response {
-		$parties = $this->partyService->getCurrent($this->user());
-		$party   = null;
-		foreach ($parties as $userParty) {
-			if ($userParty->getOwner() === $p) {
-				$party = $p;
-				break;
-			}
-		}
-		if (!$party) {
-			return $this->redirectToRoute('profile');
-		}
-
-		$game          = $this->gameService->getCurrent();
-		$engine        = $this->engineService->get($game);
-		$hasSimulation = $engine->canSimulate($game, $t) && $this->getParameter('app.simulation');
-
-		$order  = new Order();
-		$order->setParty($p);
-		$order->setTurn($t);
-		$order->setGame($game);
-		$this->orderService->setContext($order);
-		$form = $this->createOrderForm($order, $parties, $t);
-
-		return $this->render('order/index.html.twig', [
-			'form' => $form->createView(), 'hasSimulation' => $hasSimulation
-		]);
-	}
-
 	private function user(): User {
 		/** @var User $user */
 		$user = $this->getUser();
 		return $user;
+	}
+
+	private function parties(): array {
+		$parties = [];
+		foreach ($this->partyService->getCurrent($this->user()) as $party) {
+			$parties[$party->getId()] = $party;
+		}
+		return $parties;
 	}
 
 	/**
@@ -178,35 +165,13 @@ class OrderController extends AbstractController
 	 */
 	private function createOrderForm(Order $order, array $parties, int $turn): FormInterface {
 		$form = $this->createFormBuilder($order);
-		$form->setAction($this->generateUrl('order'));
 		$form->add('party', ChoiceType::class, [
 			'label'   => 'Partei',
 			'choices' => $this->getParties($parties)
 		]);
 		$form->add('turn', ChoiceType::class, [
 			'label'   => 'Runde',
-			'choices' => $this->getTurns($turn),
-			'data'    => (string)$turn
-		]);
-		$form->add('submit', SubmitType::class, [
-			'label' => 'Anzeigen'
-		]);
-		return $form->getForm();
-	}
-
-	/**
-	 * @param array<Party> $parties
-	 * @throws \Exception
-	 */
-	private function createSendForm(Order $order, array $parties, int $turn): FormInterface {
-		$form = $this->createFormBuilder($order);
-		$form->add('party', ChoiceType::class, [
-			'label'   => 'Partei',
-			'choices' => $this->getParties($parties)
-		]);
-		$form->add('turn', ChoiceType::class, [
-			'label'   => 'Runde',
-			'choices' => $this->getTurns($turn),
+			'choices' => $this->getTurns($turn, 0),
 			'data'    => (string)$turn
 		]);
 		$form->add('orders', TextareaType::class, [
@@ -234,10 +199,10 @@ class OrderController extends AbstractController
 	/**
 	 * @return array<string>
 	 */
-	#[Pure] private function getTurns(int $turn, int $min = -5): array {
+	#[Pure] private function getTurns(int $turn, int $min = -3, int $max = 3): array {
 		$turns = [];
 		$next  = max(0, $turn + $min);
-		$last  = $turn + 5;
+		$last  = $turn + $max;
 		while ($next <= $last ) {
 			$round = (string)$next;
 			$next++;
