@@ -119,7 +119,18 @@ form label {
 }
 
 form .form-check-label {
-	margin-left: 0.4rem;
+	margin-left: unset;
+}
+
+form .form-check-label span {
+	color: #704a21;
+	font-size: 125%;
+	margin-left: 0.2em;
+}
+
+form .form-check-input[type="checkbox"] {
+	border-radius: unset;
+	margin-top: 0.6em;
 }
 
 form .btn-primary {
@@ -154,6 +165,10 @@ form .row > div:last-child {
 
 .form-control, .form-select {
 	border-radius: 0;
+}
+
+#settings-form .form-group:last-child {
+	margin-bottom: 0.25rem;
 }
 
 /* Header */

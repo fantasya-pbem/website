@@ -8,6 +8,7 @@ use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -18,6 +19,7 @@ use App\Entity\Game;
 use App\Entity\User;
 use App\Game\Newbie;
 use App\Game\Party;
+use App\Security\TokenHelper;
 use App\Service\GameService;
 use App\Service\MailService;
 use App\Service\PartyService;
@@ -63,12 +65,14 @@ class ProfileController extends AbstractController
 	 * @throws \Exception
 	 */
 	#[Route('/profil', 'profile')]
-	public function index(Request $request): Response {
-		$roles   = $this->getRoles();
-		$flags   = $this->getFlags();
-		$games   = $this->gameService->getAll();
-		$parties = $this->partyService->getFor($this->user());
-		$newbies = $this->partyService->getNewbies($this->user());
+	public function index(Request $request, Security $security): Response {
+		$tokenHelper = new TokenHelper($security);
+		$certificate = $tokenHelper->getClientCertificate();
+		$roles       = $this->getRoles();
+		$flags       = $this->getFlags();
+		$games       = $this->gameService->getAll();
+		$parties     = $this->partyService->getFor($this->user());
+		$newbies     = $this->partyService->getNewbies($this->user());
 		$this->removeEmptyGameParties($games, $parties, $newbies);
 
 		$success   = null;
@@ -84,13 +88,14 @@ class ProfileController extends AbstractController
 		}
 
 		return $this->render('profile/index.html.twig', [
-			'roles'   => $roles,
-			'flags'   => $flags,
-			'games'   => $games,
-			'parties' => $parties,
-			'newbies' => $newbies,
-			'success' => $success,
-			'error'   => ['code' => $errorCode, 'text' => self::$errors[$error] ?? null]
+			'certificate' => $certificate,
+			'roles'       => $roles,
+			'flags'       => $flags,
+			'games'       => $games,
+			'parties'     => $parties,
+			'newbies'     => $newbies,
+			'success'     => $success,
+			'error'       => ['code' => $errorCode, 'text' => self::$errors[$error] ?? null]
 		]);
 	}
 
