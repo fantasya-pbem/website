@@ -9,6 +9,37 @@
 {% endblock %}
 
 {% block content %}
+    {% if certificate %}
+        <div class="mb-4">
+            <p>
+                Du hast Dich mit einem Zertifikat angemeldet, das
+                {% if certificate.remainingDays > 30 %}
+                    noch <strong>{{ certificate.remainingDays }} Tage</strong> gültig ist.
+                {% else %}
+                    nur noch <strong>{{ certificate.remainingDays == 1 ? 'Tag' : 'Tage' }}</strong> gültig ist.
+                    <strong>Du solltest Dir bald ein neues Zertifikat besorgen.</strong>
+                {% endif %}
+            </p>
+            <ul>
+                <li>
+                    <strong>E-Mail-Adresse:</strong> {{ certificate.email }}
+                </li>
+                <li>
+                    <strong>Aussteller:</strong> {{ certificate.cA }}
+                </li>
+                <li>
+                    <strong>Seriennummer:</strong> {{ certificate.serialNumber }}
+                </li>
+                <li>
+                    <strong>Gültigkeitszeitraum:</strong> {{ certificate.start }} – {{ certificate.end }}
+                </li>
+                <li>
+                    <strong>Verifiziert?</strong> {{ certificate.verified ? 'Ja' : 'Nein' }}
+                </li>
+            </ul>
+        </div>
+    {% endif %}
+
     <div class="mb-4">
         {% if error.code > 0 and error.code < 40 %}
             <h2>

@@ -19,6 +19,7 @@ use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 use App\Entity\User;
+use App\Security\TokenHelper;
 
 class ClientCertificateAuthenticator extends AbstractAuthenticator
 {
@@ -59,12 +60,11 @@ class ClientCertificateAuthenticator extends AbstractAuthenticator
 		if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
 			return new RedirectResponse($targetPath);
 		}
-		$client = new ClientCertificate();
-		$days   = $client->getRemainingDays();
-		if ($days > 30) {
-			return new RedirectResponse($this->urlGenerator->generate('profile'));
-		}
-		return new RedirectResponse($this->urlGenerator->generate('user_expire', ['days' => $days]));
+
+		$helper = new TokenHelper();
+		$helper->registerClientCertificate($token);
+
+		return new RedirectResponse($this->urlGenerator->generate('profile'));
 	}
 
 	private function getLoginUrl(): string {

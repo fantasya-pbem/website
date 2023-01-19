@@ -40,13 +40,6 @@ class UserController extends AbstractController
 		return $this->redirectToRoute('profile');
 	}
 
-	#[Route('/zertifikatshinweis/{days}/tage', 'user_expire')]
-	public function expire(int $days): Response {
-    	return $this->render('user/expire.html.twig', [
-    		'days' => $days
-		]);
-	}
-
 	/**
 	 * @throws \Throwable
 	 */
