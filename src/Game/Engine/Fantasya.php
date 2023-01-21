@@ -25,6 +25,10 @@ class Fantasya implements Engine
 		return false;
 	}
 
+	public function getRulesFile(): string {
+		return __DIR__ . '/../../../var/check/fantasya.tpl';
+	}
+
 	/**
 	 * @return array<Party>
 	 */

@@ -29,9 +29,9 @@ class MailfilterCommand extends Command
 	private array $header = [];
 
 	public function __construct(private readonly UserRepository $userRepository, private readonly GameRepository $gameRepository,
-								private readonly PartyService $partyService, private readonly OrderService $orderService,
-								private readonly MailService $mailService, private readonly EngineService $engineService,
-								private readonly UserPasswordHasherInterface $hasher) {
+		                        private readonly PartyService $partyService, private readonly OrderService $orderService,
+		                        private readonly MailService $mailService, private readonly EngineService $engineService,
+		                        private readonly UserPasswordHasherInterface $hasher) {
 		parent::__construct();
 		setlocale(LC_ALL, 'de_DE');
 	}

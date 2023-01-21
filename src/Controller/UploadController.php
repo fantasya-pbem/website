@@ -11,6 +11,7 @@ use App\Exception\OrderException;
 use App\Game\OrderTrait;
 use App\Repository\GameRepository;
 use App\Repository\UserRepository;
+use App\Service\CheckService;
 use App\Service\EngineService;
 use App\Service\OrderService;
 use App\Service\PartyService;
@@ -21,7 +22,8 @@ class UploadController extends AbstractController
 
 	public function __construct(private readonly UserRepository $userRepository, private readonly GameRepository $gameRepository,
 		                        private readonly PartyService $partyService, private readonly OrderService $orderService,
-		                        private readonly EngineService $engineService, private readonly UserPasswordHasherInterface $hasher) {
+		                        private readonly EngineService $engineService, private readonly CheckService $checkService,
+		                        private readonly UserPasswordHasherInterface $hasher) {
 	}
 
 	/**
@@ -50,6 +52,29 @@ class UploadController extends AbstractController
 		} catch (OrderException $e) {
 			return new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
 		}
-		return new Response('OK');
+		return $this->returnCheckResponse();
+	}
+
+	protected function returnCheckResponse(): Response {
+		$check      = $this->getCheckResult();
+		$simulation = $this->getSimulationProblems();
+		if (empty($check)) {
+			$code   = Response::HTTP_OK;
+			$result = 'Die Schreibweise der Befehle scheint in Ordnung zu sein.';
+		} else {
+			$code   = Response::HTTP_CREATED;
+			$result = implode(PHP_EOL, $check);
+		}
+		if (is_array($simulation)) {
+			if (empty($simulation)) {
+				$result .= PHP_EOL . 'Die Simulation hat keine Probleme aufgezeigt.';
+			} else {
+				$code = Response::HTTP_CREATED;
+				foreach ($simulation as $line) {
+					$result .= PHP_EOL . $line;
+				}
+			}
+		}
+		return new Response($result, $code);
 	}
 }

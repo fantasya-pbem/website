@@ -17,6 +17,11 @@ interface Engine
 	public function canSimulate(Game $game, int $turn): bool;
 
 	/**
+	 * Get the path to the rules checker template file.
+	 */
+	public function getRulesFile(): string;
+
+	/**
 	 * Get the last game round.
 	 */
 	public function getRound(Game $game): int;
