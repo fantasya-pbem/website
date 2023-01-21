@@ -14,7 +14,7 @@ abstract class AbstractCheckCommand extends Command
 {
 	protected string $rules;
 
-	public function __construct(protected ContainerBagInterface $config, protected CheckService $checkService) {
+	public function __construct(protected readonly ContainerBagInterface $config, protected readonly CheckService $checkService) {
 		parent::__construct();
 	}
 
@@ -30,7 +30,7 @@ abstract class AbstractCheckCommand extends Command
 		$commands = file_get_contents($orders);
 		$result   = $this->checkService->check($commands);
 		if (empty($result)) {
-			$output->writeln('Die Befehle scheinen in Ordnung zu sein.');
+			$output->writeln('Die Schreibweise der Befehle scheint in Ordnung zu sein.');
 			return 0;
 		}
 		foreach ($result as $line) {

@@ -99,4 +99,36 @@ trait OrderTrait
 			throw new OrderException('Die Befehle konnten nicht gespeichert werden.', 1);
 		}
 	}
+
+	private function getCheckResult(): array {
+		$engine = $this->engineService->get($this->game);
+		$this->checkService->readRules($engine->getRulesFile());
+		return $this->checkService->check($this->content);
+	}
+
+	private function getSimulationProblems(): ?array {
+		$engine = $this->engineService->get($this->game);
+		if ($engine->canSimulate($this->game, $this->round)) {
+			$result     = [];
+			$simulation = explode(PHP_EOL, $this->orderService->getSimulation());
+			$unit       = null;
+			foreach ($simulation as $line) {
+				if ($line) {
+					if ($line[0] === '[') {
+						if ($line[1] !== ' ') {
+							if ($unit) {
+								$result[] = $unit;
+								$unit     = null;
+							}
+							$result[] = $line;
+						}
+					} else {
+						$unit = $line;
+					}
+				}
+			}
+			return $result;
+		}
+		return null;
+	}
 }

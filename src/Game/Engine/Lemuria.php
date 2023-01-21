@@ -67,6 +67,10 @@ class Lemuria implements Engine
 		return $turn === $this->getRound($game);
 	}
 
+	public function getRulesFile(): string {
+		return __DIR__ . '/../../../var/check/lemuria.tpl';
+	}
+
 	public function getRound(Game $game): int {
 		return LemuriaGame::Calendar()->Round();
 	}
