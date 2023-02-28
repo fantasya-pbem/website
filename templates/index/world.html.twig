@@ -44,93 +44,58 @@
 
     <p>Es gibt {{ statistics.landscape.world|format_number(locale='de') }} Regionen auf dieser Spielwelt und {{ statistics.landscape.underworld|format_number(locale='de') }} Regionen in der Unterwelt.</p>
 
-    <table class="table table-borderless table-sm">
-        <thead></thead>
-        <tr>
-            {% for region in statistics.world %}
-                <th>{{ region.typ }}</th>
-            {% endfor %}
-        </tr>
-        <tbody>
-        <tr>
-            {% for region in statistics.world %}
-                <td>{{ region.count|format_number(locale='de') }}</td>
-            {% endfor %}
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-like row">
+        {% for region in statistics.world %}
+            <div class="col-3 col-sm-2">
+                <span class="th">{{ region.typ }}</span>
+                <span class="td">{{ region.count|format_number(locale='de') }}</span>
+            </div>
+        {% endfor %}
+    </div>
 
-    <table class="table table-borderless table-sm">
-        <thead></thead>
-        <tr>
-            {% for region in statistics.underworld %}
-                <th>{{ region.typ }}</th>
-            {% endfor %}
-        </tr>
-        <tbody>
-        <tr>
-            {% for region in statistics.underworld %}
-                <td>{{ region.count|format_number(locale='de') }}</td>
-            {% endfor %}
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-like row">
+        {% for region in statistics.underworld %}
+            <div class="col-3 col-sm-2">
+                <span class="th">{{ region.typ }}</span>
+                <span class="td">{{ region.count|format_number(locale='de') }}</span>
+            </div>
+        {% endfor %}
+    </div>
 
     <h3>Bevölkerung</h3>
 
     <p>Es gibt insgesamt {{ statistics.population.units|format_number(locale='de') }} Einheiten mit {{ statistics.population.persons|format_number(locale='de') }} Individuen (Spieler und Monster).</p>
 
-    <table class="table table-borderless table-sm">
-        <thead></thead>
-        <tr>
-            {% for player in statistics.races %}
-                <th>{{ player.race }}</th>
-            {% endfor %}
-        </tr>
-        <tbody>
-        <tr>
-            {% for player in statistics.races %}
-                <td>{{ player.units|format_number(locale='de') }}/{{ player.persons|format_number(locale='de') }}</td>
-            {% endfor %}
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-like row">
+        {% for player in statistics.races %}
+            <div class="col-3 col-sm-2">
+                <span class="th">{{ player.race }}</span>
+                <span class="td">{{ player.units|format_number(locale='de') }}/{{ player.persons|format_number(locale='de') }}</span>
+            </div>
+        {% endfor %}
+    </div>
 
-    <table class="table table-borderless table-sm">
-        <thead></thead>
-        <tr>
-            {% for monster in statistics.monsters %}
-                <th>{{ monster.race }}</th>
-            {% endfor %}
-        </tr>
-        <tbody>
-        <tr>
-            {% for monster in statistics.monsters %}
-                <td>{{ monster.units|format_number(locale='de') }}/{{ monster.persons|format_number(locale='de') }}</td>
-            {% endfor %}
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-like row">
+        {% for monster in statistics.monsters %}
+            <div class="col-3 col-sm-2">
+                <span class="th">{{ monster.race }}</span>
+                <span class="td">{{ monster.units|format_number(locale='de') }}/{{ monster.persons|format_number(locale='de') }}</span>
+            </div>
+        {% endfor %}
+    </div>
 
     <h3>Parteien</h3>
 
     <p>Diese Spielwelt wird von {{ statistics.partiesCount|format_number(locale='de') }} Parteien bevölkert.</p>
 
-    <table class="table table-borderless table-sm">
-        <thead></thead>
-        <tr>
-            {% for player in statistics.partyRaces %}
-                <th>{{ player.race }}</th>
-            {% endfor %}
-        </tr>
-        <tbody>
-        <tr>
-            {% for player in statistics.partyRaces %}
-                <td>{{ player.count|format_number(locale='de') }}</td>
-            {% endfor %}
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-like row">
+        {% for player in statistics.partyRaces %}
+            <div class="col-3 col-sm-2">
+                <span class="th">{{ player.race }}</span>
+                <span class="td">{{ player.count|format_number(locale='de') }}</span>
+            </div>
+        {% endfor %}
+    </div>
 
     <dl>
         {% for party in statistics.parties %}

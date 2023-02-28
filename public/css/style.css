@@ -301,6 +301,19 @@ main a.inline img {
 	margin-left: 0.5rem;
 }
 
+main .table-like.row {
+	margin-bottom: 0.25rem;
+}
+main .table-like.row > div {
+	margin-bottom: 0.75rem;
+}
+main .table-like.row > div .th, main .table-like.row > div .td {
+	display: block;
+}
+main .table-like.row > div .th {
+	font-weight: bold;
+}
+
 .article.card {
 	border: 1px solid #90602a;
 }
