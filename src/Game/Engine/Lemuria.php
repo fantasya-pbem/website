@@ -43,6 +43,8 @@ class Lemuria implements Engine
 
 	private static NewcomerConfig $config;
 
+	private static array $retiredUuids = [];
+
 	private EntityManagerInterface $entityManager;
 
 	public function __construct(private readonly ContainerBagInterface $container, private readonly AssignmentRepository $assignmentRepository,
@@ -52,6 +54,9 @@ class Lemuria implements Engine
 			self::$config = new NewcomerConfig(__DIR__ . '/../../../var/lemuria');
 			LemuriaGame::init(self::$config->setLogFile(self::LOG_FILE));
 			LemuriaGame::load();
+			foreach ($this->assignmentRepository->findRetired() as $assignment) {
+				self::$retiredUuids[$assignment->getUuid()] = true;
+			}
 			self::$hasBeenInitialized = true;
 		}
 	}
@@ -87,7 +92,11 @@ class Lemuria implements Engine
 		$parties = [];
 		foreach (LemuriaGame::Catalog()->getAll(Domain::Party) as $party) {
 			/** @var PartyModel $party */
-			$parties[] = $this->createParty($party);
+			if ($party->hasRetired()) {
+				$this->updateRetirement($party);
+			} else {
+				$parties[] = $this->createParty($party);
+			}
 		}
 		return $parties;
 	}
@@ -117,7 +126,11 @@ class Lemuria implements Engine
 			/** @var PartyModel $party */
 			$party = LemuriaGame::Registry()->find($assignment->getUuid());
 			if ($party) {
-				$parties[] = $this->createParty($party);
+				if ($party->hasRetired()) {
+					$this->updateRetirement($party);
+				} else {
+					$parties[] = $this->createParty($party);
+				}
 			}
 		}
 		return $parties;
@@ -211,5 +224,14 @@ class Lemuria implements Engine
 	private function fetchEmailAddress(string $uuid): string {
 		$assignment = $this->assignmentRepository->findByUuid($uuid);
 		return $assignment ? $assignment->getUser()->getEmail() : '';
+	}
+
+	private function updateRetirement(PartyModel $party): void {
+		if (!isset(self::$retiredUuids[$party->Uuid()])) {
+			$assignment = $this->assignmentRepository->findByUuid($party->Uuid());
+			$assignment->retire();
+			$this->entityManager->persist($assignment);
+			$this->entityManager->flush();
+		}
 	}
 }

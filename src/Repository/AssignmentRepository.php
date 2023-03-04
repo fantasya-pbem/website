@@ -20,6 +20,15 @@ class AssignmentRepository extends ServiceEntityRepository
 	/**
 	 * @return array<Assignment>
 	 */
+	public function findRetired(): array {
+		$q = $this->createQueryBuilder('a');
+		$q->andWhere($q->expr()->eq('a.retired', 1));
+		return $q->getQuery()->getResult();
+	}
+
+	/**
+	 * @return array<Assignment>
+	 */
 	public function findByUser(User $user): array {
 		return parent::findBy(['user' => $user, 'retired' => false]);
 	}
