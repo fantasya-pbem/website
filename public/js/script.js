@@ -1,6 +1,4 @@
 document.addEventListener('readystatechange', () => {
-	console.log('readyState is ' + document.readyState);
-
 	if (document.readyState === 'complete') {
 		document.querySelectorAll('form.dynamic-select').forEach(form => {
 			form.querySelectorAll('select').forEach(select => {

@@ -1,2 +1,6 @@
 User-agent: *
-Disallow: /
+Disallow: /anmelden
+Disallow: /kontakt
+Disallow: /passwort-vergessen
+Disallow: /registrieren
+Disallow: /welt/fantasya

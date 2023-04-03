@@ -14,12 +14,6 @@
     "doctrine/cache": {
         "version": "v1.8.0"
     },
-    "doctrine/collections": {
-        "version": "v1.5.0"
-    },
-    "doctrine/common": {
-        "version": "v2.10.0"
-    },
     "doctrine/dbal": {
         "version": "v2.9.2"
     },
@@ -32,7 +26,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "2.8",
-            "ref": "719d615af3150a59a02acc97c285d689e5dcf43f"
+            "ref": "6b43b7b6ff6bf2551f2933ebeb66721fa3db8fbc"
         },
         "files": [
             "config/packages/doctrine.yaml",
@@ -59,17 +53,11 @@
     "doctrine/inflector": {
         "version": "v1.3.0"
     },
-    "doctrine/instantiator": {
-        "version": "1.1.0"
-    },
     "doctrine/lexer": {
         "version": "v1.0.1"
     },
     "doctrine/migrations": {
         "version": "v2.0.0"
-    },
-    "doctrine/orm": {
-        "version": "v2.6.3"
     },
     "doctrine/persistence": {
         "version": "v1.1.0"
@@ -210,9 +198,6 @@
     },
     "sebastian/recursion-context": {
         "version": "4.0.4"
-    },
-    "sebastian/resource-operations": {
-        "version": "3.0.3"
     },
     "sebastian/type": {
         "version": "2.3.1"
