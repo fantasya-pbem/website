@@ -1,10 +1,12 @@
-<h1 class="card-header">Die&nbsp;Welten</h1>
+<h1 class="card-header">Die&nbsp;Spielwelt</h1>
 <nav class="card-body">
     <ul class="nav flex-column">
         {% for game in game_service.all %}
-            <li class="nav-item">
-                <a href="{{ path('world', {'alias': game.name | lower}) }}" class="nav-link">{{ game.name }}</a>
-            </li>
+            {% if game.canEnter %}
+                <li class="nav-item">
+                    <a href="{{ path('world', {'alias': game.name | lower}) }}" class="nav-link">{{ game.name }}</a>
+                </li>
+            {% endif %}
         {% endfor %}
     </ul>
 </nav>
