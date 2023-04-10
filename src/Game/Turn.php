@@ -44,7 +44,13 @@ class Turn
 		$day      = $this->game->getStartDay();
 		$hour     = $this->game->getStartHour();
 		$start->setTime($hour, 0);
-		if ($day > 0) {
+		if ($day >= 10) {
+			$start->add(new \DateInterval('P1M'));
+			$day   = (int)($day / 10);
+			$month = (int)$start->format('m');
+			$year  = (int)$start->format('Y');
+			$start->setDate($year, $month, $day);
+		} elseif ($day > 0) {
 			if ($lastDay > $day || $lastDay === $day && $lastHour >= $hour) {
 				$start->add(new \DateInterval('P' . (7 - $lastDay + $day) . 'D'));
 			} elseif ($lastDay < $day) {
