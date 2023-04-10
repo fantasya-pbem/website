@@ -135,6 +135,10 @@ class Game
 	}
 
 	public function getStart(): string {
+		if ($this->start_day >= 10) {
+			$day = (int)($this->start_day / 10);
+			return $day . '. des Monats, ' . $this->start_hour . ' Uhr';
+		}
 		if ($this->start_day > 0) {
 			$start = Turn::createStart($this)->getTimestamp();
 			return self::dateFormat("EEEE, k 'Uhr'")->format($start);
