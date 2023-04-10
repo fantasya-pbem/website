@@ -128,7 +128,7 @@ form .form-check-label span {
 	margin-left: 0.2em;
 }
 
-form .form-check-input[type="checkbox"] {
+form .form-group .form-check-input[type="checkbox"] {
 	border-radius: unset;
 	margin-top: 0.6em;
 }
@@ -167,8 +167,9 @@ form .row > div:last-child {
 	border-radius: 0;
 }
 
-#settings-form .form-group:last-child {
-	margin-bottom: 0.25rem;
+#settings-form .form-group,
+#settings-form .form-group .form-label {
+	margin-bottom: 0;
 }
 
 /* Header */

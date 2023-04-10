@@ -31,11 +31,12 @@
 		}
 	],
 	"version": "2.15.2",
-	"time": "2023-04-10",
+	"time": "2023-04-12",
 
 	"require": {
 		"php": "~8.2",
 		"ext-iconv": "~8.2",
+		"ext-zip": "~8.2",
 		"doctrine/annotations": "~2.0",
 		"doctrine/doctrine-bundle": "~2.9",
 		"doctrine/doctrine-migrations-bundle": "~3.2",

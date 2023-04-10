@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace App\Controller;
 
+use App\Data\Reports;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Egulias\EmailValidator\EmailValidator;
@@ -15,6 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use App\Data\Flag;
 use App\Entity\Game;
 use App\Entity\User;
 use App\Game\Newbie;
@@ -66,13 +68,15 @@ class ProfileController extends AbstractController
 	 */
 	#[Route('/profil', 'profile')]
 	public function index(Request $request, Security $security): Response {
-		$tokenHelper = new TokenHelper($security);
-		$certificate = $tokenHelper->getClientCertificate();
-		$roles       = $this->getRoles();
-		$flags       = $this->getFlags();
-		$games       = $this->gameService->getAll();
-		$parties     = $this->partyService->getFor($this->user());
-		$newbies     = $this->partyService->getNewbies($this->user());
+		$tokenHelper   = new TokenHelper($security);
+		$certificate   = $tokenHelper->getClientCertificate();
+		$roles         = $this->getRoles();
+		$flags         = $this->getFlags();
+		$reportOptions = $this->getReportOptions();
+		$report        = new Reports($this->user()->getFlags());
+		$games         = $this->gameService->getAll();
+		$parties       = $this->partyService->getFor($this->user());
+		$newbies       = $this->partyService->getNewbies($this->user());
 		$this->removeEmptyGameParties($games, $parties, $newbies);
 
 		$success   = null;
@@ -88,14 +92,16 @@ class ProfileController extends AbstractController
 		}
 
 		return $this->render('profile/index.html.twig', [
-			'certificate' => $certificate,
-			'roles'       => $roles,
-			'flags'       => $flags,
-			'games'       => $games,
-			'parties'     => $parties,
-			'newbies'     => $newbies,
-			'success'     => $success,
-			'error'       => ['code' => $errorCode, 'text' => self::$errors[$error] ?? null]
+			'certificate'   => $certificate,
+			'roles'         => $roles,
+			'report'        => $report,
+			'flags'         => $flags,
+			'reportOptions' => $reportOptions,
+			'games'         => $games,
+			'parties'       => $parties,
+			'newbies'       => $newbies,
+			'success'       => $success,
+			'error'         => ['code' => $errorCode, 'text' => self::$errors[$error] ?? null]
 		]);
 	}
 
@@ -169,10 +175,21 @@ class ProfileController extends AbstractController
 	#[Route('/profil/einstellungen', 'profile_settings')]
 	public function settings(Request $request): Response {
 		if ($request->request->has('submitSettings')) {
-			$user = $this->user();
+			$user    = $this->user();
+			$flags   = $user->getFlags();
+			$reports = new Reports($flags);
+			$reports->clear();
 			try {
-				$withAttachment = $request->request->has('withAttachment');
-				$user->setFlag(User::FLAG_WITH_ATTACHMENT, $withAttachment);
+				$flags->setFlag(Flag::WithAttachment, $request->request->has('withAttachment'));
+				foreach ($request->request->getIterator() as $name => $value) {
+					if (str_starts_with($name, 'report-')) {
+						$reports->$value = true;
+					}
+				}
+				if ($reports->isClear()) {
+					$reports->all();
+				}
+				$user->setFlags($reports->setToFlags($flags));
 				$this->save($user);
 				$error = 0;
 			} catch (\Exception) {
@@ -221,9 +238,20 @@ class ProfileController extends AbstractController
 	 */
 	#[ArrayShape(['withAttachment' => 'string'])]
 	private function getFlags(): array {
-		$withAttachment = $this->user()->hasFlag(User::FLAG_WITH_ATTACHMENT);
+		$withAttachment = $this->user()->getFlags()->hasFlag(Flag::WithAttachment);
 		return [
 			'withAttachment' => $withAttachment ? ' checked="checked"' : ''
+		];
+	}
+
+	/**
+	 * @return array<int, string>
+	 */
+	private function getReportOptions(): array {
+		return [
+			Reports::HTML     => 'HTML',
+			Reports::TEXT     => 'Text',
+			Reports::MAGELLAN => 'Magellan'
 		];
 	}
 

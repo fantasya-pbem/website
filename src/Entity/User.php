@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping\Id;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use App\Data\Flags;
 use App\Data\PasswordReset;
 use App\Repository\UserRepository;
 use App\Security\Role;
@@ -16,10 +17,6 @@ use App\Security\Role;
 #[Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-	public final const FLAG_WITH_ATTACHMENT = 1;
-
-	private const ALL_FLAGS = [self::FLAG_WITH_ATTACHMENT];
-
 	#[Column]
 	#[GeneratedValue]
 	#[Id]
@@ -107,34 +104,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		return $this;
 	}
 
-	/**
-	 * @throws \InvalidArgumentException
-	 */
-	public function hasFlag(int $flag): bool {
-		$this->validateFlag($flag);
-		return ($this->flags & $flag) === 1;
+	public function getFlags(): Flags {
+		return new Flags($this->flags);
 	}
 
-	/**
-	 * @throws \InvalidArgumentException
-	 */
-	public function setFlag(int $flag, bool $set = true): self {
-		$this->validateFlag($flag);
-		if ($set) {
-			$this->flags |= $flag;
-		} else {
-			$this->flags &= array_sum(self::ALL_FLAGS) - $flag;
-		}
+	public function setFlags(Flags $flags): self {
+		$this->flags = $flags->get();
 		return $this;
-	}
-
-	/**
-	 * @throws \InvalidArgumentException
-	 */
-	private function validateFlag(int $flag): void {
-		if (!in_array($flag, self::ALL_FLAGS)) {
-			throw new \InvalidArgumentException('Invalid flag: ' . $flag);
-		}
 	}
 
 	public function from(PasswordReset $resetOrRegistration): self {
@@ -144,5 +120,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 			->setEmail($resetOrRegistration->getEmail())
 			->setRoles([Role::USER]);
 	}
-
 }
