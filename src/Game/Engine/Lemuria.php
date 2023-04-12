@@ -48,7 +48,7 @@ class Lemuria implements Engine
 	private EntityManagerInterface $entityManager;
 
 	public function __construct(private readonly ContainerBagInterface $container, private readonly AssignmentRepository $assignmentRepository,
-								ManagerRegistry $managerRegistry) {
+		                        ManagerRegistry $managerRegistry) {
 		$this->entityManager = $managerRegistry->getManager();
 		if (!self::$hasBeenInitialized) {
 			self::$config = new NewcomerConfig(__DIR__ . '/../../../var/lemuria');
@@ -206,6 +206,7 @@ class Lemuria implements Engine
 			'user_id'      => $user,
 			'email'        => $email,
 			'monster'      => $party->Type() !== Type::Player,
+			'round'        => $party->Round(),
 			'retirement'   => $party->Retirement()
 		]);
 	}

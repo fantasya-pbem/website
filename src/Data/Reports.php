@@ -10,6 +10,8 @@ class Reports implements \ArrayAccess
 
 	public final const MAGELLAN = 'magellan';
 
+	protected const EXTENSIONS = ['cr' => self::MAGELLAN, 'html' => self::HTML, 'txt' => self::TEXT];
+
 	private const ALL = [self::HTML, self::TEXT, self::MAGELLAN];
 
 	public bool $html;
@@ -72,6 +74,18 @@ class Reports implements \ArrayAccess
 		$this->text     = false;
 		$this->magellan = false;
 		return $this;
+	}
+
+	public function byExtension(string $extension): bool {
+		if (!isset(self::EXTENSIONS[$extension])) {
+			return false;
+		}
+		$format = self::EXTENSIONS[$extension];
+		return $this->$format;
+	}
+
+	public function allowAdditionalFiles(): bool {
+		return $this->html || $this->text;
 	}
 
 	public function setToFlags(Flags $flags): Flags {
