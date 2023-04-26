@@ -31,7 +31,7 @@
 		}
 	],
 	"version": "2.15.2",
-	"time": "2023-04-21",
+	"time": "2023-04-26",
 
 	"require": {
 		"php": "~8.2",
@@ -41,9 +41,9 @@
 		"doctrine/doctrine-bundle": "~2.9",
 		"doctrine/doctrine-migrations-bundle": "~3.2",
 		"doctrine/orm": "~2.14",
-		"lemuria-pbem/engine-fantasya": "~1.2.0",
-		"lemuria-pbem/lemuria": "~1.2.0",
-		"lemuria-pbem/model-fantasya": "~1.2.0",
+		"lemuria-pbem/engine-fantasya": "~1.3.0",
+		"lemuria-pbem/lemuria": "~1.3.0",
+		"lemuria-pbem/model-fantasya": "~1.3.0",
 		"symfony/apache-pack": "~1.0",
 		"symfony/asset": "~6.2",
 		"symfony/console": "~6.2",
