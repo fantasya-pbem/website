@@ -5,6 +5,9 @@ namespace App\Data;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+use App\Entity\Game;
+use App\Entity\User;
+
 class Report
 {
 	#[NotBlank]
@@ -13,7 +16,11 @@ class Report
 	#[GreaterThanOrEqual(0)]
 	private int $turn = 0;
 
-	private string $game = '';
+	private Game $game;
+
+	private User $user;
+
+	private string $path;
 
 	public function getParty(): string {
 		return $this->party;
@@ -23,8 +30,16 @@ class Report
 		return $this->turn;
 	}
 
-	public function getGame(): string {
+	public function getGame(): Game {
 		return $this->game;
+	}
+
+	public function getUser(): User {
+		return $this->user;
+	}
+
+	public function getPath(): string {
+		return $this->path;
 	}
 
 	public function setParty(string $party): void {
@@ -35,7 +50,15 @@ class Report
 		$this->turn = $turn;
 	}
 
-	public function setGame(string $game): void {
+	public function setGame(Game $game): void {
 		$this->game = $game;
+	}
+
+	public function setUser(User $user): void {
+		$this->user = $user;
+	}
+
+	public function setPath(string $path): void {
+		$this->path = $path;
 	}
 }

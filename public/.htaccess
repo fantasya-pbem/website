@@ -76,6 +76,7 @@ Redirect 301 /game/next      /welt
 Redirect 301 /index          /
 Redirect 301 /logout         /abmelden
 Redirect 301 /myth           /geruechte
+Redirect 301 /myths          /geruechte
 Redirect 301 /news           /neuigkeiten
 Redirect 301 /order          /befehle-kontrollieren
 Redirect 301 /order/send     /befehle-senden

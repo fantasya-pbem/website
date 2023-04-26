@@ -10,6 +10,14 @@
                 </label>
             </div>
         </div>
+        <div class="col-12">
+            {% for value, format in reportOptions %}
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="report-{{ value }}" name="report-{{ value }}" value="{{ value }}" {{ report[value] ? 'checked' : '' }}>
+                    <label class="form-check-label" for="report-{{ value }}">{{ format }}</label>
+                </div>
+            {% endfor %}
+        </div>
         <div class="col-auto">
             <button type="submit" name="submitSettings" class="btn btn-primary btn-block">Einstellungen übernehmen
             </button>

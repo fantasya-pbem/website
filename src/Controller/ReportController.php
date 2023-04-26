@@ -44,8 +44,9 @@ class ReportController extends AbstractController
 		foreach ($parties as $party) {
 			$id     = $party->getId();
 			$report = new Report();
+			$report->setUser($this->user());
 			$report->setParty($id);
-			$report->setGame($this->gameService->getCurrent()->getAlias());
+			$report->setGame($this->gameService->getCurrent());
 			$this->reportService->setContext($report);
 			$form       = $this->createReportForm($report);
 			$forms[$id] = $form->createView();
@@ -54,7 +55,7 @@ class ReportController extends AbstractController
 			if ($form->isSubmitted() && $form->isValid()) {
 				/** @var Report $report */
 				$report = $form->getData();
-				$report->setGame($this->gameService->getCurrent()->getAlias());
+				$report->setGame($this->gameService->getCurrent());
 				$this->reportService->setContext($report);
 				return $this->file($this->reportService->getPath());
 			}
@@ -86,7 +87,7 @@ class ReportController extends AbstractController
 					$currentToken->setGame($gameId)->setParty($partyId)->setEmail($email)->setTurn($round);
 					if ($downloadToken->setEmail($email)->setTurn($round)->equals($currentToken)) {
 						$report = new Report();
-						$report->setGame($game->getAlias());
+						$report->setGame($game);
 						$report->setParty($party->getId());
 						$report->setTurn($turn->getRound());
 						$this->reportService->setContext($report);

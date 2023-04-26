@@ -55,6 +55,10 @@ readonly class Party
 		return !$this->properties['monster'];
 	}
 
+	public function getRound(): int {
+		return $this->properties['round'];
+	}
+
 	public function isRetired(): bool {
 		return isset($this->properties['retirement']) && $this->properties['retirement'];
 	}

@@ -9,8 +9,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
+use App\Data\Flag;
 use App\Entity\Game;
-use App\Entity\User;
 use App\Game\Party;
 use App\Game\Turn;
 use App\Repository\GameRepository;
@@ -127,7 +127,7 @@ abstract class AbstractSendCommand extends Command
 		$this->token->setGame($this->game->getId())->setParty($id)->setEmail($user->getEmail())->setTurn($this->round);
 
 		$report = null;
-		if ($user->hasFlag(User::FLAG_WITH_ATTACHMENT)) {
+		if ($user->getFlags()->hasFlag(Flag::WithAttachment)) {
 			$file   = $this->round . '-' . $partyId . '.zip';
 			$report = realpath(__DIR__ . '/../../var/zip/' . $this->game->getAlias() . '/' . $this->round . '/' . $file);
 			if (!$report || !is_file($report)) {
