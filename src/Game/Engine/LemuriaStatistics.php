@@ -4,9 +4,9 @@ namespace App\Game\Engine;
 
 use JetBrains\PhpStorm\ArrayShape;
 
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Lemuria;
-use Lemuria\Model\Dictionary;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -20,6 +20,7 @@ use App\Game\Statistics;
 class LemuriaStatistics implements Statistics
 {
 	use BuilderTrait;
+	use GrammarTrait;
 
 	/**
 	 * @var array<array>|null
@@ -52,10 +53,7 @@ class LemuriaStatistics implements Statistics
 	 */
 	private ?array $persons = null;
 
-	private Dictionary $dictionary;
-
 	public function __construct() {
-		$this->dictionary = new Dictionary();
 	}
 
 	/**
@@ -78,7 +76,7 @@ class LemuriaStatistics implements Statistics
 				$races[$race]++;
 			}
 			foreach ($races as $race => $count) {
-				$this->races[] = ['race' => $this->dictionary->get('race', $race), 'count' => $count];
+				$this->races[] = ['race' => $this->translateSingleton($race), 'count' => $count];
 			}
 		}
 		return $this->parties;
@@ -126,7 +124,7 @@ class LemuriaStatistics implements Statistics
 				$this->regions++;
 			}
 			foreach ($regions as $landscape => $count) {
-				$this->landscape[] = ['typ' => $this->dictionary->get('landscape', $landscape), 'count' => $count];
+				$this->landscape[] = ['typ' => $this->translateSingleton($landscape), 'count' => $count];
 			}
 		}
 		return ['world' => $this->regions, 'underworld' => 0];
@@ -157,10 +155,10 @@ class LemuriaStatistics implements Statistics
 			$this->getUnitPopulation($persons, $monsters, $count, $total);
 			$this->getResourcesPopulation($monsters, $count, $total);
 			foreach ($persons as $race => $numbers) {
-				$this->persons[] = ['race' => $this->dictionary->get('race', $race), 'units' => $numbers[0], 'persons' => $numbers[1]];
+				$this->persons[] = ['race' => $this->translateSingleton($race), 'units' => $numbers[0], 'persons' => $numbers[1]];
 			}
 			foreach ($monsters as $race => $numbers) {
-				$this->mosters[] = ['race' => $this->dictionary->get('race', $race), 'units' => $numbers[0], 'persons' => $numbers[1]];
+				$this->mosters[] = ['race' => $this->translateSingleton($race), 'units' => $numbers[0], 'persons' => $numbers[1]];
 			}
 			$this->population = ['units' => $count, 'persons' => $total];
 		}
