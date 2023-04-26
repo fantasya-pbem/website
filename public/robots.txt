@@ -4,3 +4,5 @@ Disallow: /kontakt
 Disallow: /passwort-vergessen
 Disallow: /registrieren
 Disallow: /welt/fantasya
+Disallow: /memberlist.php
+Allow: /
