@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 use App\Data\Flag;
+use App\Data\Report;
 use App\Entity\Game;
 use App\Game\Party;
 use App\Game\Turn;
@@ -19,6 +20,7 @@ use App\Security\DownloadToken;
 use App\Service\EngineService;
 use App\Service\MailService;
 use App\Service\PartyService;
+use App\Service\ReportService;
 
 abstract class AbstractSendCommand extends Command
 {
@@ -34,7 +36,8 @@ abstract class AbstractSendCommand extends Command
 
 	public function __construct(ContainerBagInterface $config, private readonly GameRepository $gameRepository,
 		                        private readonly UserRepository $userRepository, private readonly EngineService $engineService,
-		                        private readonly MailService $mailService, private readonly PartyService $partyService
+		                        private readonly MailService $mailService, private readonly PartyService $partyService,
+		                        private readonly ReportService $reportService
 	) {
 		parent::__construct();
 		$this->token = new DownloadToken($config->get('app.secret'));
@@ -126,21 +129,24 @@ abstract class AbstractSendCommand extends Command
 		}
 		$this->token->setGame($this->game->getId())->setParty($id)->setEmail($user->getEmail())->setTurn($this->round);
 
-		$report = null;
+		$reportPath = null;
 		if ($user->getFlags()->hasFlag(Flag::WithAttachment)) {
-			$file   = $this->round . '-' . $partyId . '.zip';
-			$report = realpath(__DIR__ . '/../../var/zip/' . $this->game->getAlias() . '/' . $this->round . '/' . $file);
-			if (!$report || !is_file($report)) {
-				throw new \RuntimeException('Report ' . $file . ' does not exist.');
-			}
+			$report = new Report();
+			$report->setGame($this->game);
+			$report->setParty($party->getId());
+			$report->setTurn($this->round);
+			$report->setUser($user);
+			$this->reportService->setContext($report);
+			$reportPath = $this->reportService->getPath();
+			$file       = basename($reportPath);
 		}
 
 		$mail = $this->mailService->withReport($user);
 		$mail->subject($this->getSubject());
 		$mail->textTemplate($this->getTemplate());
-		$mail->context(['user' => $user, 'round' => $this->round, 'token' => $this->token, 'withReport' => (bool)$report]);
-		if ($report) {
-			$mail->attachFromPath($report);
+		$mail->context(['user' => $user, 'round' => $this->round, 'token' => $this->token, 'withReport' => (bool)$reportPath]);
+		if ($reportPath) {
+			$mail->attachFromPath($reportPath);
 			/** @noinspection PhpUndefinedVariableInspection */
 			$this->output->writeln('Attaching report ' . $file . ' for party ' . $partyName . '.', OutputInterface::VERBOSITY_VERBOSE);
 		} else {

@@ -16,6 +16,7 @@ use App\Entity\Game;
 use App\Entity\User;
 use App\Game\Party;
 use App\Game\Turn;
+use App\Repository\UserRepository;
 use App\Security\DownloadToken;
 use App\Security\Role;
 use App\Service\EngineService;
@@ -25,8 +26,9 @@ use App\Service\ReportService;
 
 class ReportController extends AbstractController
 {
-	public function __construct(private readonly GameService $gameService, private readonly PartyService $partyService,
-		                        private readonly ReportService $reportService, private readonly EngineService $engineService) {
+	public function __construct(private readonly UserRepository $userRepository, private readonly GameService $gameService,
+								private readonly PartyService $partyService, private readonly ReportService $reportService,
+								private readonly EngineService $engineService) {
 	}
 
 	/**
@@ -90,6 +92,7 @@ class ReportController extends AbstractController
 						$report->setGame($game);
 						$report->setParty($party->getId());
 						$report->setTurn($turn->getRound());
+						$report->setUser($this->userRepository->find($party->getUser()));
 						$this->reportService->setContext($report);
 						return $this->file($this->reportService->getPath());
 					}
