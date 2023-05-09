@@ -69,6 +69,7 @@ DirectoryIndex index.php
     </IfModule>
 </IfModule>
 
+Redirect 301 /about          /ueber-fantasya
 Redirect 301 /about-fantasya /ueber-fantasya
 Redirect 301 /contact        /kontakt
 Redirect 301 /donate         /spenden
