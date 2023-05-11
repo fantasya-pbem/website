@@ -33,14 +33,14 @@ class Order
 		return $this->game;
 	}
 
-	public function getPartyId(): string {
+	public function getPartyId(): ?string {
 		$orders = explode("\r\n", $this->orders);
 		$line   = $orders[0] ?? '';
 		$cPos   = strpos($line, ';');
 		$line   = explode(' ', strtolower(trim(substr($line, 0, $cPos > 0 ? $cPos : null))));
 		return match ($line[0]) {
 			'eressea', 'fantasya', 'lemuria', 'partei' => $this->parsePartyId($line),
-			default                                    => '',
+			default                                    => null,
 		};
 	}
 

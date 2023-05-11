@@ -109,10 +109,14 @@ class OrderController extends AbstractController
 			$order = $form->getData();
 			$game  = $this->gameService->getCurrent();
 			$id    = $order->getPartyId();
-			try {
-				$party = $this->partyService->getById($id, $game);
-			} catch (\Exception) {
-				$party = null;
+			$party = null;
+			if ($id === null) {
+				$party = $this->partyService->getByOwner($order->getParty(), $game);
+			} else {
+				try {
+					$party = $this->partyService->getById($id, $game);
+				} catch (\Throwable) {
+				}
 			}
 			if ($order->getParty() === $party?->getOwner()) {
 				$order->setGame($game);
