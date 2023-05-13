@@ -20,6 +20,7 @@
 !/var/certs/.gitignore
 !/var/check/fantasya.tpl
 !/var/orders/.gitignore
+!/var/temp/.gitignore
 !/var/zip/.gitignore
 /composer.lock
 
