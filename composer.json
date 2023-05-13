@@ -1,7 +1,7 @@
 {
 	"name": "fantasya-pbem/website",
 	"description": "The Fantasya website.",
-	"keywords": ["atlantis", "email", "eressea", "fantasya", "lemuria", "pbem", "symfony", "website"],
+	"keywords": ["atlantis", "email", "eressea", "fantasya", "lemuria", "pbem", "pbm", "symfony", "website"],
 	"license": "proprietary",
 	"type": "project",
 	"homepage": "https://www.fantasya-pbem.de",
@@ -30,8 +30,8 @@
 			"email": "info@fantasya-pbem.de"
 		}
 	],
-	"version": "2.15.4",
-	"time": "2023-05-11",
+	"version": "2.15.5",
+	"time": "2023-05-13",
 
 	"require": {
 		"php": "~8.2",

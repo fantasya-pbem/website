@@ -12,15 +12,7 @@ class TempDirService
 
 	public function __construct() {
 		if (!self::$tmpDir) {
-			$tmpDir = realpath(self::TMP_DIR);
-			if (!$tmpDir || !is_dir($tmpDir)) {
-				if (!mkdir(self::TMP_DIR, 0750)) {
-					throw new \RuntimeException('Could not create temp dir.');
-				}
-				self::$tmpDir = realpath(self::TMP_DIR);
-			} else {
-				self::$tmpDir = $tmpDir;
-			}
+			self::$tmpDir = (string)realpath(self::TMP_DIR);
 		}
 	}
 
@@ -51,9 +43,11 @@ class TempDirService
 			unlink($path);
 			return;
 		}
-		foreach (glob($path . DIRECTORY_SEPARATOR . '*') as $path) {
-			$this->delete($path);
+		foreach (glob($path . DIRECTORY_SEPARATOR . '*') as $file) {
+			$this->delete($file);
 		}
-		rmdir($path);
+		if (is_dir($path)) {
+			rmdir($path);
+		}
 	}
 }
