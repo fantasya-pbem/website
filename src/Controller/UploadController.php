@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +31,11 @@ class UploadController extends AbstractController
 	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
 	#[Route('/magellan/{alias}', 'upload')]
-	public function index(string $alias): Response {
+	public function index(Request $request, string $alias): Response {
+		if ($request->getMethod() !== Request::METHOD_POST) {
+			return $this->render('upload/magellan.html.twig', response: new Response(status: Response::HTTP_METHOD_NOT_ALLOWED));
+		}
+
 		$this->game = $this->gameRepository->findByAlias($alias);
 		if (!$this->game) {
 			return new Response(status: Response::HTTP_NOT_FOUND);

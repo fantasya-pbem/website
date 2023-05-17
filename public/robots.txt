@@ -2,7 +2,9 @@ User-agent: *
 Disallow: /anmelden
 Disallow: /kontakt
 Disallow: /passwort-vergessen
+Disallow: /register
 Disallow: /registrieren
+Disallow: /reset
 Disallow: /welt/fantasya
 Disallow: /memberlist.php
 Allow: /
