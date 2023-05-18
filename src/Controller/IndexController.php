@@ -8,16 +8,26 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Game\Turn;
 use App\Repository\GameRepository;
+use App\Repository\NewsRepository;
 use App\Service\EngineService;
 
 class IndexController extends AbstractController
 {
-	public function __construct(private readonly GameRepository $gameRepository, private readonly EngineService $engineService) {
+	public function __construct(private readonly NewsRepository $newsRepository, private readonly GameRepository $gameRepository,
+		                        private readonly EngineService $engineService) {
 	}
 
 	#[Route('/', 'index')]
 	public function index(): Response {
-		return $this->redirectToRoute('news');
+		$news = $this->newsRepository->findLatest();
+		$game = $this->gameRepository->findByAlias('lemuria');
+		$turn = new Turn($game, $this->engineService);
+
+		return $this->render('index/index.html.twig', [
+			'news' => $news,
+			'game' => $game,
+			'turn' => $turn
+		]);
 	}
 
 	#[Route('/ueber-fantasya', 'about-fantasya')]

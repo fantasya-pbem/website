@@ -26,4 +26,11 @@ class NewsRepository extends ServiceEntityRepository
     	$q->orderBy('n.created_at', 'DESC');
     	return $q->getQuery()->getResult();
 	}
+
+	public function findLatest(): ?News {
+		$q = $this->createQueryBuilder('n');
+		$q->orderBy('n.created_at', 'DESC')->setMaxResults(1);
+		$result = $q->getQuery()->getResult();
+		return $result[0] ?? null;
+	}
 }
