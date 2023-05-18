@@ -1,6 +1,7 @@
 User-agent: *
 Disallow: /anmelden
 Disallow: /kontakt
+Disallow: /magellan/
 Disallow: /passwort-vergessen
 Disallow: /register
 Disallow: /registrieren

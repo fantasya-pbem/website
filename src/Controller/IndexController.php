@@ -53,11 +53,13 @@ class IndexController extends AbstractController
 			return $this->redirectToRoute('index');
 		}
 
+		$robots     = $game->getCanEnter() ? 'index, follow' : 'noindex, nofollow';
 		$turn       = new Turn($game, $this->engineService);
 		$engine     = $this->engineService->get($game);
 		$statistics = $engine->getStatistics($game);
 		$version    = $engine->getVersion();
 		return $this->render('index/world.html.twig', [
+			'robots'     => $robots,
 			'game'       => $game,
 			'turn'       => $turn,
 			'statistics' => $statistics,
