@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Fantasya 3
+{% endblock %}
+
+{% block description %}
+    Fantasya ist eine Welt voll mit Elfen, Zwergen und anderen Lebewesen. Gründe Deine eigene Zivilisation und messe
+    Dich mit anderen Spielern bei diesem kostenlosen Strategiespiel.
+{% endblock %}
+
+{% block header %}
+    Fantasya 3
+{% endblock %}
+
+{% block content %}
+    <p>
+        Im März 2021 ist mit <a href="{{ path('world', {'alias': game.name | lower}) }}">Lemuria</a> die neue Spielwelt
+        gestartet. Fantasya 3 ist eine Weiterentwicklung mit dem Ziel, Mikromanagement zu reduzieren und schneller und
+        flexibler neue Spielideen ausprobieren zu können.
+    </p>
+
+    <h2>Nächste Auswertung</h2>
+
+    <p><strong>Runde {{ (turn.round + 1)|format_number(locale='de') }} am {{ turn.next }}</strong></p>
+
+    <p>Spielbefehle bitte an folgende E-Mail-Adressen senden:</p>
+
+    <ul>
+        <li>
+            <strong>lemuria(at)fantasya-pbem.de</strong>
+        </li>
+    </ul>
+
+    <h2>Aktuelles</h2>
+
+    <p>
+        Besucht regelmäßig unser Forum, die <a href="//forum.fantasya-pbem.de">Taverne</a>, oder folgt uns auf
+        <a class="inline image" href="{{ mastodon_url }}" target="fantasya_mastodon">
+            <img src="{{ asset('images/mastodon.png') }}" alt="Mastodon">
+        </a>.
+    </p>
+
+    {% if news %}
+        <p><a href="{{ path('news') }}">alle Neuigkeiten</a></p>
+
+        <div class="article card">
+            <h3 class="card-header">{{ news.createdAt|format_date('long', locale='de') }} – {{ news.title }}</h3>
+            <div class="card-body">{{ news.content|raw|nl2br }}</div>
+        </div>
+    {% endif %}
+{% endblock %}
