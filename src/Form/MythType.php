@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class MythType extends AbstractType
 {
-	public function buildForm(FormBuilderInterface $builder, array $options) {
+	public function buildForm(FormBuilderInterface $builder, array $options): void {
 		$builder->add('myth', TextType::class,[
 			'label' => '...das da lautet:',
 			'attr'  => ['autofocus' => true]
