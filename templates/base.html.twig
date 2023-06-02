@@ -71,7 +71,7 @@
                 <div class="row">
                     <div class="col-6 col-md-4 col-lg-3 offset-xl-1">
                         <div class="card">
-                            <h1 class="card-header">Fantasya</h1>
+                            <h2 class="card-header">Fantasya</h2>
                             <nav class="card-body">
                                 {{ include('includes/fantasya.html.twig') }}
                             </nav>
@@ -83,7 +83,7 @@
 
 
                         <div class="card d-none d-md-block">
-                            <h1 class="card-header">Anmeldung</h1>
+                            <h2 class="card-header">Anmeldung</h2>
                             <div class="card-body">
                                 {% if is_granted('ROLE_USER') %}
                                     {{ include('includes/menu.html.twig') }}
@@ -95,11 +95,14 @@
                         </div>
 
                         <div class="card d-none d-md-block">
-                            {{ include('includes/worlds.html.twig') }}
+                            <h2 class="card-header">Die&nbsp;Spielwelt</h2>
+                            <nav class="card-body">
+                                {{ include('includes/worlds.html.twig') }}
+                            </nav>
                         </div>
 
                         <div class="card d-none d-md-block">
-                            <h1 class="card-header">Links</h1>
+                            <h2 class="card-header">Links</h2>
                             <nav class="card-body">
                                 {{ include('includes/links.html.twig') }}
                             </nav>
@@ -108,7 +111,7 @@
 
                     <div class="col-6 d-md-none">
                         <div class="card">
-                            <h1 class="card-header">Anmeldung</h1>
+                            <h2 class="card-header">Anmeldung</h2>
                             <div class="card-body">
                                 {% if is_granted('ROLE_USER') %}
                                     {{ include('includes/menu.html.twig') }}
@@ -132,7 +135,7 @@
 
                     <div class="col-6 d-md-none">
                         <div class="card">
-                            <h1 class="card-header">Links</h1>
+                            <h2 class="card-header">Links</h2>
                             <nav class="card-body">
                                 {{ include('includes/links.html.twig') }}
                             </nav>
