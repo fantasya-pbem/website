@@ -13,7 +13,7 @@ h1, h2, h3, h4 {
 h1 {
 	font-size: 1.5rem;
 }
-h1.card-header {
+h1.card-header, h2.card-header {
 	color: #fff3d1;
 }
 

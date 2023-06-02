@@ -17,7 +17,7 @@ class RegistrationType extends AbstractType
 		$this->question = $config->get('app.antispam.question');
 	}
 
-	public function buildForm(FormBuilderInterface $builder, array $options) {
+	public function buildForm(FormBuilderInterface $builder, array $options): void {
 		$builder->add('name', TextType::class,[
 			'label' => 'Benutzername',
 			'attr'  => ['autofocus' => true]

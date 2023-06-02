@@ -13,7 +13,7 @@ use App\Game\Race;
 
 class NewbieType extends AbstractType
 {
-	public function buildForm(FormBuilderInterface $builder, array $options) {
+	public function buildForm(FormBuilderInterface $builder, array $options): void {
 		$builder->add('name', TextType::class, [
 			'label' => 'Name der Partei',
 			'attr'  => ['autofocus' => true, 'tabindex' => 1]
