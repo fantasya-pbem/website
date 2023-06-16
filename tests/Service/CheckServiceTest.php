@@ -2,11 +2,13 @@
 declare(strict_types = 1);
 namespace App\Tests\Service;
 
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Test;
+use SATHub\PHPUnit\Base;
+
 use App\Service\CheckService;
 
-use App\Tests\Test;
-
-class CheckServiceTest extends Test
+class CheckServiceTest extends Base
 {
 	protected const LINES = [
 		'EINHEIT 123',
@@ -24,9 +26,7 @@ class CheckServiceTest extends Test
 
 	protected const INVALID = [2, 7];
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function construct(): CheckService {
 		$service = new CheckService();
 
@@ -35,10 +35,7 @@ class CheckServiceTest extends Test
 		return $service;
 	}
 
-	/**
-	 * @test
-	 * @depends construct
-	 */
+	#[Test, Depends('construct')]
 	public function readRules(CheckService $service): CheckService {
 		$service->readRules(__DIR__ . '/../check/test.tpl');
 
@@ -47,19 +44,13 @@ class CheckServiceTest extends Test
 		return $service;
 	}
 
-	/**
-	 * @test
-	 * @depends readRules
-	 */
+	#[Test, Depends('readRules')]
 	public function isValid(CheckService $service): void {
 		$this->assertTrue($service->isValid(self::LINES[self::VALID[0]]));
 		$this->assertFalse($service->isValid(self::LINES[self::INVALID[0]]));
 	}
 
-	/**
-	 * @test
-	 * @depends readRules
-	 */
+	#[Test, Depends('readRules')]
 	public function check(CheckService $service): void {
 		$result = $service->check(implode(PHP_EOL, self::LINES));
 
