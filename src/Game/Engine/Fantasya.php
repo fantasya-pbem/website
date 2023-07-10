@@ -129,6 +129,10 @@ class Fantasya implements Engine
 	}
 
 	public function updateUser(User $user, Game $game): void {
+		if (!$this->hasParty($user, $game)) {
+			return;
+		}
+
 		$id         = $user->getId();
 		$connection = $this->entityManager->getConnection();
 		$email      = $connection->quote($user->getEmail());
@@ -165,6 +169,11 @@ class Fantasya implements Engine
 		if (!$connection->prepare($sql)->executeStatement()) {
 			throw new \RuntimeException('Could not delete Newbie.');
 		}
+	}
+
+	private function hasParty(User $user, Game $game): bool {
+		$parties = $this->getParties($user, $game);
+		return count($parties) > 0;
 	}
 
 	private function createValues(Newbie $newbie): string {
