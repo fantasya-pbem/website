@@ -10,18 +10,19 @@ h1, h2, h3, h4 {
 	font-weight: 700;
 }
 
-h1 {
-	font-size: 1.5rem;
-}
 h1.card-header, h2.card-header {
 	color: #fff3d1;
+}
+
+h1.card-header {
+	background: #90602a;
 }
 
 h2, h3, h3.card-header, h4 {
 	color: #e13900;
 }
 
-h2 {
+h1, h2 {
 	font-size: 1.25rem;
 }
 
@@ -188,12 +189,36 @@ form .row > div:last-child {
 	margin: 0.1rem 1rem;
 }
 
-.navbar .nav-item a {
+.navbar .nav-item a,
+.navbar .nav-item button {
 	color: #fff;
 	text-decoration: none;
 }
-.navbar .nav-item a:hover {
+.navbar .nav-item a:hover,
+#mobile-nav-buttons .nav-link.active {
 	color: #ddd;
+}
+
+#mobile-nav-buttons {
+	margin-top: 1.5rem;
+}
+
+#mobile-nav-buttons .navbar {
+	background: linear-gradient(#573d21, #90602a);
+}
+
+#mobile-nav-buttons .nav-tabs,
+#mobile-nav-buttons .nav-link  {
+	border: none;
+}
+
+#mobile-nav-buttons .nav-tabs .nav-link {
+	background: none;
+	font-size: 1.25rem;
+}
+
+#mobile-nav-buttons .nav-item {
+
 }
 
 .container-fluid.myth {
