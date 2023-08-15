@@ -87,6 +87,9 @@
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="mobile-nav-worlds" data-bs-toggle="tab" data-bs-target="#mobile-tab-worlds" type="button" role="tab" aria-controls="mobile-tab-worlds" aria-selected="false">Spielwelt</button>
                                 </li>
+                                <li class="nav-item d-none d-sm-block" role="presentation">
+                                    <button class="nav-link" id="mobile-nav-links" data-bs-toggle="tab" data-bs-target="#mobile-tab-links" type="button" role="tab" aria-controls="mobile-tab-links" aria-selected="false">Links</button>
+                                </li>
                             </ul>
                         </nav>
                         <div class="tab-content">
@@ -108,6 +111,11 @@
                             <div class="tab-pane" id="mobile-tab-worlds" role="tabpanel" aria-labelledby="mobile-nav-worlds" tabindex="2">
                                 <nav class="card-body">
                                     {{ include('includes/worlds.html.twig') }}
+                                </nav>
+                            </div>
+                            <div class="tab-pane" id="mobile-tab-links" role="tabpanel" aria-labelledby="mobile-nav-links" tabindex="3">
+                                <nav class="card-body d-none d-sm-block">
+                                    {{ include('includes/links.html.twig') }}
                                 </nav>
                             </div>
                         </div>
@@ -161,7 +169,7 @@
                         </main>
                     </div>
 
-                    <div class="col-6 d-md-none">
+                    <div class="col-12 d-sm-none">
                         <div class="card">
                             <h2 class="card-header">Links</h2>
                             <nav class="card-body">
