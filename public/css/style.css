@@ -376,3 +376,8 @@ footer span {
 	text-align: center;
 	text-transform: uppercase;
 }
+
+footer span img {
+	width: 0.75rem;
+	vertical-align: text-bottom;
+}

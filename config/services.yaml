@@ -20,6 +20,10 @@ parameters:
     app.mail.user.agent: '%env(MAIL_USER_AGENT)%'
     app.secret: '%env(APP_SECRET)%'
     app.simulation: '%env(SIMULATION)%'
+    feed.title: '%env(FEED_TITLE)%'
+    feed.description: '%env(FEED_DESCRIPTION)%'
+    feed.author.name: '%env(FEED_AUTHOR_NAME)%'
+    feed.author.email: '%env(FEED_AUTHOR_EMAIL)%'
 
 services:
     # default configuration for services in *this* file

@@ -27,6 +27,15 @@ class NewsRepository extends ServiceEntityRepository
     	return $q->getQuery()->getResult();
 	}
 
+	/**
+	 * @return array<News>
+	 */
+	public function findForFeed(int $limit = 15): array {
+		$q = $this->createQueryBuilder('n');
+		$q->orderBy('n.created_at', 'DESC')->setMaxResults($limit);
+		return $q->getQuery()->getResult();
+	}
+
 	public function findLatest(): ?News {
 		$q = $this->createQueryBuilder('n');
 		$q->orderBy('n.created_at', 'DESC')->setMaxResults(1);
