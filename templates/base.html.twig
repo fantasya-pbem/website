@@ -10,7 +10,7 @@
 {% endif %}
         <meta name="generator" content="Symfony 6.3">
         <meta name="keywords" content="Atlantis, Eressea, Fantasy, Fantasya, game, GermanAtlantis, Lemuria, pbem, playByEmail, pbm, Rollenspiel, Spiel">
-        <meta name="origin" content="https://www.fantasya-pbem.de">
+        <meta name="origin" content="{{ absolute_url(path('index')) }}">
         <meta name="referrer" content="origin">
 {% if block('robots') is defined %}
         <meta name="robots" content="{{ block('robots') }}">
@@ -18,12 +18,14 @@
         <meta name="robots" content="index, follow">
 {% endif %}
         <meta name="theme-color" content="#90602a">
-        <meta name="version" content="2.17.0">
+        <meta name="version" content="2.17.2">
         <meta name="viewport" content="width=400, initial-scale=1.0">
         <title>{{ block('title')|trim }}</title>
+        <link rel="alternate" type="application/atom+xml" title="ATOM" href="{{ absolute_url(path('feed', {format: 'atom'})) }}">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ absolute_url(path('feed', {format: 'rss'})) }}">
         <link rel="icon" href="{{ asset('favicon.ico') }}?v=2.17.0">
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}?v=5.3.1">
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=2.17.0">
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=2.17.2">
         <script src="{{ asset('js/bootstrap.min.js') }}?v=5.3.1" async></script>
         <script src="{{ asset('js/script.js') }}?v=2.17.0" async></script>
     </head>
@@ -185,7 +187,16 @@
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-auto">
-                        <span>&copy; {{ 'now'|date('Y') }} fantasya.pbem. All rights reserved. Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>, mogel &amp; Thalian.</span>
+                        <span>
+                            &copy; {{ 'now'|date('Y') }} fantasya.pbem. All rights reserved. Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>, mogel &amp; Thalian.
+                            Newsfeed:
+                            <a href="{{ absolute_url(path('feed', {format: 'rss'})) }}">
+                                <img src="{{ asset('images/feed-icon.svg') }}" alt="RSS"/>&nbsp;RSS
+                            </a>
+                            <a href="{{ absolute_url(path('feed', {format: 'atom'})) }}">
+                                <img src="{{ asset('images/feed-icon.svg') }}" alt="ATOM"/>&nbsp;ATOM
+                            </a>
+                        </span>
                     </div>
                 </div>
             </div>

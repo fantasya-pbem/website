@@ -11,6 +11,7 @@
 		"forum": "https://forum.fantasya-pbem.de",
 		"irc": "irc://libera.chat/fantasya",
 		"issues": "https://github.com/fantasya-pbem/website/issues",
+		"rss": "https://www.fantasya-pbem.de/feed/rss",
 		"source": "https://github.com/fantasya-pbem/website",
 		"wiki": "https://wiki.fantasya-pbem.de"
 	},
@@ -30,8 +31,8 @@
 			"email": "info@fantasya-pbem.de"
 		}
 	],
-	"version": "2.17.1",
-	"time": "2023-08-15",
+	"version": "2.17.2",
+	"time": "2023-08-17",
 
 	"require": {
 		"php": "~8.2",
@@ -41,6 +42,7 @@
 		"doctrine/doctrine-bundle": "~2.10",
 		"doctrine/doctrine-migrations-bundle": "~3.2",
 		"doctrine/orm": "~2.16",
+		"laminas/laminas-feed": "~2.21",
 		"lemuria-pbem/engine-fantasya": "~1.4.0",
 		"lemuria-pbem/lemuria": "~1.4.0",
 		"lemuria-pbem/model-fantasya": "~1.4.0",

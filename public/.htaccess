@@ -71,6 +71,7 @@ DirectoryIndex index.php
 
 Redirect 301 /about          /ueber-fantasya
 Redirect 301 /about-fantasya /ueber-fantasya
+Redirect 301 /atom           /feed/atom
 Redirect 301 /contact        /kontakt
 Redirect 301 /donate         /spenden
 Redirect 301 /game/next      /welt
@@ -86,6 +87,7 @@ Redirect 301 /profile        /profil
 Redirect 301 /report         /auswertung
 Redirect 301 /register       /registrieren
 Redirect 301 /reset          /passwort-vergessen
+Redirect 301 /rss            /feed/rss
 Redirect 301 /user/register  /registrieren
 Redirect 301 /user/reset     /passwort-vergessen
 Redirect 301 /user/secure    /anmeldung
