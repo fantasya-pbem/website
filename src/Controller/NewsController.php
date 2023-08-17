@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Entity\News;
@@ -94,19 +95,19 @@ class NewsController extends AbstractController
 		if (!in_array($format, self::FEED_FORMAT)) {
 			$format = self::DEFAULT_FEED_FORMAT;
 		}
-		$index    = $this->generateUrl('index');
+		$index    = $this->generateUrl('index', referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
 		$author   = ['name' => $this->getParameter('feed.author.name'), 'email' => $this->getParameter('feed.author.email'), 'uri' => $index];
-		$newsLink = $this->generateUrl('news');
+		$newsLink = $this->generateUrl('news', referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
 		$feedNews = $this->repository->findForFeed();
 
 		$feed = new Feed;
 		$feed->setLanguage('de_DE');
 		$feed->setTitle($this->getParameter('feed.title'));
-		$feed->setId($this->generateUrl('feed', ['format' => $format]));
+		$feed->setId($this->generateUrl('feed', ['format' => $format], UrlGeneratorInterface::ABSOLUTE_URL));
 		$feed->setDescription($this->getParameter('feed.description'));
 		$feed->setLink($index);
 		foreach (self::FEED_FORMAT as $type) {
-			$feed->setFeedLink($this->generateUrl('feed', ['format' => $type]), $type);
+			$feed->setFeedLink($this->generateUrl('feed', ['format' => $type], UrlGeneratorInterface::ABSOLUTE_URL), $type);
 		}
 		$feed->addAuthor($author);
 		$feed->setDateModified($feedNews[0]?->getCreatedAt()->getTimestamp() ?? time());
