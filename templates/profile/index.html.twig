@@ -16,7 +16,7 @@
                 {% if certificate.remainingDays > 30 %}
                     noch <strong>{{ certificate.remainingDays }} Tage</strong> gültig ist.
                 {% else %}
-                    nur noch <strong>{{ certificate.remainingDays == 1 ? 'Tag' : 'Tage' }}</strong> gültig ist.
+                    nur noch <strong>{{ certificate.remainingDays }} {{ certificate.remainingDays == 1 ? 'Tag' : 'Tage' }}</strong> gültig ist.
                     <strong>Du solltest Dir bald ein neues Zertifikat besorgen.</strong>
                 {% endif %}
             </p>
