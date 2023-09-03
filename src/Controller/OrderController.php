@@ -70,15 +70,19 @@ class OrderController extends AbstractController
 		]);
 	}
 
-	#[Route('/befehle-simulieren', 'order_simulation')]
-	public function simulation(Request $request): Response {
-		$parties = $this->partyService->getCurrent($this->user());
-		if (empty($parties)) {
+	#[Route('/befehle-simulieren/{id}', 'order_simulation')]
+	public function simulation(Request $request, string $id): Response {
+		foreach ($this->partyService->getCurrent($this->user()) as $next) {
+			if ($next->getId() === $id) {
+				$party = $next;
+				break;
+			}
+		}
+		if (!isset($party)) {
 			return new Response(status: Response::HTTP_NOT_FOUND);
 		}
 
 		$game  = $this->gameService->getCurrent();
-		$party = $parties[0];
 		$order = new Order();
 		$order->setParty($party->getOwner());
 		$order->setTurn($this->turn($request));
