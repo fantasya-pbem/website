@@ -9,6 +9,7 @@ document.addEventListener('readystatechange', () => {
 		});
 
 		const simulationToggle = document.getElementById('simulation');
+		const simulationId = simulationToggle.dataset['party'];
 		const simulationModeAll = document.getElementById('simulation-mode-all');
 		const simulationModeProblems = document.getElementById('simulation-mode-problems');
 		const simulationText = document.querySelector('#simulation pre');
@@ -51,8 +52,8 @@ document.addEventListener('readystatechange', () => {
 			simulationText.textContent = text;
 		};
 
-		const fetchSimulation = function () {
-			fetch('/befehle-simulieren')
+		const fetchSimulation = function (event) {
+			fetch('/befehle-simulieren/' + simulationId)
 				.then((response) => response.text())
 				.then((text) => {
 					simulation = text;
