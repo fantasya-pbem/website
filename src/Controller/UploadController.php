@@ -59,7 +59,10 @@ class UploadController extends AbstractController
 		}
 
 		if ($request->query->has('nosimulation')) {
-			$noSimulation = $request->query->get('nosimulation');
+			$noSimulation = $request->query->get('nosimulation', '');
+			if (!is_string($noSimulation)) {
+				$noSimulation = $noSimulation ? 'ALL' : '';
+			}
 			if (strlen($noSimulation) <= 15 && preg_match('/^[a-zA-Z,]+$/', $noSimulation) === 1) {
 				return $this->returnCheckResponse(explode(',', strtoupper($noSimulation)));
 			}
