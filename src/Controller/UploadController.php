@@ -57,12 +57,18 @@ class UploadController extends AbstractController
 		} catch (OrderException $e) {
 			return new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
 		}
+
+		if ($request->query->has('nosimulation')) {
+			$noSimulation = $request->query->get('nosimulation');
+			if (strlen($noSimulation) <= 15 && preg_match('/^[a-zA-Z,]+$/', $noSimulation) === 1) {
+				return $this->returnCheckResponse(explode(',', strtoupper($noSimulation)));
+			}
+		}
 		return $this->returnCheckResponse();
 	}
 
-	protected function returnCheckResponse(): Response {
-		$check      = $this->getCheckResult();
-		$simulation = $this->getSimulationProblems();
+	protected function returnCheckResponse(array $noSimulation = []): Response {
+		$check = $this->getCheckResult();
 		if (empty($check)) {
 			$code   = Response::HTTP_OK;
 			$result = 'Die Schreibweise der Befehle scheint in Ordnung zu sein.';
@@ -70,16 +76,21 @@ class UploadController extends AbstractController
 			$code   = Response::HTTP_CREATED;
 			$result = implode(PHP_EOL, $check);
 		}
-		if (is_array($simulation)) {
-			if (empty($simulation)) {
-				$result .= PHP_EOL . 'Die Simulation hat keine Probleme aufgezeigt.';
-			} else {
-				$code = Response::HTTP_CREATED;
-				foreach ($simulation as $line) {
-					$result .= PHP_EOL . $line;
+
+		if (!in_array('ALL', $noSimulation) && !in_array('1', $noSimulation)) {
+			$simulation = $this->getSimulationProblems($noSimulation);
+			if (is_array($simulation)) {
+				if (empty($simulation)) {
+					$result .= PHP_EOL . 'Die Simulation hat keine Probleme aufgezeigt.';
+				} else {
+					$code = Response::HTTP_CREATED;
+					foreach ($simulation as $line) {
+						$result .= PHP_EOL . $line;
+					}
 				}
 			}
 		}
+
 		return new Response($result, $code);
 	}
 }

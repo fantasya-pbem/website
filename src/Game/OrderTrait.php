@@ -106,7 +106,7 @@ trait OrderTrait
 		return $this->checkService->check($this->content);
 	}
 
-	private function getSimulationProblems(): ?array {
+	private function getSimulationProblems(array $skip = []): ?array {
 		$engine = $this->engineService->get($this->game);
 		if ($engine->canSimulate($this->game, $this->round)) {
 			$result     = [];
@@ -115,12 +115,15 @@ trait OrderTrait
 			foreach ($simulation as $line) {
 				if ($line) {
 					if ($line[0] === '[') {
-						if ($line[1] !== ' ') {
-							if ($unit) {
-								$result[] = $unit;
-								$unit     = null;
+						$type = $line[1];
+						if ($type !== ' ') {
+							if (!in_array($type, $skip)) {
+								if ($unit) {
+									$result[] = $unit;
+									$unit     = null;
+								}
+								$result[] = $line;
 							}
-							$result[] = $line;
 						}
 					} else {
 						$unit = $line;
