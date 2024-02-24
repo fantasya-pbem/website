@@ -332,6 +332,7 @@ main .table-like.row {
 }
 main .table-like.row > div {
 	margin-bottom: 0.75rem;
+	padding-right: 0;
 }
 main .table-like.row > div .th, main .table-like.row > div .td {
 	display: block;
