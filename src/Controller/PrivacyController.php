@@ -16,9 +16,9 @@ use App\Service\PrivacyService;
 
 class PrivacyController extends AbstractController
 {
-	public final const COOKIE = 'accept_dsgvo';
+	public final const string COOKIE = 'accept_dsgvo';
 
-	private const RETURN = 'news';
+	private const string RETURN = 'news';
 
 	public function __construct(private readonly PrivacyService $service) {
 	}

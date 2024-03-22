@@ -4,15 +4,21 @@ namespace App\Data;
 
 class Reports implements \ArrayAccess
 {
-	public final const HTML = 'html';
+	public final const string HTML = 'html';
 
-	public final const TEXT = 'text';
+	public final const string TEXT = 'text';
 
-	public final const MAGELLAN = 'magellan';
+	public final const string MAGELLAN = 'magellan';
 
-	protected const EXTENSIONS = ['cr' => self::MAGELLAN, 'html' => self::HTML, 'txt' => self::TEXT];
+	/**
+	 * @type array<string, string>
+	 */
+	protected const array EXTENSIONS = ['cr' => self::MAGELLAN, 'html' => self::HTML, 'txt' => self::TEXT];
 
-	private const ALL = [self::HTML, self::TEXT, self::MAGELLAN];
+	/**
+	 * @type array<string>
+	 */
+	private const array ALL = [self::HTML, self::TEXT, self::MAGELLAN];
 
 	public bool $html;
 

@@ -31,7 +31,7 @@ class MythController extends AbstractController
 		if ($page <= 0) {
 			$page = 1;
 		}
-		$myths = $this->repository->findAll($page);
+		$myths = $this->repository->getAll($page);
 		$next  = count($myths) > $page * MythRepository::PAGE_SIZE ? $page + 1 : $page;
 
 		return $this->render('myth/index.html.twig', ['myths' => $myths, 'page' => $page, 'next' => $next]);

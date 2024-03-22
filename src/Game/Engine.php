@@ -7,9 +7,9 @@ use App\Entity\User;
 
 interface Engine
 {
-	public const FANTASYA = 'fantasya';
+	public const string FANTASYA = 'fantasya';
 
-	public const LEMURIA = 'lemuria';
+	public const string LEMURIA = 'lemuria';
 
 	/**
 	 * Check if a turn can be simulated.

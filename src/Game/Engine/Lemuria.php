@@ -35,7 +35,7 @@ class Lemuria implements Engine
 {
 	use BuilderTrait;
 
-	private const LOG_FILE = 'website-engine.log';
+	private const string LOG_FILE = 'website-engine.log';
 
 	private static bool $hasBeenInitialized = false;
 

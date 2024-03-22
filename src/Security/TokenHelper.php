@@ -9,7 +9,7 @@ use App\Security\X509\ClientCertificate;
 
 class TokenHelper
 {
-	private const CERTIFICATE = 'certificate';
+	private const string CERTIFICATE = 'certificate';
 
 	public function __construct(protected readonly ?Security $security = null) {
 	}

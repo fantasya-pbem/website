@@ -6,7 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 class DownloadToken
 {
-	protected const LENGTH = 16;
+	protected const int LENGTH = 16;
 
 	private string $email = '';
 

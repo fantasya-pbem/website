@@ -6,7 +6,10 @@ use JetBrains\PhpStorm\Pure;
 
 class ClientCertificate
 {
-	protected const ALLOWED_CA = ['CAcert Inc.' => true, 'Root CA' => true];
+	/**
+	 * @type array<string, true>
+	 */
+	protected const array ALLOWED_CA = ['CAcert Inc.' => true, 'Root CA' => true];
 
 	private string $ca;
 

@@ -8,7 +8,7 @@ use App\Entity\Game;
 
 class Turn
 {
-	private const DATETIME_FORMAT = "EEEE, d. MMMM yyyy, k:mm 'Uhr'";
+	private const string DATETIME_FORMAT = "EEEE, d. MMMM yyyy, k:mm 'Uhr'";
 
 	private static string $dateBase = '2017-12-31';
 
