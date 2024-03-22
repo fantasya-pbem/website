@@ -10,7 +10,10 @@ use App\Repository\GameRepository;
 
 class OrderService
 {
-	private const PARTY_LINE = ['PARTEI', 'FANTASYA', 'ERESSEA', 'LEMURIA'];
+	/**
+	 * @type array<string>
+	 */
+	private const array PARTY_LINE = ['PARTEI', 'FANTASYA', 'ERESSEA', 'LEMURIA'];
 
 	private string $baseDir;
 

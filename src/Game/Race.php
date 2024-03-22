@@ -6,28 +6,34 @@ use JetBrains\PhpStorm\Pure;
 
 class Race implements \Stringable
 {
-	public const AQUAN = 'Aquaner';
+	public const string AQUAN = 'Aquaner';
 
-	public const DWARF = 'Zwerg';
+	public const string DWARF = 'Zwerg';
 
-	public const ELF = 'Elf';
+	public const string ELF = 'Elf';
 
-	public const HALFLING = 'Halbling';
+	public const string HALFLING = 'Halbling';
 
-	public const HUMAN = 'Mensch';
+	public const string HUMAN = 'Mensch';
 
-	public const ORC = 'Ork';
+	public const string ORC = 'Ork';
 
-	public const TROLL = 'Troll';
+	public const string TROLL = 'Troll';
 
-	public const MONSTER = 'Monster';
+	public const string MONSTER = 'Monster';
 
-	protected const FANTASYA = [
+	/**
+	 * @type array<string, string>
+	 */
+	protected const array FANTASYA = [
 		self::AQUAN => 'Aquan', self::ELF => 'Elf', self::HALFLING => 'Halfling', self::HUMAN => 'Human',
 		self::ORC   => 'Orc', self::TROLL => 'Troll', self::DWARF  => 'Dwarf', self::MONSTER  => 'Monster'
 	];
 
-	protected const LEMURIA = [
+	/**
+	 * @type array<string, string>
+	 */
+	protected const array LEMURIA = [
 		'Aquan' => self::AQUAN, 'Dwarf' => self::DWARF, 'Elf' => self::ELF, 'Halfling' => self::HALFLING,
 		'Human' => self::HUMAN, 'Orc' => self::ORC, 'Troll' => self::TROLL
 	];

@@ -4,7 +4,7 @@ namespace App\Service;
 
 class TempDirService
 {
-	private const TMP_DIR = __DIR__ . '/../../var/temp';
+	private const string TMP_DIR = __DIR__ . '/../../var/temp';
 
 	private static ?string $tmpDir = null;
 

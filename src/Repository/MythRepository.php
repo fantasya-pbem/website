@@ -17,13 +17,13 @@ use App\Entity\Myth;
  */
 class MythRepository extends ServiceEntityRepository
 {
-	public const PAGE_SIZE = 15;
+	public const int PAGE_SIZE = 15;
 
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Myth::class);
     }
 
-    public function findAll(int $page = 1): Paginator {
+    public function getAll(int $page = 1): Paginator {
     	$q = $this->createQuery()->getQuery();
 		$q->setFirstResult(--$page * self::PAGE_SIZE)->setMaxResults(self::PAGE_SIZE);
 		return new Paginator($q);

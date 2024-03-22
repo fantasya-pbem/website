@@ -19,9 +19,9 @@ use App\Security\Role;
 
 class NewsController extends AbstractController
 {
-	private const DEFAULT_FEED_FORMAT = 'rss';
+	private const string DEFAULT_FEED_FORMAT = 'rss';
 
-	private const FEED_FORMAT = ['atom', 'rss'];
+	private const array FEED_FORMAT = ['atom', 'rss'];
 
 	private EntityManagerInterface $entityManager;
 
