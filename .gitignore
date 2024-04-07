@@ -17,6 +17,7 @@
 /public/css/bootstrap.*
 /public/js/bootstrap.*
 /public/js/jquery.*
+/templates/emails/game_mail.html.twig
 !/var/certs/.gitignore
 !/var/check/fantasya.tpl
 !/var/orders/.gitignore
