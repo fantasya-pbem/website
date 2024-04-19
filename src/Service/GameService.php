@@ -12,7 +12,7 @@ use App\Repository\GameRepository;
 class GameService
 {
 	/**
-	 * @var array<Game>
+	 * @var array<Game>|null
 	 */
 	private ?array $games = null;
 

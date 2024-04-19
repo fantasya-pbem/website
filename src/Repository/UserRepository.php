@@ -24,7 +24,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void {
 		if ($user instanceof User) {
 			$user->setPassword($newHashedPassword);
-			$this->getEntityManager()->flush($user);
+			$this->getEntityManager()->flush();
 		}
 	}
 
