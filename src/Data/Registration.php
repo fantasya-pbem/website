@@ -23,7 +23,7 @@ class Registration extends PasswordReset
 		return $this->antispam;
 	}
 
-	public function setAntispam(string $antispam) {
+	public function setAntispam(string $antispam): void {
 		$this->antispam = trim($antispam);
 	}
 

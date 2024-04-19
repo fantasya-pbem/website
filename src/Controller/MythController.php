@@ -7,7 +7,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Entity\Myth;
@@ -62,7 +62,7 @@ class MythController extends AbstractController
 
 	}
 
-	private function sendAdminMail(Myth $myth) {
+	private function sendAdminMail(Myth $myth): void {
 		$mail = $this->mailService->toGameMaster();
 		$mail->subject('Es geht ein Gerücht um');
 		$mail->text($this->renderView('emails/admin_myth.html.twig', ['user' => $this->user(), 'myth' => $myth]));

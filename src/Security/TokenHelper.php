@@ -24,7 +24,7 @@ class TokenHelper
 		if (!$this->security) {
 			return null;
 		}
-		$token = $this->security?->getToken();
+		$token = $this->security->getToken();
 		return $token->hasAttribute(self::CERTIFICATE) ? $token->getAttribute(self::CERTIFICATE) : null;
 	}
 }

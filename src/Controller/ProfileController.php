@@ -13,7 +13,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Data\Flag;
@@ -264,7 +264,7 @@ class ProfileController extends AbstractController
 	/**
 	 * @throws \Throwable
 	 */
-	private function save(User $user, bool $sendMail = false) {
+	private function save(User $user, bool $sendMail = false): void {
 		$this->entityManager->persist($user);
 		$this->entityManager->flush();
 		if ($sendMail) {
@@ -275,7 +275,7 @@ class ProfileController extends AbstractController
 	/**
 	 * @throws \Throwable
 	 */
-	private function sendMail(User $user) {
+	private function sendMail(User $user): void {
 		$mail = $this->mailService->fromAdmin($user);
 		$mail->subject('Fantasya-Profil geändert');
 		$mail->text($this->renderView('emails/profile_change.html.twig', ['user' => $user]));

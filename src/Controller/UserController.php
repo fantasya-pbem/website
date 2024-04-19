@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Data\PasswordReset;
@@ -128,14 +128,14 @@ class UserController extends AbstractController
 	/**
 	 * @throws \Throwable
 	 */
-	private function sendMail(User $user, string $password) {
+	private function sendMail(User $user, string $password): void {
 		$mail = $this->mailService->fromAdmin($user);
 		$mail->subject('Fantasya-Registrierung');
 		$mail->text($this->renderView('emails/user_reset.html.twig', ['user' => $user, 'password' => $password]));
 		$this->mailService->signAndSend($mail);
 	}
 
-	private function sendAdminMail(User $user) {
+	private function sendAdminMail(User $user): void {
 		$mail = $this->mailService->toGameMaster();
 		$mail->subject('Neue Fantasya-Registrierung');
 		$mail->text($this->renderView('emails/admin_user.html.twig', ['user' => $user]));

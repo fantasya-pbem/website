@@ -15,7 +15,7 @@ use App\Repository\AssignmentRepository;
 class EngineService
 {
 	/**
-	 * @var array<string, Engine>
+	 * @var array<string, Engine>|null
 	 */
 	private static ?array $engines = null;
 

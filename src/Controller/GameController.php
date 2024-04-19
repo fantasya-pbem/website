@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Data\Lemurian;
@@ -135,7 +135,7 @@ class GameController extends AbstractController
 		return false;
 	}
 
-	private function sendAdminMail(Newbie $newbie) {
+	private function sendAdminMail(Newbie $newbie): void {
 		$mail = $this->mailService->toGameMaster();
 		$mail->subject('Neue Fantasya-Partei');
 		$mail->text($this->renderView('emails/admin_party.html.twig', ['user' => $this->user(), 'newbie' => $newbie]));

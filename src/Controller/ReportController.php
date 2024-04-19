@@ -4,11 +4,12 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Data\Report;
@@ -118,6 +119,9 @@ class ReportController extends AbstractController
 		}
 
 		$form = $this->createFormBuilder($report);
+		$form->add('party', HiddenType::class, [
+			'data' => $report->getParty()
+		]);
 		$form->add('turn', ChoiceType::class, [
 			'label'   => 'Runde',
 			'choices' => $turns,

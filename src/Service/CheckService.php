@@ -5,7 +5,7 @@ namespace App\Service;
 class CheckService
 {
 	/**
-	 * @var array<string>
+	 * @var array<string>|null
 	 */
 	protected ?array $rules = null;
 

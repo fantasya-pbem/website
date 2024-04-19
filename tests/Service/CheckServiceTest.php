@@ -10,7 +10,10 @@ use App\Service\CheckService;
 
 class CheckServiceTest extends Base
 {
-	protected const LINES = [
+	/**
+	 * @type array<string>
+	 */
+	protected const array LINES = [
 		'EINHEIT 123',
 		'@MACHEN Pferde',
 		'KEINBEFEHL',
@@ -22,9 +25,15 @@ class CheckServiceTest extends Base
 		'ENDE'
 	];
 
-	protected const VALID = [0, 1, 3, 4, 5, 8];
+	/**
+	 * @type array<int>
+	 */
+	protected const array VALID = [0, 1, 3, 4, 5, 8];
 
-	protected const INVALID = [2, 7];
+	/**
+	 * @type array<int>
+	 */
+	protected const array INVALID = [2, 7];
 
 	#[Test]
 	public function construct(): CheckService {
