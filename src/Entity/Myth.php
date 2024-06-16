@@ -4,10 +4,10 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-
-use App\Repository\MythRepository;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+
+use App\Repository\MythRepository;
 
 #[Entity(repositoryClass: MythRepository::class)]
 class Myth
@@ -29,7 +29,7 @@ class Myth
 	}
 
 	public function setMyth(string $myth): self {
-		$this->myth = $myth;
+		$this->myth = html_entity_decode($myth);
 		return $this;
 	}
 }
