@@ -31,8 +31,8 @@
 			"email": "info@fantasya-pbem.de"
 		}
 	],
-	"version": "2.22.1",
-	"time": "2024-06-04",
+	"version": "2.22.2",
+	"time": "2024-06-16",
 
 	"require": {
 		"php": "~8.3",
@@ -53,6 +53,7 @@
 		"symfony/flex": "~2.4",
 		"symfony/form": "~7.1",
 		"symfony/framework-bundle": "~7.1",
+		"symfony/html-sanitizer": "~7.1",
 		"symfony/mailer": "~7.1",
 		"symfony/monolog-bundle": "~3.10",
 		"symfony/runtime": "~7.1",
