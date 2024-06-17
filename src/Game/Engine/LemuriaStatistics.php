@@ -10,10 +10,10 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Party\Type;
-use Lemuria\Model\Fantasya\Unit;
 
 use App\Game\Statistics;
 
@@ -67,7 +67,8 @@ class LemuriaStatistics implements Statistics
 				if ($party->Type() !== Type::Player || $party->hasRetired()) {
 					continue;
 				}
-				$this->parties[] = ['name' => $party->Name(), 'description' => $party->Description()];
+				$name                 = $party->Name();
+				$this->parties[$name] = ['name' => $name, 'description' => $party->Description()];
 
 				$race = (string)$party->Race();
 				if (!isset($races[$race])) {
@@ -75,8 +76,10 @@ class LemuriaStatistics implements Statistics
 				}
 				$races[$race]++;
 			}
-			foreach ($races as $race => $count) {
-				$this->races[] = ['race' => $this->translateSingleton($race), 'count' => $count];
+			ksort($this->parties);
+			$this->parties = array_values($this->parties);
+			foreach ($this->sortAndTranslate($races) as $race => $count) {
+				$this->races[] = ['race' => $race, 'count' => $count];
 			}
 		}
 		return $this->parties;
@@ -123,8 +126,8 @@ class LemuriaStatistics implements Statistics
 				$regions[$landscape]++;
 				$this->regions++;
 			}
-			foreach ($regions as $landscape => $count) {
-				$this->landscape[] = ['typ' => $this->translateSingleton($landscape), 'count' => $count];
+			foreach ($this->sortAndTranslate($regions) as $landscape => $count) {
+				$this->landscape[] = ['typ' => $landscape, 'count' => $count];
 			}
 		}
 		return ['world' => $this->regions, 'underworld' => 0];
@@ -154,11 +157,11 @@ class LemuriaStatistics implements Statistics
 			$total         = 0;
 			$this->getUnitPopulation($persons, $monsters, $count, $total);
 			$this->getResourcesPopulation($monsters, $count, $total);
-			foreach ($persons as $race => $numbers) {
-				$this->persons[] = ['race' => $this->translateSingleton($race), 'units' => $numbers[0], 'persons' => $numbers[1]];
+			foreach ($this->sortAndTranslate($persons) as $race => $numbers) {
+				$this->persons[] = ['race' => $race, 'units' => $numbers[0], 'persons' => $numbers[1]];
 			}
-			foreach ($monsters as $race => $numbers) {
-				$this->mosters[] = ['race' => $this->translateSingleton($race), 'units' => $numbers[0], 'persons' => $numbers[1]];
+			foreach ($this->sortAndTranslate($monsters) as $race => $numbers) {
+				$this->mosters[] = ['race' => $race, 'units' => $numbers[0], 'persons' => $numbers[1]];
 			}
 			$this->population = ['units' => $count, 'persons' => $total];
 		}
@@ -180,23 +183,23 @@ class LemuriaStatistics implements Statistics
 	}
 
 	protected function getUnitPopulation(array &$persons, array &$monsters, int &$count, int &$total): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Unit) as $unit /* @var Unit $unit */) {
-			$type = $unit->Party()->Type();
-			$race = (string)$unit->Race();
+		foreach (Lemuria::Catalog()->getAll(Domain::Unit) as $unit) {
+			$race = $unit->Race();
+			$r    = (string)$unit->Race();
 			$size = $unit->Size();
 
-			if ($type === Type::Player) {
-				if (!isset($persons[$race])) {
-					$persons[$race] = [0, 0];
+			if ($race instanceof Monster) {
+				if (!isset($monsters[$r])) {
+					$monsters[$r] = [0, 0];
 				}
-				$persons[$race][0]++;
-				$persons[$race][1] += $size;
-			} elseif ($type === Type::Monster) {
-				if (!isset($monsters[$race])) {
-					$monsters[$race] = [0, 0];
+				$monsters[$r][0]++;
+				$monsters[$r][1] += $size;
+			} else {
+				if (!isset($persons[$r])) {
+					$persons[$r] = [0, 0];
 				}
-				$monsters[$race][0]++;
-				$monsters[$race][1] += $size;
+				$persons[$r][0]++;
+				$persons[$r][1] += $size;
 			}
 			$total += $size;
 			$count++;
@@ -207,7 +210,7 @@ class LemuriaStatistics implements Statistics
 		$griffin      = self::createCommodity(Griffin::class);
 		$griffinCount = 0;
 		$griffinSize  = 0;
-		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region) {
 			$resources = $region->Resources();
 			/** @noinspection PhpIllegalArrayKeyTypeInspection */
 			$griffins = $resources[$griffin]->Count();
@@ -221,5 +224,14 @@ class LemuriaStatistics implements Statistics
 		if ($griffinCount) {
 			$monsters[(string)$griffin] = [$griffinCount, $griffinSize];
 		}
+	}
+
+	protected function sortAndTranslate(array $numbers): array {
+		$sorted = [];
+		foreach ($numbers as $singleton => $count) {
+			$sorted[$this->translateSingleton($singleton)] = $count;
+		}
+		ksort($sorted);
+		return $sorted;
 	}
 }
