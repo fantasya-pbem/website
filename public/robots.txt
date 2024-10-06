@@ -9,3 +9,4 @@ Disallow: /reset
 Disallow: /welt/fantasya
 Disallow: /memberlist.php
 Allow: /
+Sitemap: https://www.fantasya-pbem.de/sitemap.xml
