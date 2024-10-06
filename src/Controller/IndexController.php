@@ -45,6 +45,13 @@ class IndexController extends AbstractController
 		return $this->render('index/donate.html.twig');
 	}
 
+	#[Route('/sitemap.xml', 'sitemap')]
+	public function sitemap(): Response {
+		$response = $this->render('index/sitemap.xml.twig');
+		$response->headers->set('Content-Type', 'application/xml');
+		return $response;
+	}
+
 	/**
 	 * @throws \Exception
 	 */
