@@ -2,9 +2,8 @@
 declare(strict_types = 1);
 namespace App\Game;
 
-use App\Service\EngineService;
-
 use App\Entity\Game;
+use App\Service\EngineService;
 
 class Turn
 {
@@ -31,6 +30,10 @@ class Turn
 
 	public function getRound(): int {
 		return $this->round;
+	}
+
+	public function getLast(): \DateTimeInterface {
+		return $this->lastZat;
 	}
 
 	public function getStart(): string {

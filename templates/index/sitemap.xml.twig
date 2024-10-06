@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
-		<loc>https://www.fantasya-pbem.de/</loc>
-		<lastmod>2024-10-05</lastmod>
+		<loc>{{ url('index') }}</loc>
+		<lastmod>{{ turnMod() }}</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
 	<url>
-		<loc>https://www.fantasya-pbem.de/neuigkeiten</loc>
-		<lastmod>2024-09-14</lastmod>
+		<loc>{{ url('news') }}</loc>
+		<lastmod>{{ tableMod('news') }}</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.8</priority>
 	</url>
 	<url>
-		<loc>https://www.fantasya-pbem.de/ueber-fantasya</loc>
-		<lastmod>2024-09-14</lastmod>
+		<loc>{{ url('about-fantasya') }}</loc>
+		<lastmod>{{ templateMod('index/about-fantasya') }}</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.5</priority>
 	</url>
 	<url>
-		<loc>https://www.fantasya-pbem.de/geruechte</loc>
-		<lastmod>2024-09-14</lastmod>
+		<loc>{{ url('myth') }}</loc>
+		<lastmod>{{ tableMod('myth') }}</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.3</priority>
 	</url>
 	<url>
-		<loc>https://www.fantasya-pbem.de/spenden</loc>
-		<lastmod>2024-09-14</lastmod>
+		<loc>{{ url('donate') }}</loc>
+		<lastmod>{{ templateMod('index/donate') }}</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.5</priority>
 	</url>
 	<url>
-		<loc>https://www.fantasya-pbem.de/datenschutz</loc>
-		<lastmod>2024-09-14</lastmod>
+		<loc>{{ url('privacy') }}</loc>
+		<lastmod>{{ templateMod('privacy/index') }}</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.3</priority>
 	</url>
 	<url>
-		<loc>https://www.fantasya-pbem.de/welt/lemuria</loc>
-		<lastmod>2024-10-05</lastmod>
+		<loc>{{ url('world', {'alias': 'lemuria'}) }}</loc>
+		<lastmod>{{ turnMod('lemuria') }}</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.8</priority>
 	</url>
