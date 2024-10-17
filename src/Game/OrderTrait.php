@@ -34,7 +34,7 @@ trait OrderTrait
 		if (strlen($firstLine) <= 0) {
 			throw new OrderException('Die erste Befehlszeile ist leer.', 2);
 		}
-		if (!preg_match('/^([^ ]+) +([a-zA-Z0-9]+) +"([^"]*)"$/', $firstLine, $parts) || count($parts) < 4) {
+		if (!preg_match('/^([^ ]+) +([a-zA-Z0-9]+) +"([^"]*)"( *;.*)?$/', $firstLine, $parts) || count($parts) < 3 + 1) {
 			throw new OrderException('Die erste Befehlszeile ist fehlerhaft.', 2);
 		}
 		/** @noinspection PhpUnusedLocalVariableInspection */
